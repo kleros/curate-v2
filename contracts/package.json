@@ -44,7 +44,7 @@
     "solhint": "^3.3.6",
     "solhint-plugin-prettier": "^0.0.5",
     "standard-version": "^8.0.1",
-    "truffle": "^5.0.25",
+    "truffle": "^5.8.0",
     "web3": "~1.5.0",
     "web3-utils": "~1.5.0"
   },

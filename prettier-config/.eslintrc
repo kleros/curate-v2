@@ -1,0 +1,3 @@
+{
+  "extends": ["@kleros/curate-v2-eslint-config"]
+}

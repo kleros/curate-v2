@@ -1,0 +1,50 @@
+{
+  "name": "curate-v2",
+  "version": "2.0.0",
+  "description": "Awesome Curate V2",
+  "type": "commonjs",
+  "main": "index.js",
+  "repository": "git@github.com:kleros/curate-v2.git",
+  "author": {
+    "name": "Kleros",
+    "email": "contact@kleros.io",
+    "url": "https://kleros.io"
+  },
+  "bugs": {
+    "url": "https://github.com/kleros/curate-v2/issues",
+    "email": "contact@kleros.io"
+  },
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "contracts",
+    "subgraph",
+    "web",
+    "eslint-config",
+    "prettier-config",
+    "tsconfig"
+  ],
+  "packageManager": "yarn@4.0.2+sha256.825003a0f561ad09a3b1ac4a3b3ea6207af2796d54f62a9420520915721f5186",
+  "volta": {
+    "node": "20.11.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.2",
+    "@commitlint/config-conventional": "^17.6.7",
+    "buffer": "^5.5.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "process": "^0.11.10"
+  },
+  "scripts": {
+    "check-prerequisites": "scripts/check-prerequisites.sh",
+    "changelog": "conventional-changelog --infile CHANGELOG.md --same-file --release-count 0 && prettier --write CHANGELOG.md",
+    "postinstall": "yarn check-prerequisites; husky install",
+    "reinstall": "YARN_CHECKSUM_BEHAVIOR=update yarn install --no-immutable"
+  },
+  "alias": {
+    "process": "process/browser.js",
+    "buffer": "buffer"
+  }
+}

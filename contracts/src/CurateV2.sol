@@ -432,7 +432,7 @@ contract Curate is IArbitrableV2 {
             ? templateIdRegistration
             : templateIdRemoval;
         uint256 localDisputeID = uint256(keccak256(abi.encodePacked(_itemID, lastRequestIndex)));
-        emit DisputeRequest(arbitrator, localDisputeID, disputeData.disputeID, templateId, "");
+        emit DisputeRequest(arbitrator, disputeData.disputeID, localDisputeID, templateId, "");
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);

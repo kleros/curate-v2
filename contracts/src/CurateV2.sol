@@ -122,7 +122,8 @@ contract Curate is IArbitrableV2 {
 
     /// @dev Emitted when someone submits a request.
     /// @param _itemID The ID of the affected item.
-    event RequestSubmitted(bytes32 indexed _itemID);
+    /// @param _localDisputeID Unique dispute identifier within this contract.
+    event RequestSubmitted(bytes32 indexed _itemID, uint256 _localDisputeID);
 
     /// @dev Emitted when the address of the connected Curate contract is set. The Curate is an instance of the Curate contract where each item is the address of a Curate contract related to this one.
     /// @param _connectedTCR The address of the connected Curate. TODO: change TCR mentions.
@@ -348,7 +349,7 @@ contract Curate is IArbitrableV2 {
         request.arbitrationParamsIndex = uint24(arbitrationParamsIndex);
         request.requester = payable(msg.sender);
 
-        emit RequestSubmitted(itemID);
+        emit RequestSubmitted(itemID, getLocalDisputeID(itemID, item.requestCount - 1));
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);
@@ -379,7 +380,7 @@ contract Curate is IArbitrableV2 {
         request.requester = payable(msg.sender);
         request.requestType = RequestType.Clearing;
 
-        emit RequestSubmitted(_itemID);
+        emit RequestSubmitted(_itemID, getLocalDisputeID(_itemID, item.requestCount - 1));
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);
@@ -431,8 +432,7 @@ contract Curate is IArbitrableV2 {
         uint256 templateId = request.requestType == RequestType.Registration
             ? templateIdRegistration
             : templateIdRemoval;
-        uint256 localDisputeID = uint256(keccak256(abi.encodePacked(_itemID, lastRequestIndex)));
-        emit DisputeRequest(arbitrator, disputeData.disputeID, localDisputeID, templateId, "");
+        emit DisputeRequest(arbitrator, disputeData.disputeID, getLocalDisputeID(_itemID, lastRequestIndex), templateId, "");
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);
@@ -527,6 +527,14 @@ contract Curate is IArbitrableV2 {
     // ************************************* //
     // *           Public Views            * //
     // ************************************* //
+
+    /// @notice Gets the local dispute ID for a given item and request.
+    /// @param _itemID The ID of the item.
+    /// @param _requestID The ID of the request.
+    /// @return Local dispute ID.
+    function getLocalDisputeID(bytes32 _itemID, uint256 _requestID) public pure returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(_itemID, _requestID)));
+    }
 
     /// @notice Gets the arbitrator for new requests.
     /// @dev Gets the latest value in arbitrationParamsChanges.

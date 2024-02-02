@@ -56,6 +56,7 @@ contract Curate is IArbitrableV2 {
         address payable requester; // Address of the requester.
         // Pack the requester together with the other parameters, as they are written in the same request.
         address payable challenger; // Address of the challenger, if any.
+        // TODO: store templateRegistry in case it's changed?
     }
 
     struct DisputeData {

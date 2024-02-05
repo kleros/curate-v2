@@ -14,6 +14,9 @@ import {Curate, IArbitratorV2} from "./CurateV2.sol";
 /// A view contract to fetch, batch, parse and return Curate contract data efficiently.
 /// This contract includes functions that can halt execution due to out-of-gas exceptions. Because of this it should never be relied upon by other contracts.
 contract CurateView {
+    // ************************************* //
+    // *         Enums / Structs           * //
+    // ************************************* //
     struct QueryResult {
         bytes32 ID;
         Curate.Status status;
@@ -44,6 +47,10 @@ contract CurateView {
         uint256 templateIdRemoval;
         uint256 arbitrationCost;
     }
+
+    // ************************************* //
+    // *           Public Views            * //
+    // ************************************* //
 
     /// @dev Fetch Curate storage in a single call.
     /// @param _address The address of the Curate contract to query.

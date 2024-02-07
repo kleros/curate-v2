@@ -9,6 +9,7 @@ import QueryClientProvider from "context/QueryClientProvider";
 import StyledComponentsProvider from "context/StyledComponentsProvider";
 import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
+import Home from "./pages/Home";
 
 const App: React.FC = () => {
   return (
@@ -17,11 +18,12 @@ const App: React.FC = () => {
         <RefetchOnBlock />
         <Web3Provider>
           <IsListProvider>
-              <SentryRoutes>
-                <Route path="/" element={<Layout />}>
-                  <Route path="*" element={<h1>404 not found</h1>} />
-                </Route>
-              </SentryRoutes>
+            <SentryRoutes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="*" element={<h1>404 not found</h1>} />
+              </Route>
+            </SentryRoutes>
           </IsListProvider>
         </Web3Provider>
       </QueryClientProvider>

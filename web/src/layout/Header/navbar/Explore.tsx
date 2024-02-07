@@ -49,6 +49,7 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
 
 const links = [
   { to: "/", text: "Home" },
+  { to: "/", text: "Curation Policy" },
 ];
 
 const Explore: React.FC = () => {

@@ -52,7 +52,7 @@ const getStatusColor = (status: Status, theme: Theme): [string, string] => {
     case Status.Disputed:
       return [theme.secondaryPurple, theme.mediumPurple];
     case Status.Included:
-      return [theme.successLight, theme.success];
+      return [theme.success, theme.successLight];
     default:
       return [theme.primaryBlue, theme.mediumBlue];
   }

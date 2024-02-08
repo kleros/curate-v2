@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import RegistriesDisplay from "components/RegistriesDisplay";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { isUndefined } from "utils/index";
+import { lists } from "consts/index";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -30,7 +31,7 @@ const RegistriesFetcher: React.FC = () => {
 
   return (
     <RegistriesDisplay
-      registries={[]}
+      registries={lists}
       totalRegistries={10}
       currentPage={pageNumber}
       setCurrentPage={(newPage: number) => navigate(`${location}/${newPage}/${order}/${filter}`)}

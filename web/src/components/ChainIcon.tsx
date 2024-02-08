@@ -1,9 +1,9 @@
 import React from "react";
 import { arbitrum, arbitrumSepolia, gnosis, gnosisChiado, polygon, polygonMumbai } from "viem/chains";
 import { mainnet, sepolia } from "wagmi";
-import EthIcon from "svgs/icons/eth-chain.svg";
-import PolygonIcon from "svgs/icons/polygon.svg";
-import GnosisIcon from "svgs/icons/gnosis.svg";
+import EthIcon from "svgs/chains/ethereum.svg";
+import PolygonIcon from "svgs/chains/polygon.svg";
+import GnosisIcon from "svgs/chains/gnosis.svg";
 import styled from "styled-components";
 
 const getChainIcon = (chainId: number) => {

@@ -1,97 +1,85 @@
-import React, { useMemo } from "react";
-import styled, { Theme, useTheme, css } from "styled-components";
-import { Statuses } from "consts/statuses";
+import React from "react";
+import styled, { Theme } from "styled-components";
+import { Status } from "consts/status";
+import ChainIcon from "../ChainIcon";
 
-interface IContainer {
-  isCard: boolean;
-  frontColor: string;
-  backgroundColor: string;
-}
-
-const Container = styled.div<IContainer>`
-  height: ${({ isCard }) => (isCard ? "45px" : "100%")};
-  width: auto;
+const Container = styled.div<{ status: Status; isList: boolean }>`
+  height: ${({ isList }) => (isList ? "min-content" : "45px")};
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  ${({ isCard, frontColor, backgroundColor }) => {
+  .dot {
+    ::before {
+      content: "";
+      display: inline-block;
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+  }
+  ${({ theme, status, isList }) => {
+    const [frontColor, backgroundColor] = getStatusColor(status, theme);
     return `
-      ${isCard ? `border-top: 5px solid ${frontColor}` : `border-left: 5px solid ${frontColor}`};
-      ${isCard ? `background-color: ${backgroundColor}` : null};
+      ${!isList && `border-top: 5px solid ${frontColor}`};
+      ${!isList && `background-color: ${backgroundColor}`};
+      ${isList && `padding: 0px`};
+      .front-color {
+        color: ${frontColor};
+      }
+      .dot {
+        ::before {
+          background-color: ${frontColor};
+        }
+      }
     `;
   }};
 `;
 
-const StyledLabel = styled.label<{ frontColor: string; withDot?: boolean }>`
-  color: ${({ frontColor }) => frontColor};
-  ${({ withDot, frontColor }) =>
-    withDot
-      ? css`
-          ::before {
-            content: "";
-            display: inline-block;
-            height: 8px;
-            width: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-            background-color: ${frontColor};
-          }
-        `
-      : null}
-`;
-
-export interface IStatusBanner {
-  id: number;
-  status: Statuses;
-  isCard?: boolean;
+interface IStatusBanner {
+  status: Status;
+  chainId?: number;
+  isList?: boolean;
 }
 
-const getStatusColors = (status: Statuses, theme: Theme): [string, string] => {
+const getStatusColor = (status: Status, theme: Theme): [string, string] => {
   switch (status) {
-    case Statuses.pending:
+    case Status.Pending:
       return [theme.primaryBlue, theme.mediumBlue];
-    case Statuses.disputed:
+    case Status.Disputed:
       return [theme.secondaryPurple, theme.mediumPurple];
-    case Statuses.included:
+    case Status.Included:
       return [theme.success, theme.successLight];
-    case Statuses.removed:
+    case Status.Removed:
       return [theme.error, theme.errorLight];
     default:
       return [theme.primaryBlue, theme.mediumBlue];
   }
 };
 
-const getStatusLabel = (status: Statuses): string => {
+const getStatusLabel = (status: Status): string => {
   switch (status) {
-    case Statuses.pending:
+    case Status.Pending:
       return "Pending";
-    case Statuses.disputed:
+    case Status.Disputed:
       return "Disputed";
-    case Statuses.included:
+    case Status.Included:
       return "Included";
-    case Statuses.removed:
+    case Status.Removed:
       return "Removed";
     default:
       return "Pending";
   }
 };
 
-const StatusBanner: React.FC<IStatusBanner> = ({ id, status, isCard = true }) => {
-  const theme = useTheme();
-  const [frontColor, backgroundColor] = useMemo(() => getStatusColors(status, theme), [theme, status]);
-  return (
-    <Container {...{ isCard, frontColor, backgroundColor }}>
-      {isCard ? (
-        <StyledLabel frontColor={frontColor} withDot>
-          {getStatusLabel(status)}
-        </StyledLabel>
-      ) : null}
-      <StyledLabel frontColor={frontColor}>#{id}</StyledLabel>
-    </Container>
-  );
-};
+const StatusBanner: React.FC<IStatusBanner> = ({ status, chainId, isList = false }) => (
+  <Container {...{ status, isList }}>
+    <label className="front-color dot">{getStatusLabel(status)}</label>
+    {!isList && <ChainIcon chainId={chainId ?? 1} />}
+  </Container>
+);
 
 export default StatusBanner;

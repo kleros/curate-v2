@@ -6,6 +6,7 @@ import Search from "./Search";
 import StatsAndFilters from "./StatsAndFilters";
 import RegistriesGrid, { IRegistriesGrid } from "./RegistriesGrid";
 import HomeIcon from "svgs/icons/home.svg";
+import Header from "~src/pages/Home/Header";
 
 const StyledTitle = styled.h1`
   margin-bottom: ${responsiveSize(32, 48)};
@@ -41,14 +42,13 @@ const RegistriesDisplay: React.FC<IRegistriesDisplay> = ({
   setCurrentPage,
   totalRegistries,
   registriesPerPage,
-  title = "Community Curated Lists",
   className,
   totalPages,
 }) => {
   return (
     <div {...{ className }}>
       <StyledBreadcrumb items={breadcrumbItems} />
-      <StyledTitle>{title}</StyledTitle>
+      <Header />
       <Search />
       <StatsAndFilters totalRegistries={7} />
 

@@ -10,7 +10,7 @@ import JurorIcon from "svgs/icons/user.svg";
 import { responsiveSize } from "styles/responsiveSize";
 
 const StyledCard = styled(Card)`
-  width: auto;
+  width: 100%;
   height: fit-content;
   gap: 32px;
   padding: ${responsiveSize(16, 30)};
@@ -18,6 +18,7 @@ const StyledCard = styled(Card)`
   padding-bottom: 16px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  margin-bottom: 64px;
 
   ${landscapeStyle(
     () => css`

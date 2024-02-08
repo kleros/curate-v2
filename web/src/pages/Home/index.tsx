@@ -4,6 +4,7 @@ import HeroImage from "components/HeroImage";
 import { responsiveSize } from "styles/responsiveSize";
 import Header from "./Header";
 import Stats from "./Stats";
+import HighlightedLists from "./Highlights";
 
 const Container = styled.div`
   width: 100%;
@@ -20,6 +21,7 @@ const Home: React.FC = () => {
       <Container>
         <Header />
         <Stats />
+        <HighlightedLists />
       </Container>
     </>
   );

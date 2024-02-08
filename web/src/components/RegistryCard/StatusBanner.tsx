@@ -53,6 +53,8 @@ const getStatusColor = (status: Status, theme: Theme): [string, string] => {
       return [theme.secondaryPurple, theme.mediumPurple];
     case Status.Included:
       return [theme.success, theme.successLight];
+    case Status.Removed:
+      return [theme.error, theme.errorLight];
     default:
       return [theme.primaryBlue, theme.mediumBlue];
   }
@@ -66,6 +68,8 @@ const getStatusLabel = (status: Status): string => {
       return "Disputed";
     case Status.Included:
       return "Included";
+    case Status.Removed:
+      return "Removed";
     default:
       return "Pending";
   }

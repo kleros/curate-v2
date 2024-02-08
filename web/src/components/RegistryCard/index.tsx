@@ -6,18 +6,11 @@ import { useIsList } from "context/IsListProvider";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { lists } from "consts/index";
 import StatusBanner from "./StatusBanner";
-import ListInfo from "./ListInfo";
+import RegistryInfo from "./RegistryInfo";
 
 const StyledCard = styled(Card)`
   width: 100%;
   height: 274px;
-
-  ${landscapeStyle(
-    () =>
-      css`
-        width: max(calc((100% - 48px) * 0.333), 348px);
-      `
-  )}
 `;
 
 const StyledListItem = styled(Card)`
@@ -37,7 +30,7 @@ interface IListCard extends List {
   overrideIsList?: boolean;
 }
 
-const ListCard: React.FC<IListCard> = ({ id, title, logoURI, totalItems, status, chainId, overrideIsList }) => {
+const RegistryCard: React.FC<IListCard> = ({ id, title, logoURI, totalItems, status, chainId, overrideIsList }) => {
   const { isList } = useIsList();
 
   const navigate = useNavigate();
@@ -46,15 +39,15 @@ const ListCard: React.FC<IListCard> = ({ id, title, logoURI, totalItems, status,
       {!isList || overrideIsList ? (
         <StyledCard hover onClick={() => navigate(`/lists/${id.toString()}`)}>
           <StatusBanner {...{ status, chainId }} />
-          <ListInfo {...{ title, logoURI, totalItems, status, chainId }} />
+          <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} />
         </StyledCard>
       ) : (
         <StyledListItem hover onClick={() => navigate(`/lists/${id.toString()}`)}>
-          <ListInfo {...{ title, logoURI, totalItems, status, chainId }} isList />
+          <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} isList />
         </StyledListItem>
       )}
     </>
   );
 };
 
-export default ListCard;
+export default RegistryCard;

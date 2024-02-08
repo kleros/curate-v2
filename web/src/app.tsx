@@ -10,6 +10,7 @@ import StyledComponentsProvider from "context/StyledComponentsProvider";
 import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
+import AllLists from "./pages/AllLists";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <SentryRoutes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
+                <Route path="lists/*" element={<AllLists />} />
                 <Route path="*" element={<h1>404 not found</h1>} />
               </Route>
             </SentryRoutes>

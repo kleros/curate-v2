@@ -7,15 +7,15 @@ export const StyledSkeleton = styled(Skeleton)`
   z-index: 0;
 `;
 
-const SkeletonTransactionCardContainer = styled.div`
+const SkeletonRegistryCardContainer = styled.div`
   width: 100%;
 `;
 
-const StyledSkeletonTransactionCard = styled(Skeleton)`
+const StyledSkeletonRegistryCard = styled(Skeleton)`
   height: ${responsiveSize(270, 296)};
 `;
 
-const StyledSkeletonTransactionListItem = styled(Skeleton)`
+const StyledSkeletonRegistryListItem = styled(Skeleton)`
   height: 62px;
 `;
 
@@ -24,12 +24,12 @@ const StyledSkeletonEvidenceCard = styled(Skeleton)`
   width: 76vw;
 `;
 
-export const SkeletonTransactionCard = () => (
-  <SkeletonTransactionCardContainer>
-    <StyledSkeletonTransactionCard />
-  </SkeletonTransactionCardContainer>
+export const SkeletonRegistryCard = () => (
+  <SkeletonRegistryCardContainer>
+    <StyledSkeletonRegistryCard />
+  </SkeletonRegistryCardContainer>
 );
 
-export const SkeletonTransactionListItem = () => <StyledSkeletonTransactionListItem />;
+export const SkeletonRegistryListItem = () => <StyledSkeletonRegistryListItem />;
 
 export const SkeletonEvidenceCard = () => <StyledSkeletonEvidenceCard />;

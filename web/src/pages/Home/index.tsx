@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import HeroImage from "components/HeroImage";
 import { responsiveSize } from "styles/responsiveSize";
+import Header from "./Header";
+import Stats from "./Stats";
 
 const Container = styled.div`
   width: 100%;
@@ -15,7 +17,10 @@ const Home: React.FC = () => {
   return (
     <>
       <HeroImage />
-      <Container>Home</Container>
+      <Container>
+        <Header />
+        <Stats />
+      </Container>
     </>
   );
 };

@@ -63,18 +63,11 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
         smallButton
         simpleButton
         alignRight
-        items={
-          isListFilter
-            ? [
-                { value: "desc", text: "Most Active" },
-                { value: "desc", text: "Newest" },
-                { value: "asc", text: "Oldest" },
-              ]
-            : [
-                { value: "desc", text: "Newest" },
-                { value: "asc", text: "Oldest" },
-              ]
-        }
+        items={[
+          { value: "desc", text: "Most Active" },
+          { value: "desc", text: "Newest" },
+          { value: "asc", text: "Oldest" },
+        ]}
         defaultValue={order}
         callback={handleOrderChange}
       />

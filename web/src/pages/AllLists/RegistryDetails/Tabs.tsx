@@ -36,9 +36,9 @@ const Tabs: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
-  const currentPathName = location.pathname.split("/").at(-1);
+  const currentPathName = location.pathname.split("/").at(3);
 
-  const findTabIndex = (pathName) => TABS.findIndex(({ path }) => path === pathName);
+  const findTabIndex = (pathName) => TABS.findIndex(({ path }) => pathName.startsWith(path));
   const [currentTab, setCurrentTab] = useState(findTabIndex(currentPathName));
 
   useEffect(() => {

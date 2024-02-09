@@ -1,6 +1,6 @@
 import React from "react";
 import Search from "../Search";
-import StatsAndFilters from "../StatsAndFilters";
+import StatsAndFilters from "~src/components/StatsAndFilters";
 
 interface IList {}
 
@@ -8,7 +8,7 @@ const List: React.FC<IList> = ({}) => {
   return (
     <>
       <Search />
-      <StatsAndFilters totalItems={0} />
+      <StatsAndFilters fields={[{ label: "Items", value: "0" }]} />
     </>
   );
 };

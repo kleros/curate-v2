@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { Breadcrumb } from "@kleros/ui-components-library";
 import Search from "./Search";
-import StatsAndFilters from "./StatsAndFilters";
 import RegistriesGrid, { IRegistriesGrid } from "./RegistriesGrid";
 import HomeIcon from "svgs/icons/home.svg";
 import Header from "pages/Home/Header";
+import StatsAndFilters from "components/StatsAndFilters";
 
 const StyledTitle = styled.h1`
   margin-bottom: ${responsiveSize(32, 48)};
@@ -50,8 +50,7 @@ const RegistriesDisplay: React.FC<IRegistriesDisplay> = ({
       <StyledBreadcrumb items={breadcrumbItems} />
       <Header />
       <Search />
-      <StatsAndFilters totalRegistries={7} />
-
+      <StatsAndFilters fields={[{ label: "Lists", value: totalRegistries?.toString() }]} isListFilter />
       {registries?.length === 0 ? (
         <h1>No lists found</h1>
       ) : (

@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import { DropdownSelect } from "@kleros/ui-components-library";
@@ -7,7 +7,7 @@ import { useIsList } from "context/IsListProvider";
 import ListIcon from "svgs/icons/list.svg";
 import GridIcon from "svgs/icons/grid.svg";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
-import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
+import { useItemRootPath, useListRootPath } from "utils/uri";
 
 const Container = styled.div`
   display: flex;
@@ -40,23 +40,17 @@ const StyledListIcon = styled(ListIcon)`
   height: 16px;
   overflow: hidden;
 `;
-
-const Filters: React.FC = () => {
-  const theme = useTheme();
+export interface IFilters {
+  isListFilter: boolean;
+}
+const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   const { order, filter } = useParams();
-  const { ruled, period, ...filterObject } = decodeListURIFilter(filter ?? "all");
   const navigate = useNavigate();
-  const location = useListRootPath();
-
-  const handleStatusChange = (value: string | number) => {
-    const parsedValue = JSON.parse(value as string);
-    const encodedFilter = encodeListURIFilter({ ...filterObject, ...parsedValue });
-    navigate(`${location}/1/${order}/${encodedFilter}`);
-  };
+  const locationAllLists = useListRootPath();
+  const locationList = useItemRootPath();
 
   const handleOrderChange = (value: string | number) => {
-    const encodedFilter = encodeListURIFilter({ ruled, period, ...filterObject });
-    navigate(`${location}/1/${value}/${encodedFilter}`);
+    navigate(`${isListFilter ? locationAllLists : locationList}/1/${value}/${filter}`);
   };
 
   const { width } = useWindowSize();
@@ -68,15 +62,23 @@ const Filters: React.FC = () => {
       <DropdownSelect
         smallButton
         simpleButton
-        items={[
-          { value: "desc", text: "Most Active" },
-          { value: "desc", text: "Newest" },
-          { value: "asc", text: "Oldest" },
-        ]}
+        alignRight
+        items={
+          isListFilter
+            ? [
+                { value: "desc", text: "Most Active" },
+                { value: "desc", text: "Newest" },
+                { value: "asc", text: "Oldest" },
+              ]
+            : [
+                { value: "desc", text: "Newest" },
+                { value: "asc", text: "Oldest" },
+              ]
+        }
         defaultValue={order}
         callback={handleOrderChange}
       />
-      {screenIsBig ? (
+      {screenIsBig && isListFilter ? (
         <IconsContainer>
           {isList ? (
             <StyledGridIcon onClick={() => setIsList(false)} />

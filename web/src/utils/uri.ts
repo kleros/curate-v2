@@ -40,5 +40,5 @@ export const decodeItemURIFilter = (filter: string) => {
 
 export const useItemRootPath = () => {
   const location = useLocation();
-  return location.pathname.split("/").slice(0, -2).join("/");
+  return location.pathname.split("/").slice(0, -3).join("/");
 };

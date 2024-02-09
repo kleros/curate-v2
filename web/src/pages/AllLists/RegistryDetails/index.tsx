@@ -48,9 +48,9 @@ const RegistryDetails: React.FC<IRegistryDetails> = ({
       <InformationCard title={title} logoURI={logoURI} description={description} />
       <Tabs />
       <Routes>
-        <Route path="list" element={<List />} />
+        <Route path="list/:page/:order/:filter" element={<List />} />
         <Route path="history" element={<History />} />
-        <Route path="*" element={<Navigate to="list" replace />} />
+        <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
       </Routes>
     </div>
   );

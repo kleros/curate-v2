@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { useAccount, useNetwork } from "wagmi";
 import { DEFAULT_CHAIN } from "consts/chains";
 import RegistriesFetcher from "./RegistriesFetcher";
-// import RegistryDetails from "./RegistryDetails";
+import RegistryDetails from "./RegistryDetails";
 
 const Container = styled.div`
   width: 100%;
@@ -33,7 +33,7 @@ const AllLists: React.FC = () => {
     <Container>
       <Routes>
         <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
-        {/* <Route path="/:id/*" element={<RegistryDetails />} /> */}
+        <Route path="/:id/*" element={<RegistryDetails />} />
       </Routes>
     </Container>
   );

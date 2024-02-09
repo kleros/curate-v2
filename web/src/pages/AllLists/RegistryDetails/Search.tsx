@@ -3,12 +3,15 @@ import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDebounce } from "react-use";
-import { Searchbar, DropdownSelect } from "@kleros/ui-components-library";
-import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
-import { StyledGlobeIcon } from "../StyledIcons/GlobeIcon";
-import { StyledEthereumIcon } from "../StyledIcons/EthereumIcon";
-import { StyledGnosisIcon } from "../StyledIcons/GnosisIcon";
-import { StyledPolygonIcon } from "../StyledIcons/PolygonIcon";
+import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
+import { decodeItemURIFilter, encodeItemURIFilter, useItemRootPath } from "utils/uri";
+import PlusIcon from "svgs/icons/plus.svg";
+
+const StyledPlusIcon = styled(PlusIcon)`
+  path {
+    fill: ${({ theme }) => theme.whiteBackground};
+  }
+`;
 
 const Container = styled.div`
   display: flex;
@@ -45,15 +48,15 @@ const StyledSearchbar = styled(Searchbar)`
 
 const Search: React.FC = () => {
   const { page, order, filter } = useParams();
-  const location = useListRootPath();
-  const decodedFilter = decodeListURIFilter(filter ?? "all");
+  const location = useItemRootPath();
+  const decodedFilter = decodeItemURIFilter(filter ?? "all");
   const { id: searchValue, ...filterObject } = decodedFilter;
   const [search, setSearch] = useState(searchValue ?? "");
   const navigate = useNavigate();
   useDebounce(
     () => {
       const newFilters = search === "" ? { ...filterObject } : { ...filterObject, id: search };
-      const encodedFilter = encodeListURIFilter(newFilters);
+      const encodedFilter = encodeItemURIFilter(newFilters);
       navigate(`${location}/${page}/${order}/${encodedFilter}`);
     },
     500,
@@ -72,16 +75,6 @@ const Search: React.FC = () => {
       </SearchBarContainer>
       <DropdownSelect
         items={[
-          { text: "All Networks", value: 1, Icon: StyledGlobeIcon },
-          { text: "Ethereum", value: 2, Icon: StyledEthereumIcon },
-          { text: "Gnosis", value: 3, Icon: StyledGnosisIcon },
-          { text: "Polygon", value: 4, Icon: StyledPolygonIcon },
-        ]}
-        defaultValue={1}
-        callback={() => {}}
-      />
-      <DropdownSelect
-        items={[
           { text: "All Status", dot: "grey", value: 1 },
           { text: "Pending", dot: "blue", value: 2 },
           { text: "Disputed", dot: "purple", value: 3 },
@@ -91,6 +84,7 @@ const Search: React.FC = () => {
         defaultValue={1}
         callback={() => {}}
       />
+      <Button Icon={StyledPlusIcon} text="Submit Item" />
     </Container>
   );
 };

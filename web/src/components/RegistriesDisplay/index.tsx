@@ -6,7 +6,7 @@ import Search from "./Search";
 import StatsAndFilters from "./StatsAndFilters";
 import RegistriesGrid, { IRegistriesGrid } from "./RegistriesGrid";
 import HomeIcon from "svgs/icons/home.svg";
-import Header from "~src/pages/Home/Header";
+import Header from "pages/Home/Header";
 
 const StyledTitle = styled.h1`
   margin-bottom: ${responsiveSize(32, 48)};
@@ -26,7 +26,7 @@ const StyledBreadcrumb = styled(Breadcrumb)`
 
 const breadcrumbItems = [
   { text: <StyledHomeIcon />, value: "0" },
-  { text: "All Lists", value: "0" },
+  { text: "All Lists", value: "1" },
 ];
 
 interface IRegistriesDisplay extends IRegistriesGrid {

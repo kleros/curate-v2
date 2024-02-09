@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useWindowSize } from "react-use";
-import { useRootPath, decodeURIFilter } from "utils/uri";
+import { useListRootPath, decodeListURIFilter } from "utils/uri";
 import { useAccount } from "wagmi";
 // import { useRegistriesQuery } from "hooks/queries/useRegistriesQuery";
 import RegistriesDisplay from "components/RegistriesDisplay";
@@ -13,7 +13,7 @@ const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
   const navigate = useNavigate();
   const { width } = useWindowSize();
-  const location = useRootPath();
+  const location = useListRootPath();
   const screenIsBig = width > BREAKPOINT_LANDSCAPE;
   const registriesPerPage = screenIsBig ? 9 : 3;
   const pageNumber = parseInt(page ?? "1", 10);

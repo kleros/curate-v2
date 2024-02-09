@@ -7,7 +7,7 @@ import { useIsList } from "context/IsListProvider";
 import ListIcon from "svgs/icons/list.svg";
 import GridIcon from "svgs/icons/grid.svg";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
-import { decodeURIFilter, encodeURIFilter, useRootPath } from "utils/uri";
+import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
 
 const Container = styled.div`
   display: flex;
@@ -44,18 +44,18 @@ const StyledListIcon = styled(ListIcon)`
 const Filters: React.FC = () => {
   const theme = useTheme();
   const { order, filter } = useParams();
-  const { ruled, period, ...filterObject } = decodeURIFilter(filter ?? "all");
+  const { ruled, period, ...filterObject } = decodeListURIFilter(filter ?? "all");
   const navigate = useNavigate();
-  const location = useRootPath();
+  const location = useListRootPath();
 
   const handleStatusChange = (value: string | number) => {
     const parsedValue = JSON.parse(value as string);
-    const encodedFilter = encodeURIFilter({ ...filterObject, ...parsedValue });
+    const encodedFilter = encodeListURIFilter({ ...filterObject, ...parsedValue });
     navigate(`${location}/1/${order}/${encodedFilter}`);
   };
 
   const handleOrderChange = (value: string | number) => {
-    const encodedFilter = encodeURIFilter({ ruled, period, ...filterObject });
+    const encodedFilter = encodeListURIFilter({ ruled, period, ...filterObject });
     navigate(`${location}/1/${value}/${encodedFilter}`);
   };
 

@@ -6,7 +6,7 @@ import PolygonIcon from "svgs/chains/polygon.svg";
 import GnosisIcon from "svgs/chains/gnosis.svg";
 import styled from "styled-components";
 
-const getChainIcon = (chainId: number) => {
+export const getChainIcon = (chainId: number) => {
   switch (chainId) {
     case mainnet.id:
     case sepolia.id:
@@ -22,6 +22,25 @@ const getChainIcon = (chainId: number) => {
       return <PolygonIcon />;
     default:
       return <EthIcon />;
+  }
+};
+
+export const getChainName = (chainId: number) => {
+  switch (chainId) {
+    case mainnet.id:
+    case sepolia.id:
+      return "Ethereum";
+    case arbitrum.id:
+    case arbitrumSepolia.id:
+      return "Arbitrum";
+    case gnosis.id:
+    case gnosisChiado.id:
+      return "Gnosis";
+    case polygon.id:
+    case polygonMumbai.id:
+      return "Polygon";
+    default:
+      return "Ethereum";
   }
 };
 

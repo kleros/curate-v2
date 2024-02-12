@@ -5,6 +5,9 @@ import { useAccount, useNetwork } from "wagmi";
 import { DEFAULT_CHAIN } from "consts/chains";
 import RegistriesFetcher from "./RegistriesFetcher";
 import RegistryDetails from "./RegistryDetails";
+import ItemDisplay from "./Item";
+import Breadcrumb from "./StyledBreadcrumb";
+import HomeIcon from "svgs/icons/home.svg";
 
 const Container = styled.div`
   width: 100%;
@@ -24,6 +27,19 @@ export const ConnectWalletContainer = styled.div`
   color: ${({ theme }) => theme.primaryText};
 `;
 
+const StyledHomeIcon = styled(HomeIcon)`
+  path {
+    fill: ${({ theme }) => theme.secondaryText};
+  }
+  margin-bottom: 3.5px;
+`;
+
+const breadcrumbItems = [
+  { text: <StyledHomeIcon />, value: "0" },
+  { text: "All Lists", value: "1" },
+  { text: "Address Tags", value: "2" },
+];
+
 const AllLists: React.FC = () => {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
@@ -31,8 +47,10 @@ const AllLists: React.FC = () => {
 
   return (
     <Container>
+      <Breadcrumb items={breadcrumbItems} />
       <Routes>
         <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
+        <Route path="/:id/item/:itemId" element={<ItemDisplay />} />
         <Route path="/:id/*" element={<RegistryDetails />} />
       </Routes>
     </Container>

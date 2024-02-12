@@ -1,31 +1,12 @@
 import React from "react";
-import styled from "styled-components";
-import { Breadcrumb } from "@kleros/ui-components-library";
-import HomeIcon from "svgs/icons/home.svg";
 import { IRegistriesGrid } from "components/RegistriesDisplay/RegistriesGrid";
-import InformationCard from "./InformationCard";
+import InformationCard from "components/InformationCard";
 import Tabs from "./Tabs";
 import List from "./List";
-import History from "./History";
+import History from "components/HistoryDisplay";
 import { Navigate, Route, Routes } from "react-router-dom";
-
-const StyledBreadcrumb = styled(Breadcrumb)`
-  margin-bottom: 32px;
-  align-items: center;
-`;
-
-const StyledHomeIcon = styled(HomeIcon)`
-  path {
-    fill: ${({ theme }) => theme.secondaryText};
-  }
-  margin-bottom: 3.5px;
-`;
-
-const breadcrumbItems = [
-  { text: <StyledHomeIcon />, value: "0" },
-  { text: "All Lists", value: "1" },
-  { text: "Address Tags", value: "2" },
-];
+import { useTheme } from "styled-components";
+import ClosedIcon from "assets/svgs/icons/check-circle-outline.svg";
 
 interface IRegistryDetails extends IRegistriesGrid {
   items: [];
@@ -42,14 +23,36 @@ const RegistryDetails: React.FC<IRegistryDetails> = ({
   totalItems = 3,
   className,
 }) => {
+  const theme = useTheme();
+  const historyItems = [
+    {
+      title: "List Submitted",
+      variant: theme.primaryBlue,
+      subtitle: "April 06, 2022",
+      rightSided: true,
+    },
+    {
+      title: "List Challenged",
+      party: "- Case #1369 by Alice.eth",
+      variant: theme.secondaryPurple,
+      subtitle: "April 07, 2022",
+      rightSided: true,
+    },
+    {
+      title: "List Submitted",
+      subtitle: "April 06, 2022",
+      rightSided: true,
+      Icon: ClosedIcon,
+    },
+  ];
+
   return (
     <div {...{ className }}>
-      <StyledBreadcrumb items={breadcrumbItems} />
       <InformationCard title={title} logoURI={logoURI} description={description} />
       <Tabs />
       <Routes>
         <Route path="list/:page/:order/:filter" element={<List />} />
-        <Route path="history" element={<History />} />
+        <Route path="history" element={<History items={historyItems} />} />
         <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
       </Routes>
     </div>

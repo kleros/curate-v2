@@ -118,7 +118,7 @@ const ItemCard: React.FC<IItemCard> = ({ id, title, address, website, status }) 
   const navigateAndScrollTop = useNavigateAndScrollTop();
 
   return (
-    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/desc/all`)}>
+    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/1/item/${id.toString()}`)}>
       <Container>
         <TruncatedTitle text={title} maxLength={100} />
         <DisplayContainer className="address">

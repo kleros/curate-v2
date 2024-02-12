@@ -117,6 +117,8 @@ interface IInformationCard {
   description: string;
   chainId: number;
   status: string;
+  isItem?: boolean;
+  // itemParams?: Object : item will haev dynamic params
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
@@ -125,13 +127,14 @@ const InformationCard: React.FC<IInformationCard> = ({
   description,
   chainId = 100,
   status = Status.Included,
+  isItem = false,
 }) => {
   return (
     <StyledCard>
       <TopInfo>
         <TopLeftInfo>
           <LogoAndTitle>
-            <StyledLogo src={logoURI} alt="List Img" isList={false} />
+            {!isItem && <StyledLogo src={logoURI} alt="List Img" isList={false} />}
             <h1>{title}</h1>
           </LogoAndTitle>
           <StyledP>{description}</StyledP>
@@ -150,7 +153,7 @@ const InformationCard: React.FC<IInformationCard> = ({
       <Divider />
       <BottomInfo>
         <AliasDisplay address="0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5" />
-        <Button variant="secondary" text="Remove List" />
+        <Button variant="secondary" text={isItem ? "Remove Item" : "Remove List"} />
       </BottomInfo>
       <Policies />
     </StyledCard>

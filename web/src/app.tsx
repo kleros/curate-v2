@@ -11,6 +11,8 @@ import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
+import SubmitItem from "./pages/SubmitItem";
+import { SubmitItemProvider } from "./context/SubmitItemContext";
 
 const App: React.FC = () => {
   return (
@@ -19,13 +21,16 @@ const App: React.FC = () => {
         <RefetchOnBlock />
         <Web3Provider>
           <IsListProvider>
-            <SentryRoutes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="lists/*" element={<AllLists />} />
-                <Route path="*" element={<h1>404 not found</h1>} />
-              </Route>
-            </SentryRoutes>
+            <SubmitItemProvider>
+              <SentryRoutes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="lists/*" element={<AllLists />} />
+                  <Route path="submitItem/*" element={<SubmitItem />} />
+                  <Route path="*" element={<h1>404 not found</h1>} />
+                </Route>
+              </SentryRoutes>
+            </SubmitItemProvider>
           </IsListProvider>
         </Web3Provider>
       </QueryClientProvider>

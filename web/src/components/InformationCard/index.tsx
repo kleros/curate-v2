@@ -1,13 +1,15 @@
 import React from "react";
-import { Button, Card } from "@kleros/ui-components-library";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
+import { useToggle } from "react-use";
+import { Button, Card } from "@kleros/ui-components-library";
 import { getChainIcon, getChainName } from "components/ChainIcon";
 import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { Policies } from "./Policies";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
+import RemoveModal from "../Modal/RemoveModal";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -118,7 +120,7 @@ interface IInformationCard {
   chainId: number;
   status: string;
   isItem?: boolean;
-  // itemParams?: Object : item will haev dynamic params
+  // itemParams?: Object : item will have dynamic params
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
@@ -129,34 +131,45 @@ const InformationCard: React.FC<IInformationCard> = ({
   status = Status.Included,
   isItem = false,
 }) => {
+  const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
+  const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
+
   return (
-    <StyledCard>
-      <TopInfo>
-        <TopLeftInfo>
-          <LogoAndTitle>
-            {!isItem && <StyledLogo src={logoURI} alt="List Img" isList={false} />}
-            <h1>{title}</h1>
-          </LogoAndTitle>
-          <StyledP>{description}</StyledP>
-        </TopLeftInfo>
-        <TopRightInfo>
-          <ChainContainer>
-            <p>{getChainIcon(chainId)}</p>
-            <p>{getChainName(chainId)}</p>
-          </ChainContainer>
-          <StyledEtherscanIcon />
-          <StatusContainer {...{ status, isList: false }}>
-            <label className="front-color dot">{getStatusLabel(status)}</label>
-          </StatusContainer>
-        </TopRightInfo>
-      </TopInfo>
-      <Divider />
-      <BottomInfo>
-        <AliasDisplay address="0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5" />
-        <Button variant="secondary" text={isItem ? "Remove Item" : "Remove List"} />
-      </BottomInfo>
-      <Policies />
-    </StyledCard>
+    <>
+      <StyledCard>
+        <TopInfo>
+          <TopLeftInfo>
+            <LogoAndTitle>
+              {!isItem && <StyledLogo src={logoURI} alt="List Img" isList={false} />}
+              <h1>{title}</h1>
+            </LogoAndTitle>
+            <StyledP>{description}</StyledP>
+          </TopLeftInfo>
+          <TopRightInfo>
+            <ChainContainer>
+              <p>{getChainIcon(chainId)}</p>
+              <p>{getChainName(chainId)}</p>
+            </ChainContainer>
+            <StyledEtherscanIcon />
+            <StatusContainer {...{ status, isList: false }}>
+              <label className="front-color dot">{getStatusLabel(status)}</label>
+            </StatusContainer>
+          </TopRightInfo>
+        </TopInfo>
+        <Divider />
+        <BottomInfo>
+          <AliasDisplay address="0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5" />
+          <Button
+            variant="secondary"
+            text={isItem ? "Remove Item" : "Remove List"}
+            onClick={isItem ? toggleRemoveItemModal : toggleRemoveListModal}
+          />
+        </BottomInfo>
+        <Policies />
+      </StyledCard>
+      {isRemoveItemModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveItemModal} /> : null}
+      {isRemoveListModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveListModal} /> : null}
+    </>
   );
 };
 export default InformationCard;

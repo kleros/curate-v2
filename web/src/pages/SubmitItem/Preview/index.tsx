@@ -25,6 +25,7 @@ const StyledCard = styled(Card)`
   margin-bottom: ${responsiveSize(0, 16)};
   padding: ${responsiveSize(24, 48)} ${responsiveSize(24, 32)};
   gap: 32px;
+  position: relative;
 `;
 
 const Title = styled.h2`
@@ -39,7 +40,11 @@ const Title = styled.h2`
     `
   )}
 `;
-
+const Overlay = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+`;
 const Preview: React.FC = () => {
   return (
     <Container>
@@ -47,6 +52,7 @@ const Preview: React.FC = () => {
       <StyledCard>
         <ListDisplay />
         <ItemDisplay />
+        <Overlay />
       </StyledCard>
       <NavigationButtons prevRoute="/submitItem/policy" />
     </Container>

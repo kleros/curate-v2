@@ -411,7 +411,8 @@ contract CurateV2 is IArbitrableV2 {
 
     /// @dev Challenges the request of the item. Accepts enough ETH to cover the deposit, reimburses the rest.
     /// @param _itemID The ID of the item which request to challenge.
-    function challengeRequest(bytes32 _itemID) external payable {
+    /// @param _evidence A link to evidence using its URI.
+    function challengeRequest(bytes32 _itemID, string calldata _evidence) external payable {
         Item storage item = items[_itemID];
         require(item.status > Status.Registered, "The item must have a pending request.");
 
@@ -451,10 +452,16 @@ contract CurateV2 is IArbitrableV2 {
 
         arbitratorDisputeIDToItemID[address(arbitrator)][disputeData.disputeID] = _itemID;
 
+        uint256 requestID = getRequestID(_itemID, lastRequestIndex);
         uint256 templateId = request.requestType == RequestType.Registration
             ? templateIdRegistration
             : templateIdRemoval;
-        emit DisputeRequest(arbitrator, disputeData.disputeID, getRequestID(_itemID, lastRequestIndex), templateId, "");
+        emit DisputeRequest(arbitrator, disputeData.disputeID, requestID, templateId, "");
+
+        // Emit evidence if it was provided.
+        if (bytes(_evidence).length > 0) {
+            arbitrationParams.evidenceModule.submitEvidence(requestID, _evidence); // TODO: add a msg.sender parameter to submitEvidence.
+        }
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);

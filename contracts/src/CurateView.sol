@@ -8,7 +8,7 @@
 
 pragma solidity 0.8.18;
 
-import {Curate, IArbitratorV2} from "./CurateV2.sol";
+import {CurateV2, IArbitratorV2} from "./CurateV2.sol";
 
 /// @title CurateView
 /// A view contract to fetch, batch, parse and return Curate contract data efficiently.
@@ -19,11 +19,11 @@ contract CurateView {
     // ************************************* //
     struct QueryResult {
         bytes32 ID;
-        Curate.Status status;
+        CurateV2.Status status;
         bool disputed;
         bool resolved;
         uint256 disputeID;
-        Curate.Party ruling;
+        CurateV2.Party ruling;
         address requester;
         address challenger;
         address arbitrator;
@@ -48,36 +48,54 @@ contract CurateView {
         uint256 arbitrationCost;
     }
 
+    // Workaround stack too deep limit
+    struct ItemData {
+        CurateV2.Status status;
+        uint256 numberOfRequests;
+    }
+
+    // Workaround stack too deep limit
+    struct RequestData {
+        ItemData item;
+        bool disputed;
+        uint256 disputeID;
+        uint256 submissionTime;
+        bool resolved;
+        address payable[3] parties;
+        CurateV2.Party ruling;
+        IArbitratorV2 arbitrator;
+        bytes arbitratorExtraData;
+    }
+
     // ************************************* //
     // *           Public Views            * //
     // ************************************* //
 
     /// @dev Fetch Curate storage in a single call.
-    /// @param _address The address of the Curate contract to query.
+    /// @param _curate The address of the Curate contract to query.
     /// @return result The latest storage data.
-    function fetchArbitrable(address _address) external view returns (ArbitrableData memory result) {
-        Curate curate = Curate(_address);
-        result.governor = curate.governor();
-        result.arbitrator = address(curate.getArbitrator());
-        result.arbitratorExtraData = curate.getArbitratorExtraData();
-        result.relayerContract = curate.relayerContract();
-        result.submissionBaseDeposit = curate.submissionBaseDeposit();
-        result.removalBaseDeposit = curate.removalBaseDeposit();
-        result.submissionChallengeBaseDeposit = curate.submissionChallengeBaseDeposit();
-        result.removalChallengeBaseDeposit = curate.removalChallengeBaseDeposit();
-        result.challengePeriodDuration = curate.challengePeriodDuration();
-        result.templateRegistry = address(curate.templateRegistry());
-        result.templateIdRegistration = curate.templateIdRegistration();
-        result.templateIdRemoval = curate.templateIdRemoval();
+    function fetchArbitrable(CurateV2 _curate) external view returns (ArbitrableData memory result) {
+        result.governor = _curate.governor();
+        result.arbitrator = address(_curate.getArbitrator());
+        result.arbitratorExtraData = _curate.getArbitratorExtraData();
+        result.relayerContract = _curate.relayerContract();
+        result.submissionBaseDeposit = _curate.submissionBaseDeposit();
+        result.removalBaseDeposit = _curate.removalBaseDeposit();
+        result.submissionChallengeBaseDeposit = _curate.submissionChallengeBaseDeposit();
+        result.removalChallengeBaseDeposit = _curate.removalChallengeBaseDeposit();
+        result.challengePeriodDuration = _curate.challengePeriodDuration();
+        result.templateRegistry = address(_curate.templateRegistry());
+        result.templateIdRegistration = _curate.templateIdRegistration();
+        result.templateIdRemoval = _curate.templateIdRemoval();
         result.arbitrationCost = IArbitratorV2(result.arbitrator).arbitrationCost(result.arbitratorExtraData);
     }
 
     /// @dev Fetch the latest data on an item in a single call.
-    /// @param _address The address of the Curate contract to query.
+    /// @param _curate The address of the Curate contract to query.
     /// @param _itemID The ID of the item to query.
     /// @return result The item data.
-    function getItem(address _address, bytes32 _itemID) public view returns (QueryResult memory result) {
-        RequestData memory request = getLatestRequestData(_address, _itemID);
+    function getItem(CurateV2 _curate, bytes32 _itemID) public view returns (QueryResult memory result) {
+        RequestData memory request = getLatestRequestData(_curate, _itemID);
         result = QueryResult({
             ID: _itemID,
             status: request.item.status,
@@ -85,8 +103,8 @@ contract CurateView {
             resolved: request.resolved,
             disputeID: request.disputeID,
             ruling: request.ruling,
-            requester: request.parties[uint256(Curate.Party.Requester)],
-            challenger: request.parties[uint256(Curate.Party.Challenger)],
+            requester: request.parties[uint256(CurateV2.Party.Requester)],
+            challenger: request.parties[uint256(CurateV2.Party.Challenger)],
             arbitrator: address(request.arbitrator),
             arbitratorExtraData: request.arbitratorExtraData,
             submissionTime: request.submissionTime,
@@ -106,12 +124,11 @@ contract CurateView {
     }
 
     /// @dev Fetch all requests for an item.
-    /// @param _address The address of the Curate contract to query.
+    /// @param _curate The address of the Curate contract to query.
     /// @param _itemID The ID of the item to query.
     /// @return requests The items requests.
-    function getItemRequests(address _address, bytes32 _itemID) external view returns (ItemRequest[] memory requests) {
-        Curate curate = Curate(_address);
-        ItemData memory itemData = getItemData(_address, _itemID);
+    function getItemRequests(CurateV2 _curate, bytes32 _itemID) external view returns (ItemRequest[] memory requests) {
+        ItemData memory itemData = getItemData(_curate, _itemID);
         requests = new ItemRequest[](itemData.numberOfRequests);
         for (uint256 i = 0; i < itemData.numberOfRequests; i++) {
             (
@@ -123,7 +140,7 @@ contract CurateView {
                 ,
                 IArbitratorV2 arbitrator,
                 bytes memory arbitratorExtraData
-            ) = curate.getRequestInfo(_itemID, i);
+            ) = _curate.getRequestInfo(_itemID, i);
 
             // Sort requests by newest first.
             requests[itemData.numberOfRequests - i - 1] = ItemRequest({
@@ -131,59 +148,39 @@ contract CurateView {
                 disputeID: disputeID,
                 submissionTime: submissionTime,
                 resolved: resolved,
-                requester: parties[uint256(Curate.Party.Requester)],
-                challenger: parties[uint256(Curate.Party.Challenger)],
+                requester: parties[uint256(CurateV2.Party.Requester)],
+                challenger: parties[uint256(CurateV2.Party.Challenger)],
                 arbitrator: address(arbitrator),
                 arbitratorExtraData: arbitratorExtraData
             });
         }
     }
 
-    // Functions and structs below used mainly to avoid stack limit.
-    struct ItemData {
-        Curate.Status status;
-        uint256 numberOfRequests;
-    }
-
-    struct RequestData {
-        ItemData item;
-        bool disputed;
-        uint256 disputeID;
-        uint256 submissionTime;
-        bool resolved;
-        address payable[3] parties;
-        Curate.Party ruling;
-        IArbitratorV2 arbitrator;
-        bytes arbitratorExtraData;
-    }
-
     /// @dev Fetch data of the an item and return a struct.
-    /// @param _address The address of the Curate contract to query.
+    /// @param _curate The address of the Curate contract to query.
     /// @param _itemID The ID of the item to query.
     /// @return item The item data.
-    function getItemData(address _address, bytes32 _itemID) public view returns (ItemData memory item) {
-        Curate curate = Curate(_address);
-        (Curate.Status status, uint256 numberOfRequests, ) = curate.getItemInfo(_itemID);
+    function getItemData(CurateV2 _curate, bytes32 _itemID) public view returns (ItemData memory item) {
+        (CurateV2.Status status, uint256 numberOfRequests, ) = _curate.getItemInfo(_itemID);
         item = ItemData(status, numberOfRequests);
     }
 
     /// @dev Fetch the latest request of an item.
-    /// @param _address The address of the Curate contract to query.
+    /// @param _curate The address of the Curate contract to query.
     /// @param _itemID The ID of the item to query.
     /// @return request The request data.
-    function getLatestRequestData(address _address, bytes32 _itemID) public view returns (RequestData memory request) {
-        Curate curate = Curate(_address);
-        ItemData memory item = getItemData(_address, _itemID);
+    function getLatestRequestData(CurateV2 _curate, bytes32 _itemID) public view returns (RequestData memory request) {
+        ItemData memory item = getItemData(_curate, _itemID);
         (
             bool disputed,
             uint256 disputeID,
             uint256 submissionTime,
             bool resolved,
             address payable[3] memory parties,
-            Curate.Party ruling,
+            CurateV2.Party ruling,
             IArbitratorV2 arbitrator,
             bytes memory arbitratorExtraData
-        ) = curate.getRequestInfo(_itemID, item.numberOfRequests - 1);
+        ) = _curate.getRequestInfo(_itemID, item.numberOfRequests - 1);
         request = RequestData(
             item,
             disputed,

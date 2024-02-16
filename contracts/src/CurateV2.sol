@@ -9,11 +9,12 @@
 pragma solidity 0.8.18;
 
 import {IArbitrableV2, IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
+import {EvidenceModule} from "@kleros/kleros-v2-contracts/arbitration/evidence/EvidenceModule.sol";
 import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
 
 /// @title Curate
 /// Curated registry contract compatible with V2. The V1 version is here https://github.com/kleros/tcr/blob/master/contracts/LightGeneralizedTCR.sol
-contract Curate is IArbitrableV2 {
+contract CurateV2 is IArbitrableV2 {
     // ************************************* //
     // *         Enums / Structs           * //
     // ************************************* //
@@ -68,6 +69,7 @@ contract Curate is IArbitrableV2 {
     struct ArbitrationParams {
         IArbitratorV2 arbitrator; // The arbitrator trusted to solve disputes for this request.
         bytes arbitratorExtraData; // The extra data for the trusted arbitrator of this request.
+        EvidenceModule evidenceModule; // The evidence module for the arbitrator.
     }
 
     // ************************************* //
@@ -135,12 +137,14 @@ contract Curate is IArbitrableV2 {
     // ************************************* //
 
     /// @dev Initialize the arbitrable curated registry.
+    /// @param _governor The trusted governor of this contract.
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
+    /// @param _evidenceModule The evidence contract for the arbitrator.
     /// @param _connectedTCR The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
     /// @param _registrationTemplateParameters Template and data mappings json for registration requests.
     /// @param _removalTemplateParameters Template and data mappings json for removal requests.
-    /// @param _governor The trusted governor of this contract.
+    /// @param _templateRegistry The dispute template registry.
     /// @param _baseDeposits The base deposits for requests/challenges as follows:
     /// - The base deposit to submit an item.
     /// - The base deposit to remove an item.
@@ -148,22 +152,21 @@ contract Curate is IArbitrableV2 {
     /// - The base deposit to challenge a removal request.
     /// @param _challengePeriodDuration The time in seconds parties have to challenge a request.
     /// @param _relayerContract The address of the relayer contract to add/remove items directly.
-    /// @param _templateRegistry The dispute template registry.
     function initialize(
+        address _governor,
         IArbitratorV2 _arbitrator,
         bytes calldata _arbitratorExtraData,
+        EvidenceModule _evidenceModule,
         address _connectedTCR,
         string[2] calldata _registrationTemplateParameters,
         string[2] calldata _removalTemplateParameters,
-        address _governor,
+        address _templateRegistry,
         uint256[4] calldata _baseDeposits,
         uint256 _challengePeriodDuration,
-        address _relayerContract,
-        address _templateRegistry
+        address _relayerContract
     ) external {
         require(!initialized, "Already initialized.");
-
-        emit ConnectedTCRSet(_connectedTCR);
+        initialized = true;
 
         governor = _governor;
         submissionBaseDeposit = _baseDeposits[0];
@@ -171,10 +174,9 @@ contract Curate is IArbitrableV2 {
         submissionChallengeBaseDeposit = _baseDeposits[2];
         removalChallengeBaseDeposit = _baseDeposits[3];
         challengePeriodDuration = _challengePeriodDuration;
-
         relayerContract = _relayerContract;
-        templateRegistry = IDisputeTemplateRegistry(_templateRegistry);
 
+        templateRegistry = IDisputeTemplateRegistry(_templateRegistry);
         templateIdRegistration = templateRegistry.setDisputeTemplate(
             "Registration",
             _registrationTemplateParameters[0],
@@ -187,10 +189,16 @@ contract Curate is IArbitrableV2 {
         );
 
         arbitrationParamsChanges.push(
-            ArbitrationParams({arbitrator: _arbitrator, arbitratorExtraData: _arbitratorExtraData})
+            ArbitrationParams({
+                arbitrator: _arbitrator,
+                arbitratorExtraData: _arbitratorExtraData,
+                evidenceModule: _evidenceModule
+            })
         );
 
-        initialized = true;
+        if (_connectedTCR != address(0)) {
+            emit ConnectedTCRSet(_connectedTCR);
+        }
     }
 
     // ************************************* //
@@ -279,12 +287,18 @@ contract Curate is IArbitrableV2 {
     /// @notice Changes the params related to arbitration.
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
+    /// @param _evidenceModule The evidence module for the arbitrator.
     function changeArbitrationParams(
         IArbitratorV2 _arbitrator,
-        bytes calldata _arbitratorExtraData
+        bytes calldata _arbitratorExtraData,
+        EvidenceModule _evidenceModule
     ) external onlyGovernor {
         arbitrationParamsChanges.push(
-            ArbitrationParams({arbitrator: _arbitrator, arbitratorExtraData: _arbitratorExtraData})
+            ArbitrationParams({
+                arbitrator: _arbitrator,
+                arbitratorExtraData: _arbitratorExtraData,
+                evidenceModule: _evidenceModule
+            })
         );
     }
 
@@ -359,17 +373,18 @@ contract Curate is IArbitrableV2 {
 
     /// @dev Submit a request to remove an item from the list. Accepts enough ETH to cover the deposit, reimburses the rest.
     /// @param _itemID The ID of the item to remove.
-    function removeItem(bytes32 _itemID) external payable {
+    /// @param _evidence A link to evidence using its URI.
+    function removeItem(bytes32 _itemID, string calldata _evidence) external payable {
         Item storage item = items[_itemID];
 
         require(item.status == Status.Registered, "Item must be registered to be removed.");
 
         Request storage request = item.requests[item.requestCount++];
         uint256 arbitrationParamsIndex = arbitrationParamsChanges.length - 1;
-        IArbitratorV2 arbitrator = arbitrationParamsChanges[arbitrationParamsIndex].arbitrator;
-        bytes storage arbitratorExtraData = arbitrationParamsChanges[arbitrationParamsIndex].arbitratorExtraData;
+        ArbitrationParams storage arbitrationParams = arbitrationParamsChanges[arbitrationParamsIndex];
+        IArbitratorV2 arbitrator = arbitrationParams.arbitrator;
 
-        uint256 arbitrationCost = arbitrator.arbitrationCost(arbitratorExtraData);
+        uint256 arbitrationCost = arbitrator.arbitrationCost(arbitrationParams.arbitratorExtraData);
         uint256 totalCost = arbitrationCost + removalBaseDeposit;
         require(msg.value >= totalCost, "You must fully fund the request.");
 
@@ -381,7 +396,13 @@ contract Curate is IArbitrableV2 {
         request.requester = payable(msg.sender);
         request.requestType = RequestType.Clearing;
 
-        emit RequestSubmitted(_itemID, getRequestID(_itemID, item.requestCount - 1));
+        uint256 requestID = getRequestID(_itemID, item.requestCount - 1);
+        emit RequestSubmitted(_itemID, requestID);
+
+        // Emit evidence if it was provided.
+        if (bytes(_evidence).length > 0) {
+            arbitrationParams.evidenceModule.submitEvidence(requestID, _evidence); // TODO: add a msg.sender parameter to submitEvidence.
+        }
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);

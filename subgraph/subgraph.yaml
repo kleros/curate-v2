@@ -1,4 +1,60 @@
 specVersion: 0.0.4
+description: Curate
+features:
+  - fullTextSearch
+  - ipfsOnEthereumContracts
+repository: https://github.com/kleros/curate-v2
 schema:
   file: ./schema.graphql
 dataSources:
+  - kind: ethereum/contract
+    name: CurateFactory
+    network: arbitrum-sepolia
+    source:
+      address: "0x5D03d22229899cd7Af84a3F0f9c39B24F51c8E21"
+      abi: CurateFactory
+      startBlock: 14782094
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Registry
+      abis:
+        - name: CurateFactory
+          file: ./../contracts/deployments/arbitrumSepoliaDevnet/CurateFactory.json
+      eventHandlers:
+        - event: NewGTCR(indexed address)
+          handler: handleNewCurate
+      file: ./src/CurateFactory.ts
+templates:
+  - kind: ethereum/contract
+    name: Curate
+    network: arbitrum-sepolia
+    source:
+      abi: Curate
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      entities:
+        - Item,
+        - ItemProp,
+        - Request,
+        - Round,
+        - Registry,
+      abis:
+        - name: Curate
+          file: ./../contracts/deployments/arbitrumSepoliaDevnet/CurateV2.json
+      eventHandlers:
+        - event: NewItem(indexed bytes32,string,bool)
+          handler: handleNewItem
+        - event: RequestSubmitted(indexed bytes32,uint256)
+          handler: handleRequestSubmitted
+        - event: ItemStatusChange(indexed bytes32,bool)
+          handler: handleStatusUpdated
+        - event: Ruling(indexed address,indexed uint256,uint256)
+          handler: handleRuling
+        - event: ConnectedTCRSet(indexed address)
+          handler: handleConnectedTCRSet
+      file: ./src/Curate.ts

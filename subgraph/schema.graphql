@@ -1,0 +1,247 @@
+enum Status {
+  "The item is not registered on the TCR and there are no pending requests."
+  Absent
+  "The item is registered and there are no pending requests."
+  Registered
+  "The item is not registered on the TCR, but there is a pending registration request."
+  RegistrationRequested
+  "The item is registered on the TCR, but there is a pending removal request. These are sometimes also called removal requests."
+  ClearingRequested
+}
+
+enum Ruling {
+  "The arbitrator did not rule or refused to rule."
+  None
+  "The arbitrator ruled in favor of the requester."
+  Accept
+  "The arbitrator in favor of the challenger."
+  Reject
+}
+
+type EvidenceGroup @entity {
+  "evidenceGroupId@tcrAddress"
+  id: ID!
+  "Evidences posted to this evidenceGroupId"
+  evidences: [Evidence!]! @derivedFrom(field: "evidenceGroup")
+  "Number of evidences posted in this group"
+  numberOfEvidence: BigInt!
+}
+
+type Evidence @entity {
+  "evidenceGroupId@tcrAddress-number"
+  id: ID!
+  "The arbitrator's address."
+  arbitrator: Bytes!
+  "The evidence group"
+  evidenceGroup: EvidenceGroup!
+  "The address of the party that sent this piece of evidence."
+  party: Bytes!
+  "The URI of the evidence file."
+  URI: String!
+  "This is the <number>th evidence submitted (starting at 0) for <request>."
+  number: BigInt!
+  "When was this evidence posted"
+  timestamp: BigInt!
+  "Tx hash of the evidence submission"
+  txHash: Bytes!
+  "Name of the evidence"
+  name: String
+  "Title of the evidence"
+  title: String
+  "Description of the evidence"
+  description: String
+  "URI of the attached file"
+  fileURI: String
+  "File extension of the attached file"
+  fileTypeExtension: String
+}
+
+type Arbitrator @entity {
+  "The address of the arbitrator"
+  id: ID!
+}
+
+type Registry @entity {
+  "The registry address"
+  id: ID!
+  "The items submitted to this list"
+  items: [Item!]! @derivedFrom(field: "registry")
+  "The requests submitted to this list"
+  requests: [Request!]! @derivedFrom(field: "registry")
+  "The total number of items in absent state."
+  numberOfAbsent: BigInt!
+  "The total number of items in registered state."
+  numberOfRegistered: BigInt!
+  "The total number of items in the registration requested state."
+  numberOfRegistrationRequested: BigInt!
+  numberOfClearingRequested: BigInt!
+  "The total number of items in the challenged registration state."
+  numberOfChallengedRegistrations: BigInt!
+  "The total number of items in the challenged removal state."
+  numberOfChallengedClearing: BigInt!
+  "Connected TCR. Can be the 0 address. In practice, will never be null."
+  connectedTCR: Bytes
+}
+
+type Item @entity {
+  "The id of the item in the subgraph entity. Format: <itemID>@<listaddress_lowercase>"
+  id: ID!
+  "The ID of the item in the registry. Also the keccak256 hash of the data."
+  itemID: Bytes!
+  "The data describing the item."
+  data: String!
+  "The parsed data describing the item."
+  props: [ItemProp!]! @derivedFrom(field: "item")
+  "First indexable value of the json file."
+  key0: String
+  "Second indexable value of the json file."
+  key1: String
+  "Third indexable value of the json file."
+  key2: String
+  "Fourth indexable value of the json file."
+  key3: String
+  "Fifth indexable value of the json file."
+  key4: String
+  "The item identifiers combined as a single string."
+  keywords: String
+  "The current status of the item."
+  status: Status!
+  "List of status change requests made for the item in the form requests[requestID]."
+  requests: [Request!]! @derivedFrom(field: "item")
+  "The total number of requests for this item."
+  numberOfRequests: BigInt!
+  "The registry where this item was submitted."
+  registry: Registry!
+  "The address of the registry this item was submitted. Redundant with registry field to allow use in conditionals."
+  registryAddress: Bytes!
+  "Time when the latest request was made."
+  latestRequestSubmissionTime: BigInt!
+  "The time the latest request was resolved."
+  latestRequestResolutionTime: BigInt!
+  "Whether the item is currently disputed."
+  disputed: Boolean!
+  "The account that made the latest request to the item."
+  latestRequester: Bytes!
+  "The account that challenged the latest request, if any."
+  latestChallenger: Bytes!
+}
+
+type _Schema_
+  @fulltext(
+    name: "itemSearch"
+    language: en
+    algorithm: rank
+    include: [{ entity: "Item", fields: [{ name: "keywords" }] }]
+  )
+
+type ItemProp @entity {
+  id: ID!
+  type: String!
+  label: String!
+  description: String!
+  isIdentifier: Boolean!
+  value: String
+  item: Item!
+}
+
+type Request @entity {
+  "The item ID (which is the keccak256 hash of its data)."
+  id: ID!
+  "True if a dispute was raised."
+  disputed: Boolean!
+  "ID of the dispute, if any."
+  disputeID: BigInt!
+  "Time when the request was made. Used to track when the challenge period ends."
+  submissionTime: BigInt!
+  "True if the request was executed and/or any raised disputes were resolved."
+  resolved: Boolean!
+  "The address of the party that made a request"
+  requester: Bytes!
+  "The address of the party that challenged the request"
+  challenger: Bytes!
+  "The arbitrator trusted to solve disputes for this request."
+  arbitrator: Bytes!
+  "The extra data for the trusted arbitrator of this request."
+  arbitratorExtraData: Bytes!
+  "The deposit that would be awarded to the challenger if challenge is successful"
+  deposit: BigInt!
+  "The outcome of the dispute, if any. Note that unsuccessful appeal fundings can invert the arbitrator ruling (so this may differ from the ruling given by the arbitrator)."
+  disputeOutcome: Ruling!
+  "Tracks each round of a dispute in the form rounds[roundID]."
+  rounds: [Round!]! @derivedFrom(field: "request")
+  "The evidence group for this request."
+  evidenceGroup: EvidenceGroup!
+  "The total number of rounds on this request."
+  numberOfRounds: BigInt!
+  "Whether it was requested to add or remove the item to/from the list."
+  requestType: Status!
+  "The item this request belongs to."
+  item: Item!
+  "The registry where this request was submitted."
+  registry: Registry!
+  "The address of the registry this item was submitted. Redundant with registry field to allow use in conditionals."
+  registryAddress: Bytes!
+  "The time the request was resolved."
+  resolutionTime: BigInt!
+  "Only set if the request was settled by a dispute. Used by the twitter bot"
+  finalRuling: BigInt
+  "The hash of the transaction that created this request."
+  creationTx: Bytes!
+  "The hash of the transaction that solved this request."
+  resolutionTx: Bytes
+}
+
+type Round @entity {
+  id: ID!
+  "The total amount of appeal fees contributed to the requester in this round."
+  amountPaidRequester: BigInt!
+  "The total amount of appeal fees contributed to the challenger in this round."
+  amountPaidChallenger: BigInt!
+  "Whether the requester is fully funded."
+  hasPaidRequester: Boolean!
+  "Whether the challenger is fully funded."
+  hasPaidChallenger: Boolean!
+  "When was the last contribution for requester (hack for curate bot)"
+  lastFundedRequester: BigInt!
+  "When was the last contribution for challenger (hack for curate bot)"
+  lastFundedChallenger: BigInt!
+  "Sum of reimbursable fees and stake rewards available to the parties that made contributions to the side that ultimately wins a dispute."
+  feeRewards: BigInt!
+  "The request to which this round belongs."
+  request: Request!
+  "The time the appeal period starts, if in the appeal period."
+  appealPeriodStart: BigInt!
+  "The time the appeal period ends, if in the appeal period."
+  appealPeriodEnd: BigInt!
+  "The time the round received the ruling."
+  rulingTime: BigInt!
+  "The ruling given by the arbitrator."
+  ruling: Ruling!
+  "The tx hash of the moment appealing became possible"
+  txHashAppealPossible: Bytes
+  "The tx hash of the moment the round was appealed"
+  txHashAppealDecision: Bytes
+  "The moment the round was created."
+  creationTime: BigInt!
+  "The contributions made to this round."
+  contributions: [Contribution!]! @derivedFrom(field: "round")
+  "The number of contributions made to this round"
+  numberOfContributions: BigInt!
+  "Whether this round was appealed."
+  appealed: Boolean!
+  "When this round was appealed, if it was appealed"
+  appealedAt: BigInt
+}
+
+type Contribution @entity {
+  "The contribution ID."
+  id: ID!
+  "The round the contribution was made to."
+  round: Round!
+  "The address that made the contribution."
+  contributor: Bytes!
+  "Whether there are any withdrawable contributions."
+  withdrawable: Boolean!
+  "To which side the contribution was made."
+  side: BigInt!
+}

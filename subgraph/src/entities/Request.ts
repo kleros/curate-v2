@@ -1,7 +1,7 @@
 import { log } from "@graphprotocol/graph-ts";
 import { Item, Registry, Request } from "../../generated/schema";
 import { Curate, RequestSubmitted } from "../../generated/templates/Curate/Curate";
-import { NONE, ONE, ZERO, ZERO_ADDRESS } from "../utils";
+import { NONE, ONE, REGISTRATION_REQUESTED, ZERO, ZERO_ADDRESS } from "../utils";
 
 export function createRequestFromEvent(event: RequestSubmitted): void {
   let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
@@ -33,7 +33,13 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.resolved = false;
   request.disputeID = ZERO;
   request.submissionTime = event.block.timestamp;
-  request.numberOfRounds = ZERO;
   request.requestType = item.status;
+  request.creationTx = event.transaction.hash;
+
+  if (request.requestType == REGISTRATION_REQUESTED) {
+    request.deposit = curate.submissionBaseDeposit();
+  } else {
+    request.deposit = curate.removalBaseDeposit();
+  }
   request.save();
 }

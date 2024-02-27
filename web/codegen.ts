@@ -3,7 +3,7 @@ import { graphqlUrl } from "utils/graphqlQueryFnHelper";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: [graphqlUrl(false), graphqlUrl(true)],
+  schema: [graphqlUrl()],
   documents: "./src/hooks/queries/*.ts",
   generates: {
     "./src/graphql/": {

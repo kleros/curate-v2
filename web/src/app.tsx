@@ -11,23 +11,26 @@ import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
+import GraphqlBatcherProvider from "./context/GraphqlBatcher";
 
 const App: React.FC = () => {
   return (
     <StyledComponentsProvider>
       <QueryClientProvider>
-        <RefetchOnBlock />
-        <Web3Provider>
-          <IsListProvider>
-            <SentryRoutes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="lists/*" element={<AllLists />} />
-                <Route path="*" element={<h1>404 not found</h1>} />
-              </Route>
-            </SentryRoutes>
-          </IsListProvider>
-        </Web3Provider>
+        <GraphqlBatcherProvider>
+          <RefetchOnBlock />
+          <Web3Provider>
+            <IsListProvider>
+              <SentryRoutes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="lists/*" element={<AllLists />} />
+                  <Route path="*" element={<h1>404 not found</h1>} />
+                </Route>
+              </SentryRoutes>
+            </IsListProvider>
+          </Web3Provider>
+        </GraphqlBatcherProvider>
       </QueryClientProvider>
     </StyledComponentsProvider>
   );

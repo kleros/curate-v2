@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Filters from "./Filters";
 import Stats, { IStats } from "./Stats";
+import Filters, { IFilters } from "./Filters";
 
 const Container = styled.div`
   display: flex;
@@ -12,10 +12,10 @@ const Container = styled.div`
   justify-content: space-between;
 `;
 
-const StatsAndFilters: React.FC<IStats> = ({ totalRegistries }) => (
+const StatsAndFilters: React.FC<IStats & IFilters> = ({ fields, isListFilter }) => (
   <Container>
-    <Stats {...{ totalRegistries }} />
-    <Filters />
+    <Stats {...{ fields }} />
+    <Filters {...{ isListFilter }} />
   </Container>
 );
 

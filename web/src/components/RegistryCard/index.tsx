@@ -1,12 +1,12 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { Card } from "@kleros/ui-components-library";
 import { useIsList } from "context/IsListProvider";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { lists } from "consts/index";
 import StatusBanner from "./StatusBanner";
 import RegistryInfo from "./RegistryInfo";
+import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -32,17 +32,17 @@ interface IListCard extends List {
 
 const RegistryCard: React.FC<IListCard> = ({ id, title, logoURI, totalItems, status, chainId, overrideIsList }) => {
   const { isList } = useIsList();
+  const navigateAndScrollTop = useNavigateAndScrollTop();
 
-  const navigate = useNavigate();
   return (
     <>
       {!isList || overrideIsList ? (
-        <StyledCard hover onClick={() => navigate(`/lists/${id.toString()}`)}>
+        <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/1/desc/all`)}>
           <StatusBanner {...{ status, chainId }} />
           <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} />
         </StyledCard>
       ) : (
-        <StyledListItem hover onClick={() => navigate(`/lists/${id.toString()}`)}>
+        <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/desc/all`)}>
           <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} isList />
         </StyledListItem>
       )}

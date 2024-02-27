@@ -1,7 +1,9 @@
 import { Bytes, ipfs, json, log } from "@graphprotocol/graph-ts";
-import { Item, ItemProp, Registry } from "../../generated/schema";
+import { Item, ItemProp, Registry, User } from "../../generated/schema";
 import { Curate, NewItem } from "../../generated/templates/Curate/Curate";
-import { JSONValueToBool, JSONValueToMaybeString, ZERO, ZERO_ADDRESS, getStatus } from "../utils";
+import { JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, ZERO_ADDRESS, getStatus } from "../utils";
+import { ensureCounter } from "./Counters";
+import { ensureUser } from "./User";
 
 export function createItemFromEvent(event: NewItem): void {
   // We assume this is an item added via addItemDirectly and care
@@ -9,9 +11,7 @@ export function createItemFromEvent(event: NewItem): void {
   // If it was emitted via addItem, all the missing/wrong data regarding
   // things like submission time, arbitrator and deposit will be set in
   // handleRequestSubmitted.
-  //
-  // Accounting for items added or removed directly is done
-  // inside handleStatusUpdated.
+
   let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
   let curate = Curate.bind(event.address);
   let registry = Registry.load(event.address.toHexString());
@@ -19,6 +19,13 @@ export function createItemFromEvent(event: NewItem): void {
     log.error(`Registry {} not found`, [event.address.toHexString()]);
     return;
   }
+
+  let counter = ensureCounter();
+
+  counter.totalItems = counter.totalItems.plus(ONE);
+  let doesCuratorExist = User.load(event.transaction.from.toHexString());
+  if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
+  counter.save();
 
   let itemInfo = curate.getItemInfo(event.params._itemID);
 
@@ -30,8 +37,7 @@ export function createItemFromEvent(event: NewItem): void {
   item.registryAddress = event.address;
   item.disputed = false;
   item.status = getStatus(itemInfo.value0);
-  item.latestRequester = ZERO_ADDRESS;
-  item.latestChallenger = ZERO_ADDRESS;
+  item.registerer = ensureUser(event.transaction.from.toHexString()).id;
   item.latestRequestResolutionTime = ZERO;
   item.latestRequestSubmissionTime = ZERO;
 

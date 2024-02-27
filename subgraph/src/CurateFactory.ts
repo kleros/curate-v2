@@ -1,19 +1,23 @@
 /* eslint-disable prefer-const */
 import { NewGTCR } from "../generated/CurateFactory/CurateFactory";
-import { Registry } from "../generated/schema";
+import { Registry, User } from "../generated/schema";
 import { Curate } from "../generated/templates";
-import { ZERO } from "./utils";
+import { ensureCounter } from "./entities/Counters";
+import { ensureUser } from "./entities/User";
+import { ONE } from "./utils";
 
 export function handleNewCurate(event: NewGTCR): void {
   Curate.create(event.params._address);
 
   let registry = new Registry(event.params._address.toHexString());
+  let counter = ensureCounter();
 
-  registry.numberOfAbsent = ZERO;
-  registry.numberOfRegistered = ZERO;
-  registry.numberOfRegistrationRequested = ZERO;
-  registry.numberOfClearingRequested = ZERO;
-  registry.numberOfChallengedRegistrations = ZERO;
-  registry.numberOfChallengedClearing = ZERO;
+  counter.totalRegistries = counter.totalRegistries.plus(ONE);
+  let doesCuratorExist = User.load(event.transaction.from.toHexString());
+  if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
+
+  registry.registerer = ensureUser(event.transaction.from.toHexString()).id;
+
+  counter.save();
   registry.save();
 }

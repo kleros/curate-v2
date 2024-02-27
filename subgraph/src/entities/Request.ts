@@ -1,7 +1,9 @@
 import { log } from "@graphprotocol/graph-ts";
 import { Item, Registry, Request } from "../../generated/schema";
 import { Curate, RequestSubmitted } from "../../generated/templates/Curate/Curate";
-import { NONE, ONE, REGISTRATION_REQUESTED, ZERO, ZERO_ADDRESS } from "../utils";
+import { NONE, ONE, ZERO } from "../utils";
+import { ensureCounter } from "./Counters";
+import { ensureUser } from "./User";
 
 export function createRequestFromEvent(event: RequestSubmitted): void {
   let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
@@ -23,8 +25,7 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.disputed = false;
   request.arbitrator = curate.getArbitrator();
   request.arbitratorExtraData = curate.getArbitratorExtraData();
-  request.challenger = ZERO_ADDRESS;
-  request.requester = event.transaction.from;
+  request.requester = ensureUser(event.transaction.from.toHexString()).id;
   request.item = item.id;
   request.registry = registry.id;
   request.registryAddress = event.address;
@@ -36,10 +37,13 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.requestType = item.status;
   request.creationTx = event.transaction.hash;
 
-  if (request.requestType == REGISTRATION_REQUESTED) {
-    request.deposit = curate.submissionBaseDeposit();
-  } else {
-    request.deposit = curate.removalBaseDeposit();
-  }
+  let counter = ensureCounter();
+  let deposit = item.status.includes("registrationRequested")
+    ? curate.submissionBaseDeposit()
+    : curate.removalBaseDeposit();
+  request.deposit = deposit;
+  counter.totalDeposits = counter.totalDeposits.plus(deposit);
+
+  counter.save();
   request.save();
 }

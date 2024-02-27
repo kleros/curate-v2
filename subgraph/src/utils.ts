@@ -4,10 +4,12 @@ export const ZERO = BigInt.fromI32(0);
 export const ONE = BigInt.fromI32(1);
 export const ZERO_ADDRESS = Bytes.fromHexString("0x0000000000000000000000000000000000000000") as Bytes;
 
-export const ABSENT = "Absent";
-export const REGISTERED = "Registered";
-export const REGISTRATION_REQUESTED = "RegistrationRequested";
-export const CLEARING_REQUESTED = "ClearingRequested";
+export enum ItemStatus {
+  ABSENT,
+  REGISTERED,
+  REGISTRATION_REQUESTED,
+  CLEARING_REQUESTED,
+}
 
 export const NONE = "None";
 export const ACCEPT = "Accept";
@@ -17,39 +19,9 @@ export const NO_RULING_CODE = 0;
 export const REQUESTER_CODE = 1;
 export const CHALLENGER_CODE = 2;
 
-export const ABSENT_CODE = 0;
-export const REGISTERED_CODE = 1;
-export const REGISTRATION_REQUESTED_CODE = 2;
-export const CLEARING_REQUESTED_CODE = 3;
-export const CHALLENGED_REGISTRATION_REQUEST_CODE = 4;
-export const CHALLENGED_CLEARING_REQUEST_CODE = 5;
-export const CONTRACT_STATUS_EXTENDED = new Map<string, number>();
-CONTRACT_STATUS_EXTENDED.set(ABSENT, ABSENT_CODE);
-CONTRACT_STATUS_EXTENDED.set(REGISTERED, REGISTERED_CODE);
-CONTRACT_STATUS_EXTENDED.set(REGISTRATION_REQUESTED, REGISTRATION_REQUESTED_CODE);
-CONTRACT_STATUS_EXTENDED.set(CLEARING_REQUESTED, CLEARING_REQUESTED_CODE);
-
-export const CONTRACT_STATUS_NAMES = new Map<number, string>();
-CONTRACT_STATUS_NAMES.set(ABSENT_CODE, "Absent");
-CONTRACT_STATUS_NAMES.set(REGISTERED_CODE, "Registered");
-CONTRACT_STATUS_NAMES.set(REGISTRATION_REQUESTED_CODE, "RegistrationRequested");
-CONTRACT_STATUS_NAMES.set(CLEARING_REQUESTED_CODE, "ClearingRequested");
-
-export function getExtendedStatus(disputed: boolean, status: string): number {
-  if (disputed) {
-    if (status == CONTRACT_STATUS_NAMES.get(REGISTRATION_REQUESTED_CODE)) return CHALLENGED_REGISTRATION_REQUEST_CODE;
-    else return CHALLENGED_CLEARING_REQUEST_CODE;
-  }
-
-  return CONTRACT_STATUS_EXTENDED.get(status) || 0;
-}
-
-export function getStatus(status: number): string {
-  if (status == ABSENT_CODE) return ABSENT;
-  if (status == REGISTERED_CODE) return REGISTERED;
-  if (status == REGISTRATION_REQUESTED_CODE) return REGISTRATION_REQUESTED;
-  if (status == CLEARING_REQUESTED_CODE) return CLEARING_REQUESTED;
-  return "Error";
+export function getStatus(index: i32): string {
+  const statusArray = ["absent", "registered", "registrationRequested", "clearingRequested"];
+  return statusArray.at(index) || "None";
 }
 
 export function getFinalRuling(outcome: number): string {

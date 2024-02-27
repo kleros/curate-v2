@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { log } from "@graphprotocol/graph-ts";
-import { Item, ItemProp, Request, Registry } from "../generated/schema";
+import { Item, Request, Registry } from "../generated/schema";
 
 import {
   ItemStatusChange,
@@ -11,18 +11,10 @@ import {
   Curate,
   DisputeRequest,
 } from "../generated/templates/Curate/Curate";
-import {
-  CLEARING_REQUESTED_CODE,
-  ONE,
-  REGISTRATION_REQUESTED_CODE,
-  ZERO,
-  getExtendedStatus,
-  getFinalRuling,
-  getStatus,
-} from "./utils";
-import { updateCounters } from "./Counters";
+import { ItemStatus, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
 import { createRequestFromEvent } from "./entities/Request";
 import { createItemFromEvent } from "./entities/Item";
+import { ensureUser } from "./entities/User";
 
 // Items on a TCR can be in 1 of 4 states:
 // - (0) Absent: The item is not registered on the TCR and there are no pending requests.
@@ -68,37 +60,13 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
     return;
   }
 
-  // `previousStatus` and `newStatus` are used for accounting.
-  // Note that if this is the very first request of an item,
-  // item.status and item.dispute are dirty because they were set by
-  // handleNewItem, executed before this handler and so `previousStatus`
-  // would be wrong. We use a condition to detect if its the very
-  // first request and if so, ignore its contents (see below in accounting).
-  let previousStatus = getExtendedStatus(item.disputed, item.status);
-  let newStatus = getExtendedStatus(item.disputed, item.status); // TODO
-
   item.numberOfRequests = item.numberOfRequests.plus(ONE);
   item.status = getStatus(itemInfo.value0);
-  item.latestRequester = event.transaction.from;
+  item.latestRequester = ensureUser(event.transaction.from.toHexString()).id;
   item.latestRequestResolutionTime = ZERO;
   item.latestRequestSubmissionTime = event.block.timestamp;
 
   createRequestFromEvent(event);
-
-  // Accounting.
-  if (itemInfo.value1.equals(ONE)) {
-    let registry = Registry.load(event.address.toHexString());
-    if (!registry) {
-      log.error(`Registry at address {} not found`, [event.address.toHexString()]);
-      return;
-    }
-    // This is the first request for this item, which must be
-    // a registration request.
-    registry.numberOfRegistrationRequested = registry.numberOfRegistrationRequested.plus(ONE);
-    registry.save();
-  } else {
-    updateCounters(previousStatus, newStatus, event.address);
-  }
   item.save();
 }
 
@@ -107,7 +75,7 @@ export function handleStatusUpdated(event: ItemStatusChange): void {
   // All other status updates are handled elsewhere.
   let curate = Curate.bind(event.address);
   let itemInfo = curate.getItemInfo(event.params._itemID);
-  if (itemInfo.value0 == REGISTRATION_REQUESTED_CODE || itemInfo.value0 == CLEARING_REQUESTED_CODE) {
+  if (itemInfo.value0 == ItemStatus.REGISTRATION_REQUESTED || itemInfo.value0 == ItemStatus.CLEARING_REQUESTED) {
     // Request not yet resolved. No-op as changes are handled
     // elsewhere. (RequestSubmitted handler)
     return;
@@ -120,16 +88,8 @@ export function handleStatusUpdated(event: ItemStatusChange): void {
     return;
   }
 
-  // We take the previous and new extended statuses for accounting purposes.
-  let previousStatus = getExtendedStatus(item.disputed, item.status);
   item.status = getStatus(itemInfo.value0);
   item.disputed = false;
-  let newStatus = getExtendedStatus(item.disputed, item.status);
-
-  if (previousStatus != newStatus) {
-    // Accounting.
-    updateCounters(previousStatus, newStatus, event.address);
-  }
 
   if (event.params._updatedDirectly) {
     // Direct actions (e.g. addItemDirectly and removeItemDirectly)
@@ -204,11 +164,9 @@ export function handleRequestChallenged(event: DisputeRequest): void {
     return;
   }
   let itemInfo = curate.getItemInfo(itemID);
-  let previousStatus = getExtendedStatus(item.disputed, item.status);
   item.disputed = true;
-  item.latestChallenger = event.transaction.from;
+  item.latestChallenger = ensureUser(event.transaction.from.toHexString()).id;
   item.status = getStatus(itemInfo.value0);
-  let newStatus = getExtendedStatus(item.disputed, item.status);
 
   let requestIndex = item.numberOfRequests.minus(ONE);
   let requestID = graphItemID + "-" + requestIndex.toString();
@@ -219,11 +177,8 @@ export function handleRequestChallenged(event: DisputeRequest): void {
   }
 
   request.disputed = true;
-  request.challenger = event.transaction.from;
+  request.challenger = ensureUser(event.transaction.from.toHexString()).id;
   request.disputeID = event.params._arbitrableDisputeID;
-
-  // Accounting.
-  updateCounters(previousStatus, newStatus, event.address);
 
   request.save();
   item.save();

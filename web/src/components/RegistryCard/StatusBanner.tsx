@@ -45,7 +45,7 @@ interface IStatusBanner {
   isList?: boolean;
 }
 
-const getStatusColor = (status: Status, theme: Theme): [string, string] => {
+export const getStatusColor = (status: Status, theme: Theme): [string, string] => {
   switch (status) {
     case Status.Pending:
       return [theme.primaryBlue, theme.mediumBlue];
@@ -60,7 +60,7 @@ const getStatusColor = (status: Status, theme: Theme): [string, string] => {
   }
 };
 
-const getStatusLabel = (status: Status): string => {
+export const getStatusLabel = (status: Status): string => {
   switch (status) {
     case Status.Pending:
       return "Pending";

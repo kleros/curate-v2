@@ -12,6 +12,8 @@ import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
 import GraphqlBatcherProvider from "./context/GraphqlBatcher";
+import { SubmitItemProvider } from "./context/SubmitItemContext";
+import SubmitItem from "./pages/SubmitItem";
 
 const App: React.FC = () => {
   return (
@@ -21,13 +23,16 @@ const App: React.FC = () => {
           <RefetchOnBlock />
           <Web3Provider>
             <IsListProvider>
-              <SentryRoutes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<Home />} />
-                  <Route path="lists/*" element={<AllLists />} />
-                  <Route path="*" element={<h1>404 not found</h1>} />
-                </Route>
-              </SentryRoutes>
+              <SubmitItemProvider>
+                <SentryRoutes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path="lists/*" element={<AllLists />} />
+                    <Route path="submitItem/*" element={<SubmitItem />} />
+                    <Route path="*" element={<h1>404 not found</h1>} />
+                  </Route>
+                </SentryRoutes>
+              </SubmitItemProvider>
             </IsListProvider>
           </Web3Provider>
         </GraphqlBatcherProvider>

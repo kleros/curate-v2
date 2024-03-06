@@ -1,14 +1,13 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { useWindowSize } from "react-use";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@kleros/ui-components-library";
 import { lists } from "consts/index";
 import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
 import { useIsList } from "context/IsListProvider";
-import { OverlayScrollContext } from "context/OverlayScrollContext";
+import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 
 const Container = styled.div`
   width: 100%;
@@ -36,18 +35,6 @@ const ListContainer = styled.div`
 const StyledButton = styled(Button)`
   margin: 0 auto;
 `;
-
-const useNavigateAndScrollTop = () => {
-  const navigate = useNavigate();
-  const osInstanceRef = useContext(OverlayScrollContext);
-
-  const navigateAndScrollTop = (path) => {
-    navigate(path);
-    osInstanceRef?.current?.osInstance().elements().viewport.scroll({ top: 0 });
-  };
-
-  return navigateAndScrollTop;
-};
 
 const HighlightedLists: React.FC = () => {
   const navigateAndScrollTop = useNavigateAndScrollTop();

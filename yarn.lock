@@ -4782,7 +4782,7 @@ __metadata:
     "@filebase/client": "npm:^0.0.5"
     "@graphql-codegen/cli": "npm:^4.0.1"
     "@graphql-codegen/client-preset": "npm:^4.2.0"
-    "@kleros/ui-components-library": "npm:^2.6.3"
+    "@kleros/ui-components-library": "npm:^2.7.1"
     "@netlify/functions": "npm:^1.6.0"
     "@parcel/transformer-svg-react": "npm:2.11.0"
     "@parcel/watcher": "npm:~2.2.0"
@@ -4850,9 +4850,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kleros/ui-components-library@npm:^2.6.3":
-  version: 2.7.0
-  resolution: "@kleros/ui-components-library@npm:2.7.0"
+"@kleros/ui-components-library@npm:^2.7.1":
+  version: 2.7.1
+  resolution: "@kleros/ui-components-library@npm:2.7.1"
   dependencies:
     "@datepicker-react/hooks": "npm:^2.8.4"
     "@swc/helpers": "npm:^0.3.2"
@@ -4869,7 +4869,7 @@ __metadata:
     react-dom: ^18.0.0
     react-is: ^18.0.0
     styled-components: ^5.3.3
-  checksum: 1ac3c6f8365393389630d26e4fff0497652f4b78a7a078f5de04f2d46067ca6c5be0ad4d19e56f5874a351370d4f2b3faeca8db2d6f31e8bfc98396eebc6fdb2
+  checksum: 63339c0487b1645eef312e2b0734c9a8aebaa1746706033f40b5d35409a71e7cebbef2884fdb2d901bd1415ebc737d152be35ec9ffde67f180455a96f7acd34a
   languageName: node
   linkType: hard
 

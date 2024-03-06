@@ -7,7 +7,7 @@ import { StandardPagination } from "@kleros/ui-components-library";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { useIsList } from "context/IsListProvider";
 import { isUndefined } from "utils/index";
-import { decodeURIFilter } from "utils/uri";
+import { decodeListURIFilter } from "utils/uri";
 // import { RegistryDetailsFragment } from "queries/useCasesQuery";
 import RegistryCard from "components/RegistryCard";
 
@@ -48,7 +48,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   setCurrentPage,
 }) => {
   const { filter } = useParams();
-  const decodedFilter = decodeURIFilter(filter ?? "all");
+  const decodedFilter = decodeListURIFilter(filter ?? "all");
   const { id: searchValue } = decodedFilter;
   const { isList } = useIsList();
   const { width } = useWindowSize();

@@ -24,13 +24,16 @@ const Field: React.FC<{ label: string; value: string }> = ({ label, value }) => 
 
 const Separator: React.FC = () => <SeparatorLabel>|</SeparatorLabel>;
 
+type Field = {
+  label: string;
+  value: string;
+};
+
 export interface IStats {
-  totalRegistries: number;
+  fields: Field[];
 }
 
-const Stats: React.FC<IStats> = ({ totalRegistries }) => {
-  const fields = [{ label: "Lists", value: totalRegistries.toString() }];
-
+const Stats: React.FC<IStats> = ({ fields }) => {
   return (
     <div>
       {fields.map(({ label, value }, i) => (

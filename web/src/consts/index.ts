@@ -69,3 +69,41 @@ export const lists = [
     logoURI: "https://ipfs.kleros.io//ipfs/QmZPeWnzHGKwvnckQE2QrdRJiUFqQXvQEZGFHdEAh7raHN/fno.png",
   },
 ];
+
+export const items = [
+  {
+    id: 1,
+    title: "ENS Resolver",
+    address: "0x922911F4f80a569a4425fa083456239838F7F003",
+    website: "metamask.io",
+    status: Status.Removed,
+  },
+  {
+    id: 2,
+    title: "ENS Resolver",
+    address: "0x922911F4f80a569a4425fa083456239838F7F003",
+    website: "metamask.io",
+    status: Status.Removed,
+  },
+  {
+    id: 3,
+    title: "ENS Resolver",
+    address: "0x922911F4f80a569a4425fa083456239838F7F003",
+    website: "metamask.io",
+    status: Status.Removed,
+  },
+  {
+    id: 4,
+    title: "ENS Resolver",
+    address: "0x922911F4f80a569a4425fa083456239838F7F003",
+    website: "metamask.io",
+    status: Status.Removed,
+  },
+  {
+    id: 5,
+    title: "ENS Resolver",
+    address: "0x922911F4f80a569a4425fa083456239838F7F003",
+    website: "metamask.io",
+    status: Status.Removed,
+  },
+];

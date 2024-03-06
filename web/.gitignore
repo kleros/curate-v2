@@ -22,6 +22,9 @@ parcel-bundle-reports
 .env.development.local
 .env.test.local
 .env.production.local
+!.env.devnet.public
+!.env.local.public
+!.env.testnet.public
 
 # generated code
 src/hooks/contracts

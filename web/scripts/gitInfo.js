@@ -17,9 +17,6 @@ const execSyncWrapper = (command) => {
 const main = () => {
   let version = packageJson.version;
   let gitCommitHash = execSyncWrapper("git rev-parse HEAD");
-  if(!gitCommitHash) {
-    throw error("No git commit hash found, using 'unknown'");
-  }
   let gitCommitShortHash = execSyncWrapper("git rev-parse --short=7 HEAD");
   let gitBranch = execSyncWrapper("git rev-parse --abbrev-ref HEAD");
   let gitTags = execSyncWrapper("git tag --points-at HEAD  | tr '\n' ',' | sed 's/,$//'");

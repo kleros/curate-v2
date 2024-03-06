@@ -1,0 +1,185 @@
+/* eslint-disable prefer-const */
+import { log } from "@graphprotocol/graph-ts";
+import { Item, Request, Registry } from "../generated/schema";
+
+import {
+  ItemStatusChange,
+  RequestSubmitted,
+  NewItem,
+  Ruling,
+  ConnectedTCRSet as ConnectedTCRSetEvent,
+  Curate,
+  DisputeRequest,
+} from "../generated/templates/Curate/Curate";
+import { ItemStatus, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
+import { createRequestFromEvent } from "./entities/Request";
+import { createItemFromEvent } from "./entities/Item";
+import { ensureUser } from "./entities/User";
+
+// Items on a TCR can be in 1 of 4 states:
+// - (0) Absent: The item is not registered on the TCR and there are no pending requests.
+// - (1) Registered: The item is registered and there are no pending requests.
+// - (2) Registration Requested: The item is not registered on the TCR, but there is a pending
+//       registration request.
+// - (3) Clearing Requested: The item is registered on the TCR, but there is a pending removal
+//       request. These are sometimes also called removal requests.
+//
+// Registration and removal requests can be challenged. Once the request resolves (either by
+// passing the challenge period or via dispute resolution), the item state is updated to 0 or 1.
+// Note that in this mapping, we also use extended status, which just map the combination
+// of the item status and disputed status.
+//
+// A variable naming convention regarding arrays and entities:
+// Index: This is the position of the in-contract array.
+// ID: This is the entity id.
+//
+// Example:
+// requestIndex: 0
+// requestID: <itemID>@<tcrAddress>-0
+//
+// The only exception to this rule is the itemID, which is the in-contract itemID.
+//
+// TIP: Before reading an event handler for the very first time, we recommend
+// looking at where that event is emitted in the contract. Remember that
+// the order in which events are emitted define the order in which
+// handlers are run.
+
+export function handleNewItem(event: NewItem): void {
+  createItemFromEvent(event);
+}
+
+export function handleRequestSubmitted(event: RequestSubmitted): void {
+  let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
+
+  let curate = Curate.bind(event.address);
+  let itemInfo = curate.getItemInfo(event.params._itemID);
+
+  let item = Item.load(graphItemID);
+  if (!item) {
+    log.error(`Item for graphItemID {} not found.`, [graphItemID]);
+    return;
+  }
+
+  item.numberOfRequests = item.numberOfRequests.plus(ONE);
+  item.status = getStatus(itemInfo.value0);
+  item.latestRequester = ensureUser(event.transaction.from.toHexString()).id;
+  item.latestRequestResolutionTime = ZERO;
+  item.latestRequestSubmissionTime = event.block.timestamp;
+
+  createRequestFromEvent(event);
+  item.save();
+}
+
+export function handleStatusUpdated(event: ItemStatusChange): void {
+  // This handler is used to handle transations to item statuses 0 and 1.
+  // All other status updates are handled elsewhere.
+  let curate = Curate.bind(event.address);
+  let itemInfo = curate.getItemInfo(event.params._itemID);
+  if (itemInfo.value0 == ItemStatus.REGISTRATION_REQUESTED || itemInfo.value0 == ItemStatus.CLEARING_REQUESTED) {
+    // Request not yet resolved. No-op as changes are handled
+    // elsewhere. (RequestSubmitted handler)
+    return;
+  }
+
+  let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
+  let item = Item.load(graphItemID);
+  if (!item) {
+    log.error(`Item {} not found.`, [graphItemID]);
+    return;
+  }
+
+  item.status = getStatus(itemInfo.value0);
+  item.disputed = false;
+
+  if (event.params._updatedDirectly) {
+    // Direct actions (e.g. addItemDirectly and removeItemDirectly)
+    // don't envolve any requests. Only the item is updated.
+    item.save();
+
+    return;
+  }
+
+  item.latestRequestResolutionTime = event.block.timestamp;
+
+  let requestIndex = item.numberOfRequests.minus(ONE);
+  let requestInfo = curate.getRequestInfo(event.params._itemID, requestIndex);
+
+  let requestID = graphItemID + "-" + requestIndex.toString();
+  let request = Request.load(requestID);
+  if (!request) {
+    log.error(`Request {} not found.`, [requestID]);
+    return;
+  }
+
+  request.resolved = true;
+  request.resolutionTime = event.block.timestamp;
+  request.resolutionTx = event.transaction.hash;
+  // requestInfo.value5 is request.ruling.
+  request.disputeOutcome = getFinalRuling(requestInfo.value5);
+
+  item.save();
+  request.save();
+}
+
+export function handleConnectedTCRSet(event: ConnectedTCRSetEvent): void {
+  let registry = Registry.load(event.address.toHexString());
+  if (!registry) {
+    log.error(`Registry {} not found.`, [event.address.toHexString()]);
+    return;
+  }
+  registry.connectedTCR = event.params._connectedTCR;
+
+  registry.save();
+}
+
+export function handleRuling(event: Ruling): void {
+  let curate = Curate.bind(event.address);
+  let itemID = curate.arbitratorDisputeIDToItemID(event.params._arbitrator, event.params._disputeID);
+  let graphItemID = itemID.toHexString() + "@" + event.address.toHexString();
+  let item = Item.load(graphItemID);
+  if (!item) {
+    log.error(`Ruling Item {} not found. tx {}`, [graphItemID, event.transaction.hash.toHexString()]);
+    return;
+  }
+
+  let requestID = item.id + "-" + item.numberOfRequests.minus(ONE).toString();
+  let request = Request.load(requestID);
+  if (!request) {
+    log.error(`Ruling Request {} not found. tx {}`, [requestID, event.transaction.hash.toHexString()]);
+    return;
+  }
+
+  request.finalRuling = event.params._ruling;
+  request.resolutionTime = event.block.timestamp;
+  request.save();
+}
+
+export function handleRequestChallenged(event: DisputeRequest): void {
+  let curate = Curate.bind(event.address);
+  let itemID = curate.arbitratorDisputeIDToItemID(event.params._arbitrator, event.params._arbitrableDisputeID);
+  let graphItemID = itemID.toHexString() + "@" + event.address.toHexString();
+  let item = Item.load(graphItemID);
+  if (!item) {
+    log.warning(`Item {} not found.`, [graphItemID]);
+    return;
+  }
+  let itemInfo = curate.getItemInfo(itemID);
+  item.disputed = true;
+  item.latestChallenger = ensureUser(event.transaction.from.toHexString()).id;
+  item.status = getStatus(itemInfo.value0);
+
+  let requestIndex = item.numberOfRequests.minus(ONE);
+  let requestID = graphItemID + "-" + requestIndex.toString();
+  let request = Request.load(requestID);
+  if (!request) {
+    log.error(`Request {} not found.`, [requestID]);
+    return;
+  }
+
+  request.disputed = true;
+  request.challenger = ensureUser(event.transaction.from.toHexString()).id;
+  request.disputeID = event.params._arbitrableDisputeID;
+
+  request.save();
+  item.save();
+}

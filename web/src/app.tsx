@@ -11,28 +11,31 @@ import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
-import SubmitItem from "./pages/SubmitItem";
+import GraphqlBatcherProvider from "./context/GraphqlBatcher";
 import { SubmitItemProvider } from "./context/SubmitItemContext";
+import SubmitItem from "./pages/SubmitItem";
 
 const App: React.FC = () => {
   return (
     <StyledComponentsProvider>
       <QueryClientProvider>
-        <RefetchOnBlock />
-        <Web3Provider>
-          <IsListProvider>
-            <SubmitItemProvider>
-              <SentryRoutes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<Home />} />
-                  <Route path="lists/*" element={<AllLists />} />
-                  <Route path="submitItem/*" element={<SubmitItem />} />
-                  <Route path="*" element={<h1>404 not found</h1>} />
-                </Route>
-              </SentryRoutes>
-            </SubmitItemProvider>
-          </IsListProvider>
-        </Web3Provider>
+        <GraphqlBatcherProvider>
+          <RefetchOnBlock />
+          <Web3Provider>
+            <IsListProvider>
+              <SubmitItemProvider>
+                <SentryRoutes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path="lists/*" element={<AllLists />} />
+                    <Route path="submitItem/*" element={<SubmitItem />} />
+                    <Route path="*" element={<h1>404 not found</h1>} />
+                  </Route>
+                </SentryRoutes>
+              </SubmitItemProvider>
+            </IsListProvider>
+          </Web3Provider>
+        </GraphqlBatcherProvider>
       </QueryClientProvider>
     </StyledComponentsProvider>
   );

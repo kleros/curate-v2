@@ -3,8 +3,8 @@ import { arbitrumSepolia } from "wagmi/chains";
 import { request } from "graphql-request";
 import { create, windowedFiniteBatchScheduler, Batcher } from "@yornaath/batshit";
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
-import { getGraphqlUrl } from "utils/getGraphqlUrl";
 import { debounceErrorToast } from "utils/debounceErrorToast";
+import { getGraphqlUrl } from "utils/getGraphqlUrl";
 
 interface IGraphqlBatcher {
   graphqlBatcher: Batcher<any, IQuery>;
@@ -14,14 +14,13 @@ interface IQuery {
   id: string;
   document: TypedDocumentNode<any, any>;
   variables: Record<string, any>;
-  isDisputeTemplate?: boolean;
   chainId?: number;
 }
 
 const Context = createContext<IGraphqlBatcher | undefined>(undefined);
 
 const fetcher = async (queries: IQuery[]) => {
-  const promises = queries.map(async ({ id, document, variables, isDisputeTemplate, chainId }) => {
+  const promises = queries.map(async ({ id, document, variables, chainId }) => {
     const url = getGraphqlUrl(chainId ?? arbitrumSepolia.id);
     try {
       return request(url, document, variables).then((result) => ({ id, result }));

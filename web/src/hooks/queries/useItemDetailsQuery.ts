@@ -9,8 +9,12 @@ const itemDetailsQuery = graphql(`
     item(id: $itemID) {
       status
       disputed
-      latestChallenger
-      latestRequester
+      latestChallenger {
+        id
+      }
+      latestRequester {
+        id
+      }
       registryAddress
       props {
         type

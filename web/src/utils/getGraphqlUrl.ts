@@ -1,4 +1,10 @@
 import { arbitrumSepolia } from "wagmi/chains";
 
-export const getGraphqlUrl = (chainId: number = arbitrumSepolia.id) =>
-  process.env.REACT_APP_ARBSEPOLIA_SUBGRAPH ?? "Wrong Subgraph URL. Please check the environment variables.";
+const REACT_APP_SUBGRAPH = {
+  [arbitrumSepolia.id]:
+    process.env.REACT_APP_ARBSEPOLIA_SUBGRAPH ?? "Wrong Subgraph URL. Please check the environment variables.",
+};
+
+export const getGraphqlUrl = (chainId: number = arbitrumSepolia.id) => {
+  return REACT_APP_SUBGRAPH[chainId];
+};

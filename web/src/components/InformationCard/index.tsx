@@ -120,6 +120,7 @@ interface IInformationCard {
   chainId: number;
   status: string;
   isItem?: boolean;
+  className?: string;
   // itemParams?: Object : item will have dynamic params
 }
 
@@ -130,13 +131,14 @@ const InformationCard: React.FC<IInformationCard> = ({
   chainId = 100,
   status = Status.Included,
   isItem = false,
+  className,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
   const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
 
   return (
     <>
-      <StyledCard>
+      <StyledCard {...{ className }}>
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>

@@ -19,7 +19,18 @@ contract CurateFactory {
 
     /// @dev Emitted when a new Curate contract is deployed using this factory. TODO: change TCR mentions.
     /// @param _address The address of the newly deployed Curate contract.
-    event NewGTCR(CurateV2 indexed _address);
+    /// @param _listMetadata A link to registry / list metadata (title,description) using its URI
+    event NewList(CurateV2 indexed _address, string _listMetadata);
+
+    // ************************************* //
+    // *         Enums / Structs           * //
+    // ************************************* //
+
+    struct TemplateRegistryParams {
+        address templateRegistry; // The current status of the item.
+        string[2] registrationTemplateParameters; // Template and data mappings json for registration requests.
+        string[2] removalTemplateParameters; // Template and data mappings json for removal requests.
+    }
 
     // ************************************* //
     // *             Storage               * //
@@ -47,10 +58,11 @@ contract CurateFactory {
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
     /// @param _evidenceModule The evidence contract for the arbitrator.
-    /// @param _connectedTCR The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
-    /// @param _registrationTemplateParameters Template and data mappings json for registration requests.
-    /// @param _removalTemplateParameters Template and data mappings json for removal requests.
-    /// @param _templateRegistry The dispute template registry.
+    /// @param _connectedList The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
+    /// @param _templateRegistryParams The dispute template registry.
+    /// - templateRegistry : The dispute template registry.
+    /// - registrationTemplateParameters : Template and data mappings json for registration requests.
+    /// - removalTemplateParameters : Template and data mappings json for removal requests.
     /// @param _baseDeposits The base deposits for requests/challenges as follows:
     /// - The base deposit to submit an item.
     /// - The base deposit to remove an item.
@@ -58,18 +70,18 @@ contract CurateFactory {
     /// - The base deposit to challenge a removal request.
     /// @param _challengePeriodDuration The time in seconds parties have to challenge a request.
     /// @param _relayerContract The address of the relay contract to add/remove items directly.
+    /// @param _listMetadata A link to registry / list metadata (title,description) using its URI
     function deploy(
         address _governor,
         IArbitratorV2 _arbitrator,
         bytes calldata _arbitratorExtraData,
         EvidenceModule _evidenceModule,
-        address _connectedTCR,
-        string[2] calldata _registrationTemplateParameters,
-        string[2] calldata _removalTemplateParameters,
-        address _templateRegistry,
+        address _connectedList,
+        TemplateRegistryParams calldata _templateRegistryParams,
         uint256[4] calldata _baseDeposits,
         uint256 _challengePeriodDuration,
-        address _relayerContract
+        address _relayerContract,
+        string memory _listMetadata
     ) public {
         CurateV2 instance = clone(curate);
         instance.initialize(
@@ -77,16 +89,16 @@ contract CurateFactory {
             _arbitrator,
             _arbitratorExtraData,
             _evidenceModule,
-            _connectedTCR,
-            _registrationTemplateParameters,
-            _removalTemplateParameters,
-            _templateRegistry,
+            _connectedList,
+            _templateRegistryParams.registrationTemplateParameters,
+            _templateRegistryParams.removalTemplateParameters,
+            _templateRegistryParams.templateRegistry,
             _baseDeposits,
             _challengePeriodDuration,
             _relayerContract
         );
         instances.push(instance);
-        emit NewGTCR(instance);
+        emit NewList(instance, _listMetadata);
     }
 
     /// @notice Adaptation of https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/Clones.sol.

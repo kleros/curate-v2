@@ -129,8 +129,8 @@ contract CurateV2 is IArbitrableV2 {
     event RequestSubmitted(bytes32 indexed _itemID, uint256 _requestID);
 
     /// @dev Emitted when the address of the connected Curate contract is set. The Curate is an instance of the Curate contract where each item is the address of a Curate contract related to this one.
-    /// @param _connectedTCR The address of the connected Curate. TODO: change TCR mentions.
-    event ConnectedTCRSet(address indexed _connectedTCR);
+    /// @param _connectedList The address of the connected Curate.
+    event ConnectedListSet(address indexed _connectedList);
 
     // ************************************* //
     // *            Initializer            * //
@@ -141,7 +141,7 @@ contract CurateV2 is IArbitrableV2 {
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
     /// @param _evidenceModule The evidence contract for the arbitrator.
-    /// @param _connectedTCR The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
+    /// @param _connectedList The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
     /// @param _registrationTemplateParameters Template and data mappings json for registration requests.
     /// @param _removalTemplateParameters Template and data mappings json for removal requests.
     /// @param _templateRegistry The dispute template registry.
@@ -157,7 +157,7 @@ contract CurateV2 is IArbitrableV2 {
         IArbitratorV2 _arbitrator,
         bytes calldata _arbitratorExtraData,
         EvidenceModule _evidenceModule,
-        address _connectedTCR,
+        address _connectedList,
         string[2] calldata _registrationTemplateParameters,
         string[2] calldata _removalTemplateParameters,
         address _templateRegistry,
@@ -196,8 +196,8 @@ contract CurateV2 is IArbitrableV2 {
             })
         );
 
-        if (_connectedTCR != address(0)) {
-            emit ConnectedTCRSet(_connectedTCR);
+        if (_connectedList != address(0)) {
+            emit ConnectedListSet(_connectedList);
         }
     }
 
@@ -241,10 +241,10 @@ contract CurateV2 is IArbitrableV2 {
         governor = _governor;
     }
 
-    /// @dev Change the address of connectedTCR, the Curate instance that stores addresses of Curate contracts related to this one.
-    /// @param _connectedTCR The address of the connectedTCR contract to use.
-    function changeConnectedTCR(address _connectedTCR) external onlyGovernor {
-        emit ConnectedTCRSet(_connectedTCR);
+    /// @dev Change the address of connectedList, the Curate instance that stores addresses of Curate contracts related to this one.
+    /// @param _connectedList The address of the connectedList contract to use.
+    function changeConnectedList(address _connectedList) external onlyGovernor {
+        emit ConnectedListSet(_connectedList);
     }
 
     /// @dev Change the address of the relay contract.

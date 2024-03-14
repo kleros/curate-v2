@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.7
 description: Curate
 features:
   - fullTextSearch
@@ -11,9 +11,9 @@ dataSources:
     name: CurateFactory
     network: arbitrum-sepolia
     source:
-      address: "0x5D03d22229899cd7Af84a3F0f9c39B24F51c8E21"
+      address: "0xF5B335323e1b8c219A9e0bF798a2bFf8325e1cE1"
       abi: CurateFactory
-      startBlock: 14782094
+      startBlock: 23023734
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -24,7 +24,7 @@ dataSources:
         - name: CurateFactory
           file: ./../contracts/deployments/arbitrumSepoliaDevnet/CurateFactory.json
       eventHandlers:
-        - event: NewGTCR(indexed address)
+        - event: NewList(indexed address,string)
           handler: handleNewCurate
       file: ./src/CurateFactory.ts
 templates:
@@ -55,6 +55,6 @@ templates:
           handler: handleStatusUpdated
         - event: Ruling(indexed address,indexed uint256,uint256)
           handler: handleRuling
-        - event: ConnectedTCRSet(indexed address)
-          handler: handleConnectedTCRSet
+        - event: ConnectedListSet(indexed address)
+          handler: handleConnectedListSet
       file: ./src/Curate.ts

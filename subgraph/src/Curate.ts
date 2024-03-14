@@ -7,21 +7,21 @@ import {
   RequestSubmitted,
   NewItem,
   Ruling,
-  ConnectedTCRSet as ConnectedTCRSetEvent,
   Curate,
   DisputeRequest,
+  ConnectedListSet,
 } from "../generated/templates/Curate/Curate";
 import { ItemStatus, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
 import { createRequestFromEvent } from "./entities/Request";
 import { createItemFromEvent } from "./entities/Item";
 import { ensureUser } from "./entities/User";
 
-// Items on a TCR can be in 1 of 4 states:
-// - (0) Absent: The item is not registered on the TCR and there are no pending requests.
+// Items on a List can be in 1 of 4 states:
+// - (0) Absent: The item is not registered on the List and there are no pending requests.
 // - (1) Registered: The item is registered and there are no pending requests.
-// - (2) Registration Requested: The item is not registered on the TCR, but there is a pending
+// - (2) Registration Requested: The item is not registered on the List, but there is a pending
 //       registration request.
-// - (3) Clearing Requested: The item is registered on the TCR, but there is a pending removal
+// - (3) Clearing Requested: The item is registered on the List, but there is a pending removal
 //       request. These are sometimes also called removal requests.
 //
 // Registration and removal requests can be challenged. Once the request resolves (either by
@@ -35,7 +35,7 @@ import { ensureUser } from "./entities/User";
 //
 // Example:
 // requestIndex: 0
-// requestID: <itemID>@<tcrAddress>-0
+// requestID: <itemID>@<listAddress>-0
 //
 // The only exception to this rule is the itemID, which is the in-contract itemID.
 //
@@ -121,13 +121,13 @@ export function handleStatusUpdated(event: ItemStatusChange): void {
   request.save();
 }
 
-export function handleConnectedTCRSet(event: ConnectedTCRSetEvent): void {
+export function handleConnectedListSet(event: ConnectedListSet): void {
   let registry = Registry.load(event.address.toHexString());
   if (!registry) {
     log.error(`Registry {} not found.`, [event.address.toHexString()]);
     return;
   }
-  registry.connectedTCR = event.params._connectedTCR;
+  registry.connectedList = event.params._connectedList;
 
   registry.save();
 }

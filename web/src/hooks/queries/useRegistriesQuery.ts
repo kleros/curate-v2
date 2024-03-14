@@ -8,6 +8,11 @@ export type { RegistryDetailsFragment };
 export const registryFragment = graphql(`
   fragment RegistryDetails on Registry {
     id
+    title
+    description
+    logoURI
+    policyURI
+    metadataURI
   }
 `);
 

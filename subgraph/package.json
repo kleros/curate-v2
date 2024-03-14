@@ -24,10 +24,10 @@
     "node": "20.11.0"
   },
   "dependencies": {
-    "@graphprotocol/graph-ts": "^0.32.0"
+    "@graphprotocol/graph-ts": "^0.33.0"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "0.64.0",
+    "@graphprotocol/graph-cli": "0.68.5",
     "@kleros/curate-v2-eslint-config": "workspace:^",
     "@kleros/curate-v2-prettier-config": "workspace:^",
     "gluegun": "^5.1.2",

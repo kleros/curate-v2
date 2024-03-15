@@ -10,11 +10,13 @@ import {
   Curate,
   DisputeRequest,
   ConnectedListSet,
+  ListMetadataSet,
 } from "../generated/templates/Curate/Curate";
 import { ItemStatus, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
 import { createRequestFromEvent } from "./entities/Request";
 import { createItemFromEvent } from "./entities/Item";
 import { ensureUser } from "./entities/User";
+import { updateRegistryMetadata } from "./CurateFactory";
 
 // Items on a List can be in 1 of 4 states:
 // - (0) Absent: The item is not registered on the List and there are no pending requests.
@@ -128,6 +130,19 @@ export function handleConnectedListSet(event: ConnectedListSet): void {
     return;
   }
   registry.connectedList = event.params._connectedList;
+
+  registry.save();
+}
+
+export function handleListMetadataSet(event: ListMetadataSet): void {
+  let registry = Registry.load(event.address.toHexString());
+  if (!registry) {
+    log.error(`Registry {} not found.`, [event.address.toHexString()]);
+    return;
+  }
+  registry.metadataURI = event.params._listMetadata;
+
+  updateRegistryMetadata(registry.id, event.params._listMetadata);
 
   registry.save();
 }

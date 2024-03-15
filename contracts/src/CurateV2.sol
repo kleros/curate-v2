@@ -132,6 +132,10 @@ contract CurateV2 is IArbitrableV2 {
     /// @param _connectedList The address of the connected Curate.
     event ConnectedListSet(address indexed _connectedList);
 
+    /// @dev Emitted when the list metadata ipfs uri is updated.
+    /// @param _listMetadata Ipfs uri to list metadata.
+    event ListMetadataSet(string _listMetadata);
+
     // ************************************* //
     // *            Initializer            * //
     // ************************************* //
@@ -245,6 +249,12 @@ contract CurateV2 is IArbitrableV2 {
     /// @param _connectedList The address of the connectedList contract to use.
     function changeConnectedList(address _connectedList) external onlyGovernor {
         emit ConnectedListSet(_connectedList);
+    }
+
+    /// @dev Update list metadata ipfs uri.
+    /// @param _listMetadata Ipfs uri to list metadata
+    function changeListMetadata(string calldata _listMetadata) external onlyGovernor {
+        emit ListMetadataSet(_listMetadata);
     }
 
     /// @dev Change the address of the relay contract.

@@ -17,17 +17,16 @@ contract CurateFactory {
     // *              Events               * //
     // ************************************* //
 
-    /// @dev Emitted when a new Curate contract is deployed using this factory. TODO: change TCR mentions.
+    /// @dev Emitted when a new Curate contract is deployed using this factory.
     /// @param _address The address of the newly deployed Curate contract.
-    /// @param _listMetadata A link to registry / list metadata (title,description) using its URI
-    event NewList(CurateV2 indexed _address, string _listMetadata);
+    event NewList(CurateV2 indexed _address);
 
     // ************************************* //
     // *         Enums / Structs           * //
     // ************************************* //
 
     struct TemplateRegistryParams {
-        address templateRegistry; // The current status of the item.
+        address templateRegistry; // Template registry address.
         string[2] registrationTemplateParameters; // Template and data mappings json for registration requests.
         string[2] removalTemplateParameters; // Template and data mappings json for removal requests.
     }
@@ -70,7 +69,7 @@ contract CurateFactory {
     /// - The base deposit to challenge a removal request.
     /// @param _challengePeriodDuration The time in seconds parties have to challenge a request.
     /// @param _relayerContract The address of the relay contract to add/remove items directly.
-    /// @param _listMetadata A link to registry / list metadata (title,description) using its URI
+    /// @param _listMetadata Stringified JSON object containing list metadata (title, description, isListOfLists, etc.). Example at :-  https://cloudflare-ipfs.com/ipfs/QmekLsbXtQfm2jJjdeC5TF1cJcr5qxarZ9bhKmCS9s3ebK/list-metadata.json
     function deploy(
         address _governor,
         IArbitratorV2 _arbitrator,
@@ -90,15 +89,18 @@ contract CurateFactory {
             _arbitratorExtraData,
             _evidenceModule,
             _connectedList,
-            _templateRegistryParams.registrationTemplateParameters,
-            _templateRegistryParams.removalTemplateParameters,
-            _templateRegistryParams.templateRegistry,
+            CurateV2.TemplateRegistryParams(
+                _templateRegistryParams.templateRegistry,
+                _templateRegistryParams.registrationTemplateParameters,
+                _templateRegistryParams.removalTemplateParameters
+            ),
             _baseDeposits,
             _challengePeriodDuration,
-            _relayerContract
+            _relayerContract,
+            _listMetadata
         );
         instances.push(instance);
-        emit NewList(instance, _listMetadata);
+        emit NewList(instance);
     }
 
     /// @notice Adaptation of https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/proxy/Clones.sol.

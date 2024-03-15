@@ -11,9 +11,9 @@ dataSources:
     name: CurateFactory
     network: arbitrum-sepolia
     source:
-      address: "0xcfd2315053763f6ae964f721e8a6Ea44286a9baF"
+      address: "0x3F5768ca9a36d49a8f102E903e44D32a8b84a29F"
       abi: CurateFactory
-      startBlock: 23394953
+      startBlock: 23531452
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -24,7 +24,7 @@ dataSources:
         - name: CurateFactory
           file: ./../contracts/deployments/arbitrumSepoliaDevnet/CurateFactory.json
       eventHandlers:
-        - event: NewList(indexed address,string)
+        - event: NewList(indexed address)
           handler: handleNewCurate
       file: ./src/CurateFactory.ts
 templates:

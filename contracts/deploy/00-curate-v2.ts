@@ -54,6 +54,34 @@ const removalTemplate = `{
 }
 `;
 
+const listMetadata = `{
+  "title": "Kleros Storytelling - Standard Impact",
+  "description": "A list of Standard Tier submissions for the Kleros Storytelling Reward Program.",
+  "columns": [
+    {
+      "label": "Title",
+      "description": "The submission title.",
+      "type": "text",
+      "isIdentifier": true
+    },
+    {
+      "label": "Author",
+      "description": "To easily search submissions by author. This can be a social media handle or a nickname.",
+      "type": "text",
+      "isIdentifier": true
+    },
+    {
+      "label": "Link",
+      "description": "A link to the submission.",
+      "type": "link"
+    }
+  ],
+  "itemName": "story",
+  "itemNamePlural": "stories",
+  "logoURI": "/ipfs/QmQN9ZPubns9kpW3jxZefyt8sNbeUzj8KEcsT7i81SiXFf/standard-impact-logo-.png",
+  "isTCRofTCRs": false
+}`;
+
 // General court, 3 jurors
 const extraData =
   "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
@@ -87,12 +115,11 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     extraData,
     evidenceModule.address,
     ethers.ZeroAddress, // _connectedTCR
-    [registrationTemplate, ""],
-    [removalTemplate, ""],
-    disputeTemplateRegistry.address,
+    [disputeTemplateRegistry.address, [registrationTemplate, ""], [removalTemplate, ""]],
     [fee, fee, fee, fee],
     timeout,
-    deployer
+    deployer,
+    listMetadata
   );
 
   await deploy("CurateFactory", {

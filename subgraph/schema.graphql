@@ -64,8 +64,8 @@ type Registry @entity {
   itemName: String
   "Plural item name for items in registry."
   itemNamePlural: String
-  "Ipfs uri pointing to file containing the list metadata."
-  metadataURI: String!
+  "Stringified JSON data containing registry metadata"
+  metadata: String
   "The parsed data describing the fields in Registry."
   fieldProps: [FieldProp!]! @derivedFrom(field: "registry")
 }

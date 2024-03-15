@@ -72,6 +72,12 @@ contract CurateV2 is IArbitrableV2 {
         EvidenceModule evidenceModule; // The evidence module for the arbitrator.
     }
 
+    struct TemplateRegistryParams {
+        address templateRegistry; // Dispute Template registry address
+        string[2] registrationTemplateParameters; // Template and data mappings json for registration requests.
+        string[2] removalTemplateParameters; // Template and data mappings json for removal requests.
+    }
+
     // ************************************* //
     // *             Storage               * //
     // ************************************* //
@@ -119,7 +125,7 @@ contract CurateV2 is IArbitrableV2 {
 
     /// @dev Emitted when someone submits an item for the first time.
     /// @param _itemID The ID of the new item.
-    /// @param _data The item data URI.
+    /// @param _data Stringified JSON Object containing item data. Example at :- https://cloudflare-ipfs.com/ipfs/QmTypFX9416z5V87Fsnf6A89rrskh2X8BSVdaKhwzXNiDb/item.json.
     /// @param _addedDirectly Whether the item was added via `addItemDirectly`.
     event NewItem(bytes32 indexed _itemID, string _data, bool _addedDirectly);
 
@@ -146,9 +152,10 @@ contract CurateV2 is IArbitrableV2 {
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
     /// @param _evidenceModule The evidence contract for the arbitrator.
     /// @param _connectedList The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
-    /// @param _registrationTemplateParameters Template and data mappings json for registration requests.
-    /// @param _removalTemplateParameters Template and data mappings json for removal requests.
-    /// @param _templateRegistry The dispute template registry.
+    /// @param _templateRegistryParams The dispute template registry.
+    /// - templateRegistry : The dispute template registry.
+    /// - registrationTemplateParameters : Template and data mappings json for registration requests.
+    /// - removalTemplateParameters : Template and data mappings json for removal requests.
     /// @param _baseDeposits The base deposits for requests/challenges as follows:
     /// - The base deposit to submit an item.
     /// - The base deposit to remove an item.
@@ -156,18 +163,18 @@ contract CurateV2 is IArbitrableV2 {
     /// - The base deposit to challenge a removal request.
     /// @param _challengePeriodDuration The time in seconds parties have to challenge a request.
     /// @param _relayerContract The address of the relayer contract to add/remove items directly.
+    /// @param _listMetadata Stringified JSON object containing list metadata (title, description, isListOfLists, etc.). Example at :-  https://cloudflare-ipfs.com/ipfs/QmekLsbXtQfm2jJjdeC5TF1cJcr5qxarZ9bhKmCS9s3ebK/list-metadata.json
     function initialize(
         address _governor,
         IArbitratorV2 _arbitrator,
         bytes calldata _arbitratorExtraData,
         EvidenceModule _evidenceModule,
         address _connectedList,
-        string[2] calldata _registrationTemplateParameters,
-        string[2] calldata _removalTemplateParameters,
-        address _templateRegistry,
+        TemplateRegistryParams calldata _templateRegistryParams,
         uint256[4] calldata _baseDeposits,
         uint256 _challengePeriodDuration,
-        address _relayerContract
+        address _relayerContract,
+        string calldata _listMetadata
     ) external {
         require(!initialized, "Already initialized.");
         initialized = true;
@@ -180,16 +187,16 @@ contract CurateV2 is IArbitrableV2 {
         challengePeriodDuration = _challengePeriodDuration;
         relayerContract = _relayerContract;
 
-        templateRegistry = IDisputeTemplateRegistry(_templateRegistry);
+        templateRegistry = IDisputeTemplateRegistry(_templateRegistryParams.templateRegistry);
         templateIdRegistration = templateRegistry.setDisputeTemplate(
             "Registration",
-            _registrationTemplateParameters[0],
-            _registrationTemplateParameters[1]
+            _templateRegistryParams.registrationTemplateParameters[0],
+            _templateRegistryParams.registrationTemplateParameters[1]
         );
         templateIdRemoval = templateRegistry.setDisputeTemplate(
             "Removal",
-            _removalTemplateParameters[0],
-            _removalTemplateParameters[1]
+            _templateRegistryParams.removalTemplateParameters[0],
+            _templateRegistryParams.removalTemplateParameters[1]
         );
 
         arbitrationParamsChanges.push(
@@ -203,6 +210,8 @@ contract CurateV2 is IArbitrableV2 {
         if (_connectedList != address(0)) {
             emit ConnectedListSet(_connectedList);
         }
+
+        emit ListMetadataSet(_listMetadata);
     }
 
     // ************************************* //
@@ -317,7 +326,7 @@ contract CurateV2 is IArbitrableV2 {
     // ************************************* //
 
     /// @dev Directly add an item to the list bypassing request-challenge. Can only be used by the relayer contract.
-    /// @param _item The URI to the item data.
+    /// @param _item Stringified JSON Object containing Item data
     function addItemDirectly(string calldata _item) external onlyRelayer {
         bytes32 itemID = keccak256(abi.encodePacked(_item));
         Item storage item = items[itemID];
@@ -334,7 +343,7 @@ contract CurateV2 is IArbitrableV2 {
     }
 
     /// @dev Directly remove an item from the list bypassing request-challenge. Can only be used by the relayer contract.
-    /// @param _itemID The ID of the item to remove.
+    /// @param _itemID The ID of the item to remove. Example at :- https://cloudflare-ipfs.com/ipfs/QmTypFX9416z5V87Fsnf6A89rrskh2X8BSVdaKhwzXNiDb/item.json
     function removeItemDirectly(bytes32 _itemID) external onlyRelayer {
         Item storage item = items[_itemID];
         require(item.status == Status.Registered, "Item must be registered to be removed.");
@@ -345,7 +354,7 @@ contract CurateV2 is IArbitrableV2 {
     }
 
     /// @dev Submit a request to register an item. Accepts enough ETH to cover the deposit, reimburses the rest.
-    /// @param _item The URI to the item data.
+    /// @param _item Stringified JSON object containing item data. Example at :- https://cloudflare-ipfs.com/ipfs/QmTypFX9416z5V87Fsnf6A89rrskh2X8BSVdaKhwzXNiDb/item.json
     function addItem(string calldata _item) external payable {
         bytes32 itemID = keccak256(abi.encodePacked(_item));
         Item storage item = items[itemID];

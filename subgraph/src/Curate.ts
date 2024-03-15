@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
-import { log } from "@graphprotocol/graph-ts";
-import { Item, Request, Registry } from "../generated/schema";
+import { json, log } from "@graphprotocol/graph-ts";
+import { Item, Request, Registry, FieldProp } from "../generated/schema";
 
 import {
   ItemStatusChange,
@@ -12,11 +12,10 @@ import {
   ConnectedListSet,
   ListMetadataSet,
 } from "../generated/templates/Curate/Curate";
-import { ItemStatus, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
+import { ItemStatus, JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
 import { createRequestFromEvent } from "./entities/Request";
 import { createItemFromEvent } from "./entities/Item";
 import { ensureUser } from "./entities/User";
-import { updateRegistryMetadata } from "./CurateFactory";
 
 // Items on a List can be in 1 of 4 states:
 // - (0) Absent: The item is not registered on the List and there are no pending requests.
@@ -140,9 +139,61 @@ export function handleListMetadataSet(event: ListMetadataSet): void {
     log.error(`Registry {} not found.`, [event.address.toHexString()]);
     return;
   }
-  registry.metadataURI = event.params._listMetadata;
 
-  updateRegistryMetadata(registry.id, event.params._listMetadata);
+  registry.metadata = event.params._listMetadata;
+
+  let jsonObjValueAndSuccess = json.try_fromString(event.params._listMetadata);
+  if (!jsonObjValueAndSuccess.isOk) {
+    log.error(`Error getting json object value for registry metadata {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+
+  let jsonObj = jsonObjValueAndSuccess.value.toObject();
+  if (!jsonObj) {
+    log.error(`Error converting object for registry metadata {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+
+  registry.title = JSONValueToMaybeString(jsonObj.get("title"));
+  registry.description = JSONValueToMaybeString(jsonObj.get("description"));
+  registry.logoURI = JSONValueToMaybeString(jsonObj.get("logoURI"));
+  registry.policyURI = JSONValueToMaybeString(jsonObj.get("policyURI"));
+  registry.itemName = JSONValueToMaybeString(jsonObj.get("itemName"));
+  registry.itemNamePlural = JSONValueToMaybeString(jsonObj.get("itemNamePlural"));
+  registry.isListOfLists = JSONValueToBool(jsonObj.get("isListOfLists"));
+
+  let columnsValue = jsonObj.get("columns");
+  if (!columnsValue) {
+    log.error(`Error getting column values for registry {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+  let columns = columnsValue.toArray();
+
+  for (let i = 0; i < columns.length; i++) {
+    let col = columns[i];
+    let colObj = col.toObject();
+
+    let label = colObj.get("label");
+
+    let checkedLabel = label ? label.toString() : "missing-label".concat(i.toString());
+
+    let description = colObj.get("description");
+    let _type = colObj.get("type");
+    let isIdentifier = colObj.get("isIdentifier");
+    let fieldPropId = registry.id + "@" + checkedLabel;
+    let fieldProp = new FieldProp(fieldPropId);
+
+    fieldProp.type = JSONValueToMaybeString(_type);
+    fieldProp.label = JSONValueToMaybeString(label);
+    fieldProp.description = JSONValueToMaybeString(description);
+    fieldProp.isIdentifier = JSONValueToBool(isIdentifier);
+    fieldProp.registry = registry.id;
+
+    fieldProp.save();
+  }
 
   registry.save();
 }

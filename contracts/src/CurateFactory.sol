@@ -22,16 +22,6 @@ contract CurateFactory {
     event NewList(CurateV2 indexed _address);
 
     // ************************************* //
-    // *         Enums / Structs           * //
-    // ************************************* //
-
-    struct TemplateRegistryParams {
-        address templateRegistry; // Template registry address.
-        string[2] registrationTemplateParameters; // Template and data mappings json for registration requests.
-        string[2] removalTemplateParameters; // Template and data mappings json for removal requests.
-    }
-
-    // ************************************* //
     // *             Storage               * //
     // ************************************* //
 
@@ -76,7 +66,7 @@ contract CurateFactory {
         bytes calldata _arbitratorExtraData,
         EvidenceModule _evidenceModule,
         address _connectedList,
-        TemplateRegistryParams calldata _templateRegistryParams,
+        CurateV2.TemplateRegistryParams calldata _templateRegistryParams,
         uint256[4] calldata _baseDeposits,
         uint256 _challengePeriodDuration,
         address _relayerContract,

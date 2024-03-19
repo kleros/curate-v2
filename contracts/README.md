@@ -16,9 +16,9 @@ Refresh the list of deployed contracts by running `./scripts/generateDeployments
 
 #### Arbitrum Sepolia
 
-- [CurateFactory](https://sepolia.arbiscan.io/address/0x3F5768ca9a36d49a8f102E903e44D32a8b84a29F)
-- [CurateV2](https://sepolia.arbiscan.io/address/0x7eC8b337bb297c6429794CD888EdcBB3e54A2D20)
-- [CurateView](https://sepolia.arbiscan.io/address/0xC153EDAbA561Be9F7E12ACce4079D4a7475d508E)
+- [CurateFactory](https://sepolia.arbiscan.io/address/0x6b6Df30De48cC7737138ed7531D85aFcffDe9b44)
+- [CurateV2](https://sepolia.arbiscan.io/address/0x90c415B8E515E9376A89ED52A11c667843D3e199)
+- [CurateView](https://sepolia.arbiscan.io/address/0x5c7695A48202E2F7dBCeAe264072E4a0792C23e5)
 
 #### Sepolia
 

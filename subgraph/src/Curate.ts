@@ -1,27 +1,28 @@
 /* eslint-disable prefer-const */
-import { log } from "@graphprotocol/graph-ts";
-import { Item, Request, Registry } from "../generated/schema";
+import { json, log } from "@graphprotocol/graph-ts";
+import { Item, Request, Registry, FieldProp } from "../generated/schema";
 
 import {
   ItemStatusChange,
   RequestSubmitted,
   NewItem,
   Ruling,
-  ConnectedTCRSet as ConnectedTCRSetEvent,
   Curate,
   DisputeRequest,
+  ConnectedListSet,
+  ListMetadataSet,
 } from "../generated/templates/Curate/Curate";
-import { ItemStatus, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
+import { ItemStatus, JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
 import { createRequestFromEvent } from "./entities/Request";
 import { createItemFromEvent } from "./entities/Item";
 import { ensureUser } from "./entities/User";
 
-// Items on a TCR can be in 1 of 4 states:
-// - (0) Absent: The item is not registered on the TCR and there are no pending requests.
+// Items on a List can be in 1 of 4 states:
+// - (0) Absent: The item is not registered on the List and there are no pending requests.
 // - (1) Registered: The item is registered and there are no pending requests.
-// - (2) Registration Requested: The item is not registered on the TCR, but there is a pending
+// - (2) Registration Requested: The item is not registered on the List, but there is a pending
 //       registration request.
-// - (3) Clearing Requested: The item is registered on the TCR, but there is a pending removal
+// - (3) Clearing Requested: The item is registered on the List, but there is a pending removal
 //       request. These are sometimes also called removal requests.
 //
 // Registration and removal requests can be challenged. Once the request resolves (either by
@@ -35,7 +36,7 @@ import { ensureUser } from "./entities/User";
 //
 // Example:
 // requestIndex: 0
-// requestID: <itemID>@<tcrAddress>-0
+// requestID: <itemID>@<listAddress>-0
 //
 // The only exception to this rule is the itemID, which is the in-contract itemID.
 //
@@ -121,13 +122,78 @@ export function handleStatusUpdated(event: ItemStatusChange): void {
   request.save();
 }
 
-export function handleConnectedTCRSet(event: ConnectedTCRSetEvent): void {
+export function handleConnectedListSet(event: ConnectedListSet): void {
   let registry = Registry.load(event.address.toHexString());
   if (!registry) {
     log.error(`Registry {} not found.`, [event.address.toHexString()]);
     return;
   }
-  registry.connectedTCR = event.params._connectedTCR;
+  registry.connectedList = event.params._connectedList;
+
+  registry.save();
+}
+
+export function handleListMetadataSet(event: ListMetadataSet): void {
+  let registry = Registry.load(event.address.toHexString());
+  if (!registry) {
+    log.error(`Registry {} not found.`, [event.address.toHexString()]);
+    return;
+  }
+
+  registry.metadata = event.params._listMetadata;
+
+  let jsonObjValueAndSuccess = json.try_fromString(event.params._listMetadata);
+  if (!jsonObjValueAndSuccess.isOk) {
+    log.error(`Error getting json object value for registry metadata {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+
+  let jsonObj = jsonObjValueAndSuccess.value.toObject();
+  if (!jsonObj) {
+    log.error(`Error converting object for registry metadata {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+
+  registry.title = JSONValueToMaybeString(jsonObj.get("title"));
+  registry.description = JSONValueToMaybeString(jsonObj.get("description"));
+  registry.logoURI = JSONValueToMaybeString(jsonObj.get("logoURI"));
+  registry.policyURI = JSONValueToMaybeString(jsonObj.get("policyURI"));
+  registry.itemName = JSONValueToMaybeString(jsonObj.get("itemName"));
+  registry.itemNamePlural = JSONValueToMaybeString(jsonObj.get("itemNamePlural"));
+  registry.isListOfLists = JSONValueToBool(jsonObj.get("isListOfLists"));
+
+  let columnsValue = jsonObj.get("columns");
+  if (!columnsValue) {
+    log.error(`Error getting column values for registry {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+  let columns = columnsValue.toArray();
+
+  for (let i = 0; i < columns.length; i++) {
+    let col = columns[i];
+    let colObj = col.toObject();
+
+    let label = colObj.get("label");
+
+    let checkedLabel = label ? label.toString() : "missing-label".concat(i.toString());
+
+    let description = colObj.get("description");
+    let _type = colObj.get("type");
+    let isIdentifier = colObj.get("isIdentifier");
+    let fieldPropId = registry.id + "@" + checkedLabel;
+    let fieldProp = new FieldProp(fieldPropId);
+
+    fieldProp.type = JSONValueToMaybeString(_type);
+    fieldProp.label = JSONValueToMaybeString(label);
+    fieldProp.description = JSONValueToMaybeString(description);
+    fieldProp.isIdentifier = JSONValueToBool(isIdentifier);
+    fieldProp.registry = registry.id;
+
+    fieldProp.save();
+  }
 
   registry.save();
 }

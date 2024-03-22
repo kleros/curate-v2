@@ -1,7 +1,7 @@
-import { Bytes, ipfs, json, log } from "@graphprotocol/graph-ts";
+import { json, log } from "@graphprotocol/graph-ts";
 import { Item, ItemProp, Registry, User } from "../../generated/schema";
 import { Curate, NewItem } from "../../generated/templates/Curate/Curate";
-import { JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, ZERO_ADDRESS, getStatus } from "../utils";
+import { JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getStatus } from "../utils";
 import { ensureCounter } from "./Counters";
 import { ensureUser } from "./User";
 
@@ -43,19 +43,7 @@ export function createItemFromEvent(event: NewItem): void {
 
   item.keywords = event.address.toHexString();
 
-  // Offchain item data could be unavailable. We cannot let
-  // this handler fail otherwise an item would pass the challenge
-  // period unnoticed. Instead we set dummy data so challengers
-  // have a chance to check this.
-  let jsonStr = ipfs.cat(item.data);
-  if (!jsonStr) {
-    log.error("Failed to fetch item #{} JSON: {}", [graphItemID, item.data]);
-    item.save();
-    registry.save();
-    return;
-  }
-
-  let jsonObjValueAndSuccess = json.try_fromBytes(jsonStr as Bytes);
+  let jsonObjValueAndSuccess = json.try_fromString(event.params._data);
   if (!jsonObjValueAndSuccess.isOk) {
     log.error(`Error getting json object value for graphItemID {}`, [graphItemID]);
     item.save();

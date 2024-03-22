@@ -7,6 +7,11 @@ import { isUndefined } from "utils/index";
 export const registryFragment = graphql(`
   fragment RegistryDetails on Registry {
     id
+    title
+    description
+    logoURI
+    policyURI
+    metadata
     items {
       itemID
       data

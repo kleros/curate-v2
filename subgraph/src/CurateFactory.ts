@@ -1,12 +1,12 @@
 /* eslint-disable prefer-const */
-import { NewGTCR } from "../generated/CurateFactory/CurateFactory";
+import { NewList } from "../generated/CurateFactory/CurateFactory";
 import { Registry, User } from "../generated/schema";
 import { Curate } from "../generated/templates";
 import { ensureCounter } from "./entities/Counters";
 import { ensureUser } from "./entities/User";
 import { ONE } from "./utils";
 
-export function handleNewCurate(event: NewGTCR): void {
+export function handleNewCurate(event: NewList): void {
   Curate.create(event.params._address);
 
   let registry = new Registry(event.params._address.toHexString());

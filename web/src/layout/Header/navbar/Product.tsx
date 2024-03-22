@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { responsiveSize } from "styles/responsiveSize";
 
 const Container = styled.a`
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 25px 35px 25px;
+  padding: 20px 8px 35px 8px;
   max-width: 100px;
   border-radius: 3px;
   :hover {
@@ -15,22 +16,26 @@ const Container = styled.a`
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
   gap: 8px;
-  width: calc(100px + (130 - 100) * (100vw - 375px) / (1250 - 375));
-  white-space: nowrap;
+  width: ${responsiveSize(100, 130)};
 
   background-color: ${({ theme }) => theme.lightBackground};
-  small {
-    font-weight: 400;
-    line-height: 19px;
-    font-size: 14px;
-  }
 `;
 
-const StyledIcon = styled.svg``;
+const StyledIcon = styled.svg`
+  width: 48px;
+  height: 48px;
+`;
 
 const StyledImg = styled.img`
-  max-width: 48px;
-  max-height: 48px;
+  width: 48px;
+  height: 48px;
+`;
+
+const StyledSmall = styled.small`
+  display: flex;
+  font-weight: 400;
+  line-height: 19px;
+  text-align: center;
 `;
 
 interface IProduct {
@@ -43,7 +48,7 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
   return (
     <Container href={url} target="_blank">
       {typeof Icon === "string" ? <StyledImg alt={Icon} src={Icon} /> : <StyledIcon as={Icon} />}
-      <small>{text}</small>
+      <StyledSmall>{text}</StyledSmall>
     </Container>
   );
 };

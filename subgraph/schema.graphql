@@ -1,11 +1,11 @@
 enum Status {
-  "The item is not registered on the TCR and there are no pending requests."
+  "The item is not registered on the List and there are no pending requests."
   absent
   "The item is registered and there are no pending requests."
   registered
-  "The item is not registered on the TCR, but there is a pending registration request."
+  "The item is not registered on the List, but there is a pending registration request."
   registrationRequested
-  "The item is registered on the TCR, but there is a pending removal request. These are sometimes also called removal requests."
+  "The item is registered on the List, but there is a pending removal request. These are sometimes also called removal requests."
   clearingRequested
 }
 
@@ -46,10 +46,28 @@ type Registry @entity {
   items: [Item!]! @derivedFrom(field: "registry")
   "The requests submitted to this list"
   requests: [Request!]! @derivedFrom(field: "registry")
-  "Connected TCR. Can be the 0 address. In practice, will never be null."
-  connectedTCR: Bytes
+  "Connected List. Can be the 0 address. In practice, will never be null."
+  connectedList: Bytes
   "The address that registered the curate"
   registerer: User!
+  "Registry's Title"
+  title: String
+  "Registry's description"
+  description: String
+  "A link to registry's logo."
+  logoURI: String
+  "A link to file describing registry's policy."
+  policyURI: String
+  "Field to identify if a list is a 'List of Lists.'"
+  isListOfLists: Boolean
+  "Item name for a item in registry."
+  itemName: String
+  "Plural item name for items in registry."
+  itemNamePlural: String
+  "Stringified JSON data containing registry metadata"
+  metadata: String
+  "The parsed data describing the fields in Registry."
+  fieldProps: [FieldProp!]! @derivedFrom(field: "registry")
 }
 
 type Item @entity {
@@ -113,6 +131,15 @@ type ItemProp @entity {
   isIdentifier: Boolean!
   value: String
   item: Item!
+}
+
+type FieldProp @entity {
+  id: ID!
+  type: String!
+  label: String!
+  description: String!
+  isIdentifier: Boolean!
+  registry: Registry!
 }
 
 type Request @entity {

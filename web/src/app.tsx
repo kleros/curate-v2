@@ -11,16 +11,16 @@ import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
-import GraphqlBatcherProvider from "./context/GraphqlBatcher";
-import { SubmitItemProvider } from "./context/SubmitItemContext";
+import GraphqlBatcherProvider from "context/GraphqlBatcher";
+import { SubmitItemProvider } from "context/SubmitItemContext";
 import SubmitItem from "./pages/SubmitItem";
 
 const App: React.FC = () => {
   return (
     <StyledComponentsProvider>
       <QueryClientProvider>
+        <RefetchOnBlock />
         <GraphqlBatcherProvider>
-          <RefetchOnBlock />
           <Web3Provider>
             <IsListProvider>
               <SubmitItemProvider>

@@ -12,7 +12,7 @@ export const registryFragment = graphql(`
     description
     logoURI
     policyURI
-    metadataURI
+    metadata
   }
 `);
 

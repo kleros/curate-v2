@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-/// @custom:authors: [@unknownunknown1, @mtsalenc*]
+/// @custom:authors: [@unknownunknown1, @mtsalenc]
 /// @custom:reviewers: []
 /// @custom:auditors: []
 /// @custom:bounties: []

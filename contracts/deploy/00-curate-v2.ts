@@ -115,7 +115,9 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     extraData,
     evidenceModule.address,
     ethers.ZeroAddress, // _connectedTCR
-    [disputeTemplateRegistry.address, [registrationTemplate, ""], [removalTemplate, ""]],
+    disputeTemplateRegistry.address,
+    [registrationTemplate, ""],
+    [removalTemplate, ""],
     [fee, fee, fee, fee],
     timeout,
     deployer,

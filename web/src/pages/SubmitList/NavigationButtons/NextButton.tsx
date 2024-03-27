@@ -34,9 +34,8 @@ const NextButton: React.FC<INextButton> = ({ nextRoute }) => {
     (location.pathname.includes("/submitList/fields") && !areItemFieldsFilled) ||
     (location.pathname.includes("/submitList/policy") && (isPolicyUploading || !listMetadata.policyURI)) ||
     (location.pathname.includes("/submitList/logo") && (isLogoUploading || !listMetadata.logoURI)) ||
-    (location.pathname.includes("/submitList/advanced") && !areAdvancedParamsFilled) ||
-    !listData.courtId ||
-    !listData.numberOfJurors;
+    (location.pathname.includes("/submitList/advanced") &&
+      (!areAdvancedParamsFilled || !listData.courtId || !listData.numberOfJurors));
 
   return isDeployPage ? (
     <SubmitListButton />

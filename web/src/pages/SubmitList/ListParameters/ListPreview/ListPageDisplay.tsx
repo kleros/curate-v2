@@ -4,6 +4,7 @@ import { responsiveSize } from "styles/responsiveSize";
 import { Status } from "consts/status";
 import InformationCard from "components/InformationCard";
 import { useSubmitListContext } from "context/SubmitListContext";
+import { getIpfsUrl } from "utils/getIpfsUrl";
 
 const Container = styled.div`
   display: flex;
@@ -30,7 +31,7 @@ const ListPageDisplay: React.FC = () => {
         description={listMetadata.description}
         chainId={1}
         status={Status.Included}
-        logoURI={listMetadata.logoURI}
+        logoURI={getIpfsUrl(listMetadata.logoURI)}
       />
     </Container>
   );

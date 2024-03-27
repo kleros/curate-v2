@@ -4,6 +4,7 @@ import { responsiveSize } from "styles/responsiveSize";
 import { Status } from "consts/status";
 import RegistryCard from "components/RegistryCard";
 import { useSubmitListContext } from "context/SubmitListContext";
+import { getIpfsUrl } from "utils/getIpfsUrl";
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ const HomePageDisplay: React.FC = () => {
         id={1}
         title={listMetadata.title}
         status={Status.Pending}
-        logoURI={listMetadata?.logoURI}
+        logoURI={getIpfsUrl(listMetadata?.logoURI)}
         chainId={1}
         totalItems={23}
       />

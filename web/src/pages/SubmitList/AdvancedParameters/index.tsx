@@ -87,7 +87,17 @@ const AdvancedParameters: React.FC = () => {
         </StyledLabel>
         <ButtonContainer>
           <LightButton text="Reset" Icon={HistoryIcon} onClick={reset} />{" "}
-          <LightButton text="Learn more" Icon={BookIcon} />
+          <LightButton
+            text="Learn more"
+            Icon={BookIcon}
+            onClick={() =>
+              window.open(
+                "https://docs.kleros.io/products/curate/kleros-curate-tutorial",
+                "_blank",
+                "rel=noopener noreferrer"
+              )
+            }
+          />
         </ButtonContainer>
       </LabelAndButtonContainer>
       <StyledAccordion

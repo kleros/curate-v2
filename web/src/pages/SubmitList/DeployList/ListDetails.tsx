@@ -83,8 +83,8 @@ const ListDetails: React.FC = () => {
           <StyledP>~0.03 ETH</StyledP>
         </TotalContainer>{" "}
         <ChainContainer>
-          <p>{getChainIcon(100)}</p>
-          <p>{getChainName(100)}</p>
+          <p>{getChainIcon(421614)}</p>
+          <p>{getChainName(421614)}</p>
         </ChainContainer>
       </InnerContainer>
     </Container>

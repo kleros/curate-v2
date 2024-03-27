@@ -7,6 +7,12 @@ import { rootCourtToItems, useCourtTree } from "hooks/queries/useCourtTree";
 import { isUndefined } from "utils/index";
 import Skeleton from "react-loading-skeleton";
 import ETH from "svgs/icons/eth.svg";
+import LightButton from "components/LightButton";
+import { useSubmitListContext } from "context/SubmitListContext";
+import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
+import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
+import { formatEther, isAddress } from "viem";
+import { KLEROS_ARBITRATOR, KLEROS_GOVERNOR } from "consts/arbitration";
 
 const Container = styled.div`
   display: flex;
@@ -59,17 +65,72 @@ const AlertMessageContainer = styled.div`
 const StyledDisplay = styled(DisplaySmall)`
   width: 100%;
 `;
+
+const StyledButton = styled(LightButton)`
+  border: none;
+  padding: 0px;
+  .button-text {
+    color: ${({ theme }) => theme.primaryBlue};
+    font-size: 14px;
+    line-height: 18px;
+  }
+`;
+
 const AbritrationParameters: React.FC = () => {
+  const { listData, setListData } = useSubmitListContext();
   const { data } = useCourtTree();
   const items = useMemo(() => !isUndefined(data) && [rootCourtToItems(data.court)], [data]);
 
-  const handleWrite = (courtId: string) => {};
+  const isGovernorValid = useMemo(() => listData.governor === "" || isAddress(listData.governor), [listData.governor]);
+  const isArbitratorValid = useMemo(
+    () => listData.arbitrator === "" || isAddress(listData.arbitrator),
+    [listData.arbitrator]
+  );
 
+  const { arbitrationCost } = useArbitrationCost(
+    prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors)
+  );
+
+  const handleCourtWrite = (courtId: string) => {
+    setListData({ ...listData, courtId });
+  };
+
+  const handleJurorsWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setListData({ ...listData, numberOfJurors: parseInt(event.target.value.replace(/\D/g, ""), 10) });
+  };
+
+  const noOfVotes = Number.isNaN(listData.numberOfJurors) ? "" : listData.numberOfJurors;
   return (
     <Container>
       <TopContainer>
-        <LabeledInput topLeftLabel="Arbitrator" topRightLabel="Select Kleros" placeholder="100" />
-        <LabeledInput topLeftLabel="Governor" topRightLabel="Select Kleros Governor" placeholder="100" />
+        <LabeledInput
+          topLeftLabel="Arbitrator"
+          topRightLabel={
+            <StyledButton
+              text="Select Kleros"
+              onClick={() => setListData({ ...listData, arbitrator: KLEROS_ARBITRATOR })}
+            />
+          }
+          placeholder="Arbitrator address"
+          value={listData.arbitrator}
+          onChange={(event) => setListData({ ...listData, arbitrator: event.target.value as `0x${string}` })}
+          variant={isArbitratorValid ? "" : "error"}
+          message={!isArbitratorValid ? "Invalid Address" : ""}
+        />
+        <LabeledInput
+          topLeftLabel="Governor"
+          topRightLabel={
+            <StyledButton
+              text="Select Kleros Governor"
+              onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR })}
+            />
+          }
+          placeholder="Governor address"
+          value={listData.governor}
+          onChange={(event) => setListData({ ...listData, governor: event.target.value as `0x${string}` })}
+          variant={isGovernorValid ? "" : "error"}
+          message={!isGovernorValid ? "Invalid Address" : ""}
+        />
       </TopContainer>
 
       <MiddleContainer>
@@ -78,15 +139,20 @@ const AbritrationParameters: React.FC = () => {
             <label>Select a court</label>
             <DropdownCascader
               items={items}
-              onSelect={(path: string | number) => typeof path === "string" && handleWrite(path.split("/").pop()!)}
+              onSelect={(path: string | number) => typeof path === "string" && handleCourtWrite(path.split("/").pop()!)}
               placeholder="Select Court"
             />
           </DropdownContainer>
         ) : (
           <Skeleton width={240} height={42} />
         )}
-        <LabeledInput topLeftLabel="Select the number of jurors" placeholder="3" />
-        <StyledDisplay text={"0.001"} Icon={ETH} label="Arbitration Cost" />
+        <LabeledInput
+          topLeftLabel="Select the number of jurors"
+          placeholder="Number of Jurors"
+          value={noOfVotes}
+          onChange={handleJurorsWrite}
+        />
+        <StyledDisplay text={formatEther((arbitrationCost as bigint) ?? "")} Icon={ETH} label="Arbitration Cost" />
       </MiddleContainer>
 
       <AlertMessageContainer>

@@ -5,6 +5,7 @@ import NavigationButtons from "../NavigationButtons";
 import { AlertMessage, Card } from "@kleros/ui-components-library";
 import Progress from "./Progress";
 import ListDetails from "./ListDetails";
+import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -23,11 +24,15 @@ const StyledCard = styled(Card)`
 `;
 
 const AlertMessageContainer = styled.div`
+  width: 100%;
   svg {
     flex-shrink: 0;
   }
 `;
 const DeployList: React.FC = () => {
+  const { progress } = useSubmitListContext();
+  const isSuccess = progress === ListProgress.Success;
+
   return (
     <Container>
       <StyledCard>
@@ -36,9 +41,13 @@ const DeployList: React.FC = () => {
       </StyledCard>
       <AlertMessageContainer>
         <AlertMessage
-          variant="warning"
-          title="Almost Ready!"
-          msg="Creating a list requires 2 transactions. The total cost at the moment is approximately 0.03 ETH. We recommend that you familiarize yourself with all the parameters to avoid mistakes. When you are ready, click on Create List."
+          variant={isSuccess ? "success" : "warning"}
+          title={isSuccess ? "Well done!" : "Almost Ready!"}
+          msg={
+            isSuccess
+              ? "The list was successfully created !"
+              : "Creating a list requires 2 transactions. The total cost at the moment is approximately 0.03 ETH. We recommend that you familiarize yourself with all the parameters to avoid mistakes. When you are ready, click on Create List."
+          }
         />
       </AlertMessageContainer>
       <NavigationButtons prevRoute="/submitList/advanced" />

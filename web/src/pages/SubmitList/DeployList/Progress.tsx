@@ -1,6 +1,7 @@
 import { Slider } from "@kleros/ui-components-library";
-import React from "react";
+import React, { useMemo } from "react";
 import styled, { useTheme } from "styled-components";
+import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   width: 100%;
@@ -16,12 +17,24 @@ const Container = styled.div`
 const StyledSlider = styled(Slider)`
   small {
     color: ${({ theme }) => theme.success};
-    margin-left: 8px;
   }
 `;
 
 const Progress: React.FC = () => {
   const theme = useTheme();
+  const { progress } = useSubmitListContext();
+  const progressValue = useMemo(() => {
+    switch (progress) {
+      case ListProgress.Confirming:
+        return 0;
+      case ListProgress.Confirmed:
+        return 50;
+      case ListProgress.Success:
+        return 100;
+      default:
+        return 0;
+    }
+  }, [progress]);
   return (
     <Container>
       <StyledSlider
@@ -47,11 +60,11 @@ const Progress: React.FC = () => {
         callback={() => {}}
         min={0}
         max={100}
-        value={50}
+        value={progressValue}
         disabled
         leftLabel="Start"
         rightLabel="List created"
-        label={`50%`}
+        label={`${progressValue}%`}
       />
     </Container>
   );

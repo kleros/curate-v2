@@ -5,6 +5,10 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
+import { useSubmitListContext } from "context/SubmitListContext";
+import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
+import { OPTIONS as toastOptions } from "utils/wrapWithToast";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   display: flex;
@@ -29,8 +33,24 @@ const StyledFileUploader = styled(FileUploader)`
 `;
 
 const LogoUpload: React.FC = () => {
-  const handleFileUpload = (file: File) => {};
+  const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
 
+  const handleFileUpload = (file: File) => {
+    if (!["image/png", "image/jpeg", "image/jpg"].includes(file?.type)) {
+      toast.error("File type not supported", toastOptions);
+      return;
+    }
+    setIsLogoUploading(true);
+
+    uploadFileToIPFS(file)
+      .then(async (res) => {
+        const response = await res.json();
+        const logoURI = response["cids"][0];
+        setListMetadata({ ...listMetadata, logoURI });
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsLogoUploading(false));
+  };
   return (
     <Container>
       <Header text="Logo" />

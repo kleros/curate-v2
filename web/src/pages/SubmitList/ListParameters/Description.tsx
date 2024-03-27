@@ -6,6 +6,7 @@ import NavigationButtons from "../NavigationButtons";
 import InfoCard from "components/InfoCard";
 import Header from "../Header";
 import { Field } from "@kleros/ui-components-library";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -37,14 +38,19 @@ const StyledInfoCard = styled(InfoCard)`
 `;
 
 const Description: React.FC = () => {
+  const { listMetadata, setListMetadata } = useSubmitListContext();
+
+  const handleWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setListMetadata({ ...listMetadata, description: event.target.value });
+  };
   return (
     <Container>
       <Header text="Description" />
       <FieldContainer>
         <StyledField
-          // onChange={handleWrite}
+          onChange={handleWrite}
           placeholder="eg. A list of public name tags, associated with Ethereum mainnet contract addresses."
-          value={""}
+          value={listMetadata.description}
         />
         <StyledInfoCard msg="Type a short sentence describing the content of the list. eg. A list of public name tags, associated with Ethereum mainnet contract addresses." />
       </FieldContainer>

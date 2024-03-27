@@ -5,6 +5,7 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import Header from "../Header";
 import LabeledInput from "components/LabeledInput";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +38,7 @@ const InputContainer = styled.div`
 `;
 
 const CustomName: React.FC = () => {
+  const { listMetadata, setListMetadata } = useSubmitListContext();
   return (
     <Container>
       <Header text="Custom Item Name" />
@@ -45,8 +47,18 @@ const CustomName: React.FC = () => {
         Example: A list of: (Token, Tokens), (Tag, Tags), (Car, Cars), etc.
       </StyledLabel>
       <InputContainer>
-        <LabeledInput topLeftLabel="Custom item name" placeholder="Item" />
-        <LabeledInput topLeftLabel="Plural" placeholder="Items" />
+        <LabeledInput
+          topLeftLabel="Custom item name"
+          placeholder="Item"
+          value={listMetadata.itemName}
+          onChange={(event) => setListMetadata({ ...listMetadata, itemName: event.target.value })}
+        />
+        <LabeledInput
+          topLeftLabel="Plural"
+          placeholder="Items"
+          value={listMetadata.itemNamePlural}
+          onChange={(event) => setListMetadata({ ...listMetadata, itemNamePlural: event.target.value })}
+        />
       </InputContainer>
       <NavigationButtons prevRoute="/submitList/itemPreview" nextRoute="/submitList/advanced" />
     </Container>

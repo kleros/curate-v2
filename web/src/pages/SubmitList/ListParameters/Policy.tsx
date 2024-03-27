@@ -5,6 +5,10 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
+import { useSubmitListContext } from "context/SubmitListContext";
+import { toast } from "react-toastify";
+import { OPTIONS as toastOptions } from "utils/wrapWithToast";
+import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 
 const Container = styled.div`
   display: flex;
@@ -33,7 +37,24 @@ const StyledFileUploader = styled(FileUploader)`
 `;
 
 const Policy: React.FC = () => {
-  const handleFileUpload = (file: File) => {};
+  const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
+
+  const handleFileUpload = (file: File) => {
+    if (file?.type !== "application/pdf") {
+      toast.error("File type not supported", toastOptions);
+      return;
+    }
+    setIsPolicyUploading(true);
+
+    uploadFileToIPFS(file)
+      .then(async (res) => {
+        const response = await res.json();
+        const policyURI = response["cids"][0];
+        setListMetadata({ ...listMetadata, policyURI });
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsPolicyUploading(false));
+  };
 
   return (
     <Container>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { Status } from "consts/status";
 import InformationCard from "components/InformationCard";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -20,15 +21,16 @@ const StyledInformationCard = styled(InformationCard)`
 `;
 
 const ListPageDisplay: React.FC = () => {
+  const { listMetadata } = useSubmitListContext();
   return (
     <Container>
       <StyledP>Check how the list is displayed on the List page:</StyledP>
       <StyledInformationCard
-        title="List title goes here"
-        description="List description"
+        title={listMetadata.title}
+        description={listMetadata.description}
         chainId={1}
         status={Status.Included}
-        logoURI="https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png"
+        logoURI={listMetadata.logoURI}
       />
     </Container>
   );

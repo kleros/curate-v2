@@ -10,6 +10,7 @@ import { Accordion } from "@kleros/ui-components-library";
 import ChallengeParameters from "./ChallengeParameters";
 import AppealParameters from "./AppealParameters";
 import AbritrationParameters from "./ArbitrationParameters";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -64,6 +65,19 @@ const StyledAccordion = styled(Accordion)`
 `;
 
 const AdvancedParameters: React.FC = () => {
+  const { listData, setListData } = useSubmitListContext();
+  const reset = () =>
+    setListData({
+      ...listData,
+      challengePeriodDuration: 2,
+      removalChallengeBaseDeposit: "0.00001",
+      submissionChallengeBaseDeposit: "0.00001",
+      governor: "",
+      arbitrator: "",
+      courtId: "1",
+      numberOfJurors: 3,
+    });
+
   return (
     <Container>
       <Header text="Advanced Options" />
@@ -72,7 +86,8 @@ const AdvancedParameters: React.FC = () => {
           By default, the recommended parameters are selected. You can edit them or skip them by clicking on Next.
         </StyledLabel>
         <ButtonContainer>
-          <LightButton text="Reset" Icon={HistoryIcon} /> <LightButton text="Learn more" Icon={BookIcon} />
+          <LightButton text="Reset" Icon={HistoryIcon} onClick={reset} />{" "}
+          <LightButton text="Learn more" Icon={BookIcon} />
         </ButtonContainer>
       </LabelAndButtonContainer>
       <StyledAccordion

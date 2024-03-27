@@ -5,6 +5,9 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import { Slider } from "@kleros/ui-components-library";
 import Header from "../Header";
+import { useSubmitListContext } from "context/SubmitListContext";
+import { parseEther } from "viem";
+import { formatETH } from "utils/format";
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +35,12 @@ const StyledLabel = styled.label`
 `;
 
 const Deposit: React.FC = () => {
+  const { listData, setListData } = useSubmitListContext();
+
+  const handleChange = (val: number) => {
+    setListData({ ...listData, submissionBaseDeposit: formatETH(BigInt(val), 5) });
+  };
+
   return (
     <Container>
       <Header text="Item Deposit" />
@@ -42,7 +51,14 @@ const Deposit: React.FC = () => {
         list. On the other hand, if the deposit is too high, users will rarely submit new items. Balance is key.
       </StyledLabel>
       <SliderContainer>
-        <Slider callback={() => {}} min={0.001} max={100} leftLabel="Too low" rightLabel="Too high" label={`1 ETH`} />
+        <Slider
+          callback={handleChange}
+          min={Number(parseEther("0.00001"))}
+          max={Number(parseEther("0.01"))}
+          leftLabel="Too low"
+          rightLabel="Too high"
+          label={`${listData.submissionBaseDeposit} ETH`}
+        />
       </SliderContainer>
       <NavigationButtons prevRoute="/submitList/listPreview" nextRoute="/submitList/fields" />
     </Container>

@@ -16,10 +16,6 @@ const Container = styled.div`
 
 const StyledField = styled(Field)`
   width: 100%;
-  > small {
-    margin-top: 16px;
-    margin-bottom: 16px;
-  }
 `;
 
 const StyledLabel = styled.label<{ alignRight?: boolean }>`
@@ -29,6 +25,13 @@ const StyledLabel = styled.label<{ alignRight?: boolean }>`
 
 const Wrapper = styled.div<{ top?: boolean }>`
   ${({ top }) => (top ? "margin-bottom: 12px;" : "margin-top: 12px")}
+`;
+
+const ElementWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: top;
 `;
 
 const Label: React.FC<{ label: string; tooltipMsg?: string; alignRight?: boolean; top?: boolean }> = ({
@@ -56,7 +59,7 @@ const Label: React.FC<{ label: string; tooltipMsg?: string; alignRight?: boolean
 
 interface ILabeledInput extends FieldProps {
   topLeftLabel?: string;
-  topRightLabel?: string;
+  topRightLabel?: React.ReactElement | string;
   bottomLeftLabel?: string;
   bottomRightLabel?: string;
   topLeftMsg?: string;
@@ -77,12 +80,20 @@ const LabeledInput: React.FC<ILabeledInput> = (props) => {
     bottomRightMsg,
   } = props;
 
-  const label = topLeftLabel || topRightLabel || bottomLeftLabel || bottomRightLabel;
+  const label = topLeftLabel || (topRightLabel as string) || bottomLeftLabel || bottomRightLabel;
 
   return (
     <Container>
       {!isUndefined(topLeftLabel) ? <Label label={topLeftLabel} tooltipMsg={topLeftMsg} top /> : null}
-      {!isUndefined(topRightLabel) ? <Label label={topRightLabel} alignRight tooltipMsg={topRightMsg} top /> : null}
+
+      {!isUndefined(topRightLabel) && typeof topRightLabel === `string` ? (
+        <Label label={topRightLabel} alignRight tooltipMsg={topRightMsg} top />
+      ) : null}
+
+      {!isUndefined(topRightLabel) && isReactElement(topRightLabel) ? (
+        <ElementWrapper>{topRightLabel}</ElementWrapper>
+      ) : null}
+
       <StyledField {...props} id={label} className="field" />
       {!isUndefined(bottomLeftLabel) ? <Label label={bottomLeftLabel} tooltipMsg={bottomLeftMsg} /> : null}
       {!isUndefined(bottomRightLabel) ? (
@@ -92,4 +103,7 @@ const LabeledInput: React.FC<ILabeledInput> = (props) => {
   );
 };
 
+function isReactElement(value: string | React.ReactElement): value is React.ReactElement {
+  return React.isValidElement(value);
+}
 export default LabeledInput;

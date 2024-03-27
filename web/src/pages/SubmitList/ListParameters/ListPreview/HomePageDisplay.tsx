@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { Status } from "consts/status";
 import RegistryCard from "components/RegistryCard";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -16,14 +17,15 @@ const StyledP = styled.p`
 `;
 
 const HomePageDisplay: React.FC = () => {
+  const { listMetadata } = useSubmitListContext();
   return (
     <Container>
       <StyledP>Check how the list is displayed on the home page:</StyledP>
       <RegistryCard
         id={1}
-        title="List title goes here"
+        title={listMetadata.title}
         status={Status.Pending}
-        logoURI="https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png"
+        logoURI={listMetadata?.logoURI}
         chainId={1}
         totalItems={23}
       />

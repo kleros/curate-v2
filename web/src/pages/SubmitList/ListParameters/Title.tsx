@@ -6,6 +6,7 @@ import { responsiveSize } from "styles/responsiveSize";
 import NavigationButtons from "../NavigationButtons";
 import Header from "../Header";
 import InfoCard from "components/InfoCard";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -37,15 +38,16 @@ const StyledInfoCard = styled(InfoCard)`
 `;
 
 const Title: React.FC = () => {
+  const { listMetadata, setListMetadata } = useSubmitListContext();
+
+  const handleWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setListMetadata({ ...listMetadata, title: event.target.value });
+  };
   return (
     <Container>
       <Header text="Name" />
       <FieldContainer>
-        <StyledField
-          // onChange={handleWrite}
-          placeholder="eg. Address Tags"
-          value={""}
-        />
+        <StyledField onChange={handleWrite} placeholder="eg. Address Tags" value={listMetadata.title} />
         <StyledInfoCard msg="Choose a short name for the list." />
       </FieldContainer>
       <NavigationButtons prevRoute="" nextRoute="/submitList/description" />

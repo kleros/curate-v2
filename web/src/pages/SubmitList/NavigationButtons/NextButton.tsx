@@ -1,14 +1,8 @@
 import React from "react";
 import { Button } from "@kleros/ui-components-library";
 import { useLocation, useNavigate } from "react-router-dom";
-import CheckCircle from "svgs/icons/check-circle-outline.svg";
-import styled from "styled-components";
-
-const StyledCheckCircle = styled(CheckCircle)`
-  path {
-    fill: #000;
-  }
-`;
+import { useSubmitListContext } from "context/SubmitListContext";
+import SubmitListButton from "./SubmitListButton";
 
 interface INextButton {
   nextRoute: string;
@@ -17,16 +11,37 @@ interface INextButton {
 const NextButton: React.FC<INextButton> = ({ nextRoute }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { listData, listMetadata, isLogoUploading, isPolicyUploading } = useSubmitListContext();
+
+  const areItemFieldsFilled =
+    listMetadata.columns && listMetadata.columns.every((column) => column.label !== "" && column.description);
 
   const isDeployPage = location.pathname.includes("/deploy");
-  const isButtonDisabled = false;
-  return (
-    <Button
-      disabled={isButtonDisabled}
-      onClick={() => navigate(nextRoute)}
-      text={isDeployPage ? "Create List" : "Next"}
-      Icon={isDeployPage ? StyledCheckCircle : undefined}
-    />
+  const areAdvancedParamsFilled =
+    listData.arbitrator !== "" &&
+    listData.governor !== "" &&
+    listData.submissionBaseDeposit !== "" &&
+    listData.removalBaseDeposit !== "" &&
+    listData.submissionChallengeBaseDeposit !== "" &&
+    listData.removalChallengeBaseDeposit !== "" &&
+    listData.challengePeriodDuration;
+
+  const isButtonDisabled =
+    (location.pathname.includes("/submitList/title") && !listMetadata.title) ||
+    (location.pathname.includes("/submitList/description") && !listMetadata.description) ||
+    (location.pathname.includes("/submitList/court") && !listData.courtId) ||
+    (location.pathname.includes("/submitList/custom") && !listMetadata.itemName && !listMetadata.itemNamePlural) ||
+    (location.pathname.includes("/submitList/fields") && !areItemFieldsFilled) ||
+    (location.pathname.includes("/submitList/policy") && (isPolicyUploading || !listMetadata.policyURI)) ||
+    (location.pathname.includes("/submitList/logo") && (isLogoUploading || !listMetadata.logoURI)) ||
+    (location.pathname.includes("/submitList/advanced") && !areAdvancedParamsFilled) ||
+    !listData.courtId ||
+    !listData.numberOfJurors;
+
+  return isDeployPage ? (
+    <SubmitListButton />
+  ) : (
+    <Button disabled={isButtonDisabled} onClick={() => navigate(nextRoute)} text="Next" />
   );
 };
 

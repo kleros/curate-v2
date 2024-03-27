@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { css } from "styled-components";
 import NavigationButtons from "../../NavigationButtons";
 import ItemFields from "./ItemFields";
@@ -8,6 +8,7 @@ import Header from "../../Header";
 import PlusMinusField from "components/PlusMinusField";
 import LightButton from "components/LightButton";
 import HistoryIcon from "svgs/icons/history.svg";
+import { ListField, useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -50,27 +51,35 @@ const ButtonContainer = styled.div`
   }
 `;
 
-export const FieldTypes = ["Text", "Address", "Image", "Link", "Number", "Boolean", "File"] as const;
-
-export type Field = {
-  id: string;
-  name: string;
-  description: string;
-  indexed: boolean;
-  type: (typeof FieldTypes)[number];
-};
-
 const Fields: React.FC = () => {
-  const [fields, setFields] = useState<Field[]>([
-    { name: "", description: "", type: "Text", indexed: true, id: "1" },
-    { name: "", description: "", type: "Text", indexed: false, id: "1" },
-  ]);
+  const { listMetadata, setListMetadata } = useSubmitListContext();
 
+  const resetFields = () => {
+    setListMetadata({
+      ...listMetadata,
+      columns: [
+        {
+          label: "",
+          description: "",
+          id: 0,
+          isIdentifier: false,
+          type: "Text",
+        },
+      ],
+    });
+  };
   const updateNumberOfFields = (value: number) => {
-    let defaultField: Field = { name: "", description: "", id: value.toString(), indexed: false, type: "Text" };
+    let defaultField: ListField = {
+      label: "",
+      description: "",
+      id: value - 1,
+      isIdentifier: false,
+      type: "Text",
+    };
+    const fields = listMetadata.columns;
 
-    if (value < fields?.length) return setFields([...fields.splice(0, value)]);
-    if (value > fields?.length) return setFields([...fields, defaultField]);
+    if (value < fields?.length) return setListMetadata({ ...listMetadata, columns: [...fields.splice(0, value)] });
+    if (value > fields?.length) return setListMetadata({ ...listMetadata, columns: [...fields, defaultField] });
   };
 
   return (
@@ -83,11 +92,15 @@ const Fields: React.FC = () => {
           image, or name add them as the first fields.
         </StyledLabel>
         <ButtonContainer>
-          <LightButton text="Reset" Icon={HistoryIcon} />
+          <LightButton text="Reset" Icon={HistoryIcon} onClick={resetFields} />
         </ButtonContainer>
       </LabelAndButtonContainer>
-      <ItemFields fields={fields} />
-      <StyledPlusMinusField currentValue={fields?.length ?? 2} updateValue={updateNumberOfFields} minValue={2} />
+      <ItemFields />
+      <StyledPlusMinusField
+        currentValue={listMetadata.columns?.length ?? 2}
+        updateValue={updateNumberOfFields}
+        minValue={1}
+      />
       <NavigationButtons prevRoute="/submitList/deposit" nextRoute="/submitList/itemPreview" />
     </Container>
   );

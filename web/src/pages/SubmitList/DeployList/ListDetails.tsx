@@ -4,6 +4,7 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import Coin from "svgs/icons/pile-coins.svg";
 import { getChainIcon, getChainName } from "components/ChainIcon";
+import { useSubmitListContext } from "context/SubmitListContext";
 
 const Container = styled.div`
   width: 100%;
@@ -69,9 +70,10 @@ const SVGContainer = styled.div`
 `;
 
 const ListDetails: React.FC = () => {
+  const { listMetadata } = useSubmitListContext();
   return (
     <Container>
-      <StyledHeader>Address Tags</StyledHeader>
+      <StyledHeader>{listMetadata.title}</StyledHeader>
       <InnerContainer>
         <TotalContainer>
           <SVGContainer>

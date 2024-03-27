@@ -14,6 +14,7 @@ import AllLists from "./pages/AllLists";
 import GraphqlBatcherProvider from "./context/GraphqlBatcher";
 import { SubmitItemProvider } from "./context/SubmitItemContext";
 import SubmitItem from "./pages/SubmitItem";
+import SubmitList from "./pages/SubmitList";
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = () => {
                     <Route index element={<Home />} />
                     <Route path="lists/*" element={<AllLists />} />
                     <Route path="submitItem/*" element={<SubmitItem />} />
+                    <Route path="submitList/*" element={<SubmitList />} />
                     <Route path="*" element={<h1>404 not found</h1>} />
                   </Route>
                 </SentryRoutes>

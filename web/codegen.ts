@@ -3,7 +3,7 @@ import { getGraphqlUrl } from "utils/getGraphqlUrl";
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: [getGraphqlUrl()],
+  schema: [getGraphqlUrl(false), getGraphqlUrl(true)],
   documents: "./src/hooks/queries/*.ts",
   generates: {
     "./src/graphql/": {

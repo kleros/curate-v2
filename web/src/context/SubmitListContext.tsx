@@ -73,11 +73,9 @@ const initialListData: Partial<IListData> = {
   challengePeriodDuration: 2, //hrs
 };
 
-const initialListMetadata: IListMetadata = {
+const initialListMetadata: Partial<IListMetadata> = {
   title: "",
   description: "",
-  itemName: "item",
-  itemNamePlural: "items",
   columns: [{ label: "", description: "", type: "Text", isIdentifier: true, id: 0 }],
 };
 
@@ -100,7 +98,7 @@ interface ISubmitListContext {
 const SubmitListContext = createContext<ISubmitListContext>({
   listData: initialListData as IListData,
   setListData: () => {},
-  listMetadata: initialListMetadata,
+  listMetadata: initialListMetadata as IListMetadata,
   setListMetadata: () => {},
   resetListData: () => {},
   isSubmittingList: false,
@@ -117,7 +115,10 @@ export const useSubmitListContext = () => useContext(SubmitListContext);
 
 export const SubmitListProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [listData, setListData] = useLocalStorage<IListData>("listData", initialListData as IListData);
-  const [listMetadata, setListMetadata] = useLocalStorage<IListMetadata>("listMetadata", initialListMetadata);
+  const [listMetadata, setListMetadata] = useLocalStorage<IListMetadata>(
+    "listMetadata",
+    initialListMetadata as IListMetadata
+  );
   const [isSubmittingList, setIsSubmittingList] = useState<boolean>(false);
   const [isPolicyUploading, setIsPolicyUploading] = useState<boolean>(false);
   const [isLogoUploading, setIsLogoUploading] = useState<boolean>(false);
@@ -125,6 +126,7 @@ export const SubmitListProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const resetListData = () => {
     setListData(initialListData);
+    setListMetadata(initialListMetadata);
   };
 
   const contextValues = useMemo(

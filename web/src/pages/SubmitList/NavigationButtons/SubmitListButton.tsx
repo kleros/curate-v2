@@ -9,6 +9,7 @@ import { wrapWithToast } from "utils/wrapWithToast";
 import { usePublicClient } from "wagmi";
 import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
 import { isAddress, parseEther, zeroAddress } from "viem";
+import { useNavigate } from "react-router-dom";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -16,14 +17,15 @@ const StyledCheckCircle = styled(CheckCircle)`
   }
 `;
 const SubmitListButton: React.FC = () => {
-  const { listData, listMetadata, isSubmittingList, setIsSubmittingList, progress, setProgress } =
+  const navigate = useNavigate();
+  const { listData, listMetadata, isSubmittingList, setIsSubmittingList, progress, setProgress, resetListData } =
     useSubmitListContext();
   const publicClient = usePublicClient();
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
   const { data: config } = usePrepareCurateFactoryDeploy({
-    enabled: !isUndefined(listParams?.governor),
+    enabled: areListParamsValid(listParams),
     args: [
       listParams.governor,
       listParams.arbitrator,
@@ -46,7 +48,7 @@ const SubmitListButton: React.FC = () => {
   );
 
   return progress === ListProgress.Success ? (
-    <Button text="View List" />
+    <Button text="View List" onClick={() => navigate("/lists/1/list/1/desc/all")} />
   ) : (
     <Button
       text="Create List"
@@ -65,10 +67,11 @@ const SubmitListButton: React.FC = () => {
             publicClient
           )
             .then((res) => {
-              console.log(res);
+              console.log({ res });
 
               if (res.status && !isUndefined(res.result)) {
                 setProgress(ListProgress.Success);
+                resetListData();
               } else {
                 setProgress(ListProgress.Failed);
               }

@@ -103,7 +103,6 @@ const AdvancedParameters: React.FC = () => {
       <StyledAccordion
         items={[
           { title: "Challenge Parameters", body: <ChallengeParameters /> },
-          { title: "Appeal Parameters", body: <AppealParameters /> },
           { title: "Arbitration Parameters", body: <AbritrationParameters /> },
         ]}
       />

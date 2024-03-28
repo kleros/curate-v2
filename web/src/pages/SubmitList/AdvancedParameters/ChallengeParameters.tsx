@@ -54,18 +54,6 @@ const ChallengeParameters: React.FC = () => {
         value={listData.removalChallengeBaseDeposit}
         onChange={handleChange}
       />
-      <LabeledInput
-        topLeftLabel="Incorrect challenge compensation"
-        placeholder="84"
-        bottomLeftLabel="Total : 0.086 ETH"
-        bottomLeftMsg=""
-      />
-      <LabeledInput
-        topLeftLabel="Incorrect removal challenge compensation"
-        placeholder="84"
-        bottomLeftLabel="Total : 0.086 ETH"
-        bottomLeftMsg="a"
-      />
     </Container>
   );
 };

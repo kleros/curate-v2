@@ -104,20 +104,6 @@ const AbritrationParameters: React.FC = () => {
     <Container>
       <TopContainer>
         <LabeledInput
-          topLeftLabel="Arbitrator"
-          topRightLabel={
-            <StyledButton
-              text="Select Kleros"
-              onClick={() => setListData({ ...listData, arbitrator: KLEROS_ARBITRATOR })}
-            />
-          }
-          placeholder="Arbitrator address"
-          value={listData.arbitrator}
-          onChange={(event) => setListData({ ...listData, arbitrator: event.target.value as `0x${string}` })}
-          variant={isArbitratorValid ? "" : "error"}
-          message={!isArbitratorValid ? "Invalid Address" : ""}
-        />
-        <LabeledInput
           topLeftLabel="Governor"
           topRightLabel={
             <StyledButton

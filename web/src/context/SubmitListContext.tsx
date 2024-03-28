@@ -1,7 +1,13 @@
 import React, { createContext, useState, useContext, useMemo } from "react";
 
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { EVIDENCE_MODULE, TEMPLATE_REGISTRY, registrationTemplate, removalTemplate } from "consts/arbitration";
+import {
+  EVIDENCE_MODULE,
+  KLEROS_ARBITRATOR,
+  TEMPLATE_REGISTRY,
+  registrationTemplate,
+  removalTemplate,
+} from "consts/arbitration";
 
 export interface IList {
   governor: string;
@@ -58,7 +64,7 @@ export interface IListData extends IList {
 
 const initialListData: Partial<IListData> = {
   governor: "",
-  arbitrator: "",
+  arbitrator: KLEROS_ARBITRATOR,
   numberOfJurors: 3,
   submissionBaseDeposit: "0.00001",
   removalBaseDeposit: "0.00001",

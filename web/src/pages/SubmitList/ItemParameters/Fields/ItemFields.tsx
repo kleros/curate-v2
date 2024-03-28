@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import LabeledInput from "components/LabeledInput";
@@ -6,6 +6,8 @@ import { Switch, _IItem1 } from "@kleros/ui-components-library";
 import LabeledDropdown from "../../LabeledDropdown";
 import WithHelpTooltip from "components/WithHelpTooltip";
 import { FieldTypes, useSubmitListContext } from "context/SubmitListContext";
+import { toast } from "react-toastify";
+import { OPTIONS } from "utils/wrapWithToast";
 
 const Container = styled.div`
   display: flex;
@@ -59,9 +61,20 @@ const ItemFields: React.FC = () => {
 
   const items: _IItem1[] = FieldTypes.map((item) => ({ text: item, value: item }));
 
+  const canIndexMoreFields = useMemo(() => {
+    const indexedFields = listMetadata.columns.filter((field) => field.isIdentifier);
+    return indexedFields.length < 4;
+  }, [listMetadata]);
+
   const handleFieldWrite = (event: React.ChangeEvent<HTMLInputElement>, key: number) => {
     let columns = listMetadata.columns ?? [];
+
     if (event.target.name === "isIdentifier") {
+      // check if we can index more fields
+      if (!columns[key].isIdentifier && !canIndexMoreFields) {
+        toast.info("Can only index 4 fields.", OPTIONS);
+        return;
+      }
       columns[key] = { ...columns[key], [event.target.name]: !columns[key].isIdentifier };
     } else {
       columns[key] = { ...columns[key], [event.target.name]: event.target.value };
@@ -75,6 +88,7 @@ const ItemFields: React.FC = () => {
     columns[key] = { ...columns[key], type: val };
     setListMetadata({ ...listMetadata, columns });
   };
+
   return (
     <Container>
       {listMetadata.columns?.map((field, index) => (

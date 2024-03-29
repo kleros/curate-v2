@@ -1,4 +1,4 @@
-import { AlertMessage, DisplaySmall, DropdownCascader } from "@kleros/ui-components-library";
+import { AlertMessage, DropdownCascader } from "@kleros/ui-components-library";
 import React, { useEffect, useMemo } from "react";
 import styled, { css } from "styled-components";
 import LabeledInput from "components/LabeledInput";
@@ -6,7 +6,7 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { rootCourtToItems, useCourtTree } from "hooks/queries/useCourtTree";
 import { isUndefined } from "utils/index";
 import Skeleton from "react-loading-skeleton";
-import ETH from "svgs/icons/eth.svg";
+import ETH from "svgs/icons/eth-round.svg";
 import LightButton from "components/LightButton";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
@@ -53,13 +53,6 @@ const DropdownContainer = styled.div`
 const AlertMessageContainer = styled.div`
   svg {
     flex-shrink: 0;
-  }
-`;
-
-const StyledDisplay = styled(DisplaySmall)`
-  width: 100%;
-  > div {
-    margin-top: 12px;
   }
 `;
 
@@ -141,7 +134,12 @@ const AbritrationParameters: React.FC = () => {
           value={noOfVotes}
           onChange={handleJurorsWrite}
         />
-        <StyledDisplay text={formatEther((arbitrationCost as bigint) ?? "")} Icon={ETH} label="Arbitration Cost" />
+        <LabeledInput
+          value={formatEther((arbitrationCost as bigint) ?? "")}
+          Icon={ETH}
+          topLeftLabel={{ text: "Arbitration Cost" }}
+          disabled
+        />
       </MiddleContainer>
 
       <AlertMessageContainer>

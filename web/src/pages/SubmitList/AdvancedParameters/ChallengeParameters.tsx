@@ -4,6 +4,7 @@ import LabeledInput from "components/LabeledInput";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { roundSumToPrecision } from "utils/format";
+import EthIcon from "svgs/icons/eth-round.svg";
 
 const Container = styled.div`
   display: grid;
@@ -54,7 +55,7 @@ const ChallengeParameters: React.FC = () => {
           tooltipMsg: "The total cost is the sum of the base deposit and the arbitration cost.",
         }}
         placeholder="84"
-        variant="currency"
+        Icon={EthIcon}
         name="submissionChallengeBaseDeposit"
         value={listData.submissionChallengeBaseDeposit}
         onChange={handleChange}
@@ -73,6 +74,7 @@ const ChallengeParameters: React.FC = () => {
           tooltipMsg: "The total cost is the sum of the base deposit and the arbitration cost.",
         }}
         placeholder="84"
+        Icon={EthIcon}
         name="removalChallengeBaseDeposit"
         value={listData.removalChallengeBaseDeposit}
         onChange={handleChange}

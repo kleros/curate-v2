@@ -29,6 +29,7 @@ const HomePageDisplay: React.FC = () => {
         logoURI={getIpfsUrl(listMetadata?.logoURI)}
         chainId={1}
         totalItems={23}
+        overrideIsList
       />
     </Container>
   );

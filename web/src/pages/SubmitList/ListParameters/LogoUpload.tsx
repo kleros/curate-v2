@@ -9,6 +9,7 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import { OPTIONS as toastOptions } from "utils/wrapWithToast";
 import { toast } from "react-toastify";
+import ListPreview from "./ListPreview";
 
 const Container = styled.div`
   display: flex;
@@ -59,7 +60,7 @@ const LogoUpload: React.FC = () => {
         variant="info"
         msg="Upload a logo to represent your list. The logo should be a 1:1 aspect ratio image with transparent background, in SVG, or PNG."
       />
-
+      <ListPreview />
       <NavigationButtons prevRoute="/submitList/description" nextRoute="/submitList/policy" />
     </Container>
   );

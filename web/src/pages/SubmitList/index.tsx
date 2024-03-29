@@ -11,7 +11,6 @@ import Title from "./ListParameters/Title";
 import Description from "./ListParameters/Description";
 import LogoUpload from "./ListParameters/LogoUpload";
 import Policy from "./ListParameters/Policy";
-import ListPreview from "./ListParameters/ListPreview";
 import Deposit from "./ItemParameters/Deposit";
 import Fields from "./ItemParameters/Fields";
 import ItemPreview from "./ItemParameters/ItemPreview";
@@ -83,7 +82,6 @@ const SubmitList: React.FC = () => {
               <Route path="/description/*" element={<Description />} />
               <Route path="/logo/*" element={<LogoUpload />} />
               <Route path="/policy/*" element={<Policy />} />
-              <Route path="/listPreview/*" element={<ListPreview />} />
               <Route path="/deposit/*" element={<Deposit />} />
               <Route path="/fields/*" element={<Fields />} />
               <Route path="/itemPreview/*" element={<ItemPreview />} />

@@ -18,7 +18,7 @@ const StyledSteps = styled(Steps)`
 `;
 
 const items = [
-  { title: "List", subitems: ["Name", "Description", "Logo", "Policy", "Preview"] },
+  { title: "List", subitems: ["Name", "Description", "Logo", "Policy"] },
   { title: "Item", subitems: ["Deposit", "Fields", "Preview", "Custom"] },
   { title: "Advanced" },
   { title: "Deploy" },
@@ -32,7 +32,6 @@ const Timeline: React.FC = () => {
     "/submitList/description": 0,
     "/submitList/logo": 0,
     "/submitList/policy": 0,
-    "/submitList/listPreview": 0,
     "/submitList/deposit": 1,
     "/submitList/fields": 1,
     "/submitList/itemPreview": 1,

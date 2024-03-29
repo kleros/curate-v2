@@ -29,16 +29,26 @@ const ChallengeParameters: React.FC = () => {
   return (
     <Container>
       <LabeledInput
-        topLeftLabel="Challenge period duration (hours)"
+        topLeftLabel={{
+          text: "Challenge period duration (hours)",
+          tooltipMsg:
+            "The length of time (in hours) that a submission can be challenged before it is automatically accepted onto the list and the submitter's deposit is refunded.",
+        }}
         placeholder="hours"
         name="challengePeriodDuration"
         value={listData.challengePeriodDuration}
         onChange={handleChange}
       />
       <LabeledInput
-        topLeftLabel="Submission challenge bounty"
-        bottomLeftLabel="Total : 0.086 ETH"
-        bottomLeftMsg=""
+        topLeftLabel={{
+          text: "Submission challenge bounty",
+          tooltipMsg:
+            "This is the deposit required to submit an item to the list and also the amount awarded to successful challengers. If the value is too low, challengers may not have enough incentive to look for flaws in the submissions and bad ones could make it through. If it is too high, submitters may not have enough incentive to send items which may result in an empty list.",
+        }}
+        bottomLeftLabel={{
+          text: "Total : 0.086 ETH",
+          tooltipMsg: "The total cost is the sum of the base deposit and the arbitration cost.",
+        }}
         placeholder="84"
         variant="currency"
         name="submissionChallengeBaseDeposit"
@@ -46,10 +56,16 @@ const ChallengeParameters: React.FC = () => {
         onChange={handleChange}
       />
       <LabeledInput
-        topLeftLabel="Removal challenge bounty"
+        topLeftLabel={{
+          text: "Removal challenge bounty",
+          tooltipMsg:
+            "This is the deposit required to remove an item and also the amount awarded to successful challengers. If the value is too low, people will not have enough incentive to look for flaws in removal requests and compliant items could be removed from the list. If it is too high, people will be afraid to remove items so a non compliant submission could stay longer than it should.",
+        }}
+        bottomLeftLabel={{
+          text: "Total : 0.086 ETH",
+          tooltipMsg: "The total cost is the sum of the base deposit and the arbitration cost.",
+        }}
         placeholder="84"
-        bottomLeftLabel="Total : 0.086 ETH"
-        bottomLeftMsg=""
         name="removalChallengeBaseDeposit"
         value={listData.removalChallengeBaseDeposit}
         onChange={handleChange}

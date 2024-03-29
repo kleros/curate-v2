@@ -48,13 +48,13 @@ const CustomName: React.FC = () => {
       </StyledLabel>
       <InputContainer>
         <LabeledInput
-          topLeftLabel="Custom item name"
+          topLeftLabel={{ text: "Custom item name" }}
           placeholder="Item"
           value={listMetadata.itemName}
           onChange={(event) => setListMetadata({ ...listMetadata, itemName: event.target.value })}
         />
         <LabeledInput
-          topLeftLabel="Plural"
+          topLeftLabel={{ text: "Plural" }}
           placeholder="Items"
           value={listMetadata.itemNamePlural}
           onChange={(event) => setListMetadata({ ...listMetadata, itemNamePlural: event.target.value })}

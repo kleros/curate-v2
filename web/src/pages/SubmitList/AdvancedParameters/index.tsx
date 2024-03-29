@@ -57,7 +57,11 @@ const StyledAccordion = styled(Accordion)`
     > svg {
       fill: ${({ theme }) => theme.primaryText} !important;
     }
+    > p {
+      color: ${({ theme }) => theme.primaryText};
+    }
   }
+
   //adds padding to body container
   > * > div > div {
     padding: ${responsiveSize(16, 24)} ${responsiveSize(8, 16)};
@@ -73,7 +77,6 @@ const AdvancedParameters: React.FC = () => {
       removalChallengeBaseDeposit: "0.00001",
       submissionChallengeBaseDeposit: "0.00001",
       governor: "",
-      arbitrator: "",
       courtId: "1",
       numberOfJurors: 3,
     });

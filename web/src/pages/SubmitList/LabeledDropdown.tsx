@@ -11,6 +11,7 @@ const Container = styled.div`
 const StyledLabel = styled.label`
   width: 100%;
   margin-bottom: 12px;
+  color: ${({ theme }) => theme.primaryText};
 `;
 
 interface ILabeledDropdown extends ISelect {

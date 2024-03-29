@@ -18,38 +18,39 @@ const StyledField = styled(Field)`
   width: 100%;
 `;
 
-const StyledLabel = styled.label<{ alignRight?: boolean }>`
+const StyledLabel = styled.label<{ alignRight?: boolean; top?: boolean }>`
   text-align: ${({ alignRight }) => (alignRight ? "end" : "start")};
   float: ${({ alignRight }) => (alignRight ? "right" : "left")};
+  color: ${({ theme, top }) => (top ? theme.primaryText : theme.secondaryText)};
 `;
 
 const Wrapper = styled.div<{ top?: boolean }>`
   ${({ top }) => (top ? "margin-bottom: 12px;" : "margin-top: 12px")}
 `;
 
-const ElementWrapper = styled.div`
+const ElementWrapper = styled.div<{ alignRight?: boolean }>`
   width: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: ${({ alignRight }) => (alignRight ? "end" : "start")};
   align-items: top;
 `;
 
-const Label: React.FC<{ label: string; tooltipMsg?: string; alignRight?: boolean; top?: boolean }> = ({
-  label,
-  tooltipMsg,
-  alignRight,
-  top,
-}) => {
+const Label: React.FC<{
+  label: string;
+  tooltipMsg?: string;
+  alignRight?: boolean;
+  top?: boolean;
+}> = ({ label, tooltipMsg, alignRight, top }) => {
   return (
     <Wrapper {...{ top }}>
       {tooltipMsg ? (
-        <WithHelpTooltip tooltipMsg={tooltipMsg} place={alignRight ? "left" : "right"}>
-          <StyledLabel id={label} {...{ alignRight }}>
+        <WithHelpTooltip tooltipMsg={tooltipMsg} place="top">
+          <StyledLabel id={label} {...{ alignRight, top }}>
             {label}
           </StyledLabel>
         </WithHelpTooltip>
       ) : (
-        <StyledLabel id={label} {...{ alignRight }}>
+        <StyledLabel id={label} {...{ alignRight, top }}>
           {label}
         </StyledLabel>
       )}
@@ -57,47 +58,59 @@ const Label: React.FC<{ label: string; tooltipMsg?: string; alignRight?: boolean
   );
 };
 
+interface LabelOptions {
+  text: React.ReactElement | string;
+  tooltipMsg?: string;
+  tooltipPlace?: "top" | "bottom" | "left" | "right";
+}
 interface ILabeledInput extends FieldProps {
-  topLeftLabel?: string;
-  topRightLabel?: React.ReactElement | string;
-  bottomLeftLabel?: string;
-  bottomRightLabel?: string;
-  topLeftMsg?: string;
-  topRightMsg?: string;
-  bottomLeftMsg?: string;
-  bottomRightMsg?: string;
+  topLeftLabel?: LabelOptions;
+  topRightLabel?: LabelOptions;
+  bottomLeftLabel?: LabelOptions;
+  bottomRightLabel?: LabelOptions;
 }
 
 const LabeledInput: React.FC<ILabeledInput> = (props) => {
-  const {
-    topLeftLabel,
-    topRightLabel,
-    bottomLeftLabel,
-    bottomRightLabel,
-    topLeftMsg,
-    topRightMsg,
-    bottomLeftMsg,
-    bottomRightMsg,
-  } = props;
-
-  const label = topLeftLabel || (topRightLabel as string) || bottomLeftLabel || bottomRightLabel;
+  const { topLeftLabel, topRightLabel, bottomLeftLabel, bottomRightLabel } = props;
 
   return (
     <Container>
-      {!isUndefined(topLeftLabel) ? <Label label={topLeftLabel} tooltipMsg={topLeftMsg} top /> : null}
-
-      {!isUndefined(topRightLabel) && typeof topRightLabel === `string` ? (
-        <Label label={topRightLabel} alignRight tooltipMsg={topRightMsg} top />
+      {/* top left label */}
+      {!isUndefined(topLeftLabel) && typeof topLeftLabel.text === `string` ? (
+        <Label label={topLeftLabel.text} tooltipMsg={topLeftLabel.tooltipMsg} top />
       ) : null}
 
-      {!isUndefined(topRightLabel) && isReactElement(topRightLabel) ? (
-        <ElementWrapper>{topRightLabel}</ElementWrapper>
+      {!isUndefined(topLeftLabel) && isReactElement(topLeftLabel.text) ? (
+        <ElementWrapper>{topLeftLabel.text}</ElementWrapper>
       ) : null}
 
-      <StyledField {...props} id={label} className="field" />
-      {!isUndefined(bottomLeftLabel) ? <Label label={bottomLeftLabel} tooltipMsg={bottomLeftMsg} /> : null}
-      {!isUndefined(bottomRightLabel) ? (
-        <Label label={bottomRightLabel} alignRight tooltipMsg={bottomRightMsg} />
+      {/* top right label */}
+      {!isUndefined(topRightLabel) && typeof topRightLabel.text === `string` ? (
+        <Label label={topRightLabel.text} alignRight tooltipMsg={topRightLabel.tooltipMsg} top />
+      ) : null}
+
+      {!isUndefined(topRightLabel) && isReactElement(topRightLabel.text) ? (
+        <ElementWrapper alignRight>{topRightLabel.text}</ElementWrapper>
+      ) : null}
+
+      <StyledField {...props} className="field" />
+
+      {/* bottom left label */}
+      {!isUndefined(bottomLeftLabel) && typeof bottomLeftLabel.text === `string` ? (
+        <Label label={bottomLeftLabel.text} tooltipMsg={bottomLeftLabel.tooltipMsg} />
+      ) : null}
+
+      {!isUndefined(bottomLeftLabel) && isReactElement(bottomLeftLabel.text) ? (
+        <ElementWrapper>{bottomLeftLabel.text}</ElementWrapper>
+      ) : null}
+
+      {/* bottom right label */}
+      {!isUndefined(bottomRightLabel) && typeof bottomRightLabel.text === `string` ? (
+        <Label label={bottomRightLabel.text} alignRight tooltipMsg={bottomRightLabel.tooltipMsg} />
+      ) : null}
+
+      {!isUndefined(bottomRightLabel) && isReactElement(bottomRightLabel.text) ? (
+        <ElementWrapper alignRight>{bottomRightLabel.text}</ElementWrapper>
       ) : null}
     </Container>
   );

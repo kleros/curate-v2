@@ -47,7 +47,7 @@ const StyledSearchbar = styled(Searchbar)`
 
 const StyledPaperIcon = styled(PaperIcon)`
   path {
-    fill: #000;
+    fill: ${({ theme }) => theme.whiteBackground};
   }
 `;
 

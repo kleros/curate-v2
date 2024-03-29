@@ -12,7 +12,7 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
 import { formatEther, isAddress } from "viem";
-import { KLEROS_ARBITRATOR, KLEROS_GOVERNOR } from "consts/arbitration";
+import { KLEROS_GOVERNOR } from "consts/arbitration";
 
 const Container = styled.div`
   display: flex;
@@ -26,14 +26,8 @@ const Container = styled.div`
   )}
 `;
 const TopContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  ${landscapeStyle(
-    () => css`
-      grid-template-columns: 1fr 1fr;
-    `
-  )}
+  display: flex;
+  width: 100%;
 `;
 
 const MiddleContainer = styled.div`
@@ -64,6 +58,9 @@ const AlertMessageContainer = styled.div`
 
 const StyledDisplay = styled(DisplaySmall)`
   width: 100%;
+  > div {
+    margin-top: 12px;
+  }
 `;
 
 const StyledButton = styled(LightButton)`
@@ -76,16 +73,15 @@ const StyledButton = styled(LightButton)`
   }
 `;
 
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.primaryText};
+`;
 const AbritrationParameters: React.FC = () => {
   const { listData, setListData } = useSubmitListContext();
   const { data } = useCourtTree();
   const items = useMemo(() => !isUndefined(data) && [rootCourtToItems(data.court)], [data]);
 
   const isGovernorValid = useMemo(() => listData.governor === "" || isAddress(listData.governor), [listData.governor]);
-  const isArbitratorValid = useMemo(
-    () => listData.arbitrator === "" || isAddress(listData.arbitrator),
-    [listData.arbitrator]
-  );
 
   const { arbitrationCost } = useArbitrationCost(
     prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors)
@@ -104,13 +100,15 @@ const AbritrationParameters: React.FC = () => {
     <Container>
       <TopContainer>
         <LabeledInput
-          topLeftLabel="Governor"
-          topRightLabel={
-            <StyledButton
-              text="Select Kleros Governor"
-              onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR })}
-            />
-          }
+          topLeftLabel={{ text: "Governor" }}
+          topRightLabel={{
+            text: (
+              <StyledButton
+                text="Select Kleros Governor"
+                onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR })}
+              />
+            ),
+          }}
           placeholder="Governor address"
           value={listData.governor}
           onChange={(event) => setListData({ ...listData, governor: event.target.value as `0x${string}` })}
@@ -122,7 +120,7 @@ const AbritrationParameters: React.FC = () => {
       <MiddleContainer>
         {items ? (
           <DropdownContainer>
-            <label>Select a court</label>
+            <StyledLabel>Select a court</StyledLabel>
             <DropdownCascader
               items={items}
               onSelect={(path: string | number) => typeof path === "string" && handleCourtWrite(path.split("/").pop()!)}
@@ -133,7 +131,7 @@ const AbritrationParameters: React.FC = () => {
           <Skeleton width={240} height={42} />
         )}
         <LabeledInput
-          topLeftLabel="Select the number of jurors"
+          topLeftLabel={{ text: "Select the number of jurors" }}
           placeholder="Number of Jurors"
           value={noOfVotes}
           onChange={handleJurorsWrite}

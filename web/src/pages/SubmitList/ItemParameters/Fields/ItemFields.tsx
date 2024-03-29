@@ -56,6 +56,10 @@ const IndexedContainer = styled.div`
   )}
 `;
 
+const StyledLabel = styled.div`
+  color: ${({ theme }) => theme.primaryText};
+`;
+
 const ItemFields: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
 
@@ -103,7 +107,7 @@ const ItemFields: React.FC = () => {
             />
             <LabeledInput
               name="label"
-              topLeftLabel={`Name`}
+              topLeftLabel={{ text: `Name` }}
               placeholder="Item Name"
               value={field.label}
               onChange={(event) => handleFieldWrite(event, index)}
@@ -113,7 +117,7 @@ const ItemFields: React.FC = () => {
                 tooltipMsg="Indexed fields are searchable. Toggle (On) fields are displayed on both the item card and internally on the item page. Toggle (Off) fields are displayed just internally on the item page."
                 place="left"
               >
-                <label>Indexed</label>
+                <StyledLabel>Indexed</StyledLabel>
               </WithHelpTooltip>
               <Switch
                 name="isIdentifier"
@@ -124,7 +128,7 @@ const ItemFields: React.FC = () => {
           </InnerContainer>
           <LabeledInput
             name="description"
-            topLeftLabel={`Description`}
+            topLeftLabel={{ text: `Description` }}
             placeholder="Item description"
             value={field.description}
             onChange={(event) => handleFieldWrite(event, index)}

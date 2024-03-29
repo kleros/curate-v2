@@ -21,3 +21,12 @@ export const formatETH = (value: bigint, fractionDigits = 4, roundDown = false) 
   formatValue(formatEther(value), fractionDigits, roundDown);
 
 export const formatUSD = (value: number, fractionDigits = 2) => "$" + commify(Number(value).toFixed(fractionDigits));
+
+export const roundSumToPrecision = (num1: number, num2: number) => {
+  const maxDecimalPlaces = Math.max(
+    (num1.toString().split(".")[1] || "").length,
+    (num2.toString().split(".")[1] || "").length
+  );
+  const sum = num1 + num2;
+  return sum.toFixed(maxDecimalPlaces);
+};

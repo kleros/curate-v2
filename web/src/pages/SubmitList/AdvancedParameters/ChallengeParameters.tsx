@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import LabeledInput from "components/LabeledInput";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { useSubmitListContext } from "context/SubmitListContext";
+import { roundSumToPrecision } from "utils/format";
 
 const Container = styled.div`
   display: grid;
@@ -46,7 +47,10 @@ const ChallengeParameters: React.FC = () => {
             "This is the deposit required to submit an item to the list and also the amount awarded to successful challengers. If the value is too low, challengers may not have enough incentive to look for flaws in the submissions and bad ones could make it through. If it is too high, submitters may not have enough incentive to send items which may result in an empty list.",
         }}
         bottomLeftLabel={{
-          text: "Total : 0.086 ETH",
+          text: `Total : ${roundSumToPrecision(
+            Number(listData.arbitrationCost),
+            Number(listData.submissionChallengeBaseDeposit)
+          )} ETH`,
           tooltipMsg: "The total cost is the sum of the base deposit and the arbitration cost.",
         }}
         placeholder="84"
@@ -62,7 +66,10 @@ const ChallengeParameters: React.FC = () => {
             "This is the deposit required to remove an item and also the amount awarded to successful challengers. If the value is too low, people will not have enough incentive to look for flaws in removal requests and compliant items could be removed from the list. If it is too high, people will be afraid to remove items so a non compliant submission could stay longer than it should.",
         }}
         bottomLeftLabel={{
-          text: "Total : 0.086 ETH",
+          text: `Total : ${roundSumToPrecision(
+            Number(listData.arbitrationCost),
+            Number(listData.removalChallengeBaseDeposit)
+          )} ETH`,
           tooltipMsg: "The total cost is the sum of the base deposit and the arbitration cost.",
         }}
         placeholder="84"

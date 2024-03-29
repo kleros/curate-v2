@@ -1,5 +1,5 @@
 import { AlertMessage, DisplaySmall, DropdownCascader } from "@kleros/ui-components-library";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import styled, { css } from "styled-components";
 import LabeledInput from "components/LabeledInput";
 import { landscapeStyle } from "styles/landscapeStyle";
@@ -85,6 +85,11 @@ const AbritrationParameters: React.FC = () => {
 
   const { arbitrationCost } = useArbitrationCost(
     prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors)
+  );
+
+  useEffect(
+    () => setListData({ ...listData, arbitrationCost: formatEther((arbitrationCost as bigint) ?? "") }),
+    [arbitrationCost]
   );
 
   const handleCourtWrite = (courtId: string) => {

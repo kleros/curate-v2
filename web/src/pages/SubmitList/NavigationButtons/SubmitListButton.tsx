@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Button } from "@kleros/ui-components-library";
 import CheckCircle from "svgs/icons/check-circle-outline.svg";
 import styled from "styled-components";
@@ -10,16 +10,26 @@ import { usePublicClient } from "wagmi";
 import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
 import { isAddress, parseEther, zeroAddress } from "viem";
 import { useNavigate } from "react-router-dom";
+import { formatUnitsWei } from "utils/format";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
     fill: #000;
   }
 `;
+
 const SubmitListButton: React.FC = () => {
   const navigate = useNavigate();
-  const { listData, listMetadata, isSubmittingList, setIsSubmittingList, progress, setProgress, resetListData } =
-    useSubmitListContext();
+  const {
+    listData,
+    listMetadata,
+    isSubmittingList,
+    setIsSubmittingList,
+    progress,
+    setProgress,
+    resetListData,
+    setListData,
+  } = useSubmitListContext();
   const publicClient = usePublicClient();
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
@@ -41,6 +51,19 @@ const SubmitListButton: React.FC = () => {
   });
 
   const { writeAsync: submit } = useCurateFactoryDeploy(config);
+
+  // estimate gas cost
+  useEffect(() => {
+    const estimateDeployCost = async () => {
+      if (!config?.request) return;
+      const price = await publicClient.getGasPrice();
+      const gasRequired = await publicClient.estimateContractGas(config.request);
+
+      setListData({ ...listData, deployCost: formatUnitsWei(gasRequired * price) });
+    };
+
+    estimateDeployCost();
+  }, [config]);
 
   const isButtonDisabled = useMemo(
     () => isSubmittingList || !areListParamsValid(listParams),

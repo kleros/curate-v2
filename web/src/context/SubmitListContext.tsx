@@ -61,6 +61,7 @@ export interface IListData extends IList {
   submissionChallengeBaseDeposit: string;
   removalChallengeBaseDeposit: string;
   arbitrationCost?: string;
+  deployCost?: string;
 }
 
 const initialListData: Partial<IListData> = {

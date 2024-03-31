@@ -5,6 +5,8 @@ import { responsiveSize } from "styles/responsiveSize";
 import Coin from "svgs/icons/pile-coins.svg";
 import { getChainIcon, getChainName } from "components/ChainIcon";
 import { useSubmitListContext } from "context/SubmitListContext";
+import { formatValue } from "utils/format";
+import Skeleton from "react-loading-skeleton";
 
 const Container = styled.div`
   width: 100%;
@@ -15,8 +17,10 @@ const Container = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.stroke};
   padding: ${responsiveSize(24, 32)};
   padding-bottom: 8px;
+  gap: 19px;
   ${landscapeStyle(
     () => css`
+      gap: 0px;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
@@ -28,13 +32,15 @@ const Container = styled.div`
 const InnerContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 48px;
+  gap: 0px 48px;
+  flex-wrap: wrap;
 `;
 
 const TotalContainer = styled.div`
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 `;
 
 const StyledHeader = styled.h1`
@@ -47,8 +53,13 @@ const StyledHeader = styled.h1`
   }
 `;
 
-const StyledP = styled.p`
+const StyledCost = styled.p`
   color: ${({ theme }) => theme.secondaryPurple};
+  margin: 0px;
+`;
+
+const StyledP = styled.p`
+  margin: 0px;
 `;
 
 const ChainContainer = styled.div`
@@ -70,7 +81,7 @@ const SVGContainer = styled.div`
 `;
 
 const ListDetails: React.FC = () => {
-  const { listMetadata } = useSubmitListContext();
+  const { listMetadata, listData } = useSubmitListContext();
   return (
     <Container>
       <StyledHeader>{listMetadata.title}</StyledHeader>
@@ -79,8 +90,12 @@ const ListDetails: React.FC = () => {
           <SVGContainer>
             <Coin />
           </SVGContainer>
-          <p>Total :</p>
-          <StyledP>~0.03 ETH</StyledP>
+          <StyledP>Total :</StyledP>
+          {listData.deployCost ? (
+            <StyledCost>~{formatValue(listData.deployCost, 5, false)} ETH</StyledCost>
+          ) : (
+            <Skeleton width={60} height={20} />
+          )}
         </TotalContainer>{" "}
         <ChainContainer>
           <p>{getChainIcon(421614)}</p>

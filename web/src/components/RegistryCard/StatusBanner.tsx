@@ -74,7 +74,21 @@ export const getStatusLabel = (status: Status): string => {
       return "Pending";
   }
 };
-
+// in subgraph the Statuses are mapped according to Contracts, for Fronted we need different
+export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
+  if (isDisputed) return Status.Disputed;
+  switch (status) {
+    case "absent":
+      return Status.Removed;
+    case "registered":
+      return Status.Included;
+    case "clearingRequested":
+    case "registrationRequested":
+      return Status.Pending;
+    default:
+      return Status.Pending;
+  }
+};
 const StatusBanner: React.FC<IStatusBanner> = ({ status, chainId, isList = false }) => (
   <Container {...{ status, isList }}>
     <label className="front-color dot">{getStatusLabel(status)}</label>

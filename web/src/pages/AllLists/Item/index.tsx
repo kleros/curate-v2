@@ -1,20 +1,15 @@
 import React from "react";
-import InformationCard from "components/InformationCard";
 import History from "~src/components/HistoryDisplay";
 import { useTheme } from "styled-components";
 import ClosedIcon from "assets/svgs/icons/check-circle-outline.svg";
+import ItemInformationCard from "components/ItemInformationCard";
+import { ItemDetailsFragment } from "src/graphql/graphql";
 
-interface IItems {
-  title: string;
-  description: string;
+interface IItem extends ItemDetailsFragment {
   className?: string;
 }
 
-const ItemDisplay: React.FC<IItems> = ({
-  title = "Address Tags",
-  description = "A list of public name tags, associated with Ethereum mainnet contract addresses.",
-  className,
-}) => {
+const ItemDisplay: React.FC<IItem> = ({ className, ...props }) => {
   const theme = useTheme();
   const historyItems = [
     {
@@ -40,7 +35,7 @@ const ItemDisplay: React.FC<IItems> = ({
 
   return (
     <div {...{ className }}>
-      <InformationCard title={title} description={description} isItem />
+      <ItemInformationCard {...props} />
       <History items={historyItems} />
     </div>
   );

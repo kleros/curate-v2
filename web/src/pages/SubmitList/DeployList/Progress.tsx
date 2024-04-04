@@ -25,11 +25,17 @@ const Progress: React.FC = () => {
   const { progress } = useSubmitListContext();
   const progressValue = useMemo(() => {
     switch (progress) {
-      case ListProgress.Confirming:
+      case ListProgress.ConfirmingDeploy:
         return 0;
-      case ListProgress.Confirmed:
-        return 50;
-      case ListProgress.Success:
+      case ListProgress.ConfirmedDeploy:
+        return 20;
+      case ListProgress.Deployed:
+        return 40;
+      case ListProgress.ConfirmingSubmit:
+        return 60;
+      case ListProgress.ConfirmedSubmit:
+        return 80;
+      case ListProgress.SubmitSuccess:
         return 100;
       default:
         return 0;

@@ -19,6 +19,8 @@ export const TELEGRAM_REGEX = /^@\w{5,32}$/;
 export const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 export const ETH_SIGNATURE_REGEX = /^0x[a-fA-F0-9]{130}$/;
 
+export const DEFAULT_LIST_LOGO = "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS4UPNtgJ/symbol-CURATE.png";
+
 export const lists = [
   {
     id: 1,

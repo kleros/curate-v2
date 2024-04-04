@@ -1,16 +1,33 @@
 import React, { useEffect, useMemo } from "react";
 import { Button } from "@kleros/ui-components-library";
-import CheckCircle from "svgs/icons/check-circle-outline.svg";
+import { Address } from "viem";
+import { useAccount, useNetwork, usePublicClient } from "wagmi";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { IList, IListData, IListMetadata, ListProgress, useSubmitListContext } from "context/SubmitListContext";
-import { useCurateFactoryDeploy, usePrepareCurateFactoryDeploy } from "hooks/contracts/generated";
+
+import CheckCircle from "svgs/icons/check-circle-outline.svg";
+import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
+import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
+import {
+  curateV2ABI,
+  curateV2Address,
+  useCurateFactoryDeploy,
+  useCurateV2AddItem,
+  useCurateV2GetArbitratorExtraData,
+  useCurateV2SubmissionBaseDeposit,
+  usePrepareCurateFactoryDeploy,
+} from "hooks/contracts/generated";
+
 import { isUndefined } from "utils/index";
 import { wrapWithToast } from "utils/wrapWithToast";
-import { usePublicClient } from "wagmi";
-import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
-import { isAddress, parseEther, zeroAddress } from "viem";
-import { useNavigate } from "react-router-dom";
 import { formatUnitsWei } from "utils/format";
+import {
+  areListParamsValid,
+  constructListParams,
+  createItemFromList,
+  retrieveDeployedListAddress,
+} from "utils/submitListUtils";
+import { EnsureChain } from "components/EnsureChain";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -31,111 +48,134 @@ const SubmitListButton: React.FC = () => {
     setListData,
   } = useSubmitListContext();
   const publicClient = usePublicClient();
+  const { address } = useAccount();
+  const { chain } = useNetwork();
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
   const { data: config } = usePrepareCurateFactoryDeploy({
     enabled: areListParamsValid(listParams),
     args: [
-      listParams.governor,
-      listParams.arbitrator,
-      prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors),
-      listParams.evidenceModule,
-      listParams.connectedList,
+      listParams.governor as `0x${string}`,
+      listParams.arbitrator as `0x${string}`,
+      listParams.arbitratorExtraData as `0x${string}`,
+      listParams.evidenceModule as `0x${string}`,
+      listParams.connectedList as `0x${string}`,
       listParams.templateRegistryParams,
       listParams.baseDeposits,
       BigInt(listParams.challengePeriodDuration),
-      listParams.relayerContract,
+      listParams.relayerContract as `0x${string}`,
       listParams.listMetadata ?? "",
     ],
   });
 
   const { writeAsync: submit } = useCurateFactoryDeploy(config);
+  const { writeAsync: submitListToCurate } = useCurateV2AddItem();
+
+  // calculate total cost to submit the list to Curate
+  const { data: arbitratorExtraData } = useCurateV2GetArbitratorExtraData();
+  const { data: submissionBaseDeposit } = useCurateV2SubmissionBaseDeposit();
+  const { arbitrationCost } = useArbitrationCost(arbitratorExtraData);
+
+  const totalCostToSubmit = useMemo(() => {
+    if (!arbitrationCost || !submissionBaseDeposit) return;
+
+    return (arbitrationCost as bigint) + submissionBaseDeposit;
+  }, [arbitrationCost, submissionBaseDeposit]);
 
   // estimate gas cost
   useEffect(() => {
-    const estimateDeployCost = async () => {
-      if (!config?.request) return;
+    const estimateTotalCost = async () => {
+      if (!config?.request || !totalCostToSubmit || !address) return;
       const price = await publicClient.getGasPrice();
-      const gasRequired = await publicClient.estimateContractGas(config.request);
+      const gasRequiredToDeploy = await publicClient.estimateContractGas(config.request);
+      const gasRequiredToSubmit = await publicClient.estimateContractGas({
+        address: curateV2Address[chain?.id ?? 421614],
+        abi: curateV2ABI,
+        functionName: "addItem",
+        account: address,
+        args: [""],
+        value: totalCostToSubmit,
+      });
 
-      setListData({ ...listData, deployCost: formatUnitsWei(gasRequired * price) });
+      const totalCost = (gasRequiredToDeploy + gasRequiredToSubmit) * price + totalCostToSubmit;
+      setListData({ ...listData, deployCost: formatUnitsWei(totalCost) });
     };
 
-    estimateDeployCost();
-  }, [config]);
+    estimateTotalCost();
+  }, [config, totalCostToSubmit]);
+
+  // submit deployed list to Curate
+  const submitList = (deployedAddress: Address) => {
+    if (!deployedAddress || !submitListToCurate || !totalCostToSubmit) {
+      setProgress(ListProgress.Failed);
+    }
+    setProgress(ListProgress.ConfirmingSubmit);
+    wrapWithToast(
+      async () =>
+        await submitListToCurate({ args: [createItemFromList(deployedAddress)], value: totalCostToSubmit }).then(
+          (response) => {
+            setProgress(ListProgress.ConfirmedSubmit);
+            return response.hash;
+          }
+        ),
+      publicClient
+    )
+      .then((res) => {
+        if (res.status && !isUndefined(res.result)) {
+          setProgress(ListProgress.SubmitSuccess);
+          resetListData();
+        } else {
+          setProgress(ListProgress.Failed);
+        }
+      })
+      .catch(() => {
+        setProgress(ListProgress.Failed);
+      })
+      .finally(() => {
+        setIsSubmittingList(false);
+      });
+  };
 
   const isButtonDisabled = useMemo(
     () => isSubmittingList || !areListParamsValid(listParams),
     [isSubmittingList, listParams]
   );
 
-  return progress === ListProgress.Success ? (
+  const handleDeploy = () => {
+    if (submit) {
+      setIsSubmittingList(true);
+      setProgress(ListProgress.ConfirmingDeploy);
+      wrapWithToast(
+        async () =>
+          await submit().then((response) => {
+            setProgress(ListProgress.ConfirmedDeploy);
+            return response.hash;
+          }),
+        publicClient
+      )
+        .then((res) => {
+          if (res.status && !isUndefined(res.result)) {
+            setProgress(ListProgress.Deployed);
+            const deployedList = retrieveDeployedListAddress(res.result.logs[3]);
+            submitList(deployedList);
+          } else {
+            setProgress(ListProgress.Failed);
+          }
+        })
+        .catch(() => {
+          setIsSubmittingList(false);
+          setProgress(ListProgress.Failed);
+        });
+    }
+  };
+  return progress === ListProgress.SubmitSuccess ? (
     <Button text="View List" onClick={() => navigate("/lists/1/list/1/desc/all")} />
   ) : (
-    <Button
-      text="Create List"
-      Icon={StyledCheckCircle}
-      disabled={isButtonDisabled}
-      onClick={() => {
-        if (submit) {
-          setIsSubmittingList(true);
-          setProgress(ListProgress.Confirming);
-          wrapWithToast(
-            async () =>
-              await submit().then((response) => {
-                setProgress(ListProgress.Confirmed);
-                return response.hash;
-              }),
-            publicClient
-          )
-            .then((res) => {
-              console.log({ res });
-
-              if (res.status && !isUndefined(res.result)) {
-                setProgress(ListProgress.Success);
-                resetListData();
-              } else {
-                setProgress(ListProgress.Failed);
-              }
-            })
-            .finally(() => {
-              setIsSubmittingList(false);
-            });
-        }
-      }}
-    />
+    <EnsureChain>
+      <Button text="Create List" Icon={StyledCheckCircle} disabled={isButtonDisabled} onClick={handleDeploy} />
+    </EnsureChain>
   );
-};
-
-const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
-  const baseTemplate = { ...listData } as IList;
-
-  if (!isUndefined(listMetadata.policyURI) && listMetadata.policyURI === "") delete listMetadata.policyURI;
-  baseTemplate.listMetadata = JSON.stringify(listMetadata);
-  baseTemplate.baseDeposits = [
-    parseEther(listData.submissionBaseDeposit),
-    parseEther(listData.removalBaseDeposit),
-    parseEther(listData.submissionChallengeBaseDeposit),
-    parseEther(listData.removalChallengeBaseDeposit),
-  ];
-  baseTemplate.challengePeriodDuration = listData.challengePeriodDuration * 60 * 60;
-  baseTemplate.connectedList = listData.connectedList ?? zeroAddress;
-  baseTemplate.relayerContract = baseTemplate.relayerContract ?? baseTemplate.governor;
-
-  return baseTemplate;
-};
-
-const areListParamsValid = (params: IList) => {
-  const areAddressesValid =
-    isAddress(params.governor) &&
-    isAddress(params.arbitrator) &&
-    isAddress(params.connectedList) &&
-    isAddress(params.evidenceModule) &&
-    isAddress(params.relayerContract) &&
-    isAddress(params.templateRegistryParams.templateRegistry);
-
-  return (areAddressesValid && params.challengePeriodDuration && params.listMetadata !== "") as boolean;
 };
 
 export default SubmitListButton;

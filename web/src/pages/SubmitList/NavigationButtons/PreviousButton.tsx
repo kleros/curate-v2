@@ -16,7 +16,7 @@ const ReturnButton: React.FC<IReturnButton> = ({ prevRoute }) => {
   const navigate = useNavigate();
   const { progress, isSubmittingList } = useSubmitListContext();
   return (
-    progress !== ListProgress.Success && (
+    progress !== ListProgress.SubmitSuccess && (
       <StyledButton
         prevRoute={prevRoute}
         onClick={() => navigate(prevRoute)}

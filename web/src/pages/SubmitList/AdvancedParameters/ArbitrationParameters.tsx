@@ -12,7 +12,7 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
 import { formatEther, isAddress } from "viem";
-import { KLEROS_GOVERNOR } from "consts/arbitration";
+import { KLEROS_ARBITRATOR, KLEROS_GOVERNOR } from "consts/arbitration";
 
 const Container = styled.div`
   display: flex;
@@ -103,7 +103,7 @@ const AbritrationParameters: React.FC = () => {
             text: (
               <StyledButton
                 text="Select Kleros Governor"
-                onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR })}
+                onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR, arbitrator: KLEROS_ARBITRATOR })}
               />
             ),
           }}

@@ -34,7 +34,6 @@ export type ListField = {
   isIdentifier: boolean;
   type: (typeof FieldTypes)[number];
 };
-
 export interface IListMetadata {
   title: string;
   description: string;
@@ -47,9 +46,12 @@ export interface IListMetadata {
 }
 
 export enum ListProgress {
-  Confirming,
-  Confirmed,
-  Success,
+  ConfirmingDeploy,
+  ConfirmedDeploy,
+  Deployed,
+  ConfirmingSubmit,
+  ConfirmedSubmit,
+  SubmitSuccess,
   Failed,
 }
 
@@ -115,7 +117,7 @@ const SubmitListContext = createContext<ISubmitListContext>({
   setIsPolicyUploading: () => {},
   isLogoUploading: false,
   setIsLogoUploading: () => {},
-  progress: ListProgress.Confirming,
+  progress: ListProgress.ConfirmingDeploy,
   setProgress: () => {},
 });
 
@@ -130,7 +132,7 @@ export const SubmitListProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isSubmittingList, setIsSubmittingList] = useState<boolean>(false);
   const [isPolicyUploading, setIsPolicyUploading] = useState<boolean>(false);
   const [isLogoUploading, setIsLogoUploading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<ListProgress>(ListProgress.Confirming);
+  const [progress, setProgress] = useState<ListProgress>(ListProgress.ConfirmingDeploy);
 
   const resetListData = () => {
     setListData(initialListData);

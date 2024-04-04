@@ -7,6 +7,8 @@ import StatusBanner from "./StatusBanner";
 import { Button } from "@kleros/ui-components-library";
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { landscapeStyle } from "styles/landscapeStyle";
+import { getIpfsUrl } from "~src/utils/getIpfsUrl";
+import { DEFAULT_LIST_LOGO } from "~src/consts";
 
 const Container = styled.div<{ isList: boolean }>`
   height: calc(100% - 45px);
@@ -101,7 +103,7 @@ interface IListInfo {
 const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isList = false }) => {
   return (
     <Container {...{ isList }}>
-      <StyledLogo src={logoURI} alt="List Img" isList={isList} />
+      <StyledLogo src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)} alt="List Img" isList={isList} />
       <TruncatedTitle text={title} maxLength={100} />
       {isList && <ChainIcon {...{ chainId }} />}
       <StyledLabel>{totalItems} items</StyledLabel>

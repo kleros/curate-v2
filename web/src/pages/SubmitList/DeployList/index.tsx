@@ -6,6 +6,7 @@ import { AlertMessage, Card } from "@kleros/ui-components-library";
 import Progress from "./Progress";
 import ListDetails from "./ListDetails";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
+import { formatValue } from "utils/format";
 
 const Container = styled.div`
   display: flex;
@@ -30,8 +31,8 @@ const AlertMessageContainer = styled.div`
   }
 `;
 const DeployList: React.FC = () => {
-  const { progress } = useSubmitListContext();
-  const isSuccess = progress === ListProgress.Success;
+  const { progress, listData } = useSubmitListContext();
+  const isSuccess = progress === ListProgress.SubmitSuccess;
 
   return (
     <Container>
@@ -46,7 +47,11 @@ const DeployList: React.FC = () => {
           msg={
             isSuccess
               ? "The list was successfully created !"
-              : "Creating a list requires 2 transactions. The total cost at the moment is approximately 0.03 ETH. We recommend that you familiarize yourself with all the parameters to avoid mistakes. When you are ready, click on Create List."
+              : `Creating a list requires 2 transactions. The total cost at the moment is approximately ${formatValue(
+                  listData.deployCost ?? "0",
+                  5,
+                  false
+                )} ETH. We recommend that you familiarize yourself with all the parameters to avoid mistakes. When you are ready, click on Create List.`
           }
         />
       </AlertMessageContainer>

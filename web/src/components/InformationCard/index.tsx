@@ -10,6 +10,8 @@ import { Policies } from "./Policies";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
 import RemoveModal from "../Modal/RemoveModal";
+import { getIpfsUrl } from "utils/getIpfsUrl";
+import { DEFAULT_LIST_LOGO } from "consts/index";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -139,7 +141,11 @@ const InformationCard: React.FC<IInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
-              <StyledLogo src={logoURI} alt="List Img" isList={false} />
+              <StyledLogo
+                src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)}
+                alt="List Img"
+                isList={false}
+              />
               <h1>{title}</h1>
             </LogoAndTitle>
             <StyledP>{description}</StyledP>

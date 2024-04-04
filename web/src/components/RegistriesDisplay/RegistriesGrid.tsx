@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { SkeletonRegistryCard, SkeletonRegistryListItem } from "../StyledSkeleton";
 import { StandardPagination } from "@kleros/ui-components-library";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
-import { useIsList } from "context/IsListProvider";
+import { useIsListView } from "context/IsListViewProvider";
 import { isUndefined } from "utils/index";
 import { decodeListURIFilter } from "utils/uri";
 // import { RegistryDetailsFragment } from "queries/useCasesQuery";
@@ -50,13 +50,13 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   const { filter } = useParams();
   const decodedFilter = decodeListURIFilter(filter ?? "all");
   const { id: searchValue } = decodedFilter;
-  const { isList } = useIsList();
+  const { isListView } = useIsListView();
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
 
   return (
     <>
-      {isList && screenIsBig ? (
+      {isListView && screenIsBig ? (
         <ListContainer>
           {isUndefined(registries)
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryListItem key={i} />)
@@ -69,7 +69,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
           {isUndefined(registries)
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryCard key={i} />)
             : registries.map((registry) => {
-                return <RegistryCard key={registry.id} {...registry} overrideIsList />;
+                return <RegistryCard key={registry.id} {...registry} overrideIsListView />;
               })}
         </GridContainer>
       )}

@@ -3,8 +3,8 @@ import styled, { Theme } from "styled-components";
 import { Status } from "consts/status";
 import ChainIcon from "../ChainIcon";
 
-const Container = styled.div<{ status: Status; isList: boolean }>`
-  height: ${({ isList }) => (isList ? "min-content" : "45px")};
+const Container = styled.div<{ status: Status; isListView: boolean }>`
+  height: ${({ isListView }) => (isListView ? "min-content" : "45px")};
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
   display: flex;
@@ -21,12 +21,12 @@ const Container = styled.div<{ status: Status; isList: boolean }>`
       margin-right: 8px;
     }
   }
-  ${({ theme, status, isList }) => {
+  ${({ theme, status, isListView }) => {
     const [frontColor, backgroundColor] = getStatusColor(status, theme);
     return `
-      ${!isList && `border-top: 5px solid ${frontColor}`};
-      ${!isList && `background-color: ${backgroundColor}`};
-      ${isList && `padding: 0px`};
+      ${!isListView && `border-top: 5px solid ${frontColor}`};
+      ${!isListView && `background-color: ${backgroundColor}`};
+      ${isListView && `padding: 0px`};
       .front-color {
         color: ${frontColor};
       }
@@ -42,7 +42,7 @@ const Container = styled.div<{ status: Status; isList: boolean }>`
 interface IStatusBanner {
   status: Status;
   chainId?: number;
-  isList?: boolean;
+  isListView?: boolean;
 }
 
 export const getStatusColor = (status: Status, theme: Theme): [string, string] => {
@@ -51,7 +51,7 @@ export const getStatusColor = (status: Status, theme: Theme): [string, string] =
       return [theme.primaryBlue, theme.mediumBlue];
     case Status.Disputed:
       return [theme.secondaryPurple, theme.mediumPurple];
-    case Status.Included:
+    case "registered":
       return [theme.success, theme.successLight];
     case Status.Removed:
       return [theme.error, theme.errorLight];
@@ -66,7 +66,7 @@ export const getStatusLabel = (status: Status): string => {
       return "Pending";
     case Status.Disputed:
       return "Disputed";
-    case Status.Included:
+    case "registered":
       return "Included";
     case Status.Removed:
       return "Removed";
@@ -75,10 +75,10 @@ export const getStatusLabel = (status: Status): string => {
   }
 };
 
-const StatusBanner: React.FC<IStatusBanner> = ({ status, chainId, isList = false }) => (
-  <Container {...{ status, isList }}>
+const StatusBanner: React.FC<IStatusBanner> = ({ status, chainId, isListView = false }) => (
+  <Container {...{ status, isListView }}>
     <label className="front-color dot">{getStatusLabel(status)}</label>
-    {!isList && <ChainIcon chainId={chainId ?? 1} />}
+    {!isListView && <ChainIcon chainId={chainId ?? 1} />}
   </Container>
 );
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import { DropdownSelect } from "@kleros/ui-components-library";
-import { useIsList } from "context/IsListProvider";
+import { useIsListView } from "context/IsListViewProvider";
 import ListIcon from "svgs/icons/list.svg";
 import GridIcon from "svgs/icons/grid.svg";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
@@ -54,7 +54,7 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   };
 
   const { width } = useWindowSize();
-  const { isList, setIsList } = useIsList();
+  const { isListView, setIsListView } = useIsListView();
   const screenIsBig = width > BREAKPOINT_LANDSCAPE;
 
   return (
@@ -73,13 +73,13 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
       />
       {screenIsBig && isListFilter ? (
         <IconsContainer>
-          {isList ? (
-            <StyledGridIcon onClick={() => setIsList(false)} />
+          {isListView ? (
+            <StyledGridIcon onClick={() => setIsListView(false)} />
           ) : (
             <StyledListIcon
               onClick={() => {
                 if (screenIsBig) {
-                  setIsList(true);
+                  setIsListView(true);
                 }
               }}
             />

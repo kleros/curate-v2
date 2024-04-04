@@ -19,7 +19,7 @@ const StyledCard = styled(Card)`
   margin-bottom: 64px;
 `;
 
-const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
+const StatusContainer = styled.div<{ status: Status; isListView: boolean }>`
   display: flex;
   margin-top: 18px;
   .dot {
@@ -85,11 +85,11 @@ const StyledEtherscanIcon = styled(EtherscanIcon)`
   margin-top: 20px;
 `;
 
-const StyledLogo = styled.img<{ isList: boolean }>`
-  width: ${({ isList }) => (isList ? "48px" : "125px")};
-  height: ${({ isList }) => (isList ? "48px" : "125px")};
+const StyledLogo = styled.img<{ isListView: boolean }>`
+  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
   object-fit: contain;
-  margin-bottom: ${({ isList }) => (isList ? "0px" : "8px")};
+  margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;
 
 const StyledP = styled.p`
@@ -140,7 +140,7 @@ const InformationCard: React.FC<IInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
-              {!isItem && <StyledLogo src={logoURI} alt="List Img" isList={false} />}
+              {!isItem && <StyledLogo src={logoURI} alt="List Img" isListView={false} />}
               <h1>{title}</h1>
             </LogoAndTitle>
             <StyledP>{description}</StyledP>
@@ -151,7 +151,7 @@ const InformationCard: React.FC<IInformationCard> = ({
               <p>{getChainName(chainId)}</p>
             </ChainContainer>
             <StyledEtherscanIcon />
-            <StatusContainer {...{ status, isList: false }}>
+            <StatusContainer {...{ status, isListView: false }}>
               <label className="front-color dot">{getStatusLabel(status)}</label>
             </StatusContainer>
           </TopRightInfo>

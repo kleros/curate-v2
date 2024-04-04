@@ -4,10 +4,12 @@ import { OrderDirection, Item_Filter, ItemDetailsFragment } from "src/graphql/gr
 import { useGraphqlBatcher } from "context/GraphqlBatcher";
 import { isUndefined } from "utils/index";
 export type { ItemDetailsFragment };
+
 export const itemFragment = graphql(`
   fragment ItemDetails on Item {
     id
     status
+    data
   }
 `);
 

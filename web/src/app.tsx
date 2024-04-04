@@ -4,7 +4,7 @@ import { SentryRoutes } from "./utils/sentry";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
 import Web3Provider from "context/Web3Provider";
-import IsListProvider from "context/IsListProvider";
+import IsListViewProvider from "context/IsListViewProvider";
 import QueryClientProvider from "context/QueryClientProvider";
 import StyledComponentsProvider from "context/StyledComponentsProvider";
 import RefetchOnBlock from "context/RefetchOnBlock";
@@ -22,7 +22,7 @@ const App: React.FC = () => {
         <RefetchOnBlock />
         <GraphqlBatcherProvider>
           <Web3Provider>
-            <IsListProvider>
+            <IsListViewProvider>
               <SubmitItemProvider>
                 <SentryRoutes>
                   <Route path="/" element={<Layout />}>
@@ -33,7 +33,7 @@ const App: React.FC = () => {
                   </Route>
                 </SentryRoutes>
               </SubmitItemProvider>
-            </IsListProvider>
+            </IsListViewProvider>
           </Web3Provider>
         </GraphqlBatcherProvider>
       </QueryClientProvider>

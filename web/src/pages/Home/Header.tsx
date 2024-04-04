@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 
@@ -19,21 +19,10 @@ const StyledSpan = styled.span`
 `;
 
 const Header: React.FC = () => {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const words = ["Lists", "Knowledge"];
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentWordIndex((prevIndex) => (prevIndex === 0 ? 1 : 0));
-    }, 3000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
     <StyledHeader>
       <StyledH1>
-        Community Curated <StyledSpan>{words[currentWordIndex]}</StyledSpan>
+        Community Curated <StyledSpan>Lists</StyledSpan>
       </StyledH1>
     </StyledHeader>
   );

@@ -7,8 +7,9 @@ import StatusBanner from "./StatusBanner";
 import { Button } from "@kleros/ui-components-library";
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { landscapeStyle } from "styles/landscapeStyle";
+import { getIpfsUrl } from "utils/getIpfsUrl";
 
-const Container = styled.div<{ isList: boolean }>`
+const Container = styled.div<{ isListView: boolean }>`
   height: calc(100% - 45px);
   display: flex;
   flex-direction: column;
@@ -17,8 +18,8 @@ const Container = styled.div<{ isList: boolean }>`
   gap: 8px;
 
   // css for isList view
-  ${({ isList }) =>
-    isList &&
+  ${({ isListView }) =>
+    isListView &&
     css`
       width: 100%;
       height: max-content;
@@ -50,11 +51,11 @@ const Container = styled.div<{ isList: boolean }>`
     `}
 `;
 
-const StyledLogo = styled.img<{ isList: boolean }>`
-  width: ${({ isList }) => (isList ? "48px" : "125px")};
-  height: ${({ isList }) => (isList ? "48px" : "125px")};
+const StyledLogo = styled.img<{ isListView: boolean }>`
+  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
   object-fit: contain;
-  margin-bottom: ${({ isList }) => (isList ? "0px" : "8px")};
+  margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;
 
 const StyledLabel = styled.label`
@@ -67,7 +68,7 @@ const StyledTitle = styled.h3`
 `;
 
 const TruncatedTitle = ({ text, maxLength }) => {
-  const truncatedText = text.length <= maxLength ? text : text.slice(0, maxLength) + "…";
+  const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
   return <StyledTitle>{truncatedText}</StyledTitle>;
 };
 
@@ -95,18 +96,18 @@ interface IListInfo {
   logoURI: string;
   chainId: number;
   status: Status;
-  isList?: boolean;
+  isListView?: boolean;
 }
 
-const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isList = false }) => {
+const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isListView = false }) => {
   return (
-    <Container {...{ isList }}>
-      <StyledLogo src={logoURI} alt="List Img" isList={isList} />
+    <Container {...{ isListView }}>
+      <StyledLogo src={getIpfsUrl(logoURI)} alt="List Img" isListView={isListView} />
       <TruncatedTitle text={title} maxLength={100} />
-      {isList && <ChainIcon {...{ chainId }} />}
+      {isListView && <ChainIcon {...{ chainId }} />}
       <StyledLabel>{totalItems} items</StyledLabel>
-      {isList && <StatusBanner {...{ status, isList }} />}
-      {isList && <StyledButton text="Open" Icon={ArrowIcon} />}
+      {isListView && <StatusBanner {...{ status, isListView }} />}
+      {isListView && <StyledButton text="Open" Icon={ArrowIcon} />}
     </Container>
   );
 };

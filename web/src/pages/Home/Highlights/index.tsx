@@ -3,11 +3,14 @@ import styled from "styled-components";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { useWindowSize } from "react-use";
 import { Button } from "@kleros/ui-components-library";
-import { lists } from "consts/index";
 import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
-import { useIsList } from "context/IsListProvider";
+import { SkeletonRegistryCard, SkeletonRegistryListItem } from "components/StyledSkeleton";
+import { useIsListView } from "context/IsListViewProvider";
+import { isUndefined } from "utils/index";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
+import { useItemsQuery } from "hooks/queries/useItemsQuery";
+import { useRegistriesByIdsQuery } from "hooks/queries/useRegistriesByIdsQuery";
 
 const Container = styled.div`
   width: 100%;
@@ -36,27 +39,45 @@ const StyledButton = styled(Button)`
   margin: 0 auto;
 `;
 
-const HighlightedLists: React.FC = () => {
+const HighlightedLists = () => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
-  const { isList } = useIsList();
+  const { isListView } = useIsListView();
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
+  const { data: itemsData } = useItemsQuery(0, 6, { registry: "0x1db24bae1b932c53430db2cdb3b61d4690ca108e" });
+  const registryIds = useMemo(() => itemsData?.items.map((item) => JSON.parse(item.data).address) || [], [itemsData]);
+
+  const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
+  const combinedListsData = useMemo(() => {
+    return registriesData?.registries.map((registry) => {
+      const registryAsItem = itemsData.items.find((item) => JSON.parse(item.data).address === registry.id);
+
+      return {
+        ...registry,
+        totalItems: registry.items.length,
+        status: registryAsItem.status,
+      };
+    });
+  }, [registriesData, itemsData]);
 
   return (
     <Container>
       <Header />
-
-      {isList && screenIsBig ? (
+      {isListView && screenIsBig ? (
         <ListContainer>
-          {lists.map((list, i) => (
-            <RegistryCard {...list} />
-          ))}
+          {isUndefined(combinedListsData)
+            ? [...Array(6)].map((_, i) => <SkeletonRegistryListItem key={i} />)
+            : combinedListsData?.map((registry, i) => (
+                <RegistryCard key={i} {...registry} totalItems={registry.totalItems} status={registry.status} />
+              ))}
         </ListContainer>
       ) : (
         <GridContainer>
-          {lists.map((list, i) => (
-            <RegistryCard {...list} />
-          ))}
+          {isUndefined(combinedListsData)
+            ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
+            : combinedListsData?.map((registry, i) => (
+                <RegistryCard key={i} {...registry} totalItems={registry.totalItems} status={registry.status} />
+              ))}
         </GridContainer>
       )}
       <StyledButton

@@ -15,14 +15,7 @@ interface IRegistryDetails extends IRegistriesGrid {
   className?: string;
 }
 
-const RegistryDetails: React.FC<IRegistryDetails> = ({
-  items,
-  logoURI = "https://ipfs.kleros.io//ipfs/QmZPeWnzHGKwvnckQE2QrdRJiUFqQXvQEZGFHdEAh7raHN/fno.png",
-  title = "Address Tags",
-  description = "A list of public name tags, associated with Ethereum mainnet contract addresses.",
-  totalItems = 3,
-  className,
-}) => {
+const RegistryDetails: React.FC<IRegistryDetails> = ({ items, logoURI, title, description, totalItems, className }) => {
   const theme = useTheme();
   const historyItems = [
     {

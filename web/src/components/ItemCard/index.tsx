@@ -129,7 +129,7 @@ const ItemCard: React.FC<IItemCard> = ({ id, title, address, website, status }) 
           <StyledGlobeIcon />
           <StyledP>metamask.io</StyledP>
         </DisplayContainer>
-        <StatusBanner {...{ status }} isList />
+        <StatusBanner {...{ status }} isListView />
         <StyledButton text="Open" Icon={ArrowIcon} />
       </Container>
     </StyledListItem>

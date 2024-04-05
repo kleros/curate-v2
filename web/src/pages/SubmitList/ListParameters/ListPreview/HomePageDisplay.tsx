@@ -27,7 +27,7 @@ const HomePageDisplay: React.FC = () => {
         title={listMetadata.title}
         status={Status.Pending}
         logoURI={getIpfsUrl(listMetadata?.logoURI)}
-        chainId={1}
+        chainId={421614}
         totalItems={23}
         overrideIsList
       />

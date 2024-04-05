@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import ItemInformationCard from "components/ItemInformationCard";
-import { items } from "~src/consts";
+import { useSubmitListContext } from "context/SubmitListContext";
+import { constructItemWithMockValues } from "utils/submitListUtils";
 
 const Container = styled.div`
   display: flex;
@@ -22,7 +23,8 @@ const StyledItemInformationCard = styled(ItemInformationCard)`
 interface IItemDisplay {}
 
 const ItemDisplay: React.FC<IItemDisplay> = ({}) => {
-  const item = items[0];
+  const { listMetadata } = useSubmitListContext();
+  const item = constructItemWithMockValues(listMetadata);
   return (
     <Container>
       <StyledP>Check how the item is displayed on the Item page:</StyledP>

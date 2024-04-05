@@ -29,7 +29,7 @@ const ListPageDisplay: React.FC = () => {
       <StyledInformationCard
         title={listMetadata.title}
         description={listMetadata.description}
-        chainId={1}
+        chainId={421624}
         status={Status.Included}
         logoURI={getIpfsUrl(listMetadata.logoURI)}
       />

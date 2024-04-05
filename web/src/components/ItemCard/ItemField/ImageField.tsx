@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 
 const StyledImg = styled.img<{ detailed?: boolean }>`
-  width: ${({ detailed }) => (detailed ? "125px" : "64px")};
-  height: ${({ detailed }) => (detailed ? "125px" : "64px")};
+  width: ${({ detailed }) => (detailed ? "125px" : "60px")};
+  height: ${({ detailed }) => (detailed ? "125px" : "60px")};
   object-fit: contain;
 `;
 

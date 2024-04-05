@@ -8,6 +8,7 @@ import WithHelpTooltip from "components/WithHelpTooltip";
 import { FieldTypes, useSubmitListContext } from "context/SubmitListContext";
 import { toast } from "react-toastify";
 import { OPTIONS } from "utils/wrapWithToast";
+import { capitalize } from "utils/index";
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +64,7 @@ const StyledLabel = styled.div`
 const ItemFields: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
 
-  const items: _IItem1[] = FieldTypes.map((item) => ({ text: item, value: item }));
+  const items: _IItem1[] = FieldTypes.map((item) => ({ text: capitalize(item), value: item }));
 
   const canIndexMoreFields = useMemo(() => {
     const indexedFields = listMetadata.columns.filter((field) => field.isIdentifier);

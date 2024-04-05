@@ -1,8 +1,9 @@
-import { IList, IListData, IListMetadata } from "context/SubmitListContext";
+import { IList, IListData, IListMetadata, ListField } from "context/SubmitListContext";
 import { prepareArbitratorExtradata } from "./prepareArbitratorExtradata";
 import { Address, Log, decodeEventLog, isAddress, parseAbi, parseEther, zeroAddress } from "viem";
 import { isUndefined } from ".";
 import { KLEROS_ARBITRATOR, TEMPLATE_REGISTRY } from "~src/consts/arbitration";
+import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 
 export const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
   const baseTemplate = { ...listData } as IList;
@@ -146,3 +147,42 @@ const constructRemovalTemplate = (listData: IListData, listMetadata: IListMetada
   });
 };
 const isVowel = (x: string) => /[aeiouAEIOU]/.test(x);
+
+export const constructItemWithMockValues = (data: IListMetadata): ItemDetailsFragment => {
+  const props: ListField & { value: ReturnType<typeof getMockValueForType> }[] = [];
+  for (const column of data.columns) {
+    props.push({ ...column, value: getMockValueForType(column.type) });
+  }
+  console.log({ props });
+
+  return {
+    id: "1",
+    status: Status.RegistrationRequested,
+    disputed: false,
+    registerer: {
+      id: getMockValueForType("address") as string,
+    },
+    props,
+  };
+};
+
+const getMockValueForType = (type: string) => {
+  switch (type) {
+    case "text":
+      return "Ethereum";
+    case "address":
+      return "0x922911F4f80a569a4425fa083456239838F7F003";
+    case "link":
+      return "https://kleros.io/";
+    case "image":
+      return "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS4UPNtgJ/symbol-CURATE.png";
+    case "file":
+      return "/ipfs/QmU4X2mjdi7QtcV8TnDKzvR782oDZbKkFPrRLPQnHjy8SW/PoH Origin Constitution (final draft).pdf";
+    case "number":
+      return 21;
+    case "boolean":
+      return true;
+    default:
+      return "Ethereum";
+  }
+};

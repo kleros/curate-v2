@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import ItemCard from "components/ItemCard";
-import { items } from "~src/consts";
+import { useSubmitListContext } from "context/SubmitListContext";
+import { constructItemWithMockValues } from "utils/submitListUtils";
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +19,9 @@ const StyledP = styled.p`
 interface IListDisplay {}
 
 const ListDisplay: React.FC<IListDisplay> = ({}) => {
-  const item = items[0];
+  const { listMetadata } = useSubmitListContext();
+  const item = constructItemWithMockValues(listMetadata);
+
   return (
     <Container>
       <StyledP>Check how the item is displayed on the List page:</StyledP>

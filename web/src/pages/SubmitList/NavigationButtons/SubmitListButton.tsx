@@ -73,9 +73,9 @@ const SubmitListButton: React.FC = () => {
   const { writeAsync: submitListToCurate } = useCurateV2AddItem();
 
   // calculate total cost to submit the list to Curate
-  const { data: arbitratorExtraData } = useCurateV2GetArbitratorExtraData();
-  const { data: submissionBaseDeposit } = useCurateV2SubmissionBaseDeposit();
-  const { arbitrationCost } = useArbitrationCost(arbitratorExtraData);
+  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData();
+  const { data: submissionBaseDeposit, isLoading: isLoadingDeposit } = useCurateV2SubmissionBaseDeposit();
+  const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
 
   const totalCostToSubmit = useMemo(() => {
     if (!arbitrationCost || !submissionBaseDeposit) return;
@@ -138,8 +138,9 @@ const SubmitListButton: React.FC = () => {
   };
 
   const isButtonDisabled = useMemo(
-    () => isSubmittingList || !areListParamsValid(listParams),
-    [isSubmittingList, listParams]
+    () =>
+      isSubmittingList || !areListParamsValid(listParams) || isLoadingArbCost || isLoadingDeposit || isLoadingExtradata,
+    [isSubmittingList, listParams, isLoadingArbCost, isLoadingDeposit, isLoadingExtradata]
   );
 
   const handleDeploy = () => {
@@ -161,6 +162,7 @@ const SubmitListButton: React.FC = () => {
             submitList(deployedList);
           } else {
             setProgress(ListProgress.Failed);
+            setIsSubmittingList(false);
           }
         })
         .catch(() => {

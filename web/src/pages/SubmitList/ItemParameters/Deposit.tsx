@@ -70,8 +70,8 @@ const Deposit: React.FC = () => {
               callback={(val) => setListData({ ...listData, submissionBaseDeposit: formatETH(BigInt(val), 5) })}
               min={parseEthToNumber("0.00001")}
               max={parseEthToNumber("0.01")}
-              leftLabel="Too low"
-              rightLabel="Too high"
+              leftLabel="0.00001 ETH"
+              rightLabel="0.01 ETH"
               label={`${listData.submissionBaseDeposit} ETH`}
               value={parseEthToNumber(listData.submissionBaseDeposit)}
             />
@@ -85,8 +85,8 @@ const Deposit: React.FC = () => {
               callback={(val) => setListData({ ...listData, removalBaseDeposit: formatETH(BigInt(val), 5) })}
               min={parseEthToNumber("0.00001")}
               max={parseEthToNumber("0.01")}
-              leftLabel="Too low"
-              rightLabel="Too high"
+              leftLabel="0.00001 ETH"
+              rightLabel="0.01 ETH"
               label={`${listData.removalBaseDeposit} ETH`}
               value={parseEthToNumber(listData.removalBaseDeposit)}
             />

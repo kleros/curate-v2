@@ -51,7 +51,7 @@ export const createItemFromList = (listAddress?: Address) => {
         }
       ],
       "values": {
-        "Logo": ${listAddress},
+        "List": ${listAddress},
       }
     }`;
 };

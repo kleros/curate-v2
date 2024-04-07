@@ -104,7 +104,7 @@ const ItemFields: React.FC = () => {
               label="Type"
               items={items}
               callback={(val) => handleFieldTypeWrite(val.toString(), index)}
-              defaultValue={items[0].value}
+              defaultValue={field.type}
             />
             <LabeledInput
               name="label"

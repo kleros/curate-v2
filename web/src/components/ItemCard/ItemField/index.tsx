@@ -17,11 +17,6 @@ export interface IItemField extends ItemDetails {
 const ItemField: React.FC<IItemField> = ({ detailed, type, ...props }) => {
   let FieldComponent: JSX.Element | null = null;
   switch (type) {
-    case "text": {
-      const { value, label } = props as ITextField;
-      FieldComponent = <TextField {...{ value, detailed, label }} />;
-      break;
-    }
     case "address": {
       const { value } = props as Omit<IAddressField, "chainId">;
 
@@ -53,18 +48,16 @@ const ItemField: React.FC<IItemField> = ({ detailed, type, ...props }) => {
       break;
     }
     case "number": {
-      const { value, label } = props as INumberField;
+      const { value, label, description } = props as INumberField;
 
-      FieldComponent = <NumberField {...{ value, detailed, label }} />;
+      FieldComponent = <NumberField {...{ value, detailed, label, description }} />;
       break;
     }
-    default:
-      {
-        const { value, label } = props as ITextField;
-        FieldComponent = <TextField {...{ value, detailed, label }} />;
-        break;
-      }
+    default: {
+      const { value, label } = props as ITextField;
+      FieldComponent = <TextField {...{ value, detailed, label }} />;
       break;
+    }
   }
   return FieldComponent;
 };

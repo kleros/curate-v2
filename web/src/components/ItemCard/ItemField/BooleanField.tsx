@@ -4,6 +4,9 @@ import WithHelpTooltip from "components/WithHelpTooltip";
 
 const Container = styled.p`
   margin: 0px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 `;
 
 export interface IBooleanField {
@@ -13,9 +16,17 @@ export interface IBooleanField {
   description?: string;
 }
 const BooleanField: React.FC<IBooleanField> = ({ value, label, detailed, description }) => {
-  const text = value === "true" ? `is${label}` : `not${label}`;
+  const text = value ? `true` : `false`;
   return (
-    <Container>{detailed ? <WithHelpTooltip tooltipMsg={description ?? ""}>{text}</WithHelpTooltip> : text}</Container>
+    <Container>
+      {detailed ? (
+        <>
+          {label}: <WithHelpTooltip tooltipMsg={description ?? ""}>{text}</WithHelpTooltip>
+        </>
+      ) : (
+        <WithHelpTooltip tooltipMsg={label ?? ""}>{text}</WithHelpTooltip>
+      )}
+    </Container>
   );
 };
 

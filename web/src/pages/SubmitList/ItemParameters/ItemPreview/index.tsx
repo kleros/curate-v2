@@ -7,6 +7,7 @@ import ListDisplay from "./ListDisplay";
 import ItemDisplay from "./ItemDisplay";
 
 const Container = styled.div`
+  width: 100%;
   padding: 0px ${responsiveSize(10, 130)};
   display: flex;
   flex-direction: column;

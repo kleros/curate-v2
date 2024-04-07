@@ -63,7 +63,7 @@ const Fields: React.FC = () => {
           description: "",
           id: 0,
           isIdentifier: false,
-          type: "Text",
+          type: "text",
         },
       ],
     });
@@ -74,7 +74,7 @@ const Fields: React.FC = () => {
       description: "",
       id: value - 1,
       isIdentifier: false,
-      type: "Text",
+      type: "text",
     };
     const fields = listMetadata.columns;
 

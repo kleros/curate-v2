@@ -61,7 +61,9 @@ const TopLeftInfo = styled.div`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  flex-wrap: wrap;
   gap: 16px;
+  padding-top: 16px;
 `;
 
 const TopRightInfo = styled.div`
@@ -131,6 +133,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   const textFields = props.filter((prop) => prop.type === "text");
   const restOfFields = props.filter((prop) => !["text", "address", "link", "image", "file"].includes(prop.type));
 
+  const displayField = addressFields.length || linkFields.length || fileFields.length;
   return (
     <>
       <StyledCard {...{ className }}>
@@ -144,18 +147,19 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
                 <ItemField {...field} detailed />
               ))}
             </FieldsContainer>
-            <FieldsContainer>
-              {addressFields.map((field) => (
-                <ItemField {...field} detailed />
-              ))}
-              {linkFields.map((field) => (
-                <ItemField {...field} detailed />
-              ))}
-              {fileFields.map((field) => (
-                <ItemField {...field} detailed />
-              ))}
-            </FieldsContainer>
-
+            {displayField ? (
+              <FieldsContainer>
+                {addressFields.map((field) => (
+                  <ItemField {...field} detailed />
+                ))}
+                {linkFields.map((field) => (
+                  <ItemField {...field} detailed />
+                ))}
+                {fileFields.map((field) => (
+                  <ItemField {...field} detailed />
+                ))}
+              </FieldsContainer>
+            ) : null}
             <FieldsContainer>
               {restOfFields.map((field) => (
                 <ItemField {...field} detailed />

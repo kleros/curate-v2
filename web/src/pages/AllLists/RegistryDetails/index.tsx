@@ -56,8 +56,9 @@ const RegistryDetails: React.FC = () => {
   return (
     <div>
       <InformationCard
-        {...{ title, logoURI, description, policyURI, status, listAddress }}
+        {...{ title, logoURI, description, policyURI, status }}
         registerer={registerer?.id}
+        explorerAddress={listAddress}
       />
       <Tabs />
       <Routes>

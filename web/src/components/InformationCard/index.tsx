@@ -143,7 +143,7 @@ interface IInformationCard {
   registerer?: string;
   isItem?: boolean;
   policyURI?: string;
-  listAddress?: string;
+  explorerAddress?: string;
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
@@ -154,7 +154,7 @@ const InformationCard: React.FC<IInformationCard> = ({
   chainId = 100,
   status,
   policyURI,
-  listAddress,
+  explorerAddress,
   isItem = false,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
@@ -180,13 +180,15 @@ const InformationCard: React.FC<IInformationCard> = ({
               <p>{getChainIcon(chainId)}</p>
               <p>{getChainName(chainId)}</p>
             </ChainContainer> */}
-            <a
-              href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${listAddress}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <StyledEtherscanIcon />
-            </a>
+            {explorerAddress ? (
+              <a
+                href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${explorerAddress}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <StyledEtherscanIcon />
+              </a>
+            ) : null}
             <StatusContainer {...{ status, isListView: false }}>
               <label className="front-color dot">{getStatusLabel(status)}</label>
             </StatusContainer>

@@ -56,7 +56,7 @@ export const getStatusColor = (status: Status, theme: Theme): [string, string] =
     case Status.Removed:
       return [theme.error, theme.errorLight];
     default:
-      return [theme.primaryBlue, theme.mediumBlue];
+      return [theme.lightGrey, theme.lightGrey];
   }
 };
 
@@ -71,7 +71,7 @@ export const getStatusLabel = (status: Status): string => {
     case Status.Removed:
       return "Removed";
     default:
-      return "Pending";
+      return "";
   }
 };
 

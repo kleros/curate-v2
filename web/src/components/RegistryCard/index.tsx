@@ -29,21 +29,34 @@ interface IListCard extends List {
   overrideIsListView?: boolean;
 }
 
-const RegistryCard: React.FC<IListCard> = ({ id, title, logoURI, totalItems, status, chainId, overrideIsListView }) => {
+const RegistryCard: React.FC<IListCard> = ({
+  id,
+  itemId,
+  title,
+  logoURI,
+  totalItems,
+  status,
+  chainId,
+  overrideIsListView,
+}) => {
   const { isListView } = useIsListView();
   const navigateAndScrollTop = useNavigateAndScrollTop();
   console.log(totalItems);
   console.log(status);
+  const registryAddressAndItemId = `${id}-${itemId}`;
 
   return (
     <>
       {!isListView || overrideIsListView ? (
-        <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/1/desc/all`)}>
+        <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/1/desc/all`)}>
           <StatusBanner {...{ status, chainId }} />
           <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} />
         </StyledCard>
       ) : (
-        <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/desc/all`)}>
+        <StyledListItem
+          hover
+          onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/desc/all`)}
+        >
           <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} isListView />
         </StyledListItem>
       )}

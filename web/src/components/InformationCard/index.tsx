@@ -2,13 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
+import Skeleton from "react-loading-skeleton";
 import { Button, Card } from "@kleros/ui-components-library";
-import { getChainIcon, getChainName } from "components/ChainIcon";
-import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
-import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import { Policies } from "./Policies";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
+import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "consts/chains";
+import { getIpfsUrl } from "utils/getIpfsUrl";
+import { isUndefined } from "utils/index";
+// import { getChainIcon, getChainName } from "components/ChainIcon";
+import AliasDisplay from "components/RegistryInfo/AliasDisplay";
+import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
+import { Policies } from "./Policies";
 import RemoveModal from "../Modal/RemoveModal";
 
 const StyledCard = styled(Card)`
@@ -52,30 +56,27 @@ const TopInfo = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 12px 32px;
+  padding: 24px ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
 `;
 
 const LogoAndTitle = styled.div`
   display: flex;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
 `;
 
 const TopLeftInfo = styled.div`
   display: flex;
   flex-direction: column;
+  gap: ${responsiveSize(8, 16)} 0;
 `;
 
 const TopRightInfo = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 48px;
-`;
-
-const ChainContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: top;
-  justify-content: center;
+  gap: 0 32px;
+  flex-wrap: wrap;
 `;
 
 const StyledEtherscanIcon = styled(EtherscanIcon)`
@@ -92,6 +93,10 @@ const StyledLogo = styled.img<{ isListView: boolean }>`
   margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;
 
+const StyledTitle = styled.h1`
+  margin: 0;
+`;
+
 const StyledP = styled.p`
   color: ${({ theme }) => theme.secondaryText};
   margin: 0;
@@ -101,34 +106,55 @@ const Divider = styled.hr`
   border: none;
   height: 1px;
   background-color: ${({ theme }) => theme.stroke};
-  margin: ${responsiveSize(20, 28)} 32px;
+  margin: ${responsiveSize(20, 28)} ${responsiveSize(24, 32)};
 `;
 
 const BottomInfo = styled.div`
   display: flex;
-  padding: 0 32px;
-  padding-bottom: 12px;
+  padding: 0 ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
   flex-wrap: wrap;
   gap: 12px;
   justify-content: space-between;
 `;
 
+const SkeletonLogo = styled(Skeleton)`
+  width: 125px;
+  height: 125px;
+  border-radius: 62.5px;
+  margin-bottom: 8px;
+`;
+
+const SkeletonTitle = styled(Skeleton)`
+  width: 260px;
+  height: 30px;
+`;
+
+const SkeletonDescription = styled(Skeleton)`
+  width: 90%;
+  height: 21px;
+`;
+
 interface IInformationCard {
-  title: string;
-  logoURI: string;
-  description: string;
-  chainId: number;
-  status: string;
+  title?: string;
+  logoURI?: string;
+  description?: string;
+  chainId?: number;
+  status?: Status;
+  registerer?: string;
   isItem?: boolean;
-  // itemParams?: Object : item will have dynamic params
+  policyURI?: string;
+  listAddress?: string;
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
   title,
   logoURI,
   description,
+  registerer,
   chainId = 100,
-  status = Status.Included,
+  status,
+  policyURI,
+  listAddress,
   isItem = false,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
@@ -140,17 +166,27 @@ const InformationCard: React.FC<IInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
-              {!isItem && <StyledLogo src={logoURI} alt="List Img" isListView={false} />}
-              <h1>{title}</h1>
+              {isUndefined(logoURI) && !isItem ? (
+                <SkeletonLogo />
+              ) : (
+                !isItem && logoURI && <StyledLogo src={getIpfsUrl(logoURI)} alt="List Img" isListView={false} />
+              )}
+              {isUndefined(title) ? <SkeletonTitle /> : <StyledTitle>{title}</StyledTitle>}
             </LogoAndTitle>
-            <StyledP>{description}</StyledP>
+            {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
           </TopLeftInfo>
           <TopRightInfo>
-            <ChainContainer>
+            {/* <ChainContainer>
               <p>{getChainIcon(chainId)}</p>
               <p>{getChainName(chainId)}</p>
-            </ChainContainer>
-            <StyledEtherscanIcon />
+            </ChainContainer> */}
+            <a
+              href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${listAddress}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <StyledEtherscanIcon />
+            </a>
             <StatusContainer {...{ status, isListView: false }}>
               <label className="front-color dot">{getStatusLabel(status)}</label>
             </StatusContainer>
@@ -158,18 +194,19 @@ const InformationCard: React.FC<IInformationCard> = ({
         </TopInfo>
         <Divider />
         <BottomInfo>
-          <AliasDisplay address="0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5" />
+          <AliasDisplay address={registerer} />
           <Button
             variant="secondary"
             text={isItem ? "Remove Item" : "Remove List"}
             onClick={isItem ? toggleRemoveItemModal : toggleRemoveListModal}
           />
         </BottomInfo>
-        <Policies />
+        <Policies policyURI={policyURI} />
       </StyledCard>
       {isRemoveItemModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveItemModal} /> : null}
       {isRemoveListModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveListModal} /> : null}
     </>
   );
 };
+
 export default InformationCard;

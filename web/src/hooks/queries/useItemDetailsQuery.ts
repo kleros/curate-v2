@@ -9,19 +9,26 @@ const itemDetailsQuery = graphql(`
     item(id: $itemID) {
       status
       disputed
+      key0
+      key1
+      key2
+      key3
+      key4
       latestChallenger {
         id
       }
       latestRequester {
         id
       }
-      registryAddress
       props {
         type
         label
         description
         isIdentifier
         value
+      }
+      registerer {
+        id
       }
     }
   }

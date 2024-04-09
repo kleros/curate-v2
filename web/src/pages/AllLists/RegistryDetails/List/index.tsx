@@ -1,9 +1,10 @@
 import React from "react";
-import Search from "../Search";
-import StatsAndFilters from "~src/components/StatsAndFilters";
 import styled from "styled-components";
-import { items } from "consts/index";
+import Skeleton from "react-loading-skeleton";
+import StatsAndFilters from "components/StatsAndFilters";
 import ItemCard from "components/ItemCard";
+import Search from "../Search";
+import { ItemDetailsFragment } from "graphql/graphql";
 
 const ListContainer = styled.div`
   display: flex;
@@ -12,19 +13,26 @@ const ListContainer = styled.div`
   gap: 8px;
 `;
 
-interface IList {}
+const SkeletonItemCard = styled(Skeleton)`
+  height: 64px;
+`;
 
-const List: React.FC<IList> = ({}) => {
+interface IList {
+  items: ItemDetailsFragment[] | undefined;
+}
+
+const List: React.FC<IList> = ({ items }) => {
   return (
     <>
       <Search />
-      <StatsAndFilters fields={[{ label: "Items", value: "0" }]} />
+      <StatsAndFilters fields={[{ label: "Items", value: items?.length.toString() }]} />
       <ListContainer>
-        {items.map((item) => (
-          <ItemCard key={item.id} {...item} />
-        ))}
+        {items
+          ? items.map((item) => <ItemCard key={item.id} {...item} />)
+          : Array.from({ length: 3 }).map((_, index) => <SkeletonItemCard key={index} />)}
       </ListContainer>
     </>
   );
 };
+
 export default List;

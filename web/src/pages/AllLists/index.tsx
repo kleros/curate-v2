@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
-import { useAccount, useNetwork } from "wagmi";
-import { DEFAULT_CHAIN } from "consts/chains";
+import { RegistryDetailsProvider } from "context/RegistryDetailsContext";
 import RegistriesFetcher from "./RegistriesFetcher";
 import RegistryDetails from "./RegistryDetails";
-import ItemDisplay from "./Item";
+import ItemDisplay from "./ItemDisplay";
 import Breadcrumb from "./StyledBreadcrumb";
 import HomeIcon from "svgs/icons/home.svg";
 
@@ -40,21 +39,22 @@ const breadcrumbItems = [
   { text: "Address Tags", value: "2" },
 ];
 
-const AllLists: React.FC = () => {
-  const { isConnected } = useAccount();
-  const { chain } = useNetwork();
-  const isOnSupportedChain = chain?.id === DEFAULT_CHAIN;
-
-  return (
-    <Container>
-      <Breadcrumb items={breadcrumbItems} />
-      <Routes>
-        <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
-        <Route path="/:id/item/:itemId" element={<ItemDisplay />} />
-        <Route path="/:id/*" element={<RegistryDetails />} />
-      </Routes>
-    </Container>
-  );
-};
+const AllLists: React.FC = () => (
+  <Container>
+    <Breadcrumb items={breadcrumbItems} />
+    <Routes>
+      <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
+      <Route path="/:id/item/:itemId" element={<ItemDisplay />} />
+      <Route
+        path="/:id/*"
+        element={
+          <RegistryDetailsProvider>
+            <RegistryDetails />
+          </RegistryDetailsProvider>
+        }
+      />
+    </Routes>
+  </Container>
+);
 
 export default AllLists;

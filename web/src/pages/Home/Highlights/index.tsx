@@ -7,10 +7,12 @@ import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
 import { SkeletonRegistryCard, SkeletonRegistryListItem } from "components/StyledSkeleton";
 import { useIsListView } from "context/IsListViewProvider";
+import { DEFAULT_CHAIN } from "consts/chains";
 import { isUndefined } from "utils/index";
+import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
-import { useItemsQuery } from "hooks/queries/useItemsQuery";
-import { useRegistriesByIdsQuery } from "hooks/queries/useRegistriesByIdsQuery";
+import { useItemsQuery } from "queries/useItemsQuery";
+import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 
 const Container = styled.div`
   width: 100%;
@@ -44,18 +46,18 @@ const HighlightedLists = () => {
   const { isListView } = useIsListView();
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
-  const { data: itemsData } = useItemsQuery(0, 6, { registry: "0x1db24bae1b932c53430db2cdb3b61d4690ca108e" });
+  const { data: itemsData } = useItemsQuery(0, 6, { registry: listOfListsAddresses[DEFAULT_CHAIN] });
   const registryIds = useMemo(() => itemsData?.items.map((item) => JSON.parse(item.data).address) || [], [itemsData]);
-
   const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
+
   const combinedListsData = useMemo(() => {
     return registriesData?.registries.map((registry) => {
       const registryAsItem = itemsData.items.find((item) => JSON.parse(item.data).address === registry.id);
-
       return {
         ...registry,
         totalItems: registry.items.length,
         status: registryAsItem.status,
+        itemId: registryAsItem.id,
       };
     });
   }, [registriesData, itemsData]);

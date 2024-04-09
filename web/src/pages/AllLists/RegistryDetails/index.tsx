@@ -1,22 +1,36 @@
-import React from "react";
-import { IRegistriesGrid } from "components/RegistriesDisplay/RegistriesGrid";
+import React, { useEffect } from "react";
+import { useTheme } from "styled-components";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import InformationCard from "components/InformationCard";
 import Tabs from "./Tabs";
 import List from "./List";
 import History from "components/HistoryDisplay";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { useTheme } from "styled-components";
+import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import ClosedIcon from "assets/svgs/icons/check-circle-outline.svg";
+import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
 
-interface IRegistryDetails extends IRegistriesGrid {
-  items: [];
-  totalItems?: number;
-  title?: string;
-  className?: string;
-}
+const RegistryDetails: React.FC = () => {
+  const { id } = useParams();
+  const [listAddress, itemId] = id?.split("-");
+  const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
+  const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
+  const { title, status, logoURI, policyURI, description, items, registerer, setRegistryDetails } =
+    useRegistryDetailsContext();
 
-const RegistryDetails: React.FC<IRegistryDetails> = ({ items, logoURI, title, description, totalItems, className }) => {
+  useEffect(() => {
+    if (itemDetails && registryDetails) {
+      const mergedDetails = {
+        ...registryDetails.registry,
+        ...itemDetails.item,
+      };
+      console.log(mergedDetails);
+      setRegistryDetails(mergedDetails);
+    }
+  }, [itemDetails, registryDetails, setRegistryDetails]);
+
   const theme = useTheme();
+
   const historyItems = [
     {
       title: "List Submitted",
@@ -40,11 +54,14 @@ const RegistryDetails: React.FC<IRegistryDetails> = ({ items, logoURI, title, de
   ];
 
   return (
-    <div {...{ className }}>
-      <InformationCard title={title} logoURI={logoURI} description={description} />
+    <div>
+      <InformationCard
+        {...{ title, logoURI, description, policyURI, status, listAddress }}
+        registerer={registerer?.id}
+      />
       <Tabs />
       <Routes>
-        <Route path="list/:page/:order/:filter" element={<List />} />
+        <Route path="list/:page/:order/:filter" element={<List {...{ items }} />} />
         <Route path="history" element={<History items={historyItems} />} />
         <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
       </Routes>

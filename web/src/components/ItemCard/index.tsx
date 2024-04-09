@@ -69,7 +69,7 @@ const StyledTitle = styled.h3`
 `;
 
 const TruncatedTitle = ({ text, maxLength }) => {
-  const truncatedText = text.length <= maxLength ? text : text.slice(0, maxLength) + "…";
+  const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
   return <StyledTitle>{truncatedText}</StyledTitle>;
 };
 
@@ -112,15 +112,17 @@ const StyledGlobeIcon = styled(GlobeIcon)`
 `;
 
 type Item = (typeof items)[number];
-interface IItemCard extends Item {}
+interface IItemCard extends Item {
+  key0: string;
+}
 
-const ItemCard: React.FC<IItemCard> = ({ id, title, address, website, status }) => {
+const ItemCard: React.FC<IItemCard> = ({ id, key0, address, website, status }) => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
 
   return (
-    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/1/item/${id.toString()}`)}>
+    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/1/item/${id?.toString()}`)}>
       <Container>
-        <TruncatedTitle text={title} maxLength={100} />
+        <TruncatedTitle text={key0} maxLength={100} />
         <DisplayContainer className="address">
           <StyledEtherscanIcon />
           <StyledP>{shortenAddress("0x922911F4f80a569a4425fa083456239838F7F003")}</StyledP>

@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import { Status } from "consts/status";
 import { responsiveSize } from "styles/responsiveSize";
-import ChainIcon from "../ChainIcon";
-import StatusBanner from "./StatusBanner";
+import { landscapeStyle } from "styles/landscapeStyle";
+import Skeleton from "react-loading-skeleton";
 import { Button } from "@kleros/ui-components-library";
 import ArrowIcon from "svgs/icons/arrow.svg";
-import { landscapeStyle } from "styles/landscapeStyle";
+import { Status } from "consts/status";
 import { getIpfsUrl } from "utils/getIpfsUrl";
+import ChainIcon from "../ChainIcon";
+import StatusBanner from "./StatusBanner";
 
 const Container = styled.div<{ isListView: boolean }>`
   height: calc(100% - 45px);
@@ -90,6 +91,14 @@ const StyledButton = styled(Button)`
     background-color: transparent;
   }
 `;
+
+const SkeletonLogo = styled(Skeleton)<{ isListView: boolean }>`
+  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  border-radius: ${({ isListView }) => (isListView ? "24px" : "62.5px")};
+  margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
+`;
+
 interface IListInfo {
   title: string;
   totalItems: number;
@@ -100,9 +109,18 @@ interface IListInfo {
 }
 
 const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isListView = false }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <Container {...{ isListView }}>
-      <StyledLogo src={getIpfsUrl(logoURI)} alt="List Img" isListView={isListView} />
+      {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}
+      <StyledLogo
+        src={getIpfsUrl(logoURI)}
+        alt="List Img"
+        isListView={isListView}
+        onLoad={() => setImageLoaded(true)}
+        style={{ display: imageLoaded ? "block" : "none" }}
+      />
       <TruncatedTitle text={title} maxLength={100} />
       {isListView && <ChainIcon {...{ chainId }} />}
       <StyledLabel>{totalItems} items</StyledLabel>

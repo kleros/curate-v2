@@ -20,12 +20,11 @@ const RegistryDetails: React.FC = () => {
 
   useEffect(() => {
     if (itemDetails && registryDetails) {
-      const mergedDetails = {
+      setRegistryDetails({
         ...registryDetails.registry,
         ...itemDetails.item,
-      };
-      console.log(mergedDetails);
-      setRegistryDetails(mergedDetails);
+        registerer: registryDetails.registry.registerer,
+      });
     }
   }, [itemDetails, registryDetails, setRegistryDetails]);
 

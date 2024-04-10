@@ -9,9 +9,6 @@ export const registryDetailsQuery = graphql(`
       logoURI
       policyURI
       description
-      registerer {
-        id
-      }
       items {
         id
         status
@@ -20,6 +17,9 @@ export const registryDetailsQuery = graphql(`
         }
         key0
         key1
+      }
+      registerer {
+        id
       }
     }
   }

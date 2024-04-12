@@ -115,7 +115,6 @@ const SubmitListButton: React.FC = () => {
       async () =>
         await submitListToCurate({ args: [createItemFromList(deployedAddress)], value: totalCostToSubmit }).then(
           (response) => {
-            setProgress(ListProgress.ConfirmedSubmit);
             return response.hash;
           }
         ),
@@ -150,7 +149,6 @@ const SubmitListButton: React.FC = () => {
       wrapWithToast(
         async () =>
           await submit().then((response) => {
-            setProgress(ListProgress.ConfirmedDeploy);
             return response.hash;
           }),
         publicClient

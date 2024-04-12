@@ -40,11 +40,10 @@ export interface IListMetadata {
 }
 
 export enum ListProgress {
+  Start,
   ConfirmingDeploy,
-  ConfirmedDeploy,
   Deployed,
   ConfirmingSubmit,
-  ConfirmedSubmit,
   SubmitSuccess,
   Failed,
 }
@@ -75,7 +74,7 @@ const initialListData: Partial<IListData> = {
 const initialListMetadata: Partial<IListMetadata> = {
   title: "",
   description: "",
-  columns: [{ label: "", description: "", type: "Text", isIdentifier: true, id: 0 }],
+  columns: [{ label: "", description: "", type: "text", isIdentifier: true, id: 0 }],
 };
 
 interface ISubmitListContext {
@@ -106,7 +105,7 @@ const SubmitListContext = createContext<ISubmitListContext>({
   setIsPolicyUploading: () => {},
   isLogoUploading: false,
   setIsLogoUploading: () => {},
-  progress: ListProgress.ConfirmingDeploy,
+  progress: ListProgress.Start,
   setProgress: () => {},
 });
 
@@ -121,7 +120,7 @@ export const SubmitListProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isSubmittingList, setIsSubmittingList] = useState<boolean>(false);
   const [isPolicyUploading, setIsPolicyUploading] = useState<boolean>(false);
   const [isLogoUploading, setIsLogoUploading] = useState<boolean>(false);
-  const [progress, setProgress] = useState<ListProgress>(ListProgress.ConfirmingDeploy);
+  const [progress, setProgress] = useState<ListProgress>(ListProgress.Start);
 
   const resetListData = () => {
     setListData(initialListData);

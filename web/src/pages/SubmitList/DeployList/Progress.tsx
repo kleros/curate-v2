@@ -1,11 +1,13 @@
-import { Slider } from "@kleros/ui-components-library";
+import { Steps } from "@kleros/ui-components-library";
 import React, { useMemo } from "react";
-import styled, { useTheme } from "styled-components";
+import styled, { css } from "styled-components";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
+import useIsDesktop from "hooks/useIsDesktop";
+import { landscapeStyle } from "styles/landscapeStyle";
 
 const Container = styled.div`
   width: 100%;
-  padding: 24px;
+  padding: 31px;
   > div {
     width: 100%;
   }
@@ -14,64 +16,45 @@ const Container = styled.div`
   }
 `;
 
-const StyledSlider = styled(Slider)`
-  small {
-    color: ${({ theme }) => theme.success};
-  }
+const StyledSteps = styled(Steps)`
+  height: auto;
+  ${landscapeStyle(
+    () => css`
+      padding-top: 16px;
+      padding-bottom: 16px;
+    `
+  )}
 `;
 
 const Progress: React.FC = () => {
-  const theme = useTheme();
   const { progress } = useSubmitListContext();
+  const isDesktop = useIsDesktop();
   const progressValue = useMemo(() => {
     switch (progress) {
       case ListProgress.ConfirmingDeploy:
-        return 0;
-      case ListProgress.ConfirmedDeploy:
-        return 20;
+        return 1;
       case ListProgress.Deployed:
-        return 40;
+        return 2;
       case ListProgress.ConfirmingSubmit:
-        return 60;
-      case ListProgress.ConfirmedSubmit:
-        return 80;
+        return 3;
       case ListProgress.SubmitSuccess:
-        return 100;
+        return 4;
       default:
         return 0;
     }
   }, [progress]);
+
+  const steps = [
+    { title: "Start" },
+    { title: "Confirm" },
+    { title: "Deployed" },
+    { title: "Confirm Submit" },
+    { title: "Submitted" },
+  ];
+
   return (
     <Container>
-      <StyledSlider
-        style={{ width: "100%" }}
-        trackStyle={
-          [
-            {
-              backgroundColor: theme.success,
-              height: "8px",
-              borderRadius: "30px",
-              cursor: "pointer",
-            },
-          ] as any
-        }
-        handleStyle={{
-          width: "8px",
-          height: "8px",
-          backgroundColor: theme.success,
-          border: "none",
-          color: theme.success,
-          marginTop: "-8px",
-        }}
-        callback={() => {}}
-        min={0}
-        max={100}
-        value={progressValue}
-        disabled
-        leftLabel="Start"
-        rightLabel="List created"
-        label={`${progressValue}%`}
-      />
+      <StyledSteps items={steps} currentItemIndex={progressValue} horizontal={isDesktop} />
     </Container>
   );
 };

@@ -4,7 +4,7 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import Coin from "svgs/icons/pile-coins.svg";
 import { getChainIcon, getChainName } from "components/ChainIcon";
-import { useSubmitListContext } from "context/SubmitListContext";
+import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { formatValue } from "utils/format";
 import Skeleton from "react-loading-skeleton";
 
@@ -81,22 +81,26 @@ const SVGContainer = styled.div`
 `;
 
 const ListDetails: React.FC = () => {
-  const { listMetadata, listData } = useSubmitListContext();
+  const { listMetadata, listData, progress } = useSubmitListContext();
   return (
     <Container>
       <StyledHeader>{listMetadata.title}</StyledHeader>
       <InnerContainer>
-        <TotalContainer>
-          <SVGContainer>
-            <Coin />
-          </SVGContainer>
-          <StyledP>Total :</StyledP>
-          {listData.deployCost ? (
-            <StyledCost>~{formatValue(listData.deployCost, 5, false)} ETH</StyledCost>
-          ) : (
-            <Skeleton width={60} height={20} />
-          )}
-        </TotalContainer>{" "}
+        {progress !== ListProgress.SubmitSuccess && (
+          <TotalContainer>
+            <SVGContainer>
+              <Coin />
+            </SVGContainer>
+            <>
+              <StyledP>Total :</StyledP>
+              {listData.deployCost ? (
+                <StyledCost>~{formatValue(listData.deployCost, 5, false)} ETH</StyledCost>
+              ) : (
+                <Skeleton width={60} height={20} />
+              )}
+            </>
+          </TotalContainer>
+        )}
         <ChainContainer>
           <p>{getChainIcon(421614)}</p>
           <p>{getChainName(421614)}</p>

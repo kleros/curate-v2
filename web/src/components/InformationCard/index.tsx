@@ -60,11 +60,13 @@ const TopInfo = styled.div`
 const LogoAndTitle = styled.div`
   display: flex;
   align-items: center;
+  gap: 16px;
 `;
 
 const TopLeftInfo = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 16px;
 `;
 
 const TopRightInfo = styled.div`

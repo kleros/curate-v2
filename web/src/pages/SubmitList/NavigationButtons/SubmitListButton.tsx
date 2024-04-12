@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@kleros/ui-components-library";
 import { Address } from "viem";
 import { useAccount, useNetwork, usePublicClient } from "wagmi";
@@ -50,6 +50,7 @@ const SubmitListButton: React.FC = () => {
   const publicClient = usePublicClient();
   const { address } = useAccount();
   const { chain } = useNetwork();
+  const [isEstimatingCost, setIsEstimatingCost] = useState(false);
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
@@ -74,7 +75,7 @@ const SubmitListButton: React.FC = () => {
 
   // calculate total cost to submit the list to Curate
   const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData();
-  const { data: submissionBaseDeposit, isLoading: isLoadingDeposit } = useCurateV2SubmissionBaseDeposit();
+  const { data: submissionBaseDeposit } = useCurateV2SubmissionBaseDeposit();
   const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
 
   const totalCostToSubmit = useMemo(() => {
@@ -87,6 +88,7 @@ const SubmitListButton: React.FC = () => {
   useEffect(() => {
     const estimateTotalCost = async () => {
       if (!config?.request || !totalCostToSubmit || !address) return;
+      setIsEstimatingCost(true);
       const price = await publicClient.getGasPrice();
       const gasRequiredToDeploy = await publicClient.estimateContractGas(config.request);
       const gasRequiredToSubmit = await publicClient.estimateContractGas({
@@ -100,6 +102,7 @@ const SubmitListButton: React.FC = () => {
 
       const totalCost = (gasRequiredToDeploy + gasRequiredToSubmit) * price + totalCostToSubmit;
       setListData({ ...listData, deployCost: formatUnitsWei(totalCost) });
+      setIsEstimatingCost(false);
     };
 
     estimateTotalCost();
@@ -138,8 +141,13 @@ const SubmitListButton: React.FC = () => {
 
   const isButtonDisabled = useMemo(
     () =>
-      isSubmittingList || !areListParamsValid(listParams) || isLoadingArbCost || isLoadingDeposit || isLoadingExtradata,
-    [isSubmittingList, listParams, isLoadingArbCost, isLoadingDeposit, isLoadingExtradata]
+      isSubmittingList ||
+      !areListParamsValid(listParams) ||
+      isLoadingArbCost ||
+      isEstimatingCost ||
+      isLoadingExtradata ||
+      !totalCostToSubmit,
+    [isSubmittingList, listParams, isLoadingArbCost, isEstimatingCost, isLoadingExtradata, totalCostToSubmit]
   );
 
   const handleDeploy = () => {

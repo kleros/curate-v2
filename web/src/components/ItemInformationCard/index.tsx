@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
 import { Button, Card } from "@kleros/ui-components-library";
-import { getChainIcon, getChainName } from "components/ChainIcon";
 import { getStatusColor, getStatusLabel, mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
@@ -70,13 +69,6 @@ const TopRightInfo = styled.div`
   display: flex;
   flex-direction: row;
   gap: 48px;
-`;
-
-const ChainContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: top;
-  justify-content: center;
 `;
 
 const StyledEtherscanIcon = styled(EtherscanIcon)`
@@ -167,10 +159,6 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
             </FieldsContainer>
           </TopLeftInfo>
           <TopRightInfo>
-            <ChainContainer>
-              <p>{getChainIcon(chainId)}</p>
-              <p>{getChainName(chainId)}</p>
-            </ChainContainer>
             <StyledEtherscanIcon />
             <StatusContainer {...{ status: mapFromSubgraphStatus(status, disputed), isList: false }}>
               <label className="front-color dot">{getStatusLabel(mapFromSubgraphStatus(status, disputed))}</label>

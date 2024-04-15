@@ -2,14 +2,12 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { Button, Card } from "@kleros/ui-components-library";
 import { landscapeStyle } from "styles/landscapeStyle";
-import { items } from "consts/index";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 import { responsiveSize } from "styles/responsiveSize";
-import StatusBanner from "../RegistryCard/StatusBanner";
-import EtherscanIcon from "svgs/icons/etherscan.svg";
-import GlobeIcon from "svgs/icons/globe.svg";
-import { shortenAddress } from "utils/shortenAddress";
+import StatusBanner, { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 import ArrowIcon from "svgs/icons/arrow.svg";
+import { ItemDetailsFragment } from "src/graphql/graphql";
+import ItemField from "./ItemField";
 
 const StyledListItem = styled(Card)`
   display: flex;
@@ -28,50 +26,21 @@ const Container = styled.div`
   height: max-content;
   align-items: center;
   display: grid;
-  grid-template-rows: repeat(4, min-content);
+  grid-template-rows: repeat(3, min-content);
   grid-template-columns: 1fr min-content;
   column-gap: ${responsiveSize(12, 32, 900)};
   row-gap: 8px;
   padding: 16px;
-  h3,
-  .address,
-  .ens {
-    grid-column: span 2;
-  }
   ${landscapeStyle(
     () => css`
       height: 64px;
       justify-content: space-between;
       grid-template-rows: 1fr;
-      grid-template-columns: ${responsiveSize(200, 250, 900)} ${responsiveSize(120, 150, 900)} 1fr ${responsiveSize(
-          100,
-          150,
-          900
-        )} max-content;
+      grid-template-columns: 1fr ${responsiveSize(100, 150, 900)} max-content;
       padding: 0 32px;
-
-      h3 {
-        grid-column: 1;
-      }
-      .address {
-        grid-column: 2;
-      }
-      .ens {
-        grid-column: 3;
-      }
     `
   )}
 `;
-
-const StyledTitle = styled.h3`
-  font-weight: 400;
-  margin: 0px;
-`;
-
-const TruncatedTitle = ({ text, maxLength }) => {
-  const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
-  return <StyledTitle>{truncatedText}</StyledTitle>;
-};
 
 const StyledButton = styled(Button)`
   background-color: transparent;
@@ -89,53 +58,61 @@ const StyledButton = styled(Button)`
   }
 `;
 
-// these are temporary, items will have custom fields?
-const DisplayContainer = styled.div`
+const FieldsContainer = styled.div`
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  width: max-content;
+  gap: 16px;
+  grid-column: span 2;
+  ${landscapeStyle(
+    () => css`
+      flex-direction: row;
+      align-items: center;
+      grid-column: span 1;
+      gap: ${responsiveSize(16, 36, 900)};
+    `
+  )}
 `;
-const StyledEtherscanIcon = styled(EtherscanIcon)`
-  display: flex;
-  height: 16px;
-  width: 16px;
-`;
+interface IItemCard extends ItemDetailsFragment {}
 
-const StyledP = styled.p`
-  color: ${({ theme }) => theme.primaryBlue};
-  margin: 0;
-`;
-const StyledGlobeIcon = styled(GlobeIcon)`
-  display: flex;
-  height: 16px;
-  width: 16px;
-`;
-
-type Item = (typeof items)[number];
-interface IItemCard extends Item {
-  key0: string;
-}
-
-const ItemCard: React.FC<IItemCard> = ({ id, key0, address, website, status }) => {
+const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
+
+  // sort the props
+  const sortedProps = sortItemProps(props);
 
   return (
     <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/1/item/${id?.toString()}`)}>
       <Container>
-        <TruncatedTitle text={key0} maxLength={100} />
-        <DisplayContainer className="address">
-          <StyledEtherscanIcon />
-          <StyledP>{shortenAddress("0x922911F4f80a569a4425fa083456239838F7F003")}</StyledP>
-        </DisplayContainer>
-        <DisplayContainer className="ens">
-          <StyledGlobeIcon />
-          <StyledP>metamask.io</StyledP>
-        </DisplayContainer>
-        <StatusBanner {...{ status }} isListView />
+        <FieldsContainer>{sortedProps.map((prop) => prop.isIdentifier && <ItemField {...prop} />)}</FieldsContainer>
+        <StatusBanner {...{ status: mapFromSubgraphStatus(status, disputed) }} isListView />
         <StyledButton text="Open" Icon={ArrowIcon} />
       </Container>
     </StyledListItem>
   );
+};
+
+type ItemProp = ItemDetailsFragment["props"][number];
+
+export const sortItemProps = (props: ItemDetailsFragment["props"]) => {
+  const itemSort = (a: ItemProp, b: ItemProp) => {
+    // props will show on the item card in this order
+    const order = { image: 1, text: 2, address: 3, file: 4, link: 5 };
+
+    const typeA = order[a.type] || Infinity;
+    const typeB = order[b.type] || Infinity;
+
+    if (typeA < typeB) {
+      return -1;
+    } else if (typeA > typeB) {
+      return 1;
+    } else {
+      return a.label.localeCompare(b.label);
+    }
+  };
+  return props.sort(itemSort);
 };
 
 export default ItemCard;

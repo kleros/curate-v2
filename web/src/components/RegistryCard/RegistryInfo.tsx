@@ -9,6 +9,7 @@ import { Status } from "consts/status";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import ChainIcon from "../ChainIcon";
 import StatusBanner from "./StatusBanner";
+import { DEFAULT_LIST_LOGO } from "consts/index";
 
 const Container = styled.div<{ isListView: boolean }>`
   height: calc(100% - 45px);
@@ -115,7 +116,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, st
     <Container {...{ isListView }}>
       {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}
       <StyledLogo
-        src={getIpfsUrl(logoURI)}
+        src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)}
         alt="List Img"
         isListView={isListView}
         onLoad={() => setImageLoaded(true)}

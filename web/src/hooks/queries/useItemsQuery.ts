@@ -9,7 +9,17 @@ export const itemFragment = graphql(`
   fragment ItemDetails on Item {
     id
     status
-    data
+    props {
+      type
+      label
+      description
+      isIdentifier
+      value
+    }
+    disputed
+    registerer {
+      id
+    }
   }
 `);
 

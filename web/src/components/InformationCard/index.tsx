@@ -14,6 +14,8 @@ import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
 import { Policies } from "./Policies";
 import RemoveModal from "../Modal/RemoveModal";
+import { getIpfsUrl } from "utils/getIpfsUrl";
+import { DEFAULT_LIST_LOGO } from "consts/index";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -144,6 +146,7 @@ interface IInformationCard {
   isItem?: boolean;
   policyURI?: string;
   explorerAddress?: string;
+  className?: string;
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
@@ -156,13 +159,13 @@ const InformationCard: React.FC<IInformationCard> = ({
   policyURI,
   explorerAddress,
   isItem = false,
+  className,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
-  const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
 
   return (
     <>
-      <StyledCard>
+      <StyledCard {...{ className }}>
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
@@ -197,16 +200,11 @@ const InformationCard: React.FC<IInformationCard> = ({
         <Divider />
         <BottomInfo>
           <AliasDisplay address={registerer} />
-          <Button
-            variant="secondary"
-            text={isItem ? "Remove Item" : "Remove List"}
-            onClick={isItem ? toggleRemoveItemModal : toggleRemoveListModal}
-          />
+          <Button variant="secondary" text={"Remove List"} onClick={toggleRemoveListModal} />
         </BottomInfo>
         <Policies policyURI={policyURI} />
       </StyledCard>
-      {isRemoveItemModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveItemModal} /> : null}
-      {isRemoveListModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveListModal} /> : null}
+      {isRemoveListModalOpen ? <RemoveModal isItem={false} toggleModal={toggleRemoveListModal} /> : null}
     </>
   );
 };

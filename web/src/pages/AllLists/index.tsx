@@ -7,6 +7,7 @@ import RegistryDetails from "./RegistryDetails";
 import ItemDisplay from "./ItemDisplay";
 import Breadcrumb from "./StyledBreadcrumb";
 import HomeIcon from "svgs/icons/home.svg";
+import { items } from "src/consts";
 
 const Container = styled.div`
   width: 100%;

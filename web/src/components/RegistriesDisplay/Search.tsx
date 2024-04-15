@@ -3,18 +3,20 @@ import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDebounce } from "react-use";
-import { Searchbar, DropdownSelect } from "@kleros/ui-components-library";
+import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
 import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
 import { StyledGlobeIcon } from "../StyledIcons/GlobeIcon";
 import { StyledEthereumIcon } from "../StyledIcons/EthereumIcon";
 import { StyledGnosisIcon } from "../StyledIcons/GnosisIcon";
 import { StyledPolygonIcon } from "../StyledIcons/PolygonIcon";
+import PaperIcon from "svgs/icons/paper.svg";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 
   ${landscapeStyle(
     () =>
@@ -25,8 +27,8 @@ const Container = styled.div`
 `;
 
 const SearchBarContainer = styled.div`
-  width: 100%;
   display: flex;
+  flex: 1;
   flex-wrap: wrap;
   gap: 8px;
   z-index: 0;
@@ -40,6 +42,12 @@ const StyledSearchbar = styled(Searchbar)`
     height: 45px;
     padding-top: 0px;
     padding-bottom: 0px;
+  }
+`;
+
+const StyledPaperIcon = styled(PaperIcon)`
+  path {
+    fill: ${({ theme }) => theme.whiteBackground};
   }
 `;
 
@@ -91,6 +99,7 @@ const Search: React.FC = () => {
         defaultValue={1}
         callback={() => {}}
       />
+      <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submitList")} />
     </Container>
   );
 };

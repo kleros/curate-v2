@@ -55,31 +55,20 @@ const removalTemplate = `{
 `;
 
 const listMetadata = `{
-  "title": "Kleros Storytelling - Standard Impact",
-  "description": "A list of Standard Tier submissions for the Kleros Storytelling Reward Program.",
+  "title": "Kleros Curate",
+  "description": "A list of all curated lists on Curate V2",
   "columns": [
     {
-      "label": "Title",
-      "description": "The submission title.",
-      "type": "text",
+      "label": "Address",
+      "description": "The list title.",
+      "type": "address",
       "isIdentifier": true
-    },
-    {
-      "label": "Author",
-      "description": "To easily search submissions by author. This can be a social media handle or a nickname.",
-      "type": "text",
-      "isIdentifier": true
-    },
-    {
-      "label": "Link",
-      "description": "A link to the submission.",
-      "type": "link"
     }
   ],
-  "itemName": "story",
-  "itemNamePlural": "stories",
+  "itemName": "list",
+  "itemNamePlural": "lists",
   "logoURI": "/ipfs/QmQN9ZPubns9kpW3jxZefyt8sNbeUzj8KEcsT7i81SiXFf/standard-impact-logo-.png",
-  "isTCRofTCRs": false
+  "isListofLists": true
 }`;
 
 // General court, 3 jurors
@@ -115,9 +104,11 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     extraData,
     evidenceModule.address,
     ethers.ZeroAddress, // _connectedTCR
-    disputeTemplateRegistry.address,
-    [registrationTemplate, ""],
-    [removalTemplate, ""],
+    {
+      templateRegistry: disputeTemplateRegistry.address,
+      registrationTemplateParameters: [registrationTemplate, ""],
+      removalTemplateParameters: [removalTemplate, ""],
+    },
     [fee, fee, fee, fee],
     timeout,
     deployer,

@@ -11,9 +11,9 @@ dataSources:
     name: CurateFactory
     network: arbitrum-sepolia
     source:
-      address: "0x6b6Df30De48cC7737138ed7531D85aFcffDe9b44"
+      address: "0x9ac6519e6be8fD4612a9902d3199a65E6e7eb632"
       abi: CurateFactory
-      startBlock: 24725439
+      startBlock: 29770415
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -8,6 +8,7 @@ import RegistryDetails from "./RegistryDetails";
 import ItemDisplay from "./Item";
 import Breadcrumb from "./StyledBreadcrumb";
 import HomeIcon from "svgs/icons/home.svg";
+import { items } from "src/consts";
 
 const Container = styled.div`
   width: 100%;
@@ -44,13 +45,14 @@ const AllLists: React.FC = () => {
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
   const isOnSupportedChain = chain?.id === DEFAULT_CHAIN;
-
+  // temporarily hardcoded
+  const item = items[0];
   return (
     <Container>
       <Breadcrumb items={breadcrumbItems} />
       <Routes>
         <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
-        <Route path="/:id/item/:itemId" element={<ItemDisplay />} />
+        <Route path="/:id/item/:itemId" element={<ItemDisplay {...{ ...item }} />} />
         <Route path="/:id/*" element={<RegistryDetails />} />
       </Routes>
     </Container>

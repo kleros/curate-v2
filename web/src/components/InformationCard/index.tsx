@@ -10,6 +10,8 @@ import { Policies } from "./Policies";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
 import RemoveModal from "../Modal/RemoveModal";
+import { getIpfsUrl } from "utils/getIpfsUrl";
+import { DEFAULT_LIST_LOGO } from "consts/index";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -58,11 +60,13 @@ const TopInfo = styled.div`
 const LogoAndTitle = styled.div`
   display: flex;
   align-items: center;
+  gap: 16px;
 `;
 
 const TopLeftInfo = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 16px;
 `;
 
 const TopRightInfo = styled.div`
@@ -118,8 +122,8 @@ interface IInformationCard {
   logoURI: string;
   description: string;
   chainId: number;
-  status: string;
-  isItem?: boolean;
+  status: Status;
+  className?: string;
   // itemParams?: Object : item will have dynamic params
 }
 
@@ -129,18 +133,21 @@ const InformationCard: React.FC<IInformationCard> = ({
   description,
   chainId = 100,
   status = Status.Included,
-  isItem = false,
+  className,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
-  const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
 
   return (
     <>
-      <StyledCard>
+      <StyledCard {...{ className }}>
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
-              {!isItem && <StyledLogo src={logoURI} alt="List Img" isList={false} />}
+              <StyledLogo
+                src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)}
+                alt="List Img"
+                isList={false}
+              />
               <h1>{title}</h1>
             </LogoAndTitle>
             <StyledP>{description}</StyledP>
@@ -159,16 +166,11 @@ const InformationCard: React.FC<IInformationCard> = ({
         <Divider />
         <BottomInfo>
           <AliasDisplay address="0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5" />
-          <Button
-            variant="secondary"
-            text={isItem ? "Remove Item" : "Remove List"}
-            onClick={isItem ? toggleRemoveItemModal : toggleRemoveListModal}
-          />
+          <Button variant="secondary" text={"Remove List"} onClick={toggleRemoveListModal} />
         </BottomInfo>
         <Policies />
       </StyledCard>
-      {isRemoveItemModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveItemModal} /> : null}
-      {isRemoveListModalOpen ? <RemoveModal isItem={isItem} toggleModal={toggleRemoveListModal} /> : null}
+      {isRemoveListModalOpen ? <RemoveModal isItem={false} toggleModal={toggleRemoveListModal} /> : null}
     </>
   );
 };

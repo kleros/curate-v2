@@ -4,6 +4,7 @@ import { mainnet, sepolia } from "wagmi";
 import EthIcon from "svgs/chains/ethereum.svg";
 import PolygonIcon from "svgs/chains/polygon.svg";
 import GnosisIcon from "svgs/chains/gnosis.svg";
+import ArbitrumIcon from "svgs/chains/arbitrum.svg";
 import styled from "styled-components";
 
 export const getChainIcon = (chainId: number) => {
@@ -13,7 +14,7 @@ export const getChainIcon = (chainId: number) => {
       return <EthIcon />;
     case arbitrum.id:
     case arbitrumSepolia.id:
-      return <EthIcon />;
+      return <ArbitrumIcon />;
     case gnosis.id:
     case gnosisChiado.id:
       return <GnosisIcon />;

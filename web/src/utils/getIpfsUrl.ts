@@ -1,6 +1,8 @@
 import { IPFS_GATEWAY } from "consts/index";
+import { isUndefined } from ".";
 
 export const getIpfsUrl = (url: string) => {
+  if (isUndefined(url)) return "";
   const formatedIPFSPath = getFormattedPath(url);
   return `${IPFS_GATEWAY}${formatedIPFSPath}`;
 };

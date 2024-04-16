@@ -50,8 +50,8 @@ const SubmitItem: React.FC = () => {
           <MiddleContentContainer>
             {isConnected && !isPreviewPage ? <Timeline /> : null}
             <Routes>
-              <Route index element={<Navigate to="itemField1" replace />} />
-              <Route path="/itemField1/*" element={<ItemField />} />
+              <Route index element={<Navigate to="item-field1" replace />} />
+              <Route path="/item-field1/*" element={<ItemField />} />
               <Route path="/policy/*" element={<Policy />} />
               <Route path="/preview/*" element={<Preview />} />
             </Routes>

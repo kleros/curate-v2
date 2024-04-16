@@ -22,7 +22,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ prevRoute, nextRo
   return (
     <Container>
       <PreviousButton prevRoute={prevRoute} />
-      {prevRoute === "/submitItem/policy" ? <SubmitItemButton /> : <NextButton nextRoute={nextRoute} />}
+      {prevRoute === "/submit-item/policy" ? <SubmitItemButton /> : <NextButton nextRoute={nextRoute} />}
     </Container>
   );
 };

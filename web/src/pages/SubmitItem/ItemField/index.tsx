@@ -51,7 +51,7 @@ const ItemField: React.FC = () => {
         variant={"info"}
         message={"Item Field 1 description requirements go here"}
       />
-      <NavigationButtons prevRoute="/lists/1/list/1/desc/all" nextRoute="/submitItem/policy" />
+      <NavigationButtons prevRoute="/lists/1/list/1/desc/all" nextRoute="/submit-item/policy" />
     </Container>
   );
 };

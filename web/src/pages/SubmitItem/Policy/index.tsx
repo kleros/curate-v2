@@ -18,7 +18,7 @@ const Policy: React.FC = () => {
       <ReadPolicy />
       <Info />
       <ConfirmationBox />
-      <NavigationButtons prevRoute="/submitItem/itemField1" nextRoute="/submitItem/preview" />
+      <NavigationButtons prevRoute="/submit-item/item-field1" nextRoute="/submit-item/preview" />
     </Container>
   );
 };

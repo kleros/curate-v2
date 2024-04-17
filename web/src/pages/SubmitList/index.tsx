@@ -63,8 +63,8 @@ const SubmitList: React.FC = () => {
 
   const { isConnected } = useAccount();
   const isTimelineHidden =
-    location.pathname.includes("/listPreview") ||
-    location.pathname.includes("/itemPreview") ||
+    location.pathname.includes("/list-preview") ||
+    location.pathname.includes("/item-preview") ||
     location.pathname.includes("/advanced") ||
     location.pathname.includes("/deploy");
 
@@ -84,7 +84,7 @@ const SubmitList: React.FC = () => {
               <Route path="/policy/*" element={<Policy />} />
               <Route path="/deposit/*" element={<Deposit />} />
               <Route path="/fields/*" element={<Fields />} />
-              <Route path="/itemPreview/*" element={<ItemPreview />} />
+              <Route path="/item-preview/*" element={<ItemPreview />} />
               <Route path="/custom/*" element={<CustomName />} />
               <Route path="/advanced/*" element={<AdvancedParameters />} />
               <Route path="/deploy/*" element={<DeployList />} />

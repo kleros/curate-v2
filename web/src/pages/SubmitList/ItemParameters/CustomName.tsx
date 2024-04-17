@@ -60,7 +60,7 @@ const CustomName: React.FC = () => {
           onChange={(event) => setListMetadata({ ...listMetadata, itemNamePlural: event.target.value })}
         />
       </InputContainer>
-      <NavigationButtons prevRoute="/submitList/itemPreview" nextRoute="/submitList/advanced" />
+      <NavigationButtons prevRoute="/submit-list/item-preview" nextRoute="/submit-list/advanced" />
     </Container>
   );
 };

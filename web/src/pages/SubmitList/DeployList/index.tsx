@@ -55,7 +55,7 @@ const DeployList: React.FC = () => {
           }
         />
       </AlertMessageContainer>
-      <NavigationButtons prevRoute="/submitList/advanced" />
+      <NavigationButtons prevRoute="/submit-list/advanced" />
     </Container>
   );
 };

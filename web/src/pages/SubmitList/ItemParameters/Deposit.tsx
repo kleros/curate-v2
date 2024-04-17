@@ -94,7 +94,7 @@ const Deposit: React.FC = () => {
         </DepositContainer>
       </MiddleContainer>
 
-      <NavigationButtons prevRoute="/submitList/policy" nextRoute="/submitList/fields" />
+      <NavigationButtons prevRoute="/submit-list/policy" nextRoute="/submit-list/fields" />
     </Container>
   );
 };

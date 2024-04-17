@@ -28,16 +28,16 @@ const Timeline: React.FC = () => {
   const location = useLocation();
 
   const routeToIndexMap = {
-    "/submitList/title": 0,
-    "/submitList/description": 0,
-    "/submitList/logo": 0,
-    "/submitList/policy": 0,
-    "/submitList/deposit": 1,
-    "/submitList/fields": 1,
-    "/submitList/itemPreview": 1,
-    "/submitList/custom": 1,
-    "/submitList/advanced": 2,
-    "/submitList/deploy": 3,
+    "/submit-list/title": 0,
+    "/submit-list/description": 0,
+    "/submit-list/logo": 0,
+    "/submit-list/policy": 0,
+    "/submit-list/deposit": 1,
+    "/submit-list/fields": 1,
+    "/submit-list/item-preview": 1,
+    "/submit-list/custom": 1,
+    "/submit-list/advanced": 2,
+    "/submit-list/deploy": 3,
   };
 
   const currentItemIndex = Object.entries(routeToIndexMap).reduce(

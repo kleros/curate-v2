@@ -109,7 +109,7 @@ const AdvancedParameters: React.FC = () => {
           { title: "Arbitration Parameters", body: <AbritrationParameters /> },
         ]}
       />
-      <NavigationButtons prevRoute="/submitList/custom" nextRoute="/submitList/deploy" />
+      <NavigationButtons prevRoute="/submit-list/custom" nextRoute="/submit-list/deploy" />
     </Container>
   );
 };

@@ -10,6 +10,7 @@ import { isUndefined } from "utils/index";
 import { decodeListURIFilter } from "utils/uri";
 // import { RegistryDetailsFragment } from "queries/useCasesQuery";
 import RegistryCard from "components/RegistryCard";
+import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 
 const GridContainer = styled.div`
   --gap: 24px;
@@ -61,7 +62,13 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
           {isUndefined(registries)
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryListItem key={i} />)
             : registries.map((registry) => {
-                return <RegistryCard key={registry.id} {...registry} />;
+                return (
+                  <RegistryCard
+                    key={registry.id}
+                    {...registry}
+                    status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                  />
+                );
               })}
         </ListContainer>
       ) : (
@@ -69,7 +76,14 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
           {isUndefined(registries)
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryCard key={i} />)
             : registries.map((registry) => {
-                return <RegistryCard key={registry.id} {...registry} overrideIsListView />;
+                return (
+                  <RegistryCard
+                    key={registry.id}
+                    {...registry}
+                    overrideIsListView
+                    status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                  />
+                );
               })}
         </GridContainer>
       )}

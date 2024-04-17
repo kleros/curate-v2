@@ -10,6 +10,7 @@ import { listOfListsAddresses } from "utils/listOfListsAddresses";
 // import { OrderDirection } from "src/graphql/graphql";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
+import { isUndefined } from "utils/index";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -32,12 +33,22 @@ const RegistriesFetcher: React.FC = () => {
   // console.log(registriesData);
 
   const { data: itemsData } = useItemsQuery(0, 9, { registry: listOfListsAddresses[DEFAULT_CHAIN] });
-  const registryIds = useMemo(() => itemsData?.items.map((item) => JSON.parse(item.data).address) || [], [itemsData]);
+  // TODO: Json.parse can throw error
+  const registryIds = useMemo(
+    () =>
+      itemsData
+        ? itemsData?.items
+            .map((item) => item?.props[0]?.value.toLowerCase() ?? undefined)
+            .filter((id) => !isUndefined(id))
+        : [],
+    [itemsData]
+  );
+
   const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
 
   const combinedListsData = useMemo(() => {
     return registriesData?.registries.map((registry) => {
-      const registryAsItem = itemsData.items.find((item) => JSON.parse(item.data).address === registry.id);
+      const registryAsItem = itemsData.items.find((item) => item?.props[0]?.value.toLowerCase() === registry.id);
       return {
         ...registry,
         totalItems: registry.items.length,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
@@ -14,7 +14,6 @@ import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
 import { Policies } from "./Policies";
 import RemoveModal from "../Modal/RemoveModal";
-import { getIpfsUrl } from "utils/getIpfsUrl";
 import { DEFAULT_LIST_LOGO } from "consts/index";
 
 const StyledCard = styled(Card)`
@@ -25,7 +24,7 @@ const StyledCard = styled(Card)`
   margin-bottom: 64px;
 `;
 
-const StatusContainer = styled.div<{ status: Status; isListView: boolean }>`
+const StatusContainer = styled.div<{ status: Status }>`
   display: flex;
   margin-top: 18px;
   .dot {
@@ -143,7 +142,6 @@ interface IInformationCard {
   chainId?: number;
   status?: Status;
   registerer?: string;
-  isItem?: boolean;
   policyURI?: string;
   explorerAddress?: string;
   className?: string;
@@ -158,10 +156,10 @@ const InformationCard: React.FC<IInformationCard> = ({
   status,
   policyURI,
   explorerAddress,
-  isItem = false,
   className,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
+  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? ""));
 
   return (
     <>
@@ -169,10 +167,15 @@ const InformationCard: React.FC<IInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
-              {isUndefined(logoURI) && !isItem ? (
+              {isUndefined(logoURI) ? (
                 <SkeletonLogo />
               ) : (
-                !isItem && logoURI && <StyledLogo src={getIpfsUrl(logoURI)} alt="List Img" isListView={false} />
+                <StyledLogo
+                  src={imageSrc}
+                  onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
+                  alt="List Img"
+                  isListView={false}
+                />
               )}
               {isUndefined(title) ? <SkeletonTitle /> : <StyledTitle>{title}</StyledTitle>}
             </LogoAndTitle>
@@ -192,7 +195,7 @@ const InformationCard: React.FC<IInformationCard> = ({
                 <StyledEtherscanIcon />
               </a>
             ) : null}
-            <StatusContainer {...{ status, isListView: false }}>
+            <StatusContainer {...{ status }}>
               <label className="front-color dot">{getStatusLabel(status)}</label>
             </StatusContainer>
           </TopRightInfo>

@@ -2,7 +2,7 @@ import { IList, IListData, IListMetadata, ListField } from "context/SubmitListCo
 import { prepareArbitratorExtradata } from "./prepareArbitratorExtradata";
 import { Address, Log, decodeEventLog, isAddress, parseAbi, parseEther, zeroAddress } from "viem";
 import { isUndefined } from ".";
-import { KLEROS_ARBITRATOR, TEMPLATE_REGISTRY } from "~src/consts/arbitration";
+import { KLEROS_ARBITRATOR, TEMPLATE_REGISTRY } from "consts/arbitration";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 
 export const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
@@ -41,19 +41,19 @@ export const areListParamsValid = (params: IList) => {
 };
 
 export const createItemFromList = (listAddress?: Address) => {
-  return `{
-      "columns": [
-        {
-          "label": "List",
-          "description": "The List address",
-          "type": "address",
-          "isIdentifier": true
-        }
-      ],
-      "values": {
-        "List": ${listAddress},
-      }
-    }`;
+  return JSON.stringify({
+    columns: [
+      {
+        label: "List",
+        description: "The List address",
+        type: "address",
+        isIdentifier: true,
+      },
+    ],
+    values: {
+      List: listAddress?.toString().toLowerCase(),
+    },
+  });
 };
 
 export const retrieveDeployedListAddress = (eventLog: Log) =>
@@ -153,7 +153,6 @@ export const constructItemWithMockValues = (data: IListMetadata): ItemDetailsFra
   for (const column of data.columns) {
     props.push({ ...column, value: getMockValueForType(column.type) });
   }
-  console.log({ props });
 
   return {
     id: "1",

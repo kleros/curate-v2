@@ -6,6 +6,7 @@ import InformationCard from "components/InformationCard";
 import History from "components/HistoryDisplay";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const ItemDisplay: React.FC = () => {
   const { itemId } = useParams();
@@ -38,10 +39,10 @@ const ItemDisplay: React.FC = () => {
   return (
     <div>
       <InformationCard
-        title={itemDetails?.item.key0}
-        description={itemDetails?.item.key1}
-        status={itemDetails?.item.status}
-        registerer={itemDetails?.item.registerer.id}
+        title={itemDetails?.item?.key0}
+        description={itemDetails?.item?.key1}
+        status={mapFromSubgraphStatus(itemDetails?.item?.status, itemDetails?.item?.disputed)}
+        registerer={itemDetails?.item?.registerer.id}
         policyURI={registryDetails?.registry.policyURI}
         isItem={true}
       />

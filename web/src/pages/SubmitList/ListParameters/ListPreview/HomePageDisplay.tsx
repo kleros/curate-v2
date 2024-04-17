@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import { Status } from "consts/status";
 import RegistryCard from "components/RegistryCard";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { getIpfsUrl } from "utils/getIpfsUrl";
+import { Status } from "src/graphql/graphql";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const Container = styled.div`
   display: flex;
@@ -23,10 +23,10 @@ const HomePageDisplay: React.FC = () => {
     <Container>
       <StyledP>Check how the list is displayed on the home page:</StyledP>
       <RegistryCard
-        id={1}
+        id={"1"}
         title={listMetadata.title}
-        status={Status.Pending}
-        logoURI={getIpfsUrl(listMetadata?.logoURI)}
+        status={mapFromSubgraphStatus(Status.RegistrationRequested, false)}
+        logoURI={listMetadata?.logoURI}
         chainId={421614}
         totalItems={23}
         overrideIsList

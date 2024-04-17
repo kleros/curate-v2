@@ -111,15 +111,17 @@ interface IListInfo {
 
 const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isListView = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI));
 
   return (
     <Container {...{ isListView }}>
       {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}
       <StyledLogo
-        src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)}
+        src={imageSrc}
         alt="List Img"
         isListView={isListView}
         onLoad={() => setImageLoaded(true)}
+        onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
         style={{ display: imageLoaded ? "block" : "none" }}
       />
       <TruncatedTitle text={title} maxLength={100} />

@@ -13,6 +13,7 @@ import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const Container = styled.div`
   width: 100%;
@@ -47,12 +48,23 @@ const HighlightedLists = () => {
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
   const { data: itemsData } = useItemsQuery(0, 6, { registry: listOfListsAddresses[DEFAULT_CHAIN] });
-  const registryIds = useMemo(() => itemsData?.items.map((item) => JSON.parse(item.data).address) || [], [itemsData]);
+
+  // TODO: Json.parse can throw error
+  const registryIds = useMemo(
+    () =>
+      itemsData
+        ? itemsData?.items
+            .map((item) => item?.props[0]?.value.toLowerCase() ?? undefined)
+            .filter((id) => !isUndefined(id))
+        : [],
+    [itemsData]
+  );
+
   const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
 
   const combinedListsData = useMemo(() => {
     return registriesData?.registries.map((registry) => {
-      const registryAsItem = itemsData.items.find((item) => JSON.parse(item.data).address === registry.id);
+      const registryAsItem = itemsData.items.find((item) => item?.props[0]?.value.toLowerCase() === registry.id);
       return {
         ...registry,
         totalItems: registry.items.length,
@@ -70,7 +82,12 @@ const HighlightedLists = () => {
           {isUndefined(combinedListsData)
             ? [...Array(6)].map((_, i) => <SkeletonRegistryListItem key={i} />)
             : combinedListsData?.map((registry, i) => (
-                <RegistryCard key={i} {...registry} totalItems={registry.totalItems} status={registry.status} />
+                <RegistryCard
+                  key={i}
+                  {...registry}
+                  totalItems={registry.totalItems}
+                  status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                />
               ))}
         </ListContainer>
       ) : (
@@ -78,7 +95,12 @@ const HighlightedLists = () => {
           {isUndefined(combinedListsData)
             ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
             : combinedListsData?.map((registry, i) => (
-                <RegistryCard key={i} {...registry} totalItems={registry.totalItems} status={registry.status} />
+                <RegistryCard
+                  key={i}
+                  {...registry}
+                  totalItems={registry.totalItems}
+                  status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                />
               ))}
         </GridContainer>
       )}

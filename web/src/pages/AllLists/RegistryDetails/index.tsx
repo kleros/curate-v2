@@ -9,13 +9,14 @@ import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import ClosedIcon from "assets/svgs/icons/check-circle-outline.svg";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const RegistryDetails: React.FC = () => {
   const { id } = useParams();
   const [listAddress, itemId] = id?.split("-");
   const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
   const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
-  const { title, status, logoURI, policyURI, description, items, registerer, setRegistryDetails } =
+  const { title, status, logoURI, policyURI, description, items, registerer, disputed, setRegistryDetails } =
     useRegistryDetailsContext();
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const RegistryDetails: React.FC = () => {
   return (
     <div>
       <InformationCard
-        {...{ title, logoURI, description, policyURI, status }}
+        {...{ title, logoURI, description, policyURI, status: mapFromSubgraphStatus(status, disputed) }}
         registerer={registerer?.id}
         explorerAddress={listAddress}
       />

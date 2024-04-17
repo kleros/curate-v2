@@ -38,7 +38,7 @@ export const useItemDetailsQuery = (id?: string | number) => {
   const isEnabled = id !== undefined;
   const { graphqlBatcher } = useGraphqlBatcher();
 
-  return useQuery({
+  return useQuery<ItemDetailsQuery>({
     queryKey: ["refetchOnBlock", `itemDetailsQuery${id}`],
     enabled: isEnabled,
     queryFn: async () =>

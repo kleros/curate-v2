@@ -1,4 +1,4 @@
 export const listOfListsAddresses = {
-  "421614": "0x1db24bae1b932c53430db2cdb3b61d4690ca108e",
+  "421614": "0xad0a109cc2bf4da3a9c505155e15e8c05bd95183",
   "42161": "to be deployed",
 };

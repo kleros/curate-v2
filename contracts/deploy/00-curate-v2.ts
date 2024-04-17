@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HomeChains, isSkipped } from "./utils";
-import { CurateV2 } from "../typechain-types";
+import { CurateFactory, CurateV2 } from "../typechain-types";
 
 const registrationTemplate = `{
   "$schema": "../NewDisputeTemplate.schema.json",
@@ -120,6 +120,24 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     args: [curateAddress],
     log: true,
   });
+
+  const curateFactory = (await ethers.getContract("CurateFactory")) as CurateFactory;
+  await curateFactory.deploy(
+    deployer,
+    klerosCore.address,
+    extraData,
+    evidenceModule.address,
+    ethers.ZeroAddress, // _connectedTCR
+    {
+      templateRegistry: disputeTemplateRegistry.address,
+      registrationTemplateParameters: [registrationTemplate, ""],
+      removalTemplateParameters: [removalTemplate, ""],
+    },
+    [fee, fee, fee, fee],
+    timeout,
+    deployer,
+    listMetadata
+  );
 
   await deploy("CurateView", {
     from: deployer,

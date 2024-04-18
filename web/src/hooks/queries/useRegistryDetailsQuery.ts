@@ -13,7 +13,11 @@ export const registryDetailsQuery = graphql(`
         id
         status
         props {
+          label
           description
+          value
+          isIdentifier
+          type
         }
         key0
         key1

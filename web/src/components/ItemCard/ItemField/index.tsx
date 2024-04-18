@@ -1,5 +1,5 @@
 import React from "react";
-import { ItemDetailsFragment } from "~src/graphql/graphql";
+import { ItemDetailsFragment } from "src/graphql/graphql";
 import TextField, { ITextField } from "./TextField";
 import AddressField, { IAddressField } from "./AddressField";
 import LinkField from "./LinkField";

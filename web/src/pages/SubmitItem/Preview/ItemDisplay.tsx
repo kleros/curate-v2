@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import ItemCard from "components/ItemCard";
-import { items } from "~src/consts";
+import { items } from "consts/index";
 
 const Container = styled.div`
   display: flex;

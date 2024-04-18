@@ -63,6 +63,13 @@ export const retrieveDeployedListAddress = (eventLog: Log) =>
     topics: eventLog.topics,
   }).args._address;
 
+export const retrieveSubmittedListId = (eventLog: Log) =>
+  decodeEventLog({
+    abi: parseAbi(["event NewItem(bytes32 indexed _itemID, string _data, bool _addedDirectly)"]),
+    data: eventLog.data,
+    topics: eventLog.topics,
+  }).args._itemID;
+
 const constructRegistrationTemplate = (listData: IListData, listMetadata: IListMetadata) => {
   return JSON.stringify({
     title: `Add ${

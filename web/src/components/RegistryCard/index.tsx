@@ -41,8 +41,7 @@ const RegistryCard: React.FC<IListCard> = ({
 }) => {
   const { isListView } = useIsListView();
   const navigateAndScrollTop = useNavigateAndScrollTop();
-  console.log(totalItems);
-  console.log(status);
+
   const registryAddressAndItemId = `${id}-${itemId}`;
 
   return (

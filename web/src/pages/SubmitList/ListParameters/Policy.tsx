@@ -67,7 +67,7 @@ const Policy: React.FC = () => {
       </StyledLabel>
       <StyledFileUploader callback={handleFileUpload} variant="info" msg="You can add the List Policy file in PDF." />
 
-      <NavigationButtons prevRoute="/submitList/logo" nextRoute="/submitList/deposit" />
+      <NavigationButtons prevRoute="/submit-list/logo" nextRoute="/submit-list/deposit" />
     </Container>
   );
 };

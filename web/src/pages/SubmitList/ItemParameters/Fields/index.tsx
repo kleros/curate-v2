@@ -101,7 +101,7 @@ const Fields: React.FC = () => {
         updateValue={updateNumberOfFields}
         minValue={1}
       />
-      <NavigationButtons prevRoute="/submitList/deposit" nextRoute="/submitList/itemPreview" />
+      <NavigationButtons prevRoute="/submit-list/deposit" nextRoute="/submit-list/item-preview" />
     </Container>
   );
 };

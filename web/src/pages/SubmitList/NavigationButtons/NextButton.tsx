@@ -27,14 +27,14 @@ const NextButton: React.FC<INextButton> = ({ nextRoute }) => {
     listData.challengePeriodDuration;
 
   const isButtonDisabled =
-    (location.pathname.includes("/submitList/title") && !listMetadata.title) ||
-    (location.pathname.includes("/submitList/description") && !listMetadata.description) ||
-    (location.pathname.includes("/submitList/court") && !listData.courtId) ||
-    (location.pathname.includes("/submitList/custom") && !listMetadata.itemName && !listMetadata.itemNamePlural) ||
-    (location.pathname.includes("/submitList/fields") && !areItemFieldsFilled) ||
-    (location.pathname.includes("/submitList/policy") && (isPolicyUploading || !listMetadata.policyURI)) ||
-    (location.pathname.includes("/submitList/logo") && (isLogoUploading || !listMetadata.logoURI)) ||
-    (location.pathname.includes("/submitList/advanced") &&
+    (location.pathname.includes("/submit-list/title") && !listMetadata.title) ||
+    (location.pathname.includes("/submit-list/description") && !listMetadata.description) ||
+    (location.pathname.includes("/submit-list/court") && !listData.courtId) ||
+    (location.pathname.includes("/submit-list/custom") && !listMetadata.itemName && !listMetadata.itemNamePlural) ||
+    (location.pathname.includes("/submit-list/fields") && !areItemFieldsFilled) ||
+    (location.pathname.includes("/submit-list/policy") && (isPolicyUploading || !listMetadata.policyURI)) ||
+    (location.pathname.includes("/submit-list/logo") && (isLogoUploading || !listMetadata.logoURI)) ||
+    (location.pathname.includes("/submit-list/advanced") &&
       (!areAdvancedParamsFilled || !listData.courtId || !listData.numberOfJurors));
 
   return isDeployPage ? (

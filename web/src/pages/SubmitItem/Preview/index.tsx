@@ -54,7 +54,7 @@ const Preview: React.FC = () => {
         <ItemDisplay />
         <Overlay />
       </StyledCard>
-      <NavigationButtons prevRoute="/submitItem/policy" />
+      <NavigationButtons prevRoute="/submit-item/policy" />
     </Container>
   );
 };

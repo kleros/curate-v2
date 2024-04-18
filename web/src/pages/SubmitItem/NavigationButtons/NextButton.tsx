@@ -13,8 +13,8 @@ const NextButton: React.FC<INextButton> = ({ nextRoute }) => {
   const location = useLocation();
 
   const isButtonDisabled =
-    (location.pathname.includes("/submitItem/itemField1") && !fieldOne) ||
-    (location.pathname.includes("/submitItem/policy") && !isPolicyRead);
+    (location.pathname.includes("/submit-item/item-field1") && !fieldOne) ||
+    (location.pathname.includes("/submit-item/policy") && !isPolicyRead);
 
   return <Button disabled={isButtonDisabled} onClick={() => navigate(nextRoute)} text="Next" />;
 };

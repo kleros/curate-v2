@@ -29,8 +29,8 @@ const App: React.FC = () => {
                   <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="lists/*" element={<AllLists />} />
-                    <Route path="submitItem/*" element={<SubmitItem />} />
-                    <Route path="submitList/*" element={<SubmitList />} />
+                    <Route path="submit-item/*" element={<SubmitItem />} />
+                    <Route path="submit-list/*" element={<SubmitList />} />
                     <Route path="*" element={<h1>404 not found</h1>} />
                   </Route>
                 </SentryRoutes>

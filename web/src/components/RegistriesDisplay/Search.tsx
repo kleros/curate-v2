@@ -99,7 +99,7 @@ const Search: React.FC = () => {
         defaultValue={1}
         callback={() => {}}
       />
-      <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submitList")} />
+      <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submit-list")} />
     </Container>
   );
 };

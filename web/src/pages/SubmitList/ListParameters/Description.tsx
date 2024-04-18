@@ -55,7 +55,7 @@ const Description: React.FC = () => {
         <StyledInfoCard msg="Type a short sentence describing the content of the list. eg. A list of public name tags, associated with Ethereum mainnet contract addresses." />
       </FieldContainer>
 
-      <NavigationButtons prevRoute="/submitList/title" nextRoute="/submitList/logo" />
+      <NavigationButtons prevRoute="/submit-list/title" nextRoute="/submit-list/logo" />
     </Container>
   );
 };

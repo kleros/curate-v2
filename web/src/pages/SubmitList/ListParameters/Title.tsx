@@ -50,7 +50,7 @@ const Title: React.FC = () => {
         <StyledField onChange={handleWrite} placeholder="eg. Address Tags" value={listMetadata.title} />
         <StyledInfoCard msg="Choose a short name for the list." />
       </FieldContainer>
-      <NavigationButtons prevRoute="" nextRoute="/submitList/description" />
+      <NavigationButtons prevRoute="" nextRoute="/submit-list/description" />
     </Container>
   );
 };

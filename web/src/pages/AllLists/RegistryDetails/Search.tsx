@@ -84,7 +84,7 @@ const Search: React.FC = () => {
         defaultValue={1}
         callback={() => {}}
       />
-      <Button Icon={StyledPlusIcon} text="Submit Item" onClick={() => navigate("/submitItem")} />
+      <Button Icon={StyledPlusIcon} text="Submit Item" onClick={() => navigate("/submit-item")} />
     </Container>
   );
 };

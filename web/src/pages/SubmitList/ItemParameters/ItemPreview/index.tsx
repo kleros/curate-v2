@@ -50,7 +50,7 @@ const ItemPreview: React.FC = () => {
         <ItemDisplay />
         <Overlay />
       </StyledCard>
-      <NavigationButtons prevRoute="/submitList/fields" nextRoute="/submitList/custom" />
+      <NavigationButtons prevRoute="/submit-list/fields" nextRoute="/submit-list/custom" />
     </Container>
   );
 };

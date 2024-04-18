@@ -22,8 +22,8 @@ export const constructListParams = (listData: IListData, listMetadata: IListMeta
   baseTemplate.arbitratorExtraData = prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors) ?? "";
   baseTemplate.templateRegistryParams = {
     templateRegistry: TEMPLATE_REGISTRY,
-    registrationTemplateParameters: [constructRegistrationTemplate(listData, listMetadata), ""],
-    removalTemplateParameters: [constructRemovalTemplate(listData, listMetadata), ""],
+    registrationTemplateParameters: [constructRegistrationTemplate(listMetadata), ""],
+    removalTemplateParameters: [constructRemovalTemplate(listMetadata), ""],
   };
   return baseTemplate;
 };
@@ -70,7 +70,7 @@ export const retrieveSubmittedListId = (eventLog: Log) =>
     topics: eventLog.topics,
   }).args._itemID;
 
-const constructRegistrationTemplate = (listData: IListData, listMetadata: IListMetadata) => {
+const constructRegistrationTemplate = (listMetadata: IListMetadata) => {
   return JSON.stringify({
     title: `Add ${
       listMetadata.itemName
@@ -112,7 +112,7 @@ const constructRegistrationTemplate = (listData: IListData, listMetadata: IListM
   });
 };
 
-const constructRemovalTemplate = (listData: IListData, listMetadata: IListMetadata) => {
+const constructRemovalTemplate = (listMetadata: IListMetadata) => {
   return JSON.stringify({
     title: `Remove ${
       listMetadata.itemName

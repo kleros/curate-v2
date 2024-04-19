@@ -1,6 +1,7 @@
 import { graphql } from "src/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { useGraphqlBatcher } from "context/GraphqlBatcher";
+import { RegistryDetailsQuery } from "src/graphql/graphql";
 
 export const registryDetailsQuery = graphql(`
   query RegistryDetails($id: ID!) {
@@ -33,7 +34,7 @@ export const useRegistryDetailsQuery = (id?: string | number) => {
   const isEnabled = id !== undefined;
   const { graphqlBatcher } = useGraphqlBatcher();
 
-  return useQuery({
+  return useQuery<RegistryDetailsQuery>({
     queryKey: ["refetchOnBlock", `registryDetailsQuery${id}`],
     enabled: isEnabled,
     queryFn: async () =>

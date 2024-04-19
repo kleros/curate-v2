@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import InformationCard from "components/InformationCard";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { getIpfsUrl } from "utils/getIpfsUrl";
 import { Status } from "src/graphql/graphql";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
@@ -32,7 +31,7 @@ const ListPageDisplay: React.FC = () => {
         description={listMetadata.description}
         chainId={421614}
         status={mapFromSubgraphStatus(Status.Registered, false)}
-        logoURI={getIpfsUrl(listMetadata.logoURI ?? "")}
+        logoURI={listMetadata.logoURI}
       />
     </Container>
   );

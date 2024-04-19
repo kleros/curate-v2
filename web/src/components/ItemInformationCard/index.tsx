@@ -3,14 +3,13 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
 import { Button, Card } from "@kleros/ui-components-library";
-import { getStatusColor, getStatusLabel, mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import EtherscanIcon from "svgs/icons/etherscan.svg";
-import { Status } from "consts/status";
 import RemoveModal from "../Modal/RemoveModal";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import { Policies } from "../InformationCard/Policies";
-import ItemField from "../ItemCard/ItemField";
+import FieldsDisplay from "./FieldsDisplay";
+import StatusDisplay from "./StatusDisplay";
+import Skeleton from "react-loading-skeleton";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -18,34 +17,6 @@ const StyledCard = styled(Card)`
   height: auto;
   flex-direction: column;
   margin-bottom: 64px;
-`;
-
-const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
-  display: flex;
-  margin-top: 18px;
-  .dot {
-    ::before {
-      content: "";
-      display: inline-block;
-      height: 8px;
-      width: 8px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-  }
-  ${({ theme, status }) => {
-    const [frontColor] = getStatusColor(status, theme);
-    return `
-      .front-color {
-        color: ${frontColor};
-      }
-      .dot {
-        ::before {
-          background-color: ${frontColor};
-        }
-      }
-    `;
-  }};
 `;
 
 const TopInfo = styled.div`
@@ -71,13 +42,6 @@ const TopRightInfo = styled.div`
   gap: 48px;
 `;
 
-const StyledEtherscanIcon = styled(EtherscanIcon)`
-  display: flex;
-  height: 16px;
-  width: 16px;
-  margin-top: 20px;
-`;
-
 const Divider = styled.hr`
   border: none;
   height: 1px;
@@ -94,17 +58,10 @@ const BottomInfo = styled.div`
   justify-content: space-between;
 `;
 
-const FieldsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 16px;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
-`;
 interface IItemInformationCard extends ItemDetailsFragment {
   className?: string;
   chainId?: number;
+  policyURI: string;
 }
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
@@ -113,63 +70,26 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   registerer,
   status,
   disputed,
+  policyURI,
   props,
 }) => {
   const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
 
-  // filter out fields based on type and display accordingly
-  const imageFields = props.filter((prop) => prop.type === "image");
-  const addressFields = props.filter((prop) => prop.type === "address");
-  const linkFields = props.filter((prop) => prop.type === "link");
-  const fileFields = props.filter((prop) => prop.type === "file");
-  const textFields = props.filter((prop) => prop.type === "text");
-  const restOfFields = props.filter((prop) => !["text", "address", "link", "image", "file"].includes(prop.type));
-
-  const displayField = addressFields.length || linkFields.length || fileFields.length;
   return (
     <>
       <StyledCard {...{ className }}>
         <TopInfo>
-          <TopLeftInfo>
-            <FieldsContainer>
-              {imageFields.map((field) => (
-                <ItemField {...field} detailed />
-              ))}
-              {textFields.map((field) => (
-                <ItemField {...field} detailed />
-              ))}
-            </FieldsContainer>
-            {displayField ? (
-              <FieldsContainer>
-                {addressFields.map((field) => (
-                  <ItemField {...field} detailed />
-                ))}
-                {linkFields.map((field) => (
-                  <ItemField {...field} detailed />
-                ))}
-                {fileFields.map((field) => (
-                  <ItemField {...field} detailed />
-                ))}
-              </FieldsContainer>
-            ) : null}
-            <FieldsContainer>
-              {restOfFields.map((field) => (
-                <ItemField {...field} detailed />
-              ))}
-            </FieldsContainer>
-          </TopLeftInfo>
+          <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
           <TopRightInfo>
-            <StatusContainer {...{ status: mapFromSubgraphStatus(status, disputed), isList: false }}>
-              <label className="front-color dot">{getStatusLabel(mapFromSubgraphStatus(status, disputed))}</label>
-            </StatusContainer>
+            <StatusDisplay {...{ status, disputed }} />
           </TopRightInfo>
         </TopInfo>
         <Divider />
         <BottomInfo>
-          <AliasDisplay address={registerer.id} />
+          {registerer?.id ? <AliasDisplay address={registerer.id} /> : <Skeleton height={24} />}
           <Button variant="secondary" text={"Remove Item"} onClick={toggleRemoveItemModal} />
         </BottomInfo>
-        <Policies />
+        <Policies policyURI={policyURI} />
       </StyledCard>
       {isRemoveItemModalOpen ? <RemoveModal isItem toggleModal={toggleRemoveItemModal} /> : null}
     </>

@@ -38,15 +38,13 @@ const ItemDisplay: React.FC = () => {
 
   return (
     <div>
-      {itemDetails && (
-        <ItemInformationCard
-          {...itemDetails?.item}
-          status={mapFromSubgraphStatus(itemDetails?.item?.status, itemDetails?.item?.disputed)}
-          registerer={itemDetails?.item?.registerer.id}
-          policyURI={registryDetails?.registry.policyURI}
-          isItem={true}
-        />
-      )}
+      <ItemInformationCard
+        {...itemDetails?.item}
+        status={mapFromSubgraphStatus(itemDetails?.item?.status, itemDetails?.item?.disputed)}
+        policyURI={registryDetails?.registry.policyURI}
+        isItem={true}
+      />
+
       <History items={historyItems} />
     </div>
   );

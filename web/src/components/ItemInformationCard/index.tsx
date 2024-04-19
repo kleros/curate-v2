@@ -159,7 +159,6 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
             </FieldsContainer>
           </TopLeftInfo>
           <TopRightInfo>
-            <StyledEtherscanIcon />
             <StatusContainer {...{ status: mapFromSubgraphStatus(status, disputed), isList: false }}>
               <label className="front-color dot">{getStatusLabel(mapFromSubgraphStatus(status, disputed))}</label>
             </StatusContainer>

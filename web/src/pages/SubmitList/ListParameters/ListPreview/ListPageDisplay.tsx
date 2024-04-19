@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import InformationCard from "components/InformationCard";
@@ -23,15 +23,17 @@ const StyledInformationCard = styled(InformationCard)`
 
 const ListPageDisplay: React.FC = () => {
   const { listMetadata } = useSubmitListContext();
+  const previewData = useMemo(() => listMetadata, [listMetadata]);
+
   return (
     <Container>
       <StyledP>Check how the list is displayed on the List page:</StyledP>
       <StyledInformationCard
-        title={listMetadata.title}
-        description={listMetadata.description}
+        title={previewData.title}
+        description={previewData.description}
         chainId={421614}
         status={mapFromSubgraphStatus(Status.Registered, false)}
-        logoURI={listMetadata.logoURI}
+        logoURI={previewData.logoURI}
       />
     </Container>
   );

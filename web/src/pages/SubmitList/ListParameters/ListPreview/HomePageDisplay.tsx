@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import RegistryCard from "components/RegistryCard";
@@ -19,14 +19,15 @@ const StyledP = styled.p`
 
 const HomePageDisplay: React.FC = () => {
   const { listMetadata } = useSubmitListContext();
+  const previewData = useMemo(() => listMetadata, [listMetadata]);
   return (
     <Container>
       <StyledP>Check how the list is displayed on the home page:</StyledP>
       <RegistryCard
         id={"1"}
-        title={listMetadata.title}
+        title={previewData.title}
         status={mapFromSubgraphStatus(Status.RegistrationRequested, false)}
-        logoURI={listMetadata?.logoURI}
+        logoURI={previewData?.logoURI}
         chainId={421614}
         totalItems={23}
         overrideIsList

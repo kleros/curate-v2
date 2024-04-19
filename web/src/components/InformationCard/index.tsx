@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
@@ -160,6 +160,7 @@ const InformationCard: React.FC<IInformationCard> = ({
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
   const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? ""));
+  useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
 
   return (
     <>

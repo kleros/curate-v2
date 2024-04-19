@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { landscapeStyle } from "styles/landscapeStyle";
@@ -113,6 +113,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, st
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI));
 
+  useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
   return (
     <Container {...{ isListView }}>
       {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}

@@ -68,6 +68,7 @@ const listMetadata = `{
   "itemName": "list",
   "itemNamePlural": "lists",
   "logoURI": "/ipfs/QmQN9ZPubns9kpW3jxZefyt8sNbeUzj8KEcsT7i81SiXFf/standard-impact-logo-.png",
+  "policyURI": "/ipfs/QmWciZMi8mBJg34FapRHK4Yh7a6UqmxrpcKQ3KRNMXzjfx",
   "isListofLists": true
 }`;
 

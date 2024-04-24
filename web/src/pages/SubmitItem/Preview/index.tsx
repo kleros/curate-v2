@@ -8,6 +8,7 @@ import ListDisplay from "./ListDisplay";
 import ItemDisplay from "./ItemDisplay";
 
 const Container = styled.div`
+  width: 100%;
   padding: 0px ${responsiveSize(10, 130)};
   display: flex;
   flex-direction: column;
@@ -54,7 +55,7 @@ const Preview: React.FC = () => {
         <ItemDisplay />
         <Overlay />
       </StyledCard>
-      <NavigationButtons prevRoute="/submit-item/policy" />
+      <NavigationButtons prevRoute="../policy" />
     </Container>
   );
 };

@@ -34,6 +34,7 @@ const ListPageDisplay: React.FC = () => {
         chainId={421614}
         status={mapFromSubgraphStatus(Status.Registered, false)}
         logoURI={previewData.logoURI}
+        policyURI="https://ipfs.kleros.io//ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
       />
     </Container>
   );

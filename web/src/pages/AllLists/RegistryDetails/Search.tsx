@@ -47,7 +47,8 @@ const StyledSearchbar = styled(Searchbar)`
 `;
 
 const Search: React.FC = () => {
-  const { page, order, filter } = useParams();
+  const { page, order, filter, id } = useParams();
+
   const location = useItemRootPath();
   const decodedFilter = decodeItemURIFilter(filter ?? "all");
   const { id: searchValue, ...filterObject } = decodedFilter;
@@ -84,7 +85,7 @@ const Search: React.FC = () => {
         defaultValue={1}
         callback={() => {}}
       />
-      <Button Icon={StyledPlusIcon} text="Submit Item" onClick={() => navigate("/submit-item")} />
+      <Button Icon={StyledPlusIcon} text="Submit Item" onClick={() => navigate(`/submit-item/${id}`)} />
     </Container>
   );
 };

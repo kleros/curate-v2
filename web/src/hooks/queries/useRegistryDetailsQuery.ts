@@ -23,6 +23,12 @@ export const registryDetailsQuery = graphql(`
         key0
         key1
       }
+      fieldProps {
+        label
+        description
+        type
+        isIdentifier
+      }
       registerer {
         id
       }

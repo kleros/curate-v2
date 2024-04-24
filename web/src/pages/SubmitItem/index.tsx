@@ -1,5 +1,5 @@
-import React from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useAccount } from "wagmi";
@@ -9,6 +9,8 @@ import Policy from "./Policy";
 import Preview from "./Preview";
 import Header from "./Header";
 import ItemField from "./ItemField";
+import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
+import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 
 const Container = styled.div`
   display: flex;
@@ -38,6 +40,19 @@ const MiddleContentContainer = styled.div`
 
 const SubmitItem: React.FC = () => {
   const location = useLocation();
+  const { id } = useParams();
+  const [registryAddress, _] = id?.split("-");
+
+  const { data: registryDetails } = useRegistryDetailsQuery(registryAddress?.toLowerCase());
+  const { setRegistryDetails } = useRegistryDetailsContext();
+
+  useEffect(() => {
+    if (registryDetails && registryDetails?.registry) {
+      setRegistryDetails({
+        ...registryDetails.registry,
+      });
+    }
+  }, [registryDetails, setRegistryDetails]);
 
   const { isConnected } = useAccount();
   const isPreviewPage = location.pathname.includes("/preview");
@@ -50,8 +65,8 @@ const SubmitItem: React.FC = () => {
           <MiddleContentContainer>
             {isConnected && !isPreviewPage ? <Timeline /> : null}
             <Routes>
-              <Route index element={<Navigate to="item-field1" replace />} />
-              <Route path="/item-field1/*" element={<ItemField />} />
+              <Route index element={<Navigate to="item-field/0" replace />} />
+              <Route path="/item-field/:id" element={<ItemField />} />
               <Route path="/policy/*" element={<Policy />} />
               <Route path="/preview/*" element={<Preview />} />
             </Routes>

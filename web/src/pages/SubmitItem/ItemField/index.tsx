@@ -1,11 +1,12 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
-import { Field } from "@kleros/ui-components-library";
+import styled from "styled-components";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import Title from "../Title";
 import NavigationButtons from "../NavigationButtons";
+import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
+import { useParams } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import FieldInput from "./FieldInput";
 
 const Container = styled.div`
   display: flex;
@@ -13,45 +14,42 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const StyledField = styled(Field)`
-  width: 80vw;
-  margin-bottom: ${responsiveSize(68, 40)};
-
-  input {
-    font-size: 16px;
-  }
-
-  small {
-    margin-top: 6px;
-    svg {
-      margin-top: 8px;
-    }
-  }
-
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(200, 720)};
-    `
-  )};
+const StyledSkeleton = styled(Skeleton)`
+  margin-bottom: 30px;
 `;
 
 const ItemField: React.FC = () => {
-  const { fieldOne, setFieldOne } = useSubmitItemContext();
+  const { fields, setFields } = useSubmitItemContext();
+  const { id } = useParams();
+  const fieldNumber = Number(id ?? 0);
 
-  const handleWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldOne(event.target.value);
+  const { fieldProps } = useRegistryDetailsContext();
+  const itemField = fieldProps?.[Number(id ?? "0")];
+  const value = fields?.values?.[itemField?.label ?? ""];
+
+  const handleWrite = (val: string) => {
+    if (!itemField) return;
+    const prevFields = fields ?? {};
+
+    if (!prevFields.values?.[itemField.label]) prevFields.columns.push(itemField);
+    prevFields.values = { ...fields.values, [itemField.label]: val };
+    setFields({ ...prevFields });
   };
 
   return (
     <Container>
-      <Title text="Item Field 1" />
-      <StyledField
-        value={fieldOne}
-        onChange={handleWrite}
-        variant={"info"}
-        message={"Item Field 1 description requirements go here"}
+      {itemField ? <Title text={itemField?.label} /> : <StyledSkeleton width={100} height={40} />}
+      {itemField ? (
+        <FieldInput fieldProp={{ ...itemField, value }} handleWrite={handleWrite} />
+      ) : (
+        <StyledSkeleton width={200} height={100} />
+      )}
+      <NavigationButtons
+        prevRoute={fieldNumber > 0 ? `../item-field/${fieldNumber - 1}` : undefined}
+        nextRoute={
+          fieldProps && fieldProps?.length - 1 > fieldNumber ? `../item-field/${fieldNumber + 1}` : "../policy"
+        }
       />
-      <NavigationButtons prevRoute="/lists/1/list/1/desc/all" nextRoute="/submit-item/policy" />
     </Container>
   );
 };

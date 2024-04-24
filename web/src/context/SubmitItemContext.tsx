@@ -1,17 +1,29 @@
 import React, { createContext, useContext, useMemo } from "react";
 import { useLocalStorage } from "hooks/useLocalStorage";
 
+type Fields = {
+  columns: {
+    label: string;
+    description: string;
+    isIdentifier: boolean;
+    type: string;
+  }[];
+  values?: Record<string, string>;
+};
 export interface ISubmitItemContext {
-  fieldOne: string;
-  setFieldOne: (title: string) => void;
+  fields: Fields;
+  setFields: (field: Fields) => void;
   resetItemData: () => void;
+  submissionDeposit?: string;
+  setSubmissionDeposit: (deposit: string) => void;
   isPolicyRead: boolean;
   setIsPolicyRead: (isRead: boolean) => void;
 }
 
 const initialSubmitItemContext: ISubmitItemContext = {
-  fieldOne: "",
-  setFieldOne: () => {},
+  fields: { columns: [] },
+  setFields: () => {},
+  setSubmissionDeposit: () => {},
   resetItemData: () => {},
   isPolicyRead: false,
   setIsPolicyRead: () => {},
@@ -22,26 +34,30 @@ const SubmitItemContext = createContext<ISubmitItemContext>(initialSubmitItemCon
 export const useSubmitItemContext = () => useContext(SubmitItemContext);
 
 export const SubmitItemProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [fieldOne, setFieldOne] = useLocalStorage<string>("fieldOne", initialSubmitItemContext.fieldOne);
+  const [fields, setFields] = useLocalStorage<Fields>("fields", initialSubmitItemContext.fields);
+  const [submissionDeposit, setSubmissionDeposit] = useLocalStorage<string | null>("submissionDeposit", null);
   const [isPolicyRead, setIsPolicyRead] = useLocalStorage<boolean>(
     "isPolicyRead",
     initialSubmitItemContext.isPolicyRead
   );
 
   const resetItemData = () => {
-    setFieldOne(initialSubmitItemContext.fieldOne);
+    setFields(initialSubmitItemContext.fields);
     setIsPolicyRead(initialSubmitItemContext.isPolicyRead);
+    setSubmissionDeposit(null);
   };
 
   const contextValues = useMemo(
     () => ({
-      fieldOne,
-      setFieldOne,
+      fields,
+      setFields,
       resetItemData,
       isPolicyRead,
       setIsPolicyRead,
+      submissionDeposit,
+      setSubmissionDeposit,
     }),
-    [fieldOne, isPolicyRead]
+    [fields, isPolicyRead, submissionDeposit]
   );
 
   return <SubmitItemContext.Provider value={contextValues}>{children}</SubmitItemContext.Provider>;

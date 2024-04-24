@@ -8,7 +8,6 @@ import HistoryIcon from "svgs/icons/history.svg";
 import BookIcon from "svgs/icons/book.svg";
 import { Accordion } from "@kleros/ui-components-library";
 import ChallengeParameters from "./ChallengeParameters";
-import AppealParameters from "./AppealParameters";
 import AbritrationParameters from "./ArbitrationParameters";
 import { useSubmitListContext } from "context/SubmitListContext";
 

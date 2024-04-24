@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { RegistryDetailsFragment } from "src/graphql/graphql";
+import { ItemDetailsFragment, RegistryDetailsQuery } from "src/graphql/graphql";
 
+type RegistryDetails = RegistryDetailsQuery["registry"] & ItemDetailsFragment;
 interface RegistryDetailsContextType {
-  registryDetails: RegistryDetailsFragment | null;
-  setRegistryDetails: (details: RegistryDetailsFragment | null) => void;
+  registryDetails: RegistryDetails | null;
+  setRegistryDetails: (details: RegistryDetails | null) => void;
 }
 
 const RegistryDetailsContext = createContext<RegistryDetailsContextType>({
@@ -22,7 +23,7 @@ export const useRegistryDetailsContext = () => {
 };
 
 export const RegistryDetailsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [registryDetails, setRegistryDetails] = useState<RegistryDetailsFragment | null>(null);
+  const [registryDetails, setRegistryDetails] = useState<RegistryDetails | null>(null);
 
   return (
     <RegistryDetailsContext.Provider value={{ registryDetails, setRegistryDetails }}>

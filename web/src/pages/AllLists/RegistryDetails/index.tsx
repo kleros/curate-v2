@@ -24,7 +24,7 @@ const RegistryDetails: React.FC = () => {
       setRegistryDetails({
         ...registryDetails.registry,
         ...itemDetails.item,
-        registerer: registryDetails.registry.registerer,
+        registerer: registryDetails?.registry?.registerer,
       });
     }
   }, [itemDetails, registryDetails, setRegistryDetails]);

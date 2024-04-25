@@ -24,7 +24,7 @@ const ItemField: React.FC = () => {
   const fieldNumber = Number(id ?? 0);
 
   const { fieldProps } = useRegistryDetailsContext();
-  const itemField = fieldProps?.[Number(id ?? "0")];
+  const itemField = fieldProps?.[fieldNumber];
   const value = fields?.values?.[itemField?.label ?? ""];
 
   const handleWrite = (val: string) => {

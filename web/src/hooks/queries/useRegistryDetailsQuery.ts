@@ -6,6 +6,7 @@ import { RegistryDetailsQuery } from "src/graphql/graphql";
 export const registryDetailsQuery = graphql(`
   query RegistryDetails($id: ID!) {
     registry(id: $id) {
+      id
       title
       logoURI
       policyURI

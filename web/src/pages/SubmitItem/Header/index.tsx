@@ -128,10 +128,6 @@ const Header: React.FC<IHeader> = ({}) => {
               <Skeleton width={60} height={24} />
             )}
           </DepositRequired>
-          <Chain>
-            <GnosisIcon />
-            <StyledP>Gnosis</StyledP>
-          </Chain>
         </RightContent>
       </StyledCard>
     </Container>

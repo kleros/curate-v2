@@ -89,7 +89,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
           {registerer?.id ? <AliasDisplay address={registerer.id} /> : <Skeleton height={24} />}
           <Button variant="secondary" text={"Remove Item"} onClick={toggleRemoveItemModal} />
         </BottomInfo>
-        <Policies policyURI={policyURI} />
+        <Policies policyURI={policyURI} isItem />
       </StyledCard>
       {isRemoveItemModalOpen ? <RemoveModal isItem toggleModal={toggleRemoveItemModal} /> : null}
     </>

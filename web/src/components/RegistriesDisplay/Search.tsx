@@ -5,10 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDebounce } from "react-use";
 import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
 import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
-import { StyledGlobeIcon } from "../StyledIcons/GlobeIcon";
-import { StyledEthereumIcon } from "../StyledIcons/EthereumIcon";
-import { StyledGnosisIcon } from "../StyledIcons/GnosisIcon";
-import { StyledPolygonIcon } from "../StyledIcons/PolygonIcon";
 import PaperIcon from "svgs/icons/paper.svg";
 
 const Container = styled.div`
@@ -78,16 +74,6 @@ const Search: React.FC = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </SearchBarContainer>
-      <DropdownSelect
-        items={[
-          { text: "All Networks", value: 1, Icon: StyledGlobeIcon },
-          { text: "Ethereum", value: 2, Icon: StyledEthereumIcon },
-          { text: "Gnosis", value: 3, Icon: StyledGnosisIcon },
-          { text: "Polygon", value: 4, Icon: StyledPolygonIcon },
-        ]}
-        defaultValue={1}
-        callback={() => {}}
-      />
       <DropdownSelect
         items={[
           { text: "All Status", dot: "grey", value: 1 },

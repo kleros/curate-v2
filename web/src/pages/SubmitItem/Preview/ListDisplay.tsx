@@ -35,7 +35,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
       <StyledP>Check how the item is displayed on the List page:</StyledP>
       <ItemInformationCard
         props={props}
-        policyURI="https://ipfs.kleros.io//ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
+        policyURI="/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
         status={Status.RegistrationRequested}
         id="1"
         chainId={42161}

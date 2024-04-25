@@ -57,23 +57,28 @@ const LinkContainer = styled.div`
 
 interface IPolicies {
   policyURI: string;
+  isItem?: boolean;
 }
 
-export const Policies: React.FC<IPolicies> = ({ policyURI }) => {
+export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
   const { data: parentRegistryDetails } = useRegistryDetailsQuery(listOfListsAddresses[DEFAULT_CHAIN]);
 
   return (
     <ShadeArea>
       <StyledP>Make sure you read and understand the Policies</StyledP>
       <LinkContainer>
-        {parentRegistryDetails ? (
-          <StyledA href={getIpfsUrl(parentRegistryDetails.registry.policyURI)} target="_blank" rel="noreferrer">
-            <StyledPolicyIcon />
-            Curation Policy
-          </StyledA>
-        ) : (
-          <Skeleton width={116} />
-        )}
+        {!isItem ? (
+          <>
+            {parentRegistryDetails ? (
+              <StyledA href={getIpfsUrl(parentRegistryDetails.registry.policyURI)} target="_blank" rel="noreferrer">
+                <StyledPolicyIcon />
+                Curation Policy
+              </StyledA>
+            ) : (
+              <Skeleton width={116} />
+            )}
+          </>
+        ) : null}
         {policyURI ? (
           <StyledA href={getIpfsUrl(policyURI)} target="_blank" rel="noreferrer">
             <StyledPolicyIcon />

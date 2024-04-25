@@ -7,7 +7,6 @@ import { Button } from "@kleros/ui-components-library";
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { Status } from "consts/status";
 import { getIpfsUrl } from "utils/getIpfsUrl";
-import ChainIcon from "../ChainIcon";
 import StatusBanner from "./StatusBanner";
 import { DEFAULT_LIST_LOGO } from "consts/index";
 
@@ -126,7 +125,6 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, st
         style={{ display: imageLoaded ? "block" : "none" }}
       />
       <TruncatedTitle text={title} maxLength={100} />
-      {isListView && <ChainIcon {...{ chainId }} />}
       <StyledLabel>{totalItems} items</StyledLabel>
       {isListView && <StatusBanner {...{ status, isListView }} />}
       {isListView && <StyledButton text="Open" Icon={ArrowIcon} />}

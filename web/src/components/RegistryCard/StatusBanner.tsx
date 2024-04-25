@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { Theme } from "styled-components";
 import { Status } from "consts/status";
-import ChainIcon from "../ChainIcon";
 
 const Container = styled.div<{ status: Status; isListView: boolean }>`
   height: ${({ isListView }) => (isListView ? "min-content" : "45px")};
@@ -41,7 +40,6 @@ const Container = styled.div<{ status: Status; isListView: boolean }>`
 
 interface IStatusBanner {
   status: Status;
-  chainId?: number;
   isListView?: boolean;
 }
 
@@ -89,10 +87,9 @@ export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
       return Status.Pending;
   }
 };
-const StatusBanner: React.FC<IStatusBanner> = ({ status, chainId, isListView = false }) => (
+const StatusBanner: React.FC<IStatusBanner> = ({ status, isListView = false }) => (
   <Container {...{ status, isListView }}>
     <label className="front-color dot">{getStatusLabel(status)}</label>
-    {!isListView && <ChainIcon chainId={chainId ?? 1} />}
   </Container>
 );
 

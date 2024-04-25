@@ -48,7 +48,7 @@ const itemsQuery = graphql(`
 export const useItemsQuery = (skip = 0, first = 3, where?: Item_Filter, sortOrder?: OrderDirection) => {
   const { graphqlBatcher } = useGraphqlBatcher();
 
-  return useQuery({
+  return useQuery<{ items: ItemDetailsFragment[] }>({
     queryKey: [`useItemsQuery`, skip, where, sortOrder, first],
     queryFn: async () =>
       await graphqlBatcher.fetch({

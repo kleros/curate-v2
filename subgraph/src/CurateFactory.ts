@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { NewList } from "../generated/CurateFactory/CurateFactory";
-import { Registry, User } from "../generated/schema";
+import { MainCurate, Registry, User } from "../generated/schema";
 import { Curate } from "../generated/templates";
 import { ensureCounter } from "./entities/Counters";
 import { ensureUser } from "./entities/User";
@@ -12,7 +12,14 @@ export function handleNewCurate(event: NewList): void {
   let registry = new Registry(event.params._address.toHexString());
   let counter = ensureCounter();
 
-  counter.totalRegistries = counter.totalRegistries.plus(ONE);
+  // set the first registry as the main curate
+  let mainCurate = MainCurate.load("0");
+  if (!mainCurate) {
+    mainCurate = new MainCurate("0");
+    mainCurate.address = event.params._address;
+    mainCurate.save();
+  }
+
   let doesCuratorExist = User.load(event.transaction.from.toHexString());
   if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
 

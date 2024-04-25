@@ -11,6 +11,7 @@ import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
+import { useCounter } from "queries/useCounter";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -32,13 +33,15 @@ const RegistriesFetcher: React.FC = () => {
 
   // console.log(registriesData);
 
-  const { data: itemsData } = useItemsQuery(0, 9, { registry: listOfListsAddresses[DEFAULT_CHAIN] });
+  const { data: itemsData } = useItemsQuery(registrySkip, registriesPerPage, {
+    registry: listOfListsAddresses[DEFAULT_CHAIN],
+  });
   // TODO: Json.parse can throw error
   const registryIds = useMemo(
     () =>
       itemsData
         ? itemsData?.items
-            .map((item) => item?.props[0]?.value.toLowerCase() ?? undefined)
+            .map((item) => item?.props[0]?.value?.toLowerCase() ?? undefined)
             .filter((id) => !isUndefined(id))
         : [],
     [itemsData]
@@ -48,30 +51,30 @@ const RegistriesFetcher: React.FC = () => {
 
   const combinedListsData = useMemo(() => {
     return registriesData?.registries.map((registry) => {
-      const registryAsItem = itemsData.items.find((item) => item?.props[0]?.value.toLowerCase() === registry.id);
+      const registryAsItem = itemsData?.items.find((item) => item?.props[0]?.value?.toLowerCase() === registry.id);
       return {
         ...registry,
         totalItems: registry.items.length,
-        status: registryAsItem.status,
-        itemId: registryAsItem.id,
+        status: registryAsItem?.status,
+        itemId: registryAsItem?.id,
       };
     });
   }, [registriesData, itemsData]);
 
-  // const { data: counterData } = useCounterQuery();
-  // const totalRegistries = counterData?.counter?.totalRegistries;
-  // const totalPages = useMemo(
-  //   () => (!isUndefined(totalRegistries) ? Math.ceil(totalRegistries / registriesPerPage) : 1),
-  //   [totalRegistries, registriesPerPage]
-  // );
+  const { data: counterData } = useCounter();
+  const totalRegistries = counterData?.counter?.totalRegistries;
+  const totalPages = useMemo(
+    () => (!isUndefined(totalRegistries) ? Math.ceil(totalRegistries / registriesPerPage) : 1),
+    [totalRegistries, registriesPerPage]
+  );
 
   return (
     <RegistriesDisplay
       registries={combinedListsData}
-      totalRegistries={10}
+      totalRegistries={totalRegistries}
       currentPage={pageNumber}
       setCurrentPage={(newPage: number) => navigate(`${location}/${newPage}/${order}/${filter}`)}
-      totalPages={2}
+      totalPages={totalPages}
       registriesPerPage={registriesPerPage}
     />
   );

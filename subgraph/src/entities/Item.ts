@@ -1,5 +1,5 @@
 import { json, log } from "@graphprotocol/graph-ts";
-import { Item, ItemProp, Registry, User } from "../../generated/schema";
+import { Item, ItemProp, MainCurate, Registry, User } from "../../generated/schema";
 import { Curate, NewItem } from "../../generated/templates/Curate/Curate";
 import { JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getStatus } from "../utils";
 import { ensureCounter } from "./Counters";
@@ -21,8 +21,15 @@ export function createItemFromEvent(event: NewItem): void {
   }
 
   let counter = ensureCounter();
+  let mainCurate = MainCurate.load("0");
+
+  // check if the item is being added to main curate, then it's a new registry
+  if (mainCurate && mainCurate.address == event.address) {
+    counter.totalRegistries = counter.totalRegistries.plus(ONE);
+  }
 
   counter.totalItems = counter.totalItems.plus(ONE);
+
   let doesCuratorExist = User.load(event.transaction.from.toHexString());
   if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
   counter.save();

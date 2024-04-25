@@ -18,6 +18,10 @@ enum Ruling {
   Reject
 }
 
+type MainCurate @entity {
+  id: ID!
+  address: Bytes!
+}
 type Arbitrator @entity {
   "The address of the arbitrator"
   id: ID!

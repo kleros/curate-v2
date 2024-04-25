@@ -67,8 +67,8 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
   item.latestRequestResolutionTime = ZERO;
   item.latestRequestSubmissionTime = event.block.timestamp;
 
-  createRequestFromEvent(event);
   item.save();
+  createRequestFromEvent(event);
 }
 
 export function handleStatusUpdated(event: ItemStatusChange): void {

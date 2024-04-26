@@ -103,6 +103,7 @@ const AdvancedParameters: React.FC = () => {
         </ButtonContainer>
       </LabelAndButtonContainer>
       <StyledAccordion
+        defaultExpanded={1}
         items={[
           { title: "Challenge Parameters", body: <ChallengeParameters /> },
           { title: "Arbitration Parameters", body: <AbritrationParameters /> },

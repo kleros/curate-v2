@@ -23,6 +23,7 @@ export const useCounter = () => {
       await graphqlBatcher.fetch({
         id: crypto.randomUUID(),
         document: counterQuery,
+        variables: {},
       }),
   });
 };

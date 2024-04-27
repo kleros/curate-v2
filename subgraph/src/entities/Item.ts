@@ -26,9 +26,9 @@ export function createItemFromEvent(event: NewItem): void {
   // check if the item is being added to main curate, then it's a new registry
   if (mainCurate && mainCurate.address == event.address) {
     counter.totalRegistries = counter.totalRegistries.plus(ONE);
+  } else {
+    counter.totalItems = counter.totalItems.plus(ONE);
   }
-
-  counter.totalItems = counter.totalItems.plus(ONE);
 
   let doesCuratorExist = User.load(event.transaction.from.toHexString());
   if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);

@@ -19,6 +19,7 @@ export const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 export const ETH_SIGNATURE_REGEX = /^0x[a-fA-F0-9]{130}$/;
 
 export const DEFAULT_LIST_LOGO = "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS4UPNtgJ/symbol-CURATE.png";
+export const CURATION_POLICY = `${IPFS_GATEWAY}/ipfs/QmWciZMi8mBJg34FapRHK4Yh7a6UqmxrpcKQ3KRNMXzjfx`;
 
 export const lists = [
   {

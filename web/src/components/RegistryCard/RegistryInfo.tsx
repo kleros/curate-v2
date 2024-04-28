@@ -39,7 +39,7 @@ const Container = styled.div<{ isListView: boolean }>`
           height: 64px;
           justify-content: space-between;
           grid-template-rows: 1fr;
-          grid-template-columns: auto 1fr 60px ${responsiveSize(80, 100, 900)} ${responsiveSize(100, 150, 900)} max-content;
+          grid-template-columns: auto 1fr ${responsiveSize(80, 100, 900)} ${responsiveSize(100, 150, 900)} max-content;
           padding: 0 32px;
           img {
             grid-column: 1;

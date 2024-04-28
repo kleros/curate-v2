@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom";
 import { Item_Filter } from "src/graphql/graphql";
-// import { Escrow_Filter } from "src/graphql/graphql";
 
 export const encodeListURIFilter = (filter): string => {
   if (Object.keys(filter).length === 0) {

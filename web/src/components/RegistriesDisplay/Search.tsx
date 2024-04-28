@@ -6,6 +6,7 @@ import { useDebounce } from "react-use";
 import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
 import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
 import PaperIcon from "svgs/icons/paper.svg";
+import { Status } from "src/graphql/graphql";
 
 const Container = styled.div`
   display: flex;
@@ -64,6 +65,13 @@ const Search: React.FC = () => {
     [search]
   );
 
+  const handleStatusChange = (value: string | number) => {
+    const filter = JSON.parse(value as string);
+    const newFilters = search === "" ? { ...filter } : { ...filter, id: search };
+    const encodedFilter = encodeListURIFilter(newFilters);
+    navigate(`${location}/${page}/${order}/${encodedFilter}`);
+  };
+
   return (
     <Container>
       <SearchBarContainer>
@@ -76,14 +84,18 @@ const Search: React.FC = () => {
       </SearchBarContainer>
       <DropdownSelect
         items={[
-          { text: "All Status", dot: "grey", value: 1 },
-          { text: "Pending", dot: "blue", value: 2 },
-          { text: "Disputed", dot: "purple", value: 3 },
-          { text: "Included", dot: "green", value: 4 },
-          { text: "Removed", dot: "red", value: 5 },
+          { text: "All Status", dot: "grey", value: JSON.stringify({}) },
+          {
+            text: "Pending",
+            dot: "blue",
+            value: JSON.stringify({ status_in: [Status.RegistrationRequested, Status.ClearingRequested] }),
+          },
+          { text: "Disputed", dot: "purple", value: JSON.stringify({ disputed: true }) },
+          { text: "Included", dot: "green", value: JSON.stringify({ status: Status.Registered }) },
+          { text: "Removed", dot: "red", value: JSON.stringify({ status: Status.Absent }) },
         ]}
-        defaultValue={1}
-        callback={() => {}}
+        defaultValue={JSON.stringify(filterObject)}
+        callback={handleStatusChange}
       />
       <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submit-list")} />
     </Container>

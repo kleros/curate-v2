@@ -17,12 +17,10 @@ export const registriesByIdsQuery = graphql(`
 `);
 
 export const useRegistriesByIdsQuery = (ids) => {
-  const isEnabled = ids.length > 0;
   const { graphqlBatcher } = useGraphqlBatcher();
 
   return useQuery({
     queryKey: ["GetRegistriesByIds", ids.join(",")],
-    enabled: isEnabled,
     queryFn: async () =>
       await graphqlBatcher.fetch({
         id: crypto.randomUUID(),

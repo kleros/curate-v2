@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { Item_Filter } from "src/graphql/graphql";
 // import { Escrow_Filter } from "src/graphql/graphql";
 
 export const encodeListURIFilter = (filter): string => {
@@ -9,7 +10,7 @@ export const encodeListURIFilter = (filter): string => {
   }
 };
 
-export const decodeListURIFilter = (filter: string) => {
+export const decodeListURIFilter = (filter: string): Item_Filter => {
   if (filter === "all") {
     return {};
   } else {

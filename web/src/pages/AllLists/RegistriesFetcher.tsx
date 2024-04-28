@@ -12,6 +12,7 @@ import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
 import { useCounter } from "queries/useCounter";
+import { OrderDirection } from "src/graphql/graphql";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -24,19 +25,16 @@ const RegistriesFetcher: React.FC = () => {
   const registrySkip = registriesPerPage * (pageNumber - 1);
   const decodedFilter = decodeListURIFilter(filter ?? "all");
 
-  // const { data: registriesData } = useRegistriesQuery(
-  //   registrySkip,
-  //   registriesPerPage,
-  //   decodedFilter,
-  //   order === "asc" ? OrderDirection.Asc : OrderDirection.Desc
-  // );
+  const { data: itemsData } = useItemsQuery(
+    registrySkip,
+    registriesPerPage,
+    {
+      registry: listOfListsAddresses[DEFAULT_CHAIN],
+      ...decodedFilter,
+    },
+    order === "asc" ? OrderDirection.Asc : OrderDirection.Desc
+  );
 
-  // console.log(registriesData);
-
-  const { data: itemsData } = useItemsQuery(registrySkip, registriesPerPage, {
-    registry: listOfListsAddresses[DEFAULT_CHAIN],
-  });
-  // TODO: Json.parse can throw error
   const registryIds = useMemo(
     () =>
       itemsData

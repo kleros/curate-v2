@@ -4,6 +4,7 @@ import { Address, Log, decodeEventLog, isAddress, parseAbi, parseEther, zeroAddr
 import { isUndefined } from ".";
 import { KLEROS_ARBITRATOR, TEMPLATE_REGISTRY } from "consts/arbitration";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
+import { arbitrum } from "viem/chains";
 
 export const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
   const baseTemplate = { ...listData } as IList;
@@ -188,6 +189,8 @@ const getMockValueForType = (type: string) => {
       return 21;
     case "boolean":
       return true;
+    case "chain":
+      return arbitrum.id.toString();
     default:
       return "Ethereum";
   }

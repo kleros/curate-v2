@@ -7,7 +7,7 @@ const { ...chains } = all;
  * @param chainId - Chain id of the target EVM chain.
  * @returns Viem's chain object.
  */
-export function getChainById(chainId: number) {
+export function getChainById(chainId: number): all.Chain {
   for (const chain of Object.values(chains)) {
     if (chain.id === chainId) {
       return chain;

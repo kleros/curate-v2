@@ -7,6 +7,7 @@ import NumberInput from "./NumberInput";
 import FileInput from "./FileInput";
 import ImageInput from "./ImageInput";
 import BooleanInput from "./BooleanInput";
+import ChainInput from "./ChainInput";
 
 type FieldProp = NonNullable<RegistryDetailsQuery["registry"]>["fieldProps"][number] & { value?: string };
 export interface IFieldInput {
@@ -43,6 +44,10 @@ const FieldInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
     }
     case "boolean": {
       FieldComponent = <BooleanInput {...{ fieldProp, handleWrite }} />;
+      break;
+    }
+    case "chain": {
+      FieldComponent = <ChainInput {...{ fieldProp, handleWrite }} />;
       break;
     }
     default: {

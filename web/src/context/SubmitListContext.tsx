@@ -20,7 +20,7 @@ export interface IList {
   challengePeriodDuration: number;
 }
 
-export const FieldTypes = ["text", "address", "image", "link", "number", "boolean", "file"] as const;
+export const FieldTypes = ["text", "address", "image", "link", "number", "boolean", "file", "chain"] as const;
 export type ListField = {
   id: number;
   label: string;

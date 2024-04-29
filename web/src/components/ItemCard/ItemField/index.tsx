@@ -7,6 +7,7 @@ import ImageField, { IImageField } from "./ImageField";
 import FileField, { IFileField } from "./FileField";
 import BooleanField, { IBooleanField } from "./BooleanField";
 import NumberField, { INumberField } from "./NumberField";
+import ChainField, { IChainField } from "./ChainField";
 
 type ItemDetails = ItemDetailsFragment["props"][number];
 
@@ -51,6 +52,12 @@ const ItemField: React.FC<IItemField> = ({ detailed, type, ...props }) => {
       const { value, label, description } = props as INumberField;
 
       FieldComponent = <NumberField {...{ value, detailed, label, description }} />;
+      break;
+    }
+    case "chain": {
+      const { value } = props as IChainField;
+
+      FieldComponent = <ChainField {...{ value }} />;
       break;
     }
     default: {

@@ -72,7 +72,7 @@ const Search: React.FC = () => {
   const handleStatusChange = (value: string | number) => {
     const filter = JSON.parse(value as string);
     const encodedFilter = encodeListURIFilter(filter);
-    navigate(`${location}/${page}/${order}/${encodedFilter}${keywords && "?keywords=" + keywords}`);
+    navigate(`${location}/${page}/${order}/${encodedFilter}${keywords ? "?keywords=" + keywords : ""}`);
   };
 
   return (

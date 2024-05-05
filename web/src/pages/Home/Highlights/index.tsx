@@ -47,39 +47,43 @@ const HighlightedLists = () => {
   const { isListView } = useIsListView();
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
-  const { data: itemsData } = useItemsQuery(0, 6, { registry: listOfListsAddresses[DEFAULT_CHAIN] });
+  const { data: itemsData, isLoading: isItemsDataLoading } = useItemsQuery(0, 6, {
+    registry: listOfListsAddresses[DEFAULT_CHAIN],
+  });
 
   // TODO: Json.parse can throw error
   const registryIds = useMemo(
     () =>
       itemsData
         ? itemsData?.items
-            .map((item) => item?.props[0]?.value.toLowerCase() ?? undefined)
+            .map((item) => item?.props[0]?.value?.toLowerCase() ?? undefined)
             .filter((id) => !isUndefined(id))
         : [],
     [itemsData]
   );
 
-  const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
+  const { data: registriesData, isLoading: isRegistriesDataLoading } = useRegistriesByIdsQuery(registryIds);
 
   const combinedListsData = useMemo(() => {
     return registriesData?.registries.map((registry) => {
-      const registryAsItem = itemsData.items.find((item) => item?.props[0]?.value.toLowerCase() === registry.id);
+      const registryAsItem = itemsData?.items.find((item) => item?.props[0]?.value?.toLowerCase() === registry.id);
       return {
         ...registry,
         totalItems: registry.items.length,
-        status: registryAsItem.status,
-        itemId: registryAsItem.id,
+        status: registryAsItem?.status,
+        itemId: registryAsItem?.id,
       };
     });
   }, [registriesData, itemsData]);
+
+  const registriesLoading = isUndefined(combinedListsData) || isItemsDataLoading || isRegistriesDataLoading;
 
   return (
     <Container>
       <Header />
       {isListView && screenIsBig ? (
         <ListContainer>
-          {isUndefined(combinedListsData)
+          {registriesLoading
             ? [...Array(6)].map((_, i) => <SkeletonRegistryListItem key={i} />)
             : combinedListsData?.map((registry, i) => (
                 <RegistryCard
@@ -92,7 +96,7 @@ const HighlightedLists = () => {
         </ListContainer>
       ) : (
         <GridContainer>
-          {isUndefined(combinedListsData)
+          {registriesLoading
             ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
             : combinedListsData?.map((registry, i) => (
                 <RegistryCard

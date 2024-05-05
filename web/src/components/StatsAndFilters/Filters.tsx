@@ -53,7 +53,7 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
 
   const handleOrderChange = (value: string | number) => {
     navigate(
-      `${isListFilter ? locationAllLists : locationList}/1/${value}/${filter}${keywords && "?keywords=" + keywords}`
+      `${isListFilter ? locationAllLists : locationList}/1/${value}/${filter}${keywords ? "?keywords=" + keywords : ""}`
     );
   };
 

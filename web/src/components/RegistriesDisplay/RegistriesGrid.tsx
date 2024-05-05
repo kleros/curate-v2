@@ -35,6 +35,7 @@ const StyledPagination = styled(StandardPagination)`
 
 export interface IRegistriesGrid {
   registries?: [];
+  registriesLoading?: boolean;
   currentPage: number;
   setCurrentPage: (newPage: number) => void;
   registriesPerPage: number;
@@ -43,6 +44,7 @@ export interface IRegistriesGrid {
 
 const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   registries,
+  registriesLoading,
   registriesPerPage,
   totalPages,
   currentPage,
@@ -59,7 +61,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
     <>
       {isListView && screenIsBig ? (
         <ListContainer>
-          {isUndefined(registries)
+          {isUndefined(registries) || registriesLoading
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryListItem key={i} />)
             : registries.map((registry) => {
                 return (
@@ -73,7 +75,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
         </ListContainer>
       ) : (
         <GridContainer>
-          {isUndefined(registries)
+          {isUndefined(registries) || registriesLoading
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryCard key={i} />)
             : registries.map((registry) => {
                 return (

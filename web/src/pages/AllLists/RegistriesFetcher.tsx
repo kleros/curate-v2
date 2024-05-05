@@ -30,7 +30,7 @@ const RegistriesFetcher: React.FC = () => {
   const decodedFilter = decodeListURIFilter(filter ?? "all");
 
   // get items from the main curate as these are the registries
-  const { data: itemsData } = useItemsQuery(
+  const { data: itemsData, isLoading: isItemDataLoading } = useItemsQuery(
     registrySkip,
     registriesPerPage,
     {
@@ -52,7 +52,7 @@ const RegistriesFetcher: React.FC = () => {
   );
 
   // get registries by id
-  const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
+  const { data: registriesData, isLoading: isRegistriesDataLoading } = useRegistriesByIdsQuery(registryIds);
 
   const combinedListsData = useMemo(() => {
     return registriesData?.registries.map((registry) => {
@@ -77,6 +77,7 @@ const RegistriesFetcher: React.FC = () => {
     <RegistriesDisplay
       registries={combinedListsData}
       totalRegistries={totalRegistries}
+      registriesLoading={isItemDataLoading || isRegistriesDataLoading}
       currentPage={pageNumber}
       setCurrentPage={(newPage: number) => navigate(`${location}/${newPage}/${order}/${filter}`)}
       totalPages={totalPages}

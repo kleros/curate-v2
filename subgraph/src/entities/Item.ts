@@ -23,8 +23,10 @@ export function createItemFromEvent(event: NewItem): void {
   let counter = ensureCounter();
   let mainCurate = MainCurate.load("0");
 
+  let isRegistry = mainCurate != null && mainCurate.address == event.address;
+
   // check if the item is being added to main curate, then it's a new registry
-  if (mainCurate && mainCurate.address == event.address) {
+  if (isRegistry) {
     counter.totalRegistries = counter.totalRegistries.plus(ONE);
   } else {
     counter.totalItems = counter.totalItems.plus(ONE);
@@ -122,6 +124,16 @@ export function createItemFromEvent(event: NewItem): void {
     }
 
     itemProp.save();
+  }
+
+  // if the item is a registry add the registry title to keyword to enhance search
+  if (isRegistry && values.get("List")) {
+    let registryAddress = JSONValueToMaybeString(values.get("List"));
+    let itemAsRegistry = Registry.load(registryAddress);
+
+    if (!itemAsRegistry || itemAsRegistry.title === null) return;
+
+    item.keywords = (item.keywords as string) + " | " + (itemAsRegistry.title as string);
   }
 
   item.save();

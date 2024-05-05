@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import { DropdownSelect } from "@kleros/ui-components-library";
 import { useIsListView } from "context/IsListViewProvider";
@@ -48,9 +48,13 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   const navigate = useNavigate();
   const locationAllLists = useListRootPath();
   const locationList = useItemRootPath();
+  const [searchParams] = useSearchParams();
+  const keywords = searchParams.get("keywords");
 
   const handleOrderChange = (value: string | number) => {
-    navigate(`${isListFilter ? locationAllLists : locationList}/1/${value}/${filter}`);
+    navigate(
+      `${isListFilter ? locationAllLists : locationList}/1/${value}/${filter}${keywords && "?keywords=" + keywords}`
+    );
   };
 
   const { width } = useWindowSize();
@@ -64,7 +68,6 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
         simpleButton
         alignRight
         items={[
-          { value: "desc", text: "Most Active" },
           { value: "desc", text: "Newest" },
           { value: "asc", text: "Oldest" },
         ]}

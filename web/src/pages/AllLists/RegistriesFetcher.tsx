@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import { useListRootPath, decodeListURIFilter } from "utils/uri";
 import RegistriesDisplay from "components/RegistriesDisplay";
@@ -16,6 +16,9 @@ import { OrderDirection } from "src/graphql/graphql";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
+  const [searchParmams] = useSearchParams();
+  const keywords = searchParmams.get("keywords");
+
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const location = useListRootPath();
@@ -23,8 +26,10 @@ const RegistriesFetcher: React.FC = () => {
   const registriesPerPage = screenIsBig ? 9 : 3;
   const pageNumber = parseInt(page ?? "1", 10);
   const registrySkip = registriesPerPage * (pageNumber - 1);
+
   const decodedFilter = decodeListURIFilter(filter ?? "all");
 
+  // get items from the main curate as these are the registries
   const { data: itemsData } = useItemsQuery(
     registrySkip,
     registriesPerPage,
@@ -32,7 +37,8 @@ const RegistriesFetcher: React.FC = () => {
       registry: listOfListsAddresses[DEFAULT_CHAIN],
       ...decodedFilter,
     },
-    order === "asc" ? OrderDirection.Asc : OrderDirection.Desc
+    order === "asc" ? OrderDirection.Asc : OrderDirection.Desc,
+    keywords
   );
 
   const registryIds = useMemo(
@@ -45,6 +51,7 @@ const RegistriesFetcher: React.FC = () => {
     [itemsData]
   );
 
+  // get registries by id
   const { data: registriesData } = useRegistriesByIdsQuery(registryIds);
 
   const combinedListsData = useMemo(() => {

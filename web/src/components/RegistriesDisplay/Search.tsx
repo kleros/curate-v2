@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDebounce } from "react-use";
 import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
 import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
@@ -51,15 +51,19 @@ const StyledPaperIcon = styled(PaperIcon)`
 const Search: React.FC = () => {
   const { page, order, filter } = useParams();
   const location = useListRootPath();
+  const [searchParams] = useSearchParams();
+  const keywords = searchParams.get("keywords");
+
   const decodedFilter = decodeListURIFilter(filter ?? "all");
-  const { id: searchValue, ...filterObject } = decodedFilter;
-  const [search, setSearch] = useState(searchValue ?? "");
+  const [search, setSearch] = useState(keywords);
   const navigate = useNavigate();
+
   useDebounce(
     () => {
-      const newFilters = search === "" ? { ...filterObject } : { ...filterObject, id: search };
-      const encodedFilter = encodeListURIFilter(newFilters);
-      navigate(`${location}/${page}/${order}/${encodedFilter}`);
+      const searchableText = search?.replace(/ /g, "|");
+
+      const encodedFilter = encodeListURIFilter(decodedFilter);
+      navigate(`${location}/${page}/${order}/${encodedFilter}${search ? `?keywords=${searchableText}` : ""}`);
     },
     500,
     [search]
@@ -67,9 +71,8 @@ const Search: React.FC = () => {
 
   const handleStatusChange = (value: string | number) => {
     const filter = JSON.parse(value as string);
-    const newFilters = search === "" ? { ...filter } : { ...filter, id: search };
-    const encodedFilter = encodeListURIFilter(newFilters);
-    navigate(`${location}/${page}/${order}/${encodedFilter}`);
+    const encodedFilter = encodeListURIFilter(filter);
+    navigate(`${location}/${page}/${order}/${encodedFilter}${keywords && "?keywords=" + keywords}`);
   };
 
   return (
@@ -77,7 +80,7 @@ const Search: React.FC = () => {
       <SearchBarContainer>
         <StyledSearchbar
           type="text"
-          placeholder="Search By ID"
+          placeholder="Search by keywords"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -94,7 +97,7 @@ const Search: React.FC = () => {
           { text: "Included", dot: "green", value: JSON.stringify({ status: Status.Registered }) },
           { text: "Removed", dot: "red", value: JSON.stringify({ status: Status.Absent }) },
         ]}
-        defaultValue={JSON.stringify(filterObject)}
+        defaultValue={JSON.stringify(decodedFilter)}
         callback={handleStatusChange}
       />
       <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submit-list")} />

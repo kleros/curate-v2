@@ -8,6 +8,7 @@ export type { ItemDetailsFragment };
 export const itemFragment = graphql(`
   fragment ItemDetails on Item {
     id
+    itemID
     status
     props {
       type

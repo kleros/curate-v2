@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
 import Skeleton from "react-loading-skeleton";
-import { Button, Card } from "@kleros/ui-components-library";
+import { Button, Card, Copiable } from "@kleros/ui-components-library";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
 import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "consts/chains";
@@ -26,7 +26,6 @@ const StyledCard = styled(Card)`
 
 const StatusContainer = styled.div<{ status: Status }>`
   display: flex;
-  margin-top: 18px;
   .dot {
     ::before {
       content: "";
@@ -78,13 +77,14 @@ const TopRightInfo = styled.div`
   flex-direction: row;
   gap: 0 32px;
   flex-wrap: wrap;
+  align-items: start;
+  padding-top: 20px;
 `;
 
 const StyledEtherscanIcon = styled(EtherscanIcon)`
   display: flex;
   height: 16px;
   width: 16px;
-  margin-top: 20px;
 `;
 
 const StyledLogo = styled.img<{ isListView: boolean }>`
@@ -101,6 +101,10 @@ const StyledTitle = styled.h1`
 const StyledP = styled.p`
   color: ${({ theme }) => theme.secondaryText};
   margin: 0;
+`;
+
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.primaryText};
 `;
 
 const Divider = styled.hr`
@@ -136,6 +140,7 @@ const SkeletonDescription = styled(Skeleton)`
 `;
 
 interface IInformationCard {
+  id?: string;
   title?: string;
   logoURI?: string;
   description?: string;
@@ -148,6 +153,7 @@ interface IInformationCard {
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
+  id,
   title,
   logoURI,
   description,
@@ -183,10 +189,9 @@ const InformationCard: React.FC<IInformationCard> = ({
             {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
           </TopLeftInfo>
           <TopRightInfo>
-            {/* <ChainContainer>
-              <p>{getChainIcon(chainId)}</p>
-              <p>{getChainName(chainId)}</p>
-            </ChainContainer> */}
+            <Copiable copiableContent={id ?? ""} info="Copy Registry Id">
+              <StyledLabel>Id</StyledLabel>
+            </Copiable>
             {explorerAddress ? (
               <a
                 href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${explorerAddress}`}
@@ -203,7 +208,9 @@ const InformationCard: React.FC<IInformationCard> = ({
         </TopInfo>
         <Divider />
         <BottomInfo>
-          <AliasDisplay address={registerer} />
+          <Copiable copiableContent={registerer ?? ""}>
+            <AliasDisplay address={registerer} />
+          </Copiable>
           <Button variant="secondary" text={"Remove List"} onClick={toggleRemoveListModal} />
         </BottomInfo>
         <Policies policyURI={policyURI} />

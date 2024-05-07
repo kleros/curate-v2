@@ -56,6 +56,7 @@ const RegistryDetails: React.FC = () => {
   return (
     <div>
       <InformationCard
+        id={listAddress}
         {...{ title, logoURI, description, policyURI, status: mapFromSubgraphStatus(status, disputed) }}
         registerer={registerer?.id}
         explorerAddress={listAddress}

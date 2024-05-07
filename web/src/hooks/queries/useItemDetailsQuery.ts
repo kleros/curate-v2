@@ -7,6 +7,8 @@ export type { ItemDetailsQuery };
 const itemDetailsQuery = graphql(`
   query ItemDetails($itemID: ID!) {
     item(id: $itemID) {
+      id
+      itemID
       status
       disputed
       key0

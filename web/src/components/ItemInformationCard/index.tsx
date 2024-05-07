@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
-import { Button, Card } from "@kleros/ui-components-library";
+import { Button, Card, Copiable } from "@kleros/ui-components-library";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import RemoveModal from "../Modal/RemoveModal";
 import { ItemDetailsFragment } from "src/graphql/graphql";
@@ -39,7 +39,13 @@ const TopLeftInfo = styled.div`
 const TopRightInfo = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: start;
   gap: 48px;
+  padding-top: 20px;
+`;
+
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.primaryText};
 `;
 
 const Divider = styled.hr`
@@ -71,6 +77,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   status,
   disputed,
   policyURI,
+  itemID,
   props,
 }) => {
   const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
@@ -81,12 +88,21 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
           <TopRightInfo>
+            <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
+              <StyledLabel>Id</StyledLabel>
+            </Copiable>
             <StatusDisplay {...{ status, disputed }} />
           </TopRightInfo>
         </TopInfo>
         <Divider />
         <BottomInfo>
-          {registerer?.id ? <AliasDisplay address={registerer.id} /> : <Skeleton height={24} />}
+          {registerer?.id ? (
+            <Copiable copiableContent={registerer.id}>
+              <AliasDisplay address={registerer.id} />
+            </Copiable>
+          ) : (
+            <Skeleton height={24} />
+          )}
           <Button variant="secondary" text={"Remove Item"} onClick={toggleRemoveItemModal} />
         </BottomInfo>
         <Policies policyURI={policyURI} isItem />

@@ -6,7 +6,6 @@ import { Status as SubgraphStatus } from "src/graphql/graphql";
 
 const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
   display: flex;
-  margin-top: 16px;
   .dot {
     ::before {
       content: "";

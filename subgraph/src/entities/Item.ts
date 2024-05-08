@@ -31,6 +31,7 @@ export function createItemFromEvent(event: NewItem): void {
   } else {
     counter.totalItems = counter.totalItems.plus(ONE);
   }
+  registry.totalItems = registry.totalItems.plus(ONE);
 
   let doesCuratorExist = User.load(event.transaction.from.toHexString());
   if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
@@ -137,4 +138,5 @@ export function createItemFromEvent(event: NewItem): void {
   }
 
   item.save();
+  registry.save();
 }

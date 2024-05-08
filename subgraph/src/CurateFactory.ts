@@ -4,7 +4,7 @@ import { MainCurate, Registry, User } from "../generated/schema";
 import { Curate } from "../generated/templates";
 import { ensureCounter } from "./entities/Counters";
 import { ensureUser } from "./entities/User";
-import { ONE } from "./utils";
+import { ONE, ZERO } from "./utils";
 
 export function handleNewCurate(event: NewList): void {
   Curate.create(event.params._address);
@@ -24,6 +24,11 @@ export function handleNewCurate(event: NewList): void {
   if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
 
   registry.registerer = ensureUser(event.transaction.from.toHexString()).id;
+  registry.totalItems = ZERO;
+  registry.numberOfAbsent = ZERO;
+  registry.numberOfDisputed = ZERO;
+  registry.numberOfPending = ZERO;
+  registry.numberOfRegistered = ZERO;
 
   counter.save();
   registry.save();

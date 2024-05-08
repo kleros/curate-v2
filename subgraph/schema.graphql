@@ -72,6 +72,16 @@ type Registry @entity {
   metadata: String
   "The parsed data describing the fields in Registry."
   fieldProps: [FieldProp!]! @derivedFrom(field: "registry")
+  "The total number of items in the registry."
+  totalItems: BigInt!
+  "The total number of items in absent state."
+  numberOfAbsent: BigInt!
+  "The total number of items in registered state."
+  numberOfRegistered: BigInt!
+  "The total number of items in the registration requested or clearing requested state."
+  numberOfPending: BigInt!
+  "The total number of items disputed"
+  numberOfDisputed: BigInt!
 }
 
 type Item @entity {

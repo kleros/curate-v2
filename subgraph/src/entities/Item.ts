@@ -1,5 +1,5 @@
 import { json, log } from "@graphprotocol/graph-ts";
-import { Item, ItemProp, Registry, User } from "../../generated/schema";
+import { Item, ItemProp, MainCurate, Registry, User } from "../../generated/schema";
 import { Curate, NewItem } from "../../generated/templates/Curate/Curate";
 import { JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getStatus } from "../utils";
 import { ensureCounter } from "./Counters";
@@ -21,8 +21,18 @@ export function createItemFromEvent(event: NewItem): void {
   }
 
   let counter = ensureCounter();
+  let mainCurate = MainCurate.load("0");
 
-  counter.totalItems = counter.totalItems.plus(ONE);
+  let isRegistry = mainCurate != null && mainCurate.address == event.address;
+
+  // check if the item is being added to main curate, then it's a new registry
+  if (isRegistry) {
+    counter.totalRegistries = counter.totalRegistries.plus(ONE);
+  } else {
+    counter.totalItems = counter.totalItems.plus(ONE);
+  }
+  registry.totalItems = registry.totalItems.plus(ONE);
+
   let doesCuratorExist = User.load(event.transaction.from.toHexString());
   if (!doesCuratorExist) counter.numberOfCurators = counter.numberOfCurators.plus(ONE);
   counter.save();
@@ -117,5 +127,16 @@ export function createItemFromEvent(event: NewItem): void {
     itemProp.save();
   }
 
+  // if the item is a registry add the registry title to keyword to enhance search
+  if (isRegistry && values.get("List")) {
+    let registryAddress = JSONValueToMaybeString(values.get("List"));
+    let itemAsRegistry = Registry.load(registryAddress);
+
+    if (!itemAsRegistry || itemAsRegistry.title === null) return;
+
+    item.keywords = (item.keywords as string) + " | " + (itemAsRegistry.title as string);
+  }
+
   item.save();
+  registry.save();
 }

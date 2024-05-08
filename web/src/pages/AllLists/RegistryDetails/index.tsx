@@ -1,29 +1,38 @@
-import React from "react";
-import { IRegistriesGrid } from "components/RegistriesDisplay/RegistriesGrid";
+import React, { useEffect } from "react";
+import { useTheme } from "styled-components";
+import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import InformationCard from "components/InformationCard";
 import Tabs from "./Tabs";
 import List from "./List";
 import History from "components/HistoryDisplay";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { useTheme } from "styled-components";
+import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import ClosedIcon from "assets/svgs/icons/check-circle-outline.svg";
+import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
-interface IRegistryDetails extends IRegistriesGrid {
-  items: [];
-  totalItems?: number;
-  title?: string;
-  className?: string;
-}
-
-const RegistryDetails: React.FC<IRegistryDetails> = ({
-  items,
-  logoURI = "https://ipfs.kleros.io//ipfs/QmZPeWnzHGKwvnckQE2QrdRJiUFqQXvQEZGFHdEAh7raHN/fno.png",
-  title = "Address Tags",
-  description = "A list of public name tags, associated with Ethereum mainnet contract addresses.",
-  totalItems = 3,
-  className,
-}) => {
+const RegistryDetails: React.FC = () => {
   const theme = useTheme();
+  const { id } = useParams();
+
+  const [listAddress, itemId] = id?.split("-");
+
+  const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
+  const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
+
+  const { title, status, logoURI, policyURI, description, registerer, disputed, setRegistryDetails } =
+    useRegistryDetailsContext();
+
+  useEffect(() => {
+    if (itemDetails && registryDetails) {
+      setRegistryDetails({
+        ...registryDetails.registry,
+        ...itemDetails.item,
+        registerer: registryDetails?.registry?.registerer,
+      });
+    }
+  }, [itemDetails, registryDetails, setRegistryDetails]);
+
   const historyItems = [
     {
       title: "List Submitted",
@@ -47,11 +56,16 @@ const RegistryDetails: React.FC<IRegistryDetails> = ({
   ];
 
   return (
-    <div {...{ className }}>
-      <InformationCard title={title} logoURI={logoURI} description={description} />
+    <div>
+      <InformationCard
+        id={listAddress}
+        {...{ title, logoURI, description, policyURI, status: mapFromSubgraphStatus(status, disputed) }}
+        registerer={registerer?.id}
+        explorerAddress={listAddress}
+      />
       <Tabs />
       <Routes>
-        <Route path="list/:page/:order/:filter" element={<List />} />
+        <Route path="list/:page/:order/:filter" element={<List registryAddress={listAddress} />} />
         <Route path="history" element={<History items={historyItems} />} />
         <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
       </Routes>

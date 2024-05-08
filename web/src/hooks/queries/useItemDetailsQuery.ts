@@ -7,21 +7,30 @@ export type { ItemDetailsQuery };
 const itemDetailsQuery = graphql(`
   query ItemDetails($itemID: ID!) {
     item(id: $itemID) {
+      id
+      itemID
       status
       disputed
+      key0
+      key1
+      key2
+      key3
+      key4
       latestChallenger {
         id
       }
       latestRequester {
         id
       }
-      registryAddress
       props {
         type
         label
         description
         isIdentifier
         value
+      }
+      registerer {
+        id
       }
     }
   }
@@ -31,7 +40,7 @@ export const useItemDetailsQuery = (id?: string | number) => {
   const isEnabled = id !== undefined;
   const { graphqlBatcher } = useGraphqlBatcher();
 
-  return useQuery({
+  return useQuery<ItemDetailsQuery>({
     queryKey: ["refetchOnBlock", `itemDetailsQuery${id}`],
     enabled: isEnabled,
     queryFn: async () =>

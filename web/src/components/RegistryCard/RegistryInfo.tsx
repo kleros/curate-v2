@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-import { Status } from "consts/status";
 import { responsiveSize } from "styles/responsiveSize";
-import ChainIcon from "../ChainIcon";
-import StatusBanner from "./StatusBanner";
+import { landscapeStyle } from "styles/landscapeStyle";
+import Skeleton from "react-loading-skeleton";
 import { Button } from "@kleros/ui-components-library";
 import ArrowIcon from "svgs/icons/arrow.svg";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { getIpfsUrl } from "~src/utils/getIpfsUrl";
-import { DEFAULT_LIST_LOGO } from "~src/consts";
+import { Status } from "consts/status";
+import { getIpfsUrl } from "utils/getIpfsUrl";
+import StatusBanner from "./StatusBanner";
+import { DEFAULT_LIST_LOGO } from "consts/index";
 
-const Container = styled.div<{ isList: boolean }>`
+const Container = styled.div<{ isListView: boolean }>`
   height: calc(100% - 45px);
   display: flex;
   flex-direction: column;
@@ -19,8 +19,8 @@ const Container = styled.div<{ isList: boolean }>`
   gap: 8px;
 
   // css for isList view
-  ${({ isList }) =>
-    isList &&
+  ${({ isListView }) =>
+    isListView &&
     css`
       width: 100%;
       height: max-content;
@@ -39,7 +39,7 @@ const Container = styled.div<{ isList: boolean }>`
           height: 64px;
           justify-content: space-between;
           grid-template-rows: 1fr;
-          grid-template-columns: auto 1fr 60px ${responsiveSize(80, 100, 900)} ${responsiveSize(100, 150, 900)} max-content;
+          grid-template-columns: auto 1fr ${responsiveSize(80, 100, 900)} ${responsiveSize(100, 150, 900)} max-content;
           padding: 0 32px;
           img {
             grid-column: 1;
@@ -52,11 +52,11 @@ const Container = styled.div<{ isList: boolean }>`
     `}
 `;
 
-const StyledLogo = styled.img<{ isList: boolean }>`
-  width: ${({ isList }) => (isList ? "48px" : "125px")};
-  height: ${({ isList }) => (isList ? "48px" : "125px")};
+const StyledLogo = styled.img<{ isListView: boolean }>`
+  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
   object-fit: contain;
-  margin-bottom: ${({ isList }) => (isList ? "0px" : "8px")};
+  margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;
 
 const StyledLabel = styled.label`
@@ -69,7 +69,7 @@ const StyledTitle = styled.h3`
 `;
 
 const TruncatedTitle = ({ text, maxLength }) => {
-  const truncatedText = text.length <= maxLength ? text : text.slice(0, maxLength) + "…";
+  const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
   return <StyledTitle>{truncatedText}</StyledTitle>;
 };
 
@@ -91,24 +91,43 @@ const StyledButton = styled(Button)`
     background-color: transparent;
   }
 `;
+
+const SkeletonLogo = styled(Skeleton)<{ isListView: boolean }>`
+  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  border-radius: ${({ isListView }) => (isListView ? "24px" : "62.5px")};
+  margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
+`;
+
 interface IListInfo {
   title: string;
   totalItems: number;
   logoURI: string;
   chainId: number;
   status: Status;
-  isList?: boolean;
+  isListView?: boolean;
 }
 
-const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isList = false }) => {
+const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isListView = false }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI));
+
+  useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
   return (
-    <Container {...{ isList }}>
-      <StyledLogo src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)} alt="List Img" isList={isList} />
+    <Container {...{ isListView }}>
+      {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}
+      <StyledLogo
+        src={imageSrc}
+        alt="List Img"
+        isListView={isListView}
+        onLoad={() => setImageLoaded(true)}
+        onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
+        style={{ display: imageLoaded ? "block" : "none" }}
+      />
       <TruncatedTitle text={title} maxLength={100} />
-      {isList && <ChainIcon {...{ chainId }} />}
       <StyledLabel>{totalItems} items</StyledLabel>
-      {isList && <StatusBanner {...{ status, isList }} />}
-      {isList && <StyledButton text="Open" Icon={ArrowIcon} />}
+      {isListView && <StatusBanner {...{ status, isListView }} />}
+      {isListView && <StyledButton text="Open" Icon={ArrowIcon} />}
     </Container>
   );
 };

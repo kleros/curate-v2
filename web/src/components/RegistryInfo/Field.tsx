@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 type FieldContainerProps = {
   width?: string;
-  isList?: boolean;
+  isListView?: boolean;
   isPreview?: boolean;
 };
 
@@ -23,8 +23,8 @@ const FieldContainer = styled.div<FieldContainerProps>`
     width: 14px;
   }
 
-  ${({ isList }) =>
-    isList &&
+  ${({ isListView }) =>
+    isListView &&
     css`
       ${landscapeStyle(
         () => css`
@@ -70,14 +70,14 @@ interface IField {
   value: string;
   link?: string;
   width?: string;
-  displayAsList?: boolean;
+  displayAsListView?: boolean;
   isPreview?: boolean;
 }
 
-const Field: React.FC<IField> = ({ icon: Icon, name, value, link, width, displayAsList, isPreview }) => {
+const Field: React.FC<IField> = ({ icon: Icon, name, value, link, width, displayAsListView, isPreview }) => {
   return (
-    <FieldContainer isList={displayAsList} isPreview={isPreview} width={width}>
-      {!displayAsList || isPreview ? (
+    <FieldContainer isListView={displayAsListView} isPreview={isPreview} width={width}>
+      {!displayAsListView || isPreview ? (
         <>
           <Icon />
           <label>{name}:</label>

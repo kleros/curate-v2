@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { useToggle } from "react-use";
-import { Button, Card } from "@kleros/ui-components-library";
-import { getChainIcon, getChainName } from "components/ChainIcon";
-import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
-import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import { Policies } from "./Policies";
+import Skeleton from "react-loading-skeleton";
+import { Button, Card, Copiable } from "@kleros/ui-components-library";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
-import RemoveModal from "../Modal/RemoveModal";
+import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "consts/chains";
 import { getIpfsUrl } from "utils/getIpfsUrl";
+import { isUndefined } from "utils/index";
+// import { getChainIcon, getChainName } from "components/ChainIcon";
+import AliasDisplay from "components/RegistryInfo/AliasDisplay";
+import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
+import { Policies } from "./Policies";
+import RemoveModal from "../Modal/RemoveModal";
 import { DEFAULT_LIST_LOGO } from "consts/index";
 
 const StyledCard = styled(Card)`
@@ -21,9 +24,8 @@ const StyledCard = styled(Card)`
   margin-bottom: 64px;
 `;
 
-const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
+const StatusContainer = styled.div<{ status: Status }>`
   display: flex;
-  margin-top: 18px;
   .dot {
     ::before {
       content: "";
@@ -54,46 +56,46 @@ const TopInfo = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 12px 32px;
+  padding: 24px ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
 `;
 
 const LogoAndTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 `;
 
 const TopLeftInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: ${responsiveSize(8, 16)} 0;
 `;
 
 const TopRightInfo = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 48px;
-`;
-
-const ChainContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: top;
-  justify-content: center;
+  gap: 0 32px;
+  flex-wrap: wrap;
+  align-items: start;
+  padding-top: 20px;
 `;
 
 const StyledEtherscanIcon = styled(EtherscanIcon)`
   display: flex;
   height: 16px;
   width: 16px;
-  margin-top: 20px;
 `;
 
-const StyledLogo = styled.img<{ isList: boolean }>`
-  width: ${({ isList }) => (isList ? "48px" : "125px")};
-  height: ${({ isList }) => (isList ? "48px" : "125px")};
+const StyledLogo = styled.img<{ isListView: boolean }>`
+  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
   object-fit: contain;
-  margin-bottom: ${({ isList }) => (isList ? "0px" : "8px")};
+  margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
+`;
+
+const StyledTitle = styled.h1`
+  margin: 0;
 `;
 
 const StyledP = styled.p`
@@ -101,41 +103,70 @@ const StyledP = styled.p`
   margin: 0;
 `;
 
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.primaryText};
+`;
+
 const Divider = styled.hr`
   border: none;
   height: 1px;
   background-color: ${({ theme }) => theme.stroke};
-  margin: ${responsiveSize(20, 28)} 32px;
+  margin: ${responsiveSize(20, 28)} ${responsiveSize(24, 32)};
 `;
 
 const BottomInfo = styled.div`
   display: flex;
-  padding: 0 32px;
-  padding-bottom: 12px;
+  padding: 0 ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
   flex-wrap: wrap;
   gap: 12px;
   justify-content: space-between;
 `;
 
+const SkeletonLogo = styled(Skeleton)`
+  width: 125px;
+  height: 125px;
+  border-radius: 62.5px;
+  margin-bottom: 8px;
+`;
+
+const SkeletonTitle = styled(Skeleton)`
+  width: 260px;
+  height: 30px;
+`;
+
+const SkeletonDescription = styled(Skeleton)`
+  width: 90%;
+  height: 21px;
+`;
+
 interface IInformationCard {
-  title: string;
-  logoURI: string;
-  description: string;
-  chainId: number;
-  status: Status;
+  id?: string;
+  title?: string;
+  logoURI?: string;
+  description?: string;
+  chainId?: number;
+  status?: Status;
+  registerer?: string;
+  policyURI?: string;
+  explorerAddress?: string;
   className?: string;
-  // itemParams?: Object : item will have dynamic params
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
+  id,
   title,
   logoURI,
   description,
+  registerer,
   chainId = 100,
-  status = Status.Included,
+  status,
+  policyURI,
+  explorerAddress,
   className,
 }) => {
   const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
+  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? ""));
+  useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
 
   return (
     <>
@@ -143,35 +174,50 @@ const InformationCard: React.FC<IInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>
             <LogoAndTitle>
-              <StyledLogo
-                src={logoURI !== "" ? logoURI : getIpfsUrl(DEFAULT_LIST_LOGO)}
-                alt="List Img"
-                isList={false}
-              />
-              <h1>{title}</h1>
+              {isUndefined(logoURI) ? (
+                <SkeletonLogo />
+              ) : (
+                <StyledLogo
+                  src={imageSrc}
+                  onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
+                  alt="List Img"
+                  isListView={false}
+                />
+              )}
+              {isUndefined(title) ? <SkeletonTitle /> : <StyledTitle>{title}</StyledTitle>}
             </LogoAndTitle>
-            <StyledP>{description}</StyledP>
+            {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
           </TopLeftInfo>
           <TopRightInfo>
-            <ChainContainer>
-              <p>{getChainIcon(chainId)}</p>
-              <p>{getChainName(chainId)}</p>
-            </ChainContainer>
-            <StyledEtherscanIcon />
-            <StatusContainer {...{ status, isList: false }}>
+            <Copiable copiableContent={id ?? ""} info="Copy Registry Id">
+              <StyledLabel>Id</StyledLabel>
+            </Copiable>
+            {explorerAddress ? (
+              <a
+                href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${explorerAddress}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <StyledEtherscanIcon />
+              </a>
+            ) : null}
+            <StatusContainer {...{ status }}>
               <label className="front-color dot">{getStatusLabel(status)}</label>
             </StatusContainer>
           </TopRightInfo>
         </TopInfo>
         <Divider />
         <BottomInfo>
-          <AliasDisplay address="0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5" />
+          <Copiable copiableContent={registerer ?? ""}>
+            <AliasDisplay address={registerer} />
+          </Copiable>
           <Button variant="secondary" text={"Remove List"} onClick={toggleRemoveListModal} />
         </BottomInfo>
-        <Policies />
+        <Policies policyURI={policyURI} />
       </StyledCard>
       {isRemoveListModalOpen ? <RemoveModal isItem={false} toggleModal={toggleRemoveListModal} /> : null}
     </>
   );
 };
+
 export default InformationCard;

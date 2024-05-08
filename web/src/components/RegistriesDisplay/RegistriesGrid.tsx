@@ -5,11 +5,12 @@ import { useParams } from "react-router-dom";
 import { SkeletonRegistryCard, SkeletonRegistryListItem } from "../StyledSkeleton";
 import { StandardPagination } from "@kleros/ui-components-library";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
-import { useIsList } from "context/IsListProvider";
+import { useIsListView } from "context/IsListViewProvider";
 import { isUndefined } from "utils/index";
 import { decodeListURIFilter } from "utils/uri";
 // import { RegistryDetailsFragment } from "queries/useCasesQuery";
 import RegistryCard from "components/RegistryCard";
+import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 
 const GridContainer = styled.div`
   --gap: 24px;
@@ -34,6 +35,7 @@ const StyledPagination = styled(StandardPagination)`
 
 export interface IRegistriesGrid {
   registries?: [];
+  registriesLoading?: boolean;
   currentPage: number;
   setCurrentPage: (newPage: number) => void;
   registriesPerPage: number;
@@ -42,6 +44,7 @@ export interface IRegistriesGrid {
 
 const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   registries,
+  registriesLoading,
   registriesPerPage,
   totalPages,
   currentPage,
@@ -50,26 +53,39 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   const { filter } = useParams();
   const decodedFilter = decodeListURIFilter(filter ?? "all");
   const { id: searchValue } = decodedFilter;
-  const { isList } = useIsList();
+  const { isListView } = useIsListView();
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
 
   return (
     <>
-      {isList && screenIsBig ? (
+      {isListView && screenIsBig ? (
         <ListContainer>
-          {isUndefined(registries)
+          {isUndefined(registries) || registriesLoading
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryListItem key={i} />)
             : registries.map((registry) => {
-                return <RegistryCard key={registry.id} {...registry} />;
+                return (
+                  <RegistryCard
+                    key={registry.id}
+                    {...registry}
+                    status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                  />
+                );
               })}
         </ListContainer>
       ) : (
         <GridContainer>
-          {isUndefined(registries)
+          {isUndefined(registries) || registriesLoading
             ? [...Array(registriesPerPage)].map((_, i) => <SkeletonRegistryCard key={i} />)
             : registries.map((registry) => {
-                return <RegistryCard key={registry.id} {...registry} overrideIsList />;
+                return (
+                  <RegistryCard
+                    key={registry.id}
+                    {...registry}
+                    overrideIsListView
+                    status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                  />
+                );
               })}
         </GridContainer>
       )}

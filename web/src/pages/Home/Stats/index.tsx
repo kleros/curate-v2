@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { Card } from "@kleros/ui-components-library";
@@ -8,6 +8,10 @@ import ListIcon from "svgs/icons/list.svg";
 import DollarIcon from "svgs/icons/dollar.svg";
 import JurorIcon from "svgs/icons/user.svg";
 import { responsiveSize } from "styles/responsiveSize";
+import { useCoinPrice } from "hooks/useCoinPrice";
+import { CoinIds } from "consts/coingecko";
+import { useCounter } from "hooks/queries/useCounter";
+import { formatUSD, formatUnitsWei } from "utils/format";
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -37,41 +41,48 @@ interface IStat {
   icon: React.FC<React.SVGAttributes<SVGElement>>;
 }
 
-const stats: IStat[] = [
-  {
-    title: "Total",
-    coinId: 0,
-    text: "25 Lists",
-    subtext: "in 3 Networks",
-    color: "purple",
-    icon: PaperIcon,
-  },
-  {
-    title: "Total",
-    coinId: 1,
-    text: "345 Items",
-    subtext: "Curated",
-    color: "blue",
-    icon: ListIcon,
-  },
-  {
-    title: "All time deposits",
-    coinId: 0,
-    text: "$124,000",
-    subtext: "100 ETH",
-    color: "green",
-    icon: DollarIcon,
-  },
-  {
-    title: "Curators",
-    text: "54",
-    subtext: "36 active",
-    color: "orange",
-    icon: JurorIcon,
-  },
-];
-
 const Stats = () => {
+  const { data: counters } = useCounter();
+
+  const coinIds = [CoinIds.PNK, CoinIds.ETH];
+  const { prices: pricesData } = useCoinPrice(coinIds);
+
+  const stats: IStat[] = useMemo(() => {
+    const totalDeposits = BigInt(counters?.counter?.totalDeposits ?? 0);
+
+    const ethDeposit = Number(formatUnitsWei(totalDeposits));
+
+    return [
+      {
+        title: "Total",
+        text: `${counters?.counter?.totalRegistries ?? 0} Lists`,
+        subtext: "Curated",
+        color: "purple",
+        icon: PaperIcon,
+      },
+      {
+        title: "Total",
+        text: `${counters?.counter?.totalItems ?? 0} Items`,
+        subtext: "Curated",
+        color: "blue",
+        icon: ListIcon,
+      },
+      {
+        title: "All time deposits",
+        text: `${formatUSD(ethDeposit * pricesData?.[CoinIds.ETH]?.price)}`,
+        subtext: `${ethDeposit} ETH`,
+        color: "green",
+        icon: DollarIcon,
+      },
+      {
+        title: "Curators",
+        text: `${counters?.counter?.numberOfCurators ?? 0}`,
+        subtext: "Active",
+        color: "orange",
+        icon: JurorIcon,
+      },
+    ];
+  }, [counters, pricesData]);
   return (
     <StyledCard>
       {stats.map(({ title, coinId, text, subtext, color, icon }, i) => {

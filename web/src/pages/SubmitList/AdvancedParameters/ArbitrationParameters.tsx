@@ -123,6 +123,7 @@ const AbritrationParameters: React.FC = () => {
               items={items}
               onSelect={(path: string | number) => typeof path === "string" && handleCourtWrite(path.split("/").pop()!)}
               placeholder="Select Court"
+              value={`/courts/${listData.courtId}`}
             />
           </DropdownContainer>
         ) : (

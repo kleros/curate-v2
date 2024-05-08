@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import { Card } from "@kleros/ui-components-library";
 import GnosisIcon from "svgs/chains/gnosis.svg";
 import PileCoinsIcon from "svgs/icons/pile-coins.svg";
+import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
+import Skeleton from "react-loading-skeleton";
+import { useParams } from "react-router-dom";
+import { useCurateV2GetArbitratorExtraData, useCurateV2SubmissionBaseDeposit } from "hooks/contracts/generated";
+import { useSubmitItemContext } from "context/SubmitItemContext";
+import { formatUnitsWei, formatValue } from "utils/format";
+import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 
 const Container = styled.div`
   display: flex;
@@ -89,23 +96,38 @@ const Chain = styled.div`
 interface IHeader {}
 
 const Header: React.FC<IHeader> = ({}) => {
+  const { title } = useRegistryDetailsContext();
+  const { submissionDeposit, setSubmissionDeposit } = useSubmitItemContext();
+  const { id } = useParams();
+  const [listAddress, _]: string[] = id?.split("-");
+
+  const { data: deposit } = useCurateV2SubmissionBaseDeposit({ address: listAddress });
+  const { data: arbitratorExtraData } = useCurateV2GetArbitratorExtraData({ address: listAddress });
+
+  const { arbitrationCost } = useArbitrationCost(arbitratorExtraData);
+
+  useEffect(() => {
+    if (!deposit || !arbitrationCost) return;
+    setSubmissionDeposit(((arbitrationCost as bigint) + deposit).toString());
+  }, [deposit, arbitrationCost]);
+
   return (
     <Container>
       <StyledCard>
         <LeftContent>
           <Title>Submit Item to</Title>
-          <ListName>Address Tags List</ListName>
+          {title ? <ListName>{title}</ListName> : <Skeleton width={100} height={26} />}
         </LeftContent>
         <RightContent>
           <DepositRequired>
             <PileCoinsIcon />
             <StyledP>Deposit required:&nbsp;</StyledP>
-            <Amount>0.003 ETH</Amount>
+            {submissionDeposit ? (
+              <Amount>{formatValue(formatUnitsWei(BigInt(submissionDeposit)), 5, false)} ETH</Amount>
+            ) : (
+              <Skeleton width={60} height={24} />
+            )}
           </DepositRequired>
-          <Chain>
-            <GnosisIcon />
-            <StyledP>Gnosis</StyledP>
-          </Chain>
         </RightContent>
       </StyledCard>
     </Container>

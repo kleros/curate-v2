@@ -14,15 +14,15 @@ const Container = styled.div`
 `;
 
 interface NavigationButtonsProps {
-  prevRoute: string;
+  prevRoute?: string;
   nextRoute?: string;
 }
 
 const NavigationButtons: React.FC<NavigationButtonsProps> = ({ prevRoute, nextRoute }) => {
   return (
     <Container>
-      <PreviousButton prevRoute={prevRoute} />
-      {prevRoute === "/submit-item/policy" ? <SubmitItemButton /> : <NextButton nextRoute={nextRoute} />}
+      {prevRoute && <PreviousButton prevRoute={prevRoute} />}
+      {prevRoute === "../policy" ? <SubmitItemButton /> : <NextButton nextRoute={nextRoute} />}
     </Container>
   );
 };

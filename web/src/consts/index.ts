@@ -2,7 +2,6 @@ import { Status } from "src/graphql/graphql";
 import { version, gitCommitHash, gitCommitShortHash, gitBranch, gitTags, clean } from "../generatedGitInfo.json";
 
 export const ONE_BASIS_POINT = 10000n;
-
 export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY || "https://cdn.kleros.link";
 
 export const GIT_BRANCH = gitBranch;
@@ -20,6 +19,7 @@ export const ETH_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 export const ETH_SIGNATURE_REGEX = /^0x[a-fA-F0-9]{130}$/;
 
 export const DEFAULT_LIST_LOGO = "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS4UPNtgJ/symbol-CURATE.png";
+export const CURATION_POLICY = `${IPFS_GATEWAY}/ipfs/QmWciZMi8mBJg34FapRHK4Yh7a6UqmxrpcKQ3KRNMXzjfx`;
 
 export const lists = [
   {
@@ -27,7 +27,7 @@ export const lists = [
     title: "Address Tags",
     totalItems: 24,
     chainId: 1,
-    status: Status.Disputed,
+    status: Status.RegistrationRequested,
     logoURI: "https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png",
   },
   {
@@ -35,7 +35,7 @@ export const lists = [
     title: "Address Tags",
     totalItems: 24,
     chainId: 1,
-    status: Status.Included,
+    status: Status.Registered,
     logoURI: "https://ipfs.kleros.io//ipfs/QmP1hU1LaheHVGxcSJWg5sC3g25vs5snam3qP1bVVAa7mT/address-tag-2-1.png",
   },
   {
@@ -43,7 +43,7 @@ export const lists = [
     title: "Address Tags",
     totalItems: 24,
     chainId: 1,
-    status: Status.Disputed,
+    status: Status.ClearingRequested,
     logoURI: "https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png",
   },
   {
@@ -51,7 +51,7 @@ export const lists = [
     title: "Address Tags",
     totalItems: 24,
     chainId: 1,
-    status: Status.Disputed,
+    status: Status.Absent,
     logoURI: "https://ipfs.kleros.io//ipfs/QmP1hU1LaheHVGxcSJWg5sC3g25vs5snam3qP1bVVAa7mT/address-tag-2-1.png",
   },
   {
@@ -59,7 +59,7 @@ export const lists = [
     title: "Address Tags",
     totalItems: 24,
     chainId: 1,
-    status: Status.Pending,
+    status: Status.Absent,
     logoURI: "https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png",
   },
   {
@@ -67,7 +67,7 @@ export const lists = [
     title: "Address Tags",
     totalItems: 24,
     chainId: 1,
-    status: Status.Removed,
+    status: Status.Absent,
     logoURI: "https://ipfs.kleros.io//ipfs/QmZPeWnzHGKwvnckQE2QrdRJiUFqQXvQEZGFHdEAh7raHN/fno.png",
   },
 ];

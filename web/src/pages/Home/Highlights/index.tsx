@@ -3,11 +3,17 @@ import styled from "styled-components";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { useWindowSize } from "react-use";
 import { Button } from "@kleros/ui-components-library";
-import { lists } from "consts/index";
 import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
-import { useIsList } from "context/IsListProvider";
+import { SkeletonRegistryCard, SkeletonRegistryListItem } from "components/StyledSkeleton";
+import { useIsListView } from "context/IsListViewProvider";
+import { DEFAULT_CHAIN } from "consts/chains";
+import { isUndefined } from "utils/index";
+import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
+import { useItemsQuery } from "queries/useItemsQuery";
+import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const Container = styled.div`
   width: 100%;
@@ -36,27 +42,70 @@ const StyledButton = styled(Button)`
   margin: 0 auto;
 `;
 
-const HighlightedLists: React.FC = () => {
+const HighlightedLists = () => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
-  const { isList } = useIsList();
+  const { isListView } = useIsListView();
   const { width } = useWindowSize();
   const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
+  const { data: itemsData, isLoading: isItemsDataLoading } = useItemsQuery(0, 6, {
+    registry: listOfListsAddresses[DEFAULT_CHAIN],
+  });
+
+  // TODO: Json.parse can throw error
+  const registryIds = useMemo(
+    () =>
+      itemsData
+        ? itemsData?.items
+            .map((item) => item?.props[0]?.value?.toLowerCase() ?? undefined)
+            .filter((id) => !isUndefined(id))
+        : [],
+    [itemsData]
+  );
+
+  const { data: registriesData, isLoading: isRegistriesDataLoading } = useRegistriesByIdsQuery(registryIds);
+
+  const combinedListsData = useMemo(() => {
+    return registriesData?.registries.map((registry) => {
+      const registryAsItem = itemsData?.items.find((item) => item?.props[0]?.value?.toLowerCase() === registry.id);
+      return {
+        ...registry,
+        totalItems: registry.items.length,
+        status: registryAsItem?.status,
+        itemId: registryAsItem?.id,
+      };
+    });
+  }, [registriesData, itemsData]);
+
+  const registriesLoading = isUndefined(combinedListsData) || isItemsDataLoading || isRegistriesDataLoading;
 
   return (
     <Container>
       <Header />
-
-      {isList && screenIsBig ? (
+      {isListView && screenIsBig ? (
         <ListContainer>
-          {lists.map((list, i) => (
-            <RegistryCard {...list} />
-          ))}
+          {registriesLoading
+            ? [...Array(6)].map((_, i) => <SkeletonRegistryListItem key={i} />)
+            : combinedListsData?.map((registry, i) => (
+                <RegistryCard
+                  key={i}
+                  {...registry}
+                  totalItems={registry.totalItems}
+                  status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                />
+              ))}
         </ListContainer>
       ) : (
         <GridContainer>
-          {lists.map((list, i) => (
-            <RegistryCard {...list} />
-          ))}
+          {registriesLoading
+            ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
+            : combinedListsData?.map((registry, i) => (
+                <RegistryCard
+                  key={i}
+                  {...registry}
+                  totalItems={registry.totalItems}
+                  status={mapFromSubgraphStatus(registry.status, registry.disputed)}
+                />
+              ))}
         </GridContainer>
       )}
       <StyledButton

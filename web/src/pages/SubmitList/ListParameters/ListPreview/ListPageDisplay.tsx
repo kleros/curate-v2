@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import { Status } from "consts/status";
 import InformationCard from "components/InformationCard";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { getIpfsUrl } from "utils/getIpfsUrl";
+import { Status } from "src/graphql/graphql";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const Container = styled.div`
   display: flex;
@@ -23,15 +23,18 @@ const StyledInformationCard = styled(InformationCard)`
 
 const ListPageDisplay: React.FC = () => {
   const { listMetadata } = useSubmitListContext();
+  const previewData = useMemo(() => listMetadata, [listMetadata]);
+
   return (
     <Container>
       <StyledP>Check how the list is displayed on the List page:</StyledP>
       <StyledInformationCard
-        title={listMetadata.title}
-        description={listMetadata.description}
+        title={previewData.title}
+        description={previewData.description}
         chainId={421614}
-        status={Status.Included}
-        logoURI={getIpfsUrl(listMetadata.logoURI)}
+        status={mapFromSubgraphStatus(Status.Registered, false)}
+        logoURI={previewData.logoURI}
+        policyURI="https://ipfs.kleros.io//ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
       />
     </Container>
   );

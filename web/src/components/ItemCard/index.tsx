@@ -84,10 +84,10 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
   const sortedProps = sortItemProps(props);
 
   return (
-    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/1/item/${id.toString()}`)}>
+    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/item/${id?.toString()}`)}>
       <Container>
         <FieldsContainer>{sortedProps.map((prop) => prop.isIdentifier && <ItemField {...prop} />)}</FieldsContainer>
-        <StatusBanner {...{ status: mapFromSubgraphStatus(status, disputed) }} isList />
+        <StatusBanner {...{ status: mapFromSubgraphStatus(status, disputed) }} isListView />
         <StyledButton text="Open" Icon={ArrowIcon} />
       </Container>
     </StyledListItem>

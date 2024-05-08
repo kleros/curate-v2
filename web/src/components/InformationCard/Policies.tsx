@@ -1,9 +1,13 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
+import Skeleton from "react-loading-skeleton";
 import PolicyIcon from "svgs/icons/policy.svg";
 import { responsiveSize } from "styles/responsiveSize";
-// import { getIpfsUrl } from "utils/getIpfsUrl";
+import { DEFAULT_CHAIN } from "consts/chains";
+import { getIpfsUrl } from "utils/getIpfsUrl";
+import { listOfListsAddresses } from "utils/listOfListsAddresses";
+import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 
 const ShadeArea = styled.div`
   display: flex;
@@ -51,29 +55,38 @@ const LinkContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-type Attachment = {
-  label?: string;
-  uri: string;
-};
 interface IPolicies {
-  disputePolicyURI?: string;
-  courtId?: string;
-  attachment?: Attachment;
+  policyURI: string;
+  isItem?: boolean;
 }
 
-export const Policies: React.FC<IPolicies> = ({ disputePolicyURI, courtId, attachment }) => {
+export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
+  const { data: parentRegistryDetails } = useRegistryDetailsQuery(listOfListsAddresses[DEFAULT_CHAIN]);
+
   return (
     <ShadeArea>
       <StyledP>Make sure you read and understand the Policies</StyledP>
       <LinkContainer>
-        <StyledA target="_blank" rel="noreferrer">
-          <StyledPolicyIcon />
-          Curation Policy
-        </StyledA>
-        <StyledA href={`#/courts/${courtId}/purpose?section=description`}>
-          <StyledPolicyIcon />
-          List Policy
-        </StyledA>
+        {!isItem ? (
+          <>
+            {parentRegistryDetails ? (
+              <StyledA href={getIpfsUrl(parentRegistryDetails.registry.policyURI)} target="_blank" rel="noreferrer">
+                <StyledPolicyIcon />
+                Curation Policy
+              </StyledA>
+            ) : (
+              <Skeleton width={116} />
+            )}
+          </>
+        ) : null}
+        {policyURI ? (
+          <StyledA href={getIpfsUrl(policyURI)} target="_blank" rel="noreferrer">
+            <StyledPolicyIcon />
+            List Policy
+          </StyledA>
+        ) : (
+          <Skeleton width={80} />
+        )}
       </LinkContainer>
     </ShadeArea>
   );

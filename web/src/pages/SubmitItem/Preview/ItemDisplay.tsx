@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import ItemCard from "components/ItemCard";
-import { items } from "~src/consts";
+import { useSubmitItemContext } from "context/SubmitItemContext";
+import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 
 const Container = styled.div`
   display: flex;
@@ -18,11 +19,21 @@ const StyledP = styled.p`
 interface IItemDisplay {}
 
 const ItemDisplay: React.FC<IItemDisplay> = ({}) => {
-  const item = items[0];
+  const { fields } = useSubmitItemContext();
+
+  const props = useMemo(
+    () =>
+      fields.columns.reduce<ItemDetailsFragment["props"]>((acc, current) => {
+        acc.push({ ...current, value: fields?.values?.[current.label] });
+        return acc;
+      }, []),
+    [fields]
+  );
+
   return (
     <Container>
       <StyledP>Check how the item is displayed on the Item page:</StyledP>
-      <ItemCard {...item} />
+      <ItemCard props={props} status={Status.RegistrationRequested} />
     </Container>
   );
 };

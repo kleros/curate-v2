@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { Link, useLocation } from "react-router-dom";
 import { useOpenContext } from "../MobileHeader";
+import { CURATION_POLICY } from "consts/index";
 
 const Container = styled.div`
   display: flex;
@@ -49,7 +50,7 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
 
 const links = [
   { to: "/", text: "Home" },
-  { to: "/", text: "Curation Policy" },
+  { to: CURATION_POLICY, text: "Curation Policy" },
 ];
 
 const Explore: React.FC = () => {

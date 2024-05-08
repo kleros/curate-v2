@@ -11,6 +11,13 @@ export enum ItemStatus {
   CLEARING_REQUESTED,
 }
 
+export enum ExtendedStatus {
+  Pending,
+  Included,
+  Removed,
+  Disputed,
+}
+
 export const NONE = "None";
 export const ACCEPT = "Accept";
 export const REJECT = "Reject";
@@ -19,9 +26,27 @@ export const NO_RULING_CODE = 0;
 export const REQUESTER_CODE = 1;
 export const CHALLENGER_CODE = 2;
 
+/**
+ * @description Takes in a number repsenting the item status in contract and returns a human readable status
+ */
 export function getStatus(index: i32): string {
   const statusArray = ["absent", "registered", "registrationRequested", "clearingRequested"];
   return statusArray.at(index) || "None";
+}
+
+/**
+ * @description Takes in human readable status and returns a simplified status
+ */
+export function getExtendedStatus(status: string, disputed: boolean): ExtendedStatus {
+  if (disputed) return ExtendedStatus.Disputed;
+
+  if (status == "absent") {
+    return ExtendedStatus.Removed;
+  } else if (status == "registered") {
+    return ExtendedStatus.Included;
+  }
+
+  return ExtendedStatus.Pending;
 }
 
 export function getFinalRuling(outcome: number): string {

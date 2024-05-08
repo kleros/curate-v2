@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import { Status } from "consts/status";
 import RegistryCard from "components/RegistryCard";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { getIpfsUrl } from "utils/getIpfsUrl";
+import { Status } from "src/graphql/graphql";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const Container = styled.div`
   display: flex;
@@ -19,14 +19,15 @@ const StyledP = styled.p`
 
 const HomePageDisplay: React.FC = () => {
   const { listMetadata } = useSubmitListContext();
+  const previewData = useMemo(() => listMetadata, [listMetadata]);
   return (
     <Container>
       <StyledP>Check how the list is displayed on the home page:</StyledP>
       <RegistryCard
-        id={1}
-        title={listMetadata.title}
-        status={Status.Pending}
-        logoURI={getIpfsUrl(listMetadata?.logoURI)}
+        id={"1"}
+        title={previewData.title}
+        status={mapFromSubgraphStatus(Status.RegistrationRequested, false)}
+        logoURI={previewData?.logoURI}
         chainId={421614}
         totalItems={23}
         overrideIsList

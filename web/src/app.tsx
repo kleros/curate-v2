@@ -4,38 +4,46 @@ import { SentryRoutes } from "./utils/sentry";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
 import Web3Provider from "context/Web3Provider";
-import IsListProvider from "context/IsListProvider";
+import IsListViewProvider from "context/IsListViewProvider";
 import QueryClientProvider from "context/QueryClientProvider";
 import StyledComponentsProvider from "context/StyledComponentsProvider";
 import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
-import GraphqlBatcherProvider from "./context/GraphqlBatcher";
-import { SubmitItemProvider } from "./context/SubmitItemContext";
+import GraphqlBatcherProvider from "context/GraphqlBatcher";
+import { SubmitItemProvider } from "context/SubmitItemContext";
 import SubmitItem from "./pages/SubmitItem";
 import SubmitList from "./pages/SubmitList";
+import { RegistryDetailsProvider } from "context/RegistryDetailsContext";
 
 const App: React.FC = () => {
   return (
     <StyledComponentsProvider>
       <QueryClientProvider>
+        <RefetchOnBlock />
         <GraphqlBatcherProvider>
-          <RefetchOnBlock />
           <Web3Provider>
-            <IsListProvider>
+            <IsListViewProvider>
               <SubmitItemProvider>
                 <SentryRoutes>
                   <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="lists/*" element={<AllLists />} />
-                    <Route path="submit-item/*" element={<SubmitItem />} />
+                    <Route
+                      path="submit-item/:id/*"
+                      element={
+                        <RegistryDetailsProvider>
+                          <SubmitItem />
+                        </RegistryDetailsProvider>
+                      }
+                    />
                     <Route path="submit-list/*" element={<SubmitList />} />
                     <Route path="*" element={<h1>404 not found</h1>} />
                   </Route>
                 </SentryRoutes>
               </SubmitItemProvider>
-            </IsListProvider>
+            </IsListViewProvider>
           </Web3Provider>
         </GraphqlBatcherProvider>
       </QueryClientProvider>

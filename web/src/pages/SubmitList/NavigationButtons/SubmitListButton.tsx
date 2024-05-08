@@ -26,8 +26,11 @@ import {
   constructListParams,
   createItemFromList,
   retrieveDeployedListAddress,
+  retrieveSubmittedListId,
 } from "utils/submitListUtils";
 import { EnsureChain } from "components/EnsureChain";
+import { listOfListsAddresses } from "utils/listOfListsAddresses";
+import { DEFAULT_CHAIN } from "consts/chains";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -51,6 +54,7 @@ const SubmitListButton: React.FC = () => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   const [isEstimatingCost, setIsEstimatingCost] = useState(false);
+  const [submittedListItemId, setSubmittedListItemId] = useState("");
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
@@ -71,7 +75,9 @@ const SubmitListButton: React.FC = () => {
   });
 
   const { writeAsync: submit } = useCurateFactoryDeploy(config);
-  const { writeAsync: submitListToCurate } = useCurateV2AddItem();
+  const { writeAsync: submitListToCurate } = useCurateV2AddItem({
+    address: listOfListsAddresses[DEFAULT_CHAIN],
+  });
 
   // calculate total cost to submit the list to Curate
   const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData();
@@ -126,6 +132,10 @@ const SubmitListButton: React.FC = () => {
       .then((res) => {
         if (res.status && !isUndefined(res.result)) {
           setProgress(ListProgress.SubmitSuccess);
+          const submittedListId = retrieveSubmittedListId(res.result.logs[0]);
+
+          setSubmittedListItemId(`${deployedAddress}-${submittedListId}@${listOfListsAddresses[DEFAULT_CHAIN]}`);
+
           resetListData();
         } else {
           setProgress(ListProgress.Failed);
@@ -178,7 +188,7 @@ const SubmitListButton: React.FC = () => {
     }
   };
   return progress === ListProgress.SubmitSuccess ? (
-    <Button text="View List" onClick={() => navigate("/lists/1/list/1/desc/all")} />
+    <Button text="View List" onClick={() => navigate(`/lists/${submittedListItemId}/list/1/desc/all`)} />
   ) : (
     <EnsureChain>
       <Button text="Create List" Icon={StyledCheckCircle} disabled={isButtonDisabled} onClick={handleDeploy} />

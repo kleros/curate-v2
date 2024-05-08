@@ -12,10 +12,20 @@ import {
   ConnectedListSet,
   ListMetadataSet,
 } from "../generated/templates/Curate/Curate";
-import { ItemStatus, JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getFinalRuling, getStatus } from "./utils";
+import {
+  ItemStatus,
+  JSONValueToBool,
+  JSONValueToMaybeString,
+  ONE,
+  ZERO,
+  getExtendedStatus,
+  getFinalRuling,
+  getStatus,
+} from "./utils";
 import { createRequestFromEvent } from "./entities/Request";
 import { createItemFromEvent } from "./entities/Item";
 import { ensureUser } from "./entities/User";
+import { updateCounters } from "./entities/Counters";
 
 // Items on a List can be in 1 of 4 states:
 // - (0) Absent: The item is not registered on the List and there are no pending requests.
@@ -52,6 +62,13 @@ export function handleNewItem(event: NewItem): void {
 export function handleRequestSubmitted(event: RequestSubmitted): void {
   let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
 
+  let registry = Registry.load(event.address.toHexString());
+
+  if (!registry) {
+    log.error(`Registry : {} , for graphItemID {} not found.`, [event.address.toHexString(), graphItemID]);
+    return;
+  }
+
   let curate = Curate.bind(event.address);
   let itemInfo = curate.getItemInfo(event.params._itemID);
 
@@ -61,14 +78,24 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
     return;
   }
 
+  let prevStatus = getExtendedStatus(item.status, item.disputed);
   item.numberOfRequests = item.numberOfRequests.plus(ONE);
   item.status = getStatus(itemInfo.value0);
   item.latestRequester = ensureUser(event.transaction.from.toHexString()).id;
   item.latestRequestResolutionTime = ZERO;
   item.latestRequestSubmissionTime = event.block.timestamp;
 
-  createRequestFromEvent(event);
+  let newStatus = getExtendedStatus(item.status, item.disputed);
+
+  if (itemInfo.value1.equals(ONE)) {
+    registry.numberOfPending = registry.numberOfPending.plus(ONE);
+  } else {
+    updateCounters(prevStatus, newStatus, event.address);
+  }
+
+  registry.save();
   item.save();
+  createRequestFromEvent(event);
 }
 
 export function handleStatusUpdated(event: ItemStatusChange): void {
@@ -89,8 +116,14 @@ export function handleStatusUpdated(event: ItemStatusChange): void {
     return;
   }
 
+  let prevStatus = getExtendedStatus(item.status, item.disputed);
   item.status = getStatus(itemInfo.value0);
   item.disputed = false;
+  let newStatus = getExtendedStatus(item.status, item.disputed);
+
+  if (prevStatus != newStatus) {
+    updateCounters(prevStatus, newStatus, event.address);
+  }
 
   if (event.params._updatedDirectly) {
     // Direct actions (e.g. addItemDirectly and removeItemDirectly)
@@ -230,9 +263,14 @@ export function handleRequestChallenged(event: DisputeRequest): void {
     return;
   }
   let itemInfo = curate.getItemInfo(itemID);
+
+  let prevStatus = getExtendedStatus(item.status, item.disputed);
   item.disputed = true;
   item.latestChallenger = ensureUser(event.transaction.from.toHexString()).id;
   item.status = getStatus(itemInfo.value0);
+  let newStatus = getExtendedStatus(item.status, item.disputed);
+
+  updateCounters(prevStatus, newStatus, event.address);
 
   let requestIndex = item.numberOfRequests.minus(ONE);
   let requestID = graphItemID + "-" + requestIndex.toString();

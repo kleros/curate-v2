@@ -1,9 +1,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { Card } from "@kleros/ui-components-library";
-import { useIsList } from "context/IsListProvider";
+import { useIsListView } from "context/IsListViewProvider";
 import { landscapeStyle } from "styles/landscapeStyle";
-import { lists } from "consts/index";
 import StatusBanner from "./StatusBanner";
 import RegistryInfo from "./RegistryInfo";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
@@ -25,25 +24,39 @@ const StyledListItem = styled(Card)`
   )}
 `;
 
-type List = (typeof lists)[number];
+type List = [number];
 interface IListCard extends List {
-  overrideIsList?: boolean;
+  overrideIsListView?: boolean;
 }
 
-const RegistryCard: React.FC<IListCard> = ({ id, title, logoURI, totalItems, status, chainId, overrideIsList }) => {
-  const { isList } = useIsList();
+const RegistryCard: React.FC<IListCard> = ({
+  id,
+  itemId,
+  title,
+  logoURI,
+  totalItems,
+  status,
+  chainId,
+  overrideIsListView,
+}) => {
+  const { isListView } = useIsListView();
   const navigateAndScrollTop = useNavigateAndScrollTop();
+
+  const registryAddressAndItemId = `${id}-${itemId}`;
 
   return (
     <>
-      {!isList || overrideIsList ? (
-        <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/1/desc/all`)}>
+      {!isListView || overrideIsListView ? (
+        <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/1/desc/all`)}>
           <StatusBanner {...{ status, chainId }} />
           <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} />
         </StyledCard>
       ) : (
-        <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/${id.toString()}/display/desc/all`)}>
-          <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} isList />
+        <StyledListItem
+          hover
+          onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/desc/all`)}
+        >
+          <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} isListView />
         </StyledListItem>
       )}
     </>

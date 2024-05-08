@@ -1,0 +1,53 @@
+import React from "react";
+import { useTheme } from "styled-components";
+import { useParams } from "react-router-dom";
+import ClosedIcon from "svgs/icons/check-circle-outline.svg";
+import History from "components/HistoryDisplay";
+import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
+import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
+import ItemInformationCard from "components/ItemInformationCard";
+
+const ItemDisplay: React.FC = () => {
+  const { itemId } = useParams();
+  const [, listAddress] = itemId?.split("@");
+  const { data: itemDetails } = useItemDetailsQuery(itemId);
+  const { data: registryDetails } = useRegistryDetailsQuery(listAddress);
+  const theme = useTheme();
+  const historyItems = [
+    {
+      title: "Item Submitted",
+      variant: theme.primaryBlue,
+      subtitle: "April 06, 2022",
+      rightSided: true,
+    },
+    {
+      title: "Item Challenged",
+      party: "- Case #1369 by Alice.eth",
+      variant: theme.secondaryPurple,
+      subtitle: "April 07, 2022",
+      rightSided: true,
+    },
+    {
+      title: "Item Submitted",
+      subtitle: "April 06, 2022",
+      rightSided: true,
+      Icon: ClosedIcon,
+    },
+  ];
+
+  return (
+    <div>
+      <ItemInformationCard
+        {...itemDetails?.item}
+        status={mapFromSubgraphStatus(itemDetails?.item?.status, itemDetails?.item?.disputed)}
+        policyURI={registryDetails?.registry.policyURI}
+        isItem={true}
+      />
+
+      <History items={historyItems} />
+    </div>
+  );
+};
+
+export default ItemDisplay;

@@ -9,6 +9,7 @@ import { FieldTypes, useSubmitListContext } from "context/SubmitListContext";
 import { toast } from "react-toastify";
 import { OPTIONS } from "utils/wrapWithToast";
 import { capitalize } from "utils/index";
+import useIsDesktop from "hooks/useIsDesktop";
 
 const Container = styled.div`
   display: flex;
@@ -63,7 +64,7 @@ const StyledLabel = styled.div`
 
 const ItemFields: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
-
+  const isDesktop = useIsDesktop();
   const items: _IItem1[] = FieldTypes.map((item) => ({ text: capitalize(item), value: item }));
 
   const canIndexMoreFields = useMemo(() => {
@@ -116,7 +117,7 @@ const ItemFields: React.FC = () => {
             <IndexedContainer>
               <WithHelpTooltip
                 tooltipMsg="Indexed fields are searchable. Toggle (On) fields are displayed on both the item card and internally on the item page. Toggle (Off) fields are displayed just internally on the item page."
-                place="left"
+                place={isDesktop ? "left" : "right"}
               >
                 <StyledLabel>Indexed</StyledLabel>
               </WithHelpTooltip>

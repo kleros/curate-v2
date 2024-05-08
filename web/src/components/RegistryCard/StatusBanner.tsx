@@ -1,10 +1,9 @@
 import React from "react";
 import styled, { Theme } from "styled-components";
 import { Status } from "consts/status";
-import ChainIcon from "../ChainIcon";
 
-const Container = styled.div<{ status: Status; isList: boolean }>`
-  height: ${({ isList }) => (isList ? "min-content" : "45px")};
+const Container = styled.div<{ status: Status; isListView: boolean }>`
+  height: ${({ isListView }) => (isListView ? "min-content" : "45px")};
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
   display: flex;
@@ -21,12 +20,12 @@ const Container = styled.div<{ status: Status; isList: boolean }>`
       margin-right: 8px;
     }
   }
-  ${({ theme, status, isList }) => {
+  ${({ theme, status, isListView }) => {
     const [frontColor, backgroundColor] = getStatusColor(status, theme);
     return `
-      ${!isList && `border-top: 5px solid ${frontColor}`};
-      ${!isList && `background-color: ${backgroundColor}`};
-      ${isList && `padding: 0px`};
+      ${!isListView && `border-top: 5px solid ${frontColor}`};
+      ${!isListView && `background-color: ${backgroundColor}`};
+      ${isListView && `padding: 0px`};
       .front-color {
         color: ${frontColor};
       }
@@ -41,8 +40,7 @@ const Container = styled.div<{ status: Status; isList: boolean }>`
 
 interface IStatusBanner {
   status: Status;
-  chainId?: number;
-  isList?: boolean;
+  isListView?: boolean;
 }
 
 export const getStatusColor = (status: Status, theme: Theme): [string, string] => {
@@ -56,7 +54,7 @@ export const getStatusColor = (status: Status, theme: Theme): [string, string] =
     case Status.Removed:
       return [theme.error, theme.errorLight];
     default:
-      return [theme.primaryBlue, theme.mediumBlue];
+      return [theme.lightGrey, theme.lightGrey];
   }
 };
 
@@ -71,7 +69,7 @@ export const getStatusLabel = (status: Status): string => {
     case Status.Removed:
       return "Removed";
     default:
-      return "Pending";
+      return "";
   }
 };
 // in subgraph the Statuses are mapped according to Contracts, for Fronted we need different
@@ -89,10 +87,9 @@ export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
       return Status.Pending;
   }
 };
-const StatusBanner: React.FC<IStatusBanner> = ({ status, chainId, isList = false }) => (
-  <Container {...{ status, isList }}>
+const StatusBanner: React.FC<IStatusBanner> = ({ status, isListView = false }) => (
+  <Container {...{ status, isListView }}>
     <label className="front-color dot">{getStatusLabel(status)}</label>
-    {!isList && <ChainIcon chainId={chainId ?? 1} />}
   </Container>
 );
 

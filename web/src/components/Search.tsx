@@ -6,6 +6,7 @@ import { useDebounce } from "react-use";
 import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
 import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
 import PaperIcon from "svgs/icons/paper.svg";
+import PlusIcon from "svgs/icons/plus.svg";
 import { List_filters } from "consts/filters";
 
 const Container = styled.div`
@@ -48,8 +49,14 @@ const StyledPaperIcon = styled(PaperIcon)`
   }
 `;
 
-const Search: React.FC = () => {
-  const { page, order, filter } = useParams();
+const StyledPlusIcon = styled(PlusIcon)`
+  path {
+    fill: ${({ theme }) => theme.whiteBackground};
+  }
+`;
+
+const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
+  const { page, order, filter, id } = useParams();
   const location = useListRootPath();
   const [searchParams] = useSearchParams();
   const keywords = searchParams.get("keywords");
@@ -100,7 +107,11 @@ const Search: React.FC = () => {
         defaultValue={JSON.stringify(decodedFilter)}
         callback={handleStatusChange}
       />
-      <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submit-list")} />
+      {isList ? (
+        <Button text="Create New List" Icon={StyledPaperIcon} onClick={() => navigate("/submit-list")} />
+      ) : (
+        <Button Icon={StyledPlusIcon} text="Submit Item" onClick={() => navigate(`/submit-item/${id}`)} />
+      )}
     </Container>
   );
 };

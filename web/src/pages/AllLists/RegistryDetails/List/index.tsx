@@ -3,8 +3,8 @@ import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
 import StatsAndFilters from "components/StatsAndFilters";
 import ItemCard from "components/ItemCard";
-import Search from "../Search";
-import { ItemDetailsFragment } from "graphql/graphql";
+import { ItemDetailsFragment } from "src/graphql/graphql";
+import Search from "components/Search";
 
 const ListContainer = styled.div`
   display: flex;

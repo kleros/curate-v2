@@ -1,8 +1,8 @@
 import React from "react";
-import Search from "./Search";
 import RegistriesGrid, { IRegistriesGrid } from "./RegistriesGrid";
 import Header from "pages/Home/Header";
 import StatsAndFilters from "components/StatsAndFilters";
+import Search from "../Search";
 
 interface IRegistriesDisplay extends IRegistriesGrid {
   registries: [];
@@ -25,7 +25,7 @@ const RegistriesDisplay: React.FC<IRegistriesDisplay> = ({
   return (
     <div {...{ className }}>
       <Header />
-      <Search />
+      <Search isList />
       <StatsAndFilters fields={[{ label: "Lists", value: totalRegistries?.toString() }]} isListFilter />
       {!registriesLoading && registries?.length === 0 ? (
         <h1>No lists found</h1>

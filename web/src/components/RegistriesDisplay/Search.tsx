@@ -6,7 +6,7 @@ import { useDebounce } from "react-use";
 import { Searchbar, DropdownSelect, Button } from "@kleros/ui-components-library";
 import { decodeListURIFilter, encodeListURIFilter, useListRootPath } from "utils/uri";
 import PaperIcon from "svgs/icons/paper.svg";
-import { Status } from "src/graphql/graphql";
+import { List_filters } from "consts/filters";
 
 const Container = styled.div`
   display: flex;
@@ -91,11 +91,11 @@ const Search: React.FC = () => {
           {
             text: "Pending",
             dot: "blue",
-            value: JSON.stringify({ status_in: [Status.RegistrationRequested, Status.ClearingRequested] }),
+            value: JSON.stringify(List_filters.Pending),
           },
-          { text: "Disputed", dot: "purple", value: JSON.stringify({ disputed: true }) },
-          { text: "Included", dot: "green", value: JSON.stringify({ status: Status.Registered }) },
-          { text: "Removed", dot: "red", value: JSON.stringify({ status: Status.Absent }) },
+          { text: "Disputed", dot: "purple", value: JSON.stringify(List_filters.Disputed) },
+          { text: "Included", dot: "green", value: JSON.stringify(List_filters.Included) },
+          { text: "Removed", dot: "red", value: JSON.stringify(List_filters.Removed) },
         ]}
         defaultValue={JSON.stringify(decodedFilter)}
         callback={handleStatusChange}

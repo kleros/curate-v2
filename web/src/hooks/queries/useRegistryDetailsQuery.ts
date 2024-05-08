@@ -11,6 +11,11 @@ export const registryDetailsQuery = graphql(`
       logoURI
       policyURI
       description
+      totalItems
+      numberOfAbsent
+      numberOfPending
+      numberOfRegistered
+      numberOfDisputed
       items {
         id
         status

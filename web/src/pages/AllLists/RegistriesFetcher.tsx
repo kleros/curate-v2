@@ -11,8 +11,9 @@ import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
-import { useCounter } from "queries/useCounter";
 import { OrderDirection } from "src/graphql/graphql";
+import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
+import { List_filters } from "consts/filters";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -28,6 +29,7 @@ const RegistriesFetcher: React.FC = () => {
   const registrySkip = registriesPerPage * (pageNumber - 1);
 
   const decodedFilter = decodeListURIFilter(filter ?? "all");
+  const { data: mainCurate } = useRegistryDetailsQuery(listOfListsAddresses[DEFAULT_CHAIN]);
 
   // get items from the main curate as these are the registries
   const { data: itemsData, isLoading: isItemDataLoading } = useItemsQuery(
@@ -66,8 +68,22 @@ const RegistriesFetcher: React.FC = () => {
     });
   }, [registriesData, itemsData]);
 
-  const { data: counterData } = useCounter();
-  const totalRegistries = counterData?.counter?.totalRegistries;
+  const totalRegistries = useMemo<number>(() => {
+    if (!mainCurate || !mainCurate.registry) return 0;
+    switch (JSON.stringify(decodedFilter)) {
+      case JSON.stringify(List_filters.Disputed):
+        return mainCurate.registry.numberOfDisputed;
+      case JSON.stringify(List_filters.Included):
+        return mainCurate.registry.numberOfRegistered;
+      case JSON.stringify(List_filters.Removed):
+        return mainCurate.registry.numberOfAbsent;
+      case JSON.stringify(List_filters.Pending):
+        return mainCurate.registry.numberOfPending;
+      default:
+        return mainCurate.registry.totalItems;
+    }
+  }, [mainCurate, decodedFilter]);
+
   const totalPages = useMemo(
     () => (!isUndefined(totalRegistries) ? Math.ceil(totalRegistries / registriesPerPage) : 1),
     [totalRegistries, registriesPerPage]

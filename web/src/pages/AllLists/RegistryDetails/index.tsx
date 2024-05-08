@@ -12,11 +12,15 @@ import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const RegistryDetails: React.FC = () => {
+  const theme = useTheme();
   const { id } = useParams();
+
   const [listAddress, itemId] = id?.split("-");
+
   const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
   const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
-  const { title, status, logoURI, policyURI, description, items, registerer, disputed, setRegistryDetails } =
+
+  const { title, status, logoURI, policyURI, description, registerer, disputed, setRegistryDetails } =
     useRegistryDetailsContext();
 
   useEffect(() => {
@@ -28,8 +32,6 @@ const RegistryDetails: React.FC = () => {
       });
     }
   }, [itemDetails, registryDetails, setRegistryDetails]);
-
-  const theme = useTheme();
 
   const historyItems = [
     {
@@ -63,7 +65,7 @@ const RegistryDetails: React.FC = () => {
       />
       <Tabs />
       <Routes>
-        <Route path="list/:page/:order/:filter" element={<List {...{ items }} />} />
+        <Route path="list/:page/:order/:filter" element={<List registryAddress={listAddress} />} />
         <Route path="history" element={<History items={historyItems} />} />
         <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
       </Routes>

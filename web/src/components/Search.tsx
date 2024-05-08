@@ -79,7 +79,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
   const handleStatusChange = (value: string | number) => {
     const filter = JSON.parse(value as string);
     const encodedFilter = encodeListURIFilter(filter);
-    navigate(`${location}/${page}/${order}/${encodedFilter}${keywords ? "?keywords=" + keywords : ""}`);
+    navigate(`${location}/1/${order}/${encodedFilter}${keywords ? "?keywords=" + keywords : ""}`);
   };
 
   return (

@@ -41,7 +41,7 @@ const StyledListIcon = styled(ListIcon)`
   overflow: hidden;
 `;
 export interface IFilters {
-  isListFilter: boolean;
+  isListFilter?: boolean;
 }
 const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   const { order, filter } = useParams();

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { ItemDetailsFragment, RegistryDetailsQuery } from "src/graphql/graphql";
+import { ItemDetailsFragment } from "src/graphql/graphql";
+import { RegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 
 type RegistryDetails = RegistryDetailsQuery["registry"] & ItemDetailsFragment;
 interface RegistryDetailsContextType {

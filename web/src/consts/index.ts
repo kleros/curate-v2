@@ -21,57 +21,6 @@ export const ETH_SIGNATURE_REGEX = /^0x[a-fA-F0-9]{130}$/;
 export const DEFAULT_LIST_LOGO = "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS4UPNtgJ/symbol-CURATE.png";
 export const CURATION_POLICY = `${IPFS_GATEWAY}/ipfs/QmWciZMi8mBJg34FapRHK4Yh7a6UqmxrpcKQ3KRNMXzjfx`;
 
-export const lists = [
-  {
-    id: 1,
-    title: "Address Tags",
-    totalItems: 24,
-    chainId: 1,
-    status: Status.RegistrationRequested,
-    logoURI: "https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png",
-  },
-  {
-    id: 2,
-    title: "Address Tags",
-    totalItems: 24,
-    chainId: 1,
-    status: Status.Registered,
-    logoURI: "https://ipfs.kleros.io//ipfs/QmP1hU1LaheHVGxcSJWg5sC3g25vs5snam3qP1bVVAa7mT/address-tag-2-1.png",
-  },
-  {
-    id: 3,
-    title: "Address Tags",
-    totalItems: 24,
-    chainId: 1,
-    status: Status.ClearingRequested,
-    logoURI: "https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png",
-  },
-  {
-    id: 4,
-    title: "Address Tags",
-    totalItems: 24,
-    chainId: 1,
-    status: Status.Absent,
-    logoURI: "https://ipfs.kleros.io//ipfs/QmP1hU1LaheHVGxcSJWg5sC3g25vs5snam3qP1bVVAa7mT/address-tag-2-1.png",
-  },
-  {
-    id: 5,
-    title: "Address Tags",
-    totalItems: 24,
-    chainId: 1,
-    status: Status.Absent,
-    logoURI: "https://ipfs.kleros.io//ipfs/QmNNSDkpyDX1wB4NNFdAzaHsJihpvgNVV89zCH8FH9CVAz/ledger-white.png",
-  },
-  {
-    id: 6,
-    title: "Address Tags",
-    totalItems: 24,
-    chainId: 1,
-    status: Status.Absent,
-    logoURI: "https://ipfs.kleros.io//ipfs/QmZPeWnzHGKwvnckQE2QrdRJiUFqQXvQEZGFHdEAh7raHN/fno.png",
-  },
-];
-
 // export const items = [
 //   {
 //     id: 1,

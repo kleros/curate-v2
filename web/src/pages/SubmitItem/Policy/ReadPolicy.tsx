@@ -12,7 +12,7 @@ interface IReadPolicy {}
 const ReadPolicy: React.FC<IReadPolicy> = () => {
   return (
     <StyledA
-      href="https://ipfs.kleros.io//ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
+      href="https://cdn.kleros.link/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
       target="_blank"
     >
       → Read the policy here ←

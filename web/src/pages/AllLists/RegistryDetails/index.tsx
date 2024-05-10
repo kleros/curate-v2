@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
-import { useTheme } from "styled-components";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
 import InformationCard from "components/InformationCard";
 import Tabs from "./Tabs";
 import List from "./List";
 import History from "components/HistoryDisplay";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
-import ClosedIcon from "assets/svgs/icons/check-circle-outline.svg";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const RegistryDetails: React.FC = () => {
-  const theme = useTheme();
   const { id } = useParams();
 
   const [listAddress, itemId] = id?.split("-");
@@ -33,28 +30,6 @@ const RegistryDetails: React.FC = () => {
     }
   }, [itemDetails, registryDetails, setRegistryDetails]);
 
-  const historyItems = [
-    {
-      title: "List Submitted",
-      variant: theme.primaryBlue,
-      subtitle: "April 06, 2022",
-      rightSided: true,
-    },
-    {
-      title: "List Challenged",
-      party: "- Case #1369 by Alice.eth",
-      variant: theme.secondaryPurple,
-      subtitle: "April 07, 2022",
-      rightSided: true,
-    },
-    {
-      title: "List Submitted",
-      subtitle: "April 06, 2022",
-      rightSided: true,
-      Icon: ClosedIcon,
-    },
-  ];
-
   return (
     <div>
       <InformationCard
@@ -66,7 +41,7 @@ const RegistryDetails: React.FC = () => {
       <Tabs />
       <Routes>
         <Route path="list/:page/:order/:filter" element={<List registryAddress={listAddress} />} />
-        <Route path="history" element={<History items={historyItems} />} />
+        <Route path="history" element={<History itemId={itemId} />} />
         <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
       </Routes>
     </div>

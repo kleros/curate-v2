@@ -22,7 +22,7 @@ const TABS = [
     text: "List",
     value: 0,
     Icon: PaperIcon,
-    path: "list",
+    path: "list/1/desc/all",
   },
   {
     text: "History",

@@ -80,9 +80,6 @@ export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
       return Status.Removed;
     case "registered":
       return Status.Included;
-    case "clearingRequested":
-    case "registrationRequested":
-      return Status.Pending;
     default:
       return Status.Pending;
   }

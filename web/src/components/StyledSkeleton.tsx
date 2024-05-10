@@ -24,6 +24,29 @@ const StyledSkeletonEvidenceCard = styled(Skeleton)`
   width: 76vw;
 `;
 
+const HistorySkeletonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+const HistoryStatusSkeleton = styled(Skeleton)`
+  height: 24px;
+  width: 160px;
+`;
+const HistoryDateSkeleton = styled(Skeleton)`
+  height: 18px;
+  width: 100px;
+`;
+
+export const HistorySkeletonCard = () => (
+  <HistorySkeletonContainer>
+    <HistoryStatusSkeleton />
+    <HistoryDateSkeleton />
+    <HistoryStatusSkeleton />
+    <HistoryDateSkeleton />
+  </HistorySkeletonContainer>
+);
+
 export const SkeletonRegistryCard = () => (
   <SkeletonRegistryCardContainer>
     <StyledSkeletonRegistryCard />

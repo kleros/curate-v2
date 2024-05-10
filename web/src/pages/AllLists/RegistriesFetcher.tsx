@@ -63,6 +63,7 @@ const RegistriesFetcher: React.FC = () => {
         ...registry,
         totalItems: registry.items.length,
         status: registryAsItem?.status,
+        disputed: registryAsItem?.disputed,
         itemId: registryAsItem?.id,
       };
     });

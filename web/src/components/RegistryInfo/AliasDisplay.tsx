@@ -22,9 +22,10 @@ const TextContainer = styled.div`
 
 interface IAlias {
   address: string;
+  className?: string;
 }
 
-const AliasDisplay: React.FC<IAlias> = ({ address }) => {
+const AliasDisplay: React.FC<IAlias> = ({ address, className }) => {
   const { data: addressFromENS, isLoading } = useEnsAddress({
     enabled: !isAddress(address),
     name: address,
@@ -34,7 +35,7 @@ const AliasDisplay: React.FC<IAlias> = ({ address }) => {
   const finalAddress = addressFromENS ?? address;
 
   return (
-    <AliasContainer>
+    <AliasContainer {...{ className }}>
       {isLoading ? <Skeleton width={30} height={24} /> : <IdenticonOrAvatar address={finalAddress} size="24" />}
       <TextContainer>
         {isLoading ? <Skeleton width={30} height={24} /> : <AddressOrName address={finalAddress} />}&nbsp;

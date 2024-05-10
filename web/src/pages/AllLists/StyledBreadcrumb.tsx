@@ -4,6 +4,7 @@ import { Breadcrumb as BreadcrumbBase } from "@kleros/ui-components-library";
 import { useLocation, useNavigate } from "react-router-dom";
 import HomeIcon from "svgs/icons/home.svg";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
+import { useLocalStorage } from "hooks/useLocalStorage";
 
 const StyledBreadcrumb = styled(BreadcrumbBase)`
   margin-bottom: 32px;
@@ -20,6 +21,7 @@ const StyledHomeIcon = styled(HomeIcon)`
 const Breadcrumb: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [registryItemID, setRegistryItemId] = useLocalStorage<string>("registryAsItemID", "");
 
   const [page, listAddress] = useMemo(() => {
     const id = location.pathname.split("/")?.[2];
@@ -32,7 +34,8 @@ const Breadcrumb: React.FC = () => {
         return ["item", address];
       }
       default: {
-        const [address] = id.split("-");
+        const [address, itemId] = id.split("-");
+        setRegistryItemId(itemId);
         return ["list", address];
       }
     }
@@ -58,7 +61,7 @@ const Breadcrumb: React.FC = () => {
         baseItems.push(
           {
             text: registryDetails?.registry?.title ?? "List",
-            value: `/lists/${listAddress}-${location.pathname.split("/")?.[3]}/list/1/desc/all`,
+            value: `/lists/${listAddress}-${registryItemID}/list/1/desc/all`,
           },
           {
             text: "Item",

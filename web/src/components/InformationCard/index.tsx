@@ -9,7 +9,6 @@ import { Status } from "consts/status";
 import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "consts/chains";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { isUndefined } from "utils/index";
-// import { getChainIcon, getChainName } from "components/ChainIcon";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
 import { Policies } from "./Policies";
@@ -104,7 +103,7 @@ const StyledP = styled.p`
 `;
 
 const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryText};
+  color: ${({ theme }) => theme.primaryBlue};
 `;
 
 const Divider = styled.hr`
@@ -189,8 +188,8 @@ const InformationCard: React.FC<IInformationCard> = ({
             {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
           </TopLeftInfo>
           <TopRightInfo>
-            <Copiable copiableContent={id ?? ""} info="Copy Registry Id">
-              <StyledLabel>Id</StyledLabel>
+            <Copiable copiableContent={id ?? ""} info="Copy Registry Address">
+              <StyledLabel>Registry Address</StyledLabel>
             </Copiable>
             {explorerAddress ? (
               <a

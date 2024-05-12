@@ -45,7 +45,7 @@ const TopRightInfo = styled.div`
 `;
 
 const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryText};
+  color: ${({ theme }) => theme.primaryBlue};
 `;
 
 const Divider = styled.hr`
@@ -89,7 +89,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
           <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
           <TopRightInfo>
             <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
-              <StyledLabel>Id</StyledLabel>
+              <StyledLabel>Item Id</StyledLabel>
             </Copiable>
             <StatusDisplay {...{ status, disputed }} />
           </TopRightInfo>

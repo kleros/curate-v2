@@ -6,8 +6,6 @@ import RegistriesDisplay from "components/RegistriesDisplay";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { DEFAULT_CHAIN } from "consts/chains";
 import { listOfListsAddresses } from "utils/listOfListsAddresses";
-// import { isUndefined } from "utils/index";
-// import { OrderDirection } from "src/graphql/graphql";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
@@ -99,6 +97,7 @@ const RegistriesFetcher: React.FC = () => {
       setCurrentPage={(newPage: number) => navigate(`${location}/${newPage}/${order}/${filter}`)}
       totalPages={totalPages}
       registriesPerPage={registriesPerPage}
+      showPagination={!keywords}
     />
   );
 };

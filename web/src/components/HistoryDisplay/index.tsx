@@ -99,7 +99,7 @@ const constructItemsFromRequest = (
       historyItems.push({
         title: "Removal Challenged",
         variant: theme.secondaryPurple,
-        party: `- Case ${request.disputeID} by ${shortenAddress(request.challenger.id)}`,
+        party: `- Case #${request.disputeID} by ${shortenAddress(request.challenger.id)}`,
         subtitle: formatDate(request.submissionTime),
         rightSided: true,
       });

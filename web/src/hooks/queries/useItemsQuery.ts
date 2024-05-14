@@ -80,7 +80,7 @@ export const useItemsQuery = (
     : itemsQueryWhere;
 
   return useQuery<{ items: ItemDetailsFragment[] }>({
-    queryKey: [`useItemsQuery`, skip, where, sortOrder, first, keywords],
+    queryKey: ["refetchOnBlock", `useItemsQuery`, skip, where, sortOrder, first, keywords],
     queryFn: async () => {
       const result = await graphqlBatcher.fetch({
         id: crypto.randomUUID(),

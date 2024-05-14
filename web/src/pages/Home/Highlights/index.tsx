@@ -71,6 +71,7 @@ const HighlightedLists = () => {
         ...registry,
         totalItems: registry.items.length,
         status: registryAsItem?.status,
+        disputed: registryAsItem?.disputed,
         itemId: registryAsItem?.id,
       };
     });

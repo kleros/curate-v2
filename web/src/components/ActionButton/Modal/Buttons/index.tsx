@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
-// import ChallengeButton from "components/ChallengeButton";
-// import RemoveButton from "components/RemoveButton";
 
 const Container = styled.div`
   display: flex;
@@ -14,16 +12,24 @@ const Container = styled.div`
 
 interface IButtons {
   toggleModal: () => void;
+  callback: () => void;
   buttonText: string;
+  isLoading?: boolean;
+  isDisabled?: boolean;
 }
 
-const Buttons: React.FC<IButtons> = ({ toggleModal, buttonText }) => {
+const Buttons: React.FC<IButtons> = ({ toggleModal, buttonText, callback, isLoading, isDisabled }) => {
   return (
     <Container>
       <Button variant="secondary" text="Return" onClick={toggleModal} />
-      <Button text={buttonText} toggleModal={toggleModal} />
-      {/* <ChallengeButton buttonText={buttonText} toggleModal={toggleModal} /> */}
-      {/* <RemoveButton buttonText={buttonText} toggleModal={toggleModal} /> */}
+      <Button
+        text={buttonText}
+        onClick={() => {
+          callback();
+        }}
+        isLoading={isLoading}
+        disabled={isDisabled}
+      />
     </Container>
   );
 };

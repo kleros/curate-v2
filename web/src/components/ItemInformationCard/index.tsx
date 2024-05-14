@@ -1,15 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import { useToggle } from "react-use";
-import { Button, Card, Copiable } from "@kleros/ui-components-library";
+import { Card, Copiable } from "@kleros/ui-components-library";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import RemoveModal from "../Modal/RemoveModal";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import { Policies } from "../InformationCard/Policies";
 import FieldsDisplay from "./FieldsDisplay";
 import StatusDisplay from "./StatusDisplay";
 import Skeleton from "react-loading-skeleton";
+import ActionButton from "../ActionButton";
+import { Address } from "viem";
+import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -66,12 +67,12 @@ const BottomInfo = styled.div`
 
 interface IItemInformationCard extends ItemDetailsFragment {
   className?: string;
-  chainId?: number;
   policyURI: string;
+  registryAddress: Address;
+  refetch: () => void;
 }
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
-  chainId = 100,
   className,
   registerer,
   status,
@@ -79,9 +80,9 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   policyURI,
   itemID,
   props,
+  registryAddress,
+  refetch = () => {},
 }) => {
-  const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
-
   return (
     <>
       <StyledCard {...{ className }}>
@@ -103,11 +104,18 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
           ) : (
             <Skeleton height={24} />
           )}
-          <Button variant="secondary" text={"Remove Item"} onClick={toggleRemoveItemModal} />
+          <ActionButton
+            {...{
+              status: mapFromSubgraphStatus(status, disputed),
+              itemId: itemID,
+              registryAddress,
+              isItem: true,
+              refetch,
+            }}
+          />
         </BottomInfo>
         <Policies policyURI={policyURI} isItem />
       </StyledCard>
-      {isRemoveItemModalOpen ? <RemoveModal isItem toggleModal={toggleRemoveItemModal} /> : null}
     </>
   );
 };

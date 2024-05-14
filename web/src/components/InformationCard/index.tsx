@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import { useToggle } from "react-use";
 import Skeleton from "react-loading-skeleton";
-import { Button, Card, Copiable } from "@kleros/ui-components-library";
+import { Card, Copiable } from "@kleros/ui-components-library";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { Status } from "consts/status";
 import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "consts/chains";
@@ -12,8 +11,10 @@ import { isUndefined } from "utils/index";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { getStatusColor, getStatusLabel } from "components/RegistryCard/StatusBanner";
 import { Policies } from "./Policies";
-import RemoveModal from "../Modal/RemoveModal";
 import { DEFAULT_LIST_LOGO } from "consts/index";
+import { landscapeStyle } from "styles/landscapeStyle";
+import ActionButton from "../ActionButton";
+import { Address } from "viem";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -74,10 +75,15 @@ const TopLeftInfo = styled.div`
 const TopRightInfo = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 0 32px;
+  gap: 32px;
   flex-wrap: wrap;
   align-items: start;
   padding-top: 20px;
+  ${landscapeStyle(
+    () => css`
+      gap: 0 32px;
+    `
+  )}
 `;
 
 const StyledEtherscanIcon = styled(EtherscanIcon)`
@@ -129,7 +135,7 @@ const SkeletonLogo = styled(Skeleton)`
 `;
 
 const SkeletonTitle = styled(Skeleton)`
-  width: 260px;
+  width: 180px;
   height: 30px;
 `;
 
@@ -141,14 +147,16 @@ const SkeletonDescription = styled(Skeleton)`
 interface IInformationCard {
   id?: string;
   title?: string;
-  logoURI?: string;
+  logoURI: string;
   description?: string;
-  chainId?: number;
-  status?: Status;
-  registerer?: string;
-  policyURI?: string;
-  explorerAddress?: string;
+  status: Status;
+  registerer: string;
+  policyURI: string;
+  explorerAddress?: Address;
+  itemId: string;
+  registryAddress: Address;
   className?: string;
+  refetch: () => {};
 }
 
 const InformationCard: React.FC<IInformationCard> = ({
@@ -157,65 +165,63 @@ const InformationCard: React.FC<IInformationCard> = ({
   logoURI,
   description,
   registerer,
-  chainId = 100,
   status,
   policyURI,
   explorerAddress,
   className,
+  itemId,
+  registryAddress,
+  refetch = () => {},
 }) => {
-  const [isRemoveListModalOpen, toggleRemoveListModal] = useToggle(false);
   const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? ""));
   useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
 
   return (
-    <>
-      <StyledCard {...{ className }}>
-        <TopInfo>
-          <TopLeftInfo>
-            <LogoAndTitle>
-              {isUndefined(logoURI) ? (
-                <SkeletonLogo />
-              ) : (
-                <StyledLogo
-                  src={imageSrc}
-                  onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
-                  alt="List Img"
-                  isListView={false}
-                />
-              )}
-              {isUndefined(title) ? <SkeletonTitle /> : <StyledTitle>{title}</StyledTitle>}
-            </LogoAndTitle>
-            {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
-          </TopLeftInfo>
-          <TopRightInfo>
-            <Copiable copiableContent={id ?? ""} info="Copy Registry Address">
-              <StyledLabel>Registry Address</StyledLabel>
-            </Copiable>
-            {explorerAddress ? (
-              <a
-                href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${explorerAddress}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <StyledEtherscanIcon />
-              </a>
-            ) : null}
-            <StatusContainer {...{ status }}>
-              <label className="front-color dot">{getStatusLabel(status)}</label>
-            </StatusContainer>
-          </TopRightInfo>
-        </TopInfo>
-        <Divider />
-        <BottomInfo>
-          <Copiable copiableContent={registerer ?? ""}>
-            <AliasDisplay address={registerer} />
+    <StyledCard {...{ className }}>
+      <TopInfo>
+        <TopLeftInfo>
+          <LogoAndTitle>
+            {isUndefined(logoURI) ? (
+              <SkeletonLogo />
+            ) : (
+              <StyledLogo
+                src={imageSrc}
+                onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
+                alt="List Img"
+                isListView={false}
+              />
+            )}
+            {isUndefined(title) ? <SkeletonTitle /> : <StyledTitle>{title}</StyledTitle>}
+          </LogoAndTitle>
+          {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
+        </TopLeftInfo>
+        <TopRightInfo>
+          <Copiable copiableContent={id ?? ""} info="Copy Registry Address">
+            <StyledLabel>Registry Address</StyledLabel>
           </Copiable>
-          <Button variant="secondary" text={"Remove List"} onClick={toggleRemoveListModal} />
-        </BottomInfo>
-        <Policies policyURI={policyURI} />
-      </StyledCard>
-      {isRemoveListModalOpen ? <RemoveModal isItem={false} toggleModal={toggleRemoveListModal} /> : null}
-    </>
+          {explorerAddress ? (
+            <a
+              href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${explorerAddress}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <StyledEtherscanIcon />
+            </a>
+          ) : null}
+          <StatusContainer {...{ status }}>
+            <label className="front-color dot">{getStatusLabel(status)}</label>
+          </StatusContainer>
+        </TopRightInfo>
+      </TopInfo>
+      <Divider />
+      <BottomInfo>
+        <Copiable copiableContent={registerer ?? ""}>
+          <AliasDisplay address={registerer} />
+        </Copiable>
+        <ActionButton {...{ status, registryAddress, itemId, isItem: false, refetch }} />
+      </BottomInfo>
+      <Policies policyURI={policyURI} />
+    </StyledCard>
   );
 };
 

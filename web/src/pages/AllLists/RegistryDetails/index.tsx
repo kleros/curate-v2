@@ -13,12 +13,29 @@ const RegistryDetails: React.FC = () => {
   const { id } = useParams();
 
   const [listAddress, itemId] = id?.split("-");
+  const [, registryAddress] = itemId.split("@");
 
-  const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
-  const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
+  const { data: itemDetails, refetch: refetchItemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
+  const { data: registryDetails, refetch: refetchRegistryDetails } = useRegistryDetailsQuery(
+    listAddress?.toLowerCase()
+  );
 
-  const { title, status, logoURI, policyURI, description, registerer, disputed, setRegistryDetails } =
-    useRegistryDetailsContext();
+  const refetch = () => {
+    refetchItemDetails();
+    refetchRegistryDetails();
+  };
+
+  const {
+    title,
+    status,
+    logoURI,
+    policyURI,
+    description,
+    registerer,
+    disputed,
+    setRegistryDetails,
+    itemID: registryAsitemId,
+  } = useRegistryDetailsContext();
 
   useEffect(() => {
     if (itemDetails && registryDetails) {
@@ -34,7 +51,16 @@ const RegistryDetails: React.FC = () => {
     <div>
       <InformationCard
         id={listAddress}
-        {...{ title, logoURI, description, policyURI, status: mapFromSubgraphStatus(status, disputed) }}
+        {...{
+          title,
+          logoURI,
+          description,
+          policyURI,
+          status: mapFromSubgraphStatus(status, disputed),
+          itemId: registryAsitemId,
+          refetch,
+        }}
+        registryAddress={registryAddress}
         registerer={registerer?.id}
         explorerAddress={listAddress}
       />

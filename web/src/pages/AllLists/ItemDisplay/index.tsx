@@ -3,22 +3,25 @@ import { useParams } from "react-router-dom";
 import History from "components/HistoryDisplay";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
-import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 import ItemInformationCard from "components/ItemInformationCard";
 
 const ItemDisplay: React.FC = () => {
   const { itemId } = useParams();
   const [, listAddress] = itemId?.split("@");
-  const { data: itemDetails } = useItemDetailsQuery(itemId);
-  const { data: registryDetails } = useRegistryDetailsQuery(listAddress);
+  const { data: itemDetails, refetch: refetchItemDetails } = useItemDetailsQuery(itemId);
+  const { data: registryDetails, refetch: refetchRegistryDetails } = useRegistryDetailsQuery(listAddress);
 
+  const refetch = () => {
+    refetchItemDetails();
+    refetchRegistryDetails();
+  };
   return (
     <div>
       <ItemInformationCard
         {...itemDetails?.item}
-        status={mapFromSubgraphStatus(itemDetails?.item?.status ?? "", itemDetails?.item?.disputed ?? false)}
-        policyURI={registryDetails?.registry.policyURI}
-        isItem={true}
+        policyURI={registryDetails?.registry.policyURI ?? ""}
+        refetch={refetch}
+        registryAddress={listAddress}
       />
 
       <History itemId={itemId ?? ""} isItem />

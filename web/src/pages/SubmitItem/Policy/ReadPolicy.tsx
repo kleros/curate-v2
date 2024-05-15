@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
+import { getIpfsUrl } from "utils/getIpfsUrl";
 
 const StyledA = styled.a`
   align-self: center;
@@ -10,11 +12,9 @@ const StyledA = styled.a`
 interface IReadPolicy {}
 
 const ReadPolicy: React.FC<IReadPolicy> = () => {
+  const { policyURI } = useRegistryDetailsContext();
   return (
-    <StyledA
-      href="https://cdn.kleros.link/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
-      target="_blank"
-    >
+    <StyledA href={getIpfsUrl(policyURI ?? "")} target="_blank">
       → Read the policy here ←
     </StyledA>
   );

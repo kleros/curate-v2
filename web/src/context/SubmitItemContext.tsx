@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useMemo } from "react";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { useLocation } from "react-router-dom";
 
 type Fields = {
   columns: {
@@ -34,6 +35,8 @@ const SubmitItemContext = createContext<ISubmitItemContext>(initialSubmitItemCon
 export const useSubmitItemContext = () => useContext(SubmitItemContext);
 
 export const SubmitItemProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+
   const [fields, setFields] = useLocalStorage<Fields>("fields", initialSubmitItemContext.fields);
   const [submissionDeposit, setSubmissionDeposit] = useLocalStorage<string | null>("submissionDeposit", null);
   const [isPolicyRead, setIsPolicyRead] = useLocalStorage<boolean>(
@@ -42,10 +45,17 @@ export const SubmitItemProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   );
 
   const resetItemData = () => {
-    setFields({ ...initialSubmitItemContext.fields });
+    setFields({ columns: [] });
     setIsPolicyRead(initialSubmitItemContext.isPolicyRead);
     setSubmissionDeposit(null);
   };
+
+  useEffect(() => {
+    // Cleanup function to clear local storage when user leaves the route
+    if (location.pathname.includes("/submit-item")) return;
+
+    resetItemData();
+  }, [location.pathname]);
 
   const contextValues = useMemo(
     () => ({

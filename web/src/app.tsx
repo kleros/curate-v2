@@ -16,6 +16,7 @@ import { SubmitItemProvider } from "context/SubmitItemContext";
 import SubmitItem from "./pages/SubmitItem";
 import SubmitList from "./pages/SubmitList";
 import { RegistryDetailsProvider } from "context/RegistryDetailsContext";
+import { SubmitListProvider } from "./context/SubmitListContext";
 
 const App: React.FC = () => {
   return (
@@ -25,24 +26,26 @@ const App: React.FC = () => {
         <GraphqlBatcherProvider>
           <Web3Provider>
             <IsListViewProvider>
-              <SubmitItemProvider>
-                <SentryRoutes>
-                  <Route path="/" element={<Layout />}>
-                    <Route index element={<Home />} />
-                    <Route path="lists/*" element={<AllLists />} />
-                    <Route
-                      path="submit-item/:id/*"
-                      element={
-                        <RegistryDetailsProvider>
-                          <SubmitItem />
-                        </RegistryDetailsProvider>
-                      }
-                    />
-                    <Route path="submit-list/*" element={<SubmitList />} />
-                    <Route path="*" element={<h1>404 not found</h1>} />
-                  </Route>
-                </SentryRoutes>
-              </SubmitItemProvider>
+              <SubmitListProvider>
+                <SubmitItemProvider>
+                  <SentryRoutes>
+                    <Route path="/" element={<Layout />}>
+                      <Route index element={<Home />} />
+                      <Route path="lists/*" element={<AllLists />} />
+                      <Route
+                        path="submit-item/:id/*"
+                        element={
+                          <RegistryDetailsProvider>
+                            <SubmitItem />
+                          </RegistryDetailsProvider>
+                        }
+                      />
+                      <Route path="submit-list/*" element={<SubmitList />} />
+                      <Route path="*" element={<h1>404 not found</h1>} />
+                    </Route>
+                  </SentryRoutes>
+                </SubmitItemProvider>
+              </SubmitListProvider>
             </IsListViewProvider>
           </Web3Provider>
         </GraphqlBatcherProvider>

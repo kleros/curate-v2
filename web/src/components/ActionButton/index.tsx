@@ -51,7 +51,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
     if (isExecutable && ![Status.Included, Status.Removed].includes(status))
       return <ExecuteButton {...{ registryAddress, itemId, refetch }} />;
 
-    return <Button variant="secondary" text={getModalButtonText(status ?? 0)} onClick={toggleModal} />;
+    return <Button variant="secondary" text={getModalButtonText(status ?? 0, isItem)} onClick={toggleModal} />;
   }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId]);
 
   return (

@@ -56,7 +56,7 @@ const TopInfo = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 24px ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
+  padding: ${responsiveSize(20, 24)} ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
 `;
 
 const LogoAndTitle = styled.div`
@@ -93,8 +93,8 @@ const StyledEtherscanIcon = styled(EtherscanIcon)`
 `;
 
 const StyledLogo = styled.img<{ isListView: boolean }>`
-  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
-  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  width: ${({ isListView }) => (isListView ? "40px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "40px" : "125px")};
   object-fit: contain;
   margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;
@@ -123,7 +123,7 @@ const BottomInfo = styled.div`
   display: flex;
   padding: 0 ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 20px;
   justify-content: space-between;
 `;
 

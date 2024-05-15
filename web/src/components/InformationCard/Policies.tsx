@@ -14,7 +14,7 @@ const ShadeArea = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  padding: ${responsiveSize(16, 20)} ${responsiveSize(16, 32)};
+  padding: 24px ${responsiveSize(24, 32)};
   margin-top: 16px;
   background-color: ${({ theme }) => theme.mediumBlue};
 

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
+import { EnsureChain } from "components/EnsureChain";
 
 const Container = styled.div`
   display: flex;
@@ -22,14 +23,16 @@ const Buttons: React.FC<IButtons> = ({ toggleModal, buttonText, callback, isLoad
   return (
     <Container>
       <Button variant="secondary" text="Return" onClick={toggleModal} />
-      <Button
-        text={buttonText}
-        onClick={() => {
-          callback();
-        }}
-        isLoading={isLoading}
-        disabled={isDisabled}
-      />
+      <EnsureChain>
+        <Button
+          text={buttonText}
+          onClick={() => {
+            callback();
+          }}
+          isLoading={isLoading}
+          disabled={isDisabled}
+        />
+      </EnsureChain>
     </Container>
   );
 };

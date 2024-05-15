@@ -18,6 +18,7 @@ import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { IBaseModal } from ".";
+import EvidenceUpload, { Evidence } from "./EvidenceUpload";
 
 const ReStyledModal = styled(StyledModal)`
   gap: 32px;
@@ -49,7 +50,10 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
   useClickAway(containerRef, () => toggleModal());
   const { address } = useAccount();
   const publicClient = usePublicClient();
+
   const [isChallengingItem, setIsChallengingItem] = useState(false);
+  const [isEvidenceUploading, setIsEvidenceUploading] = useState(false);
+  const [evidence, setEvidence] = useState<Evidence>();
 
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
@@ -57,14 +61,17 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
     // @ts-ignore
     address: registryAddress,
   });
+
   const { data: submissionChallengeDeposit, isLoading: isSubmissionChallengeDepositLoading } =
     //@ts-ignore
     useCurateV2SubmissionChallengeBaseDeposit({ address: registryAddress });
+
   const { data: removalChallengeDeposit, isLoading: isRemovalChallengeDepositLoading } =
     useCurateV2RemovalChallengeBaseDeposit({
       //@ts-ignore
       address: registryAddress,
     });
+
   const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
 
   const depositRequired = useMemo(() => {
@@ -75,6 +82,8 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
     );
   }, [arbitrationCost, removalChallengeDeposit, submissionChallengeDeposit]);
 
+  const isEvidenceValid = useMemo(() => evidence?.name !== "" && evidence?.description !== "", [evidence]);
+
   const isLoading = useMemo(
     () =>
       isBalanceLoading ||
@@ -82,7 +91,8 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       isSubmissionChallengeDepositLoading ||
       isRemovalChallengeDepositLoading ||
       isLoadingExtradata ||
-      isChallengingItem,
+      isChallengingItem ||
+      isEvidenceUploading,
     [
       isBalanceLoading,
       isLoadingArbCost,
@@ -90,19 +100,20 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       isRemovalChallengeDepositLoading,
       isLoadingArbCost,
       isChallengingItem,
+      isEvidenceUploading,
     ]
   );
 
   const isDisabled = useMemo(() => {
-    if (!userBalance || !depositRequired) return true;
+    if (!userBalance || !depositRequired || isEvidenceUploading || !isEvidenceValid) return true;
     return userBalance?.value < depositRequired;
-  }, [depositRequired, userBalance]);
+  }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
   const { config, isError } = usePrepareCurateV2ChallengeRequest({
     enabled: address && registryAddress && !isLoading && !isDisabled,
     //@ts-ignore
     address: registryAddress,
-    args: [itemId as `0x${string}`, "{}"],
+    args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
   });
 
@@ -114,6 +125,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       <ReStyledModal ref={containerRef}>
         <Header text={`Challenge ${isItem ? "Item" : "List"}`} />
         <DepositRequired value={depositRequired} />
+        <EvidenceUpload {...{ setEvidence, setIsEvidenceUploading }} />
         <Info alertMessage={alertMessage} />
         <Buttons
           buttonText="Challenge"

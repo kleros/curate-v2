@@ -17,6 +17,7 @@ import {
 } from "hooks/contracts/generated";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { wrapWithToast } from "utils/wrapWithToast";
+import EvidenceUpload, { Evidence } from "./EvidenceUpload";
 
 const ReStyledModal = styled(StyledModal)`
   gap: 32px;
@@ -37,6 +38,8 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
   const publicClient = usePublicClient();
 
   const [isRemovingItem, setIsRemovingItem] = useState(false);
+  const [isEvidenceUploading, setIsEvidenceUploading] = useState(false);
+  const [evidence, setEvidence] = useState<Evidence>();
 
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
@@ -57,21 +60,36 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
     return (arbitrationCost as bigint) + removalDeposit;
   }, [arbitrationCost, removalDeposit]);
 
+  const isEvidenceValid = useMemo(() => evidence?.name !== "" && evidence?.description !== "", [evidence]);
+
   const isLoading = useMemo(
-    () => isBalanceLoading || isLoadingArbCost || isRemovalDepositLoading || isLoadingArbCost || isRemovingItem,
-    [isBalanceLoading, isLoadingArbCost, isRemovalDepositLoading, isLoadingExtradata, isRemovingItem]
+    () =>
+      isBalanceLoading ||
+      isLoadingArbCost ||
+      isRemovalDepositLoading ||
+      isLoadingArbCost ||
+      isRemovingItem ||
+      isEvidenceUploading,
+    [
+      isBalanceLoading,
+      isLoadingArbCost,
+      isRemovalDepositLoading,
+      isLoadingExtradata,
+      isRemovingItem,
+      isEvidenceUploading,
+    ]
   );
 
   const isDisabled = useMemo(() => {
-    if (!userBalance || !depositRequired) return true;
+    if (!userBalance || !depositRequired || isEvidenceUploading || !isEvidenceValid) return true;
     return userBalance?.value < depositRequired;
-  }, [depositRequired, userBalance]);
+  }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
   const { config, isError } = usePrepareCurateV2RemoveItem({
     enabled: address && registryAddress && !isLoading && !isDisabled,
     //@ts-ignore
     address: registryAddress,
-    args: [itemId as `0x${string}`, "{}"],
+    args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
   });
 
@@ -83,6 +101,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <ReStyledModal ref={containerRef}>
         <Header text={`Remove ${isItem ? "Item" : "List"}`} />
         <DepositRequired value={depositRequired ?? 0} />
+        <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
         <Info alertMessage={alertMessage(isItem)} />
         <Buttons
           buttonText="Remove"

@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { Card, Copiable } from "@kleros/ui-components-library";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
@@ -11,6 +11,7 @@ import Skeleton from "react-loading-skeleton";
 import ActionButton from "../ActionButton";
 import { Address } from "viem";
 import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
+import { landscapeStyle } from "styles/landscapeStyle";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -26,6 +27,11 @@ const TopInfo = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   padding: 12px 32px;
+  ${landscapeStyle(
+    () => css`
+      flex-wrap: nowrap;
+    `
+  )};
 `;
 
 const TopLeftInfo = styled.div`
@@ -43,6 +49,7 @@ const TopRightInfo = styled.div`
   align-items: start;
   gap: 48px;
   padding-top: 20px;
+  flex-shrink: 0;
 `;
 
 const StyledLabel = styled.label`

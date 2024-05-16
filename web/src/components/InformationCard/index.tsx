@@ -57,6 +57,11 @@ const TopInfo = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   padding: ${responsiveSize(20, 24)} ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
+  ${landscapeStyle(
+    () => css`
+      flex-wrap: nowrap;
+    `
+  )}
 `;
 
 const LogoAndTitle = styled.div`
@@ -77,11 +82,12 @@ const TopRightInfo = styled.div`
   flex-direction: row;
   gap: 32px;
   flex-wrap: wrap;
+  flex-shrink: 0;
   align-items: start;
   padding-top: 20px;
   ${landscapeStyle(
     () => css`
-      gap: 0 32px;
+      gap: 0 ${responsiveSize(24, 32, 900)};
     `
   )}
 `;

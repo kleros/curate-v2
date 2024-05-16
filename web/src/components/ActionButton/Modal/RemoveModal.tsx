@@ -8,16 +8,16 @@ import DepositRequired from "./DepositRequired";
 import { StyledModal } from "./StyledModal";
 import Info from "./Info";
 import { IBaseModal } from ".";
-import { useAccount, useBalance, usePublicClient } from "wagmi";
+import { useAccount, useBalance, usePublicClient, useWalletClient } from "wagmi";
 import {
+  prepareWriteCurateV2,
   useCurateV2GetArbitratorExtraData,
   useCurateV2RemovalBaseDeposit,
-  useCurateV2RemoveItem,
-  usePrepareCurateV2RemoveItem,
 } from "hooks/contracts/generated";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { wrapWithToast } from "utils/wrapWithToast";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
+import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 
 const ReStyledModal = styled(StyledModal)`
   gap: 32px;
@@ -36,6 +36,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
   useClickAway(containerRef, () => toggleModal());
   const { address } = useAccount();
   const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
 
   const [isRemovingItem, setIsRemovingItem] = useState(false);
   const [isEvidenceUploading, setIsEvidenceUploading] = useState(false);
@@ -85,16 +86,6 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
-  const { config, isError } = usePrepareCurateV2RemoveItem({
-    enabled: address && registryAddress && !isLoading && !isDisabled,
-    //@ts-ignore
-    address: registryAddress,
-    args: [itemId as `0x${string}`, JSON.stringify(evidence)],
-    value: depositRequired,
-  });
-
-  const { writeAsync: removeItem } = useCurateV2RemoveItem(config);
-
   return (
     <>
       <Overlay />
@@ -106,24 +97,37 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
         <Buttons
           buttonText="Remove"
           toggleModal={toggleModal}
-          isDisabled={isDisabled || isError || isRemovingItem}
+          isDisabled={isDisabled || isRemovingItem}
           isLoading={isLoading}
           callback={() => {
-            if (!removeItem) return;
             setIsRemovingItem(true);
-            wrapWithToast(
-              async () =>
-                await removeItem().then((response) => {
-                  return response.hash;
-                }),
-              publicClient
-            )
-              .then((res) => {
-                console.log({ res });
-                refetch();
-                toggleModal();
+
+            const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
+              type: "application/json",
+            });
+
+            uploadFileToIPFS(evidenceFile)
+              .then(async (res) => {
+                if (res.status === 200 && walletClient) {
+                  const response = await res.json();
+                  const fileURI = response["cids"][0];
+
+                  const { request } = await prepareWriteCurateV2({
+                    //@ts-ignore
+                    address: registryAddress,
+                    functionName: "removeItem",
+                    args: [itemId as `0x${string}`, fileURI],
+                    value: depositRequired,
+                  });
+
+                  wrapWithToast(async () => await walletClient.writeContract(request), publicClient).then((res) => {
+                    console.log({ res });
+                    refetch();
+                    toggleModal();
+                  });
+                }
               })
-              .catch(() => {})
+              .catch((err) => console.log(err))
               .finally(() => setIsRemovingItem(false));
           }}
         />

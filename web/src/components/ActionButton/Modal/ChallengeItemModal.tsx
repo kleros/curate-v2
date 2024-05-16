@@ -8,17 +8,17 @@ import DepositRequired from "./DepositRequired";
 import { StyledModal } from "./StyledModal";
 import Info from "./Info";
 import {
-  useCurateV2ChallengeRequest,
+  prepareWriteCurateV2,
   useCurateV2GetArbitratorExtraData,
   useCurateV2RemovalChallengeBaseDeposit,
   useCurateV2SubmissionChallengeBaseDeposit,
-  usePrepareCurateV2ChallengeRequest,
 } from "hooks/contracts/generated";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
-import { useAccount, useBalance, usePublicClient } from "wagmi";
+import { useAccount, useBalance, usePublicClient, useWalletClient } from "wagmi";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { IBaseModal } from ".";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
+import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 
 const ReStyledModal = styled(StyledModal)`
   gap: 32px;
@@ -50,6 +50,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
   useClickAway(containerRef, () => toggleModal());
   const { address } = useAccount();
   const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
 
   const [isChallengingItem, setIsChallengingItem] = useState(false);
   const [isEvidenceUploading, setIsEvidenceUploading] = useState(false);
@@ -109,16 +110,6 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
-  const { config, isError } = usePrepareCurateV2ChallengeRequest({
-    enabled: address && registryAddress && !isLoading && !isDisabled,
-    //@ts-ignore
-    address: registryAddress,
-    args: [itemId as `0x${string}`, JSON.stringify(evidence)],
-    value: depositRequired,
-  });
-
-  const { writeAsync: challengeRequest } = useCurateV2ChallengeRequest(config);
-
   return (
     <>
       <Overlay />
@@ -130,24 +121,37 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
         <Buttons
           buttonText="Challenge"
           toggleModal={toggleModal}
-          isDisabled={isDisabled || isError || isChallengingItem}
+          isDisabled={isDisabled || isChallengingItem}
           isLoading={isLoading}
-          callback={() => {
-            if (!challengeRequest) return;
+          callback={async () => {
             setIsChallengingItem(true);
-            wrapWithToast(
-              async () =>
-                await challengeRequest().then((response) => {
-                  return response.hash;
-                }),
-              publicClient
-            )
-              .then((res) => {
-                console.log({ res });
-                refetch();
-                toggleModal();
+
+            const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
+              type: "application/json",
+            });
+
+            uploadFileToIPFS(evidenceFile)
+              .then(async (res) => {
+                if (res.status === 200 && walletClient) {
+                  const response = await res.json();
+                  const fileURI = response["cids"][0];
+
+                  const { request } = await prepareWriteCurateV2({
+                    //@ts-ignore
+                    address: registryAddress,
+                    functionName: "challengeRequest",
+                    args: [itemId as `0x${string}`, fileURI],
+                    value: depositRequired,
+                  });
+
+                  wrapWithToast(async () => await walletClient.writeContract(request), publicClient).then((res) => {
+                    console.log({ res });
+                    refetch();
+                    toggleModal();
+                  });
+                }
               })
-              .catch(() => {})
+              .catch((err) => console.log(err))
               .finally(() => setIsChallengingItem(false));
           }}
         />

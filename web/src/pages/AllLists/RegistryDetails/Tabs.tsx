@@ -23,12 +23,14 @@ const TABS = [
     value: 0,
     Icon: PaperIcon,
     path: "list/1/desc/all",
+    identifier: "list",
   },
   {
     text: "History",
     value: 1,
     Icon: HistoryIcon,
     path: "history",
+    identifier: "history",
   },
 ];
 
@@ -38,7 +40,7 @@ const Tabs: React.FC = () => {
   const location = useLocation();
   const currentPathName = location.pathname.split("/").at(3);
 
-  const findTabIndex = (pathName) => TABS.findIndex(({ path }) => pathName.startsWith(path));
+  const findTabIndex = (pathName) => TABS.findIndex(({ identifier }) => pathName.startsWith(identifier));
   const [currentTab, setCurrentTab] = useState(findTabIndex(currentPathName));
 
   useEffect(() => {

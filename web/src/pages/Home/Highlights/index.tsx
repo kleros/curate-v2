@@ -14,6 +14,7 @@ import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
+import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
 
 const Container = styled.div`
   width: 100%;
@@ -51,21 +52,25 @@ const HighlightedLists = () => {
     registry: listOfListsAddresses[DEFAULT_CHAIN],
   });
 
-  // TODO: Json.parse can throw error
   const registryIds = useMemo(
     () =>
       itemsData
-        ? itemsData?.items
+        ? (itemsData?.items
             .map((item) => item?.props[0]?.value?.toLowerCase() ?? undefined)
-            .filter((id) => !isUndefined(id))
+            .filter((id) => !isUndefined(id)) as string[])
         : [],
     [itemsData]
   );
 
   const { data: registriesData, isLoading: isRegistriesDataLoading } = useRegistriesByIdsQuery(registryIds);
 
+  const sortedRegstries = useMemo(
+    () => (registriesData?.registries ? sortRegistriesByIds(registryIds, registriesData?.registries) : []),
+    [registriesData]
+  );
+
   const combinedListsData = useMemo(() => {
-    return registriesData?.registries.map((registry) => {
+    return sortedRegstries.map((registry) => {
       const registryAsItem = itemsData?.items.find((item) => item?.props[0]?.value?.toLowerCase() === registry.id);
       return {
         ...registry,
@@ -75,7 +80,7 @@ const HighlightedLists = () => {
         itemId: registryAsItem?.id,
       };
     });
-  }, [registriesData, itemsData]);
+  }, [sortedRegstries, itemsData]);
 
   const registriesLoading = isUndefined(combinedListsData) || isItemsDataLoading || isRegistriesDataLoading;
 

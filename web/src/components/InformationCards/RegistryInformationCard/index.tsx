@@ -35,7 +35,14 @@ const BottomInfo = styled.div`
 interface IInformationCard
   extends Pick<
     RegistryDetails,
-    "title" | "description" | "logoURI" | "disputed" | "registerer" | "status" | "policyURI"
+    | "title"
+    | "description"
+    | "logoURI"
+    | "disputed"
+    | "registerer"
+    | "status"
+    | "policyURI"
+    | "latestRequestSubmissionTime"
   > {
   id: string;
   itemId: string;
@@ -56,10 +63,22 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
   className,
   itemId,
   parentRegistryAddress,
+  latestRequestSubmissionTime,
   refetch = () => {},
 }) => (
   <StyledCard {...{ className }}>
-    <TopInfo {...{ id, title, description, logoURI, status, disputed }} />
+    <TopInfo
+      {...{
+        id,
+        title,
+        description,
+        logoURI,
+        status,
+        disputed,
+        latestRequestSubmissionTime,
+        registryAddress: parentRegistryAddress,
+      }}
+    />
     <Divider />
     <BottomInfo>
       <Copiable copiableContent={registerer?.id ?? ""}>

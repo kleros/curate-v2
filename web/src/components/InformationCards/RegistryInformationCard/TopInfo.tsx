@@ -96,9 +96,24 @@ const SkeletonDescription = styled(Skeleton)`
   height: 21px;
 `;
 
-interface ITopInfo extends Pick<RegistryDetails, "description" | "title" | "logoURI" | "status" | "disputed" | "id"> {}
+interface ITopInfo
+  extends Pick<
+    RegistryDetails,
+    "description" | "title" | "logoURI" | "status" | "disputed" | "id" | "latestRequestSubmissionTime"
+  > {
+  registryAddress: string;
+}
 
-const TopInfo: React.FC<ITopInfo> = ({ id, title, description, logoURI, status, disputed }) => {
+const TopInfo: React.FC<ITopInfo> = ({
+  id,
+  title,
+  description,
+  logoURI,
+  status,
+  disputed,
+  latestRequestSubmissionTime,
+  registryAddress,
+}) => {
   const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? ""));
   useEffect(() => setImageSrc(getIpfsUrl(logoURI ?? "")), [logoURI]);
   return (
@@ -132,7 +147,7 @@ const TopInfo: React.FC<ITopInfo> = ({ id, title, description, logoURI, status, 
             <StyledEtherscanIcon />
           </a>
         ) : null}
-        <StatusDisplay {...{ status, disputed }} />
+        <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
       </TopRightInfo>
     </TopInfoContainer>
   );

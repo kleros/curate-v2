@@ -34,6 +34,7 @@ const RegistryDetails: React.FC = () => {
     disputed,
     setRegistryDetails,
     itemID: registryAsitemId,
+    latestRequestSubmissionTime,
   } = useRegistryDetailsContext();
 
   useEffect(() => {
@@ -59,6 +60,7 @@ const RegistryDetails: React.FC = () => {
           itemId: registryAsitemId,
           refetch,
           registerer,
+          latestRequestSubmissionTime,
         }}
         parentRegistryAddress={registryAddress}
       />

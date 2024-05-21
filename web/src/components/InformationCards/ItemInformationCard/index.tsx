@@ -10,7 +10,7 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import { Policies } from "../RegistryInformationCard/Policies";
 import FieldsDisplay from "./FieldsDisplay";
 import StatusDisplay from "../StatusDisplay";
-import { ItemDetailsFragment } from "src/graphql/graphql";
+import { ItemDetailsQuery } from "src/graphql/graphql";
 import { Address } from "viem";
 
 const StyledCard = styled(Card)`
@@ -72,7 +72,8 @@ const BottomInfo = styled.div`
   justify-content: space-between;
 `;
 
-interface IItemInformationCard extends ItemDetailsFragment {
+type ItemDetails = NonNullable<ItemDetailsQuery["item"]>;
+interface IItemInformationCard extends ItemDetails {
   className?: string;
   policyURI: string;
   registryAddress: Address;
@@ -88,6 +89,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   itemID,
   props,
   registryAddress,
+  latestRequestSubmissionTime,
   refetch = () => {},
 }) => {
   return (
@@ -99,7 +101,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
             <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
               <StyledLabel>Item Id</StyledLabel>
             </Copiable>
-            <StatusDisplay {...{ status, disputed }} />
+            <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
           </TopRightInfo>
         </TopInfo>
         <Divider />

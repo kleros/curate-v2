@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { getStatusColor, getStatusLabel, mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 import styled from "styled-components";
 import { Status } from "consts/status";
 import { Status as SubgraphStatus } from "src/graphql/graphql";
+import { useCurateV2ChallengePeriodDuration } from "hooks/contracts/generated";
+import { useCountdown } from "hooks/useCountdown";
+import { secondsToDayHourMinute } from "utils/date";
 
 const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
   display: flex;
@@ -33,11 +36,38 @@ const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
 interface IStatusDisplay {
   status: SubgraphStatus;
   disputed: boolean;
+  registryAddress: string;
+  latestRequestSubmissionTime: string;
 }
-const StatusDisplay: React.FC<IStatusDisplay> = ({ status, disputed }) => {
+const StatusDisplay: React.FC<IStatusDisplay> = ({
+  status,
+  disputed,
+  registryAddress,
+  latestRequestSubmissionTime,
+}) => {
+  const processedStatus = mapFromSubgraphStatus(status, disputed);
+  const { data: challengePeriodDuration } = useCurateV2ChallengePeriodDuration({
+    //@ts-ignore
+    address: registryAddress,
+    enabled: [Status.ClearingPending, Status.RegistrationPending].includes(processedStatus),
+  });
+
+  const challengePeriodDeadline = useMemo(() => {
+    if (!challengePeriodDuration || !latestRequestSubmissionTime) return 0;
+
+    return parseInt(challengePeriodDuration.toString()) + parseInt(latestRequestSubmissionTime, 10);
+  }, [latestRequestSubmissionTime, challengePeriodDuration]);
+
+  const countdown = useCountdown(challengePeriodDeadline);
+
+  const showCountdown =
+    countdown && countdown > 0 && [Status.ClearingPending, Status.RegistrationPending].includes(processedStatus);
+
   return (
-    <StatusContainer {...{ status: mapFromSubgraphStatus(status, disputed), isList: false }}>
-      <label className="front-color dot">{getStatusLabel(mapFromSubgraphStatus(status, disputed))}</label>
+    <StatusContainer {...{ status: processedStatus, isList: false }}>
+      <label className="front-color dot">
+        {getStatusLabel(processedStatus)} {showCountdown ? secondsToDayHourMinute(countdown) : ""}
+      </label>
     </StatusContainer>
   );
 };

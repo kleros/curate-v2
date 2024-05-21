@@ -70,7 +70,11 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
         {!isItem ? (
           <>
             {parentRegistryDetails ? (
-              <StyledA href={getIpfsUrl(parentRegistryDetails.registry.policyURI)} target="_blank" rel="noreferrer">
+              <StyledA
+                href={getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <StyledPolicyIcon />
                 Curation Policy
               </StyledA>

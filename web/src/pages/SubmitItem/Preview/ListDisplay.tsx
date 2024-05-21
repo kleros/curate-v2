@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import ItemInformationCard from "components/ItemInformationCard";
+import ItemInformationCard from "components/InformationCards/ItemInformationCard";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 
@@ -38,7 +38,6 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
         policyURI="/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
         status={Status.RegistrationRequested}
         id="1"
-        chainId={42161}
         disputed={false}
       />
     </Container>

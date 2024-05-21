@@ -45,7 +45,7 @@ const Breadcrumb: React.FC = () => {
 
   const breadcrumbItems = useMemo(() => {
     const baseItems = [
-      { text: <StyledHomeIcon />, value: "/lists/display/1/desc/all" },
+      { text: <StyledHomeIcon />, value: "/" },
       { text: "All Lists", value: "/lists/display/1/desc/all" },
     ];
     switch (page) {

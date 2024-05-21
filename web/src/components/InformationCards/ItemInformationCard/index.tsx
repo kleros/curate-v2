@@ -1,17 +1,17 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
 import { Card, Copiable } from "@kleros/ui-components-library";
-import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import { ItemDetailsFragment } from "src/graphql/graphql";
-import { Policies } from "../InformationCard/Policies";
-import FieldsDisplay from "./FieldsDisplay";
-import StatusDisplay from "./StatusDisplay";
+import styled, { css } from "styled-components";
 import Skeleton from "react-loading-skeleton";
-import ActionButton from "../ActionButton";
-import { Address } from "viem";
-import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
+import AliasDisplay from "components/RegistryInfo/AliasDisplay";
+import ActionButton from "components/ActionButton";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
+import { responsiveSize } from "styles/responsiveSize";
 import { landscapeStyle } from "styles/landscapeStyle";
+import { Policies } from "../RegistryInformationCard/Policies";
+import FieldsDisplay from "./FieldsDisplay";
+import StatusDisplay from "../StatusDisplay";
+import { ItemDetailsFragment } from "src/graphql/graphql";
+import { Address } from "viem";
 
 const StyledCard = styled(Card)`
   display: flex;

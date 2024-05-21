@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ItemDetailsFragment } from "src/graphql/graphql";
-import ItemField from "../ItemCard/ItemField";
+import ItemField from "components/ItemCard/ItemField";
 
 const FieldsContainer = styled.div`
   display: flex;

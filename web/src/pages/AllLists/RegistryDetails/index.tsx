@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
-import InformationCard from "components/InformationCard";
+import RegistryInformationCard from "components/InformationCards/RegistryInformationCard";
 import Tabs from "./Tabs";
 import List from "./List";
 import History from "components/HistoryDisplay";
-import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
+import { RegistryDetails as RegistryDetailsType, useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
-import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const RegistryDetails: React.FC = () => {
   const { id } = useParams();
@@ -42,27 +41,26 @@ const RegistryDetails: React.FC = () => {
       setRegistryDetails({
         ...registryDetails.registry,
         ...itemDetails.item,
-        registerer: registryDetails?.registry?.registerer,
-      });
+      } as RegistryDetailsType);
     }
   }, [itemDetails, registryDetails, setRegistryDetails]);
 
   return (
     <div>
-      <InformationCard
+      <RegistryInformationCard
         id={listAddress}
         {...{
           title,
           logoURI,
           description,
           policyURI,
-          status: mapFromSubgraphStatus(status, disputed),
+          status,
+          disputed,
           itemId: registryAsitemId,
           refetch,
+          registerer,
         }}
-        registryAddress={registryAddress}
-        registerer={registerer?.id}
-        explorerAddress={listAddress}
+        parentRegistryAddress={registryAddress}
       />
       <Tabs />
       <Routes>

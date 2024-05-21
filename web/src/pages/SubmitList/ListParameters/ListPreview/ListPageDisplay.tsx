@@ -1,10 +1,9 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import InformationCard from "components/InformationCard";
+import RegistryInformationCard from "components/InformationCards/RegistryInformationCard";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { Status } from "src/graphql/graphql";
-import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +16,7 @@ const StyledP = styled.p`
   margin: 0;
 `;
 
-const StyledInformationCard = styled(InformationCard)`
+const StyledInformationCard = styled(RegistryInformationCard)`
   margin: 0px;
 `;
 
@@ -29,10 +28,15 @@ const ListPageDisplay: React.FC = () => {
     <Container>
       <StyledP>Check how the list is displayed on the List page:</StyledP>
       <StyledInformationCard
+        id=""
+        parentRegistryAddress=""
+        registerer={{ id: "" }}
+        itemId=""
+        refetch={() => {}}
         title={previewData.title}
         description={previewData.description}
-        chainId={421614}
-        status={mapFromSubgraphStatus(Status.Registered, false)}
+        status={Status.Registered}
+        disputed={false}
         logoURI={previewData.logoURI}
         policyURI="https://cdn.kleros.link/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
       />

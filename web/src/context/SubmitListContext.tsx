@@ -1,7 +1,8 @@
-import React, { createContext, useState, useContext, useMemo } from "react";
+import React, { createContext, useState, useContext, useMemo, useEffect } from "react";
 
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { EVIDENCE_MODULE, KLEROS_ARBITRATOR } from "consts/arbitration";
+import { useLocation } from "react-router-dom";
 
 export interface IList {
   governor: string;
@@ -121,11 +122,19 @@ export const SubmitListProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [isPolicyUploading, setIsPolicyUploading] = useState<boolean>(false);
   const [isLogoUploading, setIsLogoUploading] = useState<boolean>(false);
   const [progress, setProgress] = useState<ListProgress>(ListProgress.Start);
+  const location = useLocation();
 
   const resetListData = () => {
     setListData(initialListData);
     setListMetadata(initialListMetadata);
   };
+
+  useEffect(() => {
+    // Cleanup function to clear local storage when user leaves the route
+    if (location.pathname.includes("/submit-list")) return;
+
+    resetListData();
+  }, [location.pathname]);
 
   const contextValues = useMemo(
     () => ({

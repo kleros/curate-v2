@@ -121,14 +121,14 @@ const constructRemovalTemplate = (listMetadata: IListMetadata) => {
           ? `an ${listMetadata.itemName.toLowerCase()}`
           : `a ${listMetadata.itemName.toLowerCase()}`
         : "an item"
-    } to ${listMetadata.title}`,
+    } from ${listMetadata.title}`,
     description: `Someone requested to remove ${
       listMetadata.itemName
         ? isVowel(listMetadata.itemName[0])
           ? `an ${listMetadata.itemName.toLowerCase()}`
           : `a ${listMetadata.itemName.toLowerCase()}`
         : "an item"
-    } to ${listMetadata.title}`,
+    } from ${listMetadata.title}`,
     question: `Does the ${
       (listMetadata.itemName && listMetadata.itemName.toLowerCase()) || "item"
     } comply with the required criteria?`,

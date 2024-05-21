@@ -9,6 +9,7 @@ export const itemFragment = graphql(`
   fragment RegistryItemDetails on Item {
     id
     status
+    disputed
     props {
       label
       description

@@ -9,6 +9,7 @@ interface IRegistriesDisplay extends IRegistriesGrid {
   registriesLoading?: boolean;
   totalRegistries?: number;
   title?: string;
+  showPagination?: Boolean;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ const RegistriesDisplay: React.FC<IRegistriesDisplay> = ({
   registriesPerPage,
   className,
   totalPages,
+  showPagination,
 }) => {
   return (
     <div {...{ className }}>
@@ -38,6 +40,7 @@ const RegistriesDisplay: React.FC<IRegistriesDisplay> = ({
             currentPage,
             setCurrentPage,
             registriesLoading,
+            showPagination,
           }}
         />
       )}

@@ -84,17 +84,17 @@ export function handleRequestSubmitted(event: RequestSubmitted): void {
   item.latestRequester = ensureUser(event.transaction.from.toHexString()).id;
   item.latestRequestResolutionTime = ZERO;
   item.latestRequestSubmissionTime = event.block.timestamp;
+  item.save();
 
   let newStatus = getExtendedStatus(item.status, item.disputed);
 
   if (itemInfo.value1.equals(ONE)) {
     registry.numberOfPending = registry.numberOfPending.plus(ONE);
+    registry.save();
   } else {
     updateCounters(prevStatus, newStatus, event.address);
   }
 
-  registry.save();
-  item.save();
   createRequestFromEvent(event);
 }
 

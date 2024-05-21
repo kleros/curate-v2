@@ -40,6 +40,7 @@ export interface IRegistriesGrid {
   setCurrentPage: (newPage: number) => void;
   registriesPerPage: number;
   totalPages: number;
+  showPagination?: Boolean;
 }
 
 const RegistriesGrid: React.FC<IRegistriesGrid> = ({
@@ -49,6 +50,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   totalPages,
   currentPage,
   setCurrentPage,
+  showPagination,
 }) => {
   const { filter } = useParams();
   const decodedFilter = decodeListURIFilter(filter ?? "all");
@@ -90,7 +92,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
         </GridContainer>
       )}
 
-      {isUndefined(searchValue) ? (
+      {isUndefined(searchValue) && showPagination ? (
         <StyledPagination
           currentPage={currentPage}
           numPages={Math.ceil(totalPages ?? 0)}

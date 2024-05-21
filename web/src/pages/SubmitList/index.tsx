@@ -17,7 +17,6 @@ import ItemPreview from "./ItemParameters/ItemPreview";
 import CustomName from "./ItemParameters/CustomName";
 import AdvancedParameters from "./AdvancedParameters";
 import DeployList from "./DeployList";
-import { SubmitListProvider } from "context/SubmitListContext";
 
 const Container = styled.div`
   display: flex;
@@ -69,7 +68,7 @@ const SubmitList: React.FC = () => {
     location.pathname.includes("/deploy");
 
   return (
-    <SubmitListProvider>
+    <>
       <HeroImage />
       <Container>
         {isConnected && !isTimelineHidden ? <StyledLabel>Create a List</StyledLabel> : null}
@@ -98,7 +97,7 @@ const SubmitList: React.FC = () => {
           </ConnectWalletContainer>
         )}
       </Container>
-    </SubmitListProvider>
+    </>
   );
 };
 

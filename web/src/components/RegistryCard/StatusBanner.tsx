@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { Theme } from "styled-components";
 import { Status } from "consts/status";
+import { Status as SubgraphStatus } from "src/graphql/graphql";
 
 const Container = styled.div<{ status: Status; isListView: boolean }>`
   height: ${({ isListView }) => (isListView ? "min-content" : "45px")};
@@ -45,7 +46,8 @@ interface IStatusBanner {
 
 export const getStatusColor = (status: Status, theme: Theme): [string, string] => {
   switch (status) {
-    case Status.Pending:
+    case Status.RegistrationPending:
+    case Status.ClearingPending:
       return [theme.primaryBlue, theme.mediumBlue];
     case Status.Disputed:
       return [theme.secondaryPurple, theme.mediumPurple];
@@ -60,8 +62,10 @@ export const getStatusColor = (status: Status, theme: Theme): [string, string] =
 
 export const getStatusLabel = (status: Status): string => {
   switch (status) {
-    case Status.Pending:
-      return "Pending";
+    case Status.RegistrationPending:
+      return "Registration Pending";
+    case Status.ClearingPending:
+      return "Clearing Pending";
     case Status.Disputed:
       return "Disputed";
     case Status.Included:
@@ -76,15 +80,14 @@ export const getStatusLabel = (status: Status): string => {
 export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
   if (isDisputed) return Status.Disputed;
   switch (status) {
-    case "absent":
+    case SubgraphStatus.Absent:
       return Status.Removed;
-    case "registered":
+    case SubgraphStatus.Registered:
       return Status.Included;
-    case "clearingRequested":
-    case "registrationRequested":
-      return Status.Pending;
+    case SubgraphStatus.RegistrationRequested:
+      return Status.RegistrationPending;
     default:
-      return Status.Pending;
+      return Status.ClearingPending;
   }
 };
 const StatusBanner: React.FC<IStatusBanner> = ({ status, isListView = false }) => (

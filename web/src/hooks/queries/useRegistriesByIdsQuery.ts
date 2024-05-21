@@ -1,6 +1,7 @@
 import { graphql } from "src/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { useGraphqlBatcher } from "context/GraphqlBatcher";
+import { GetRegistriesByIdsQuery } from "src/graphql/graphql";
 
 export const registriesByIdsQuery = graphql(`
   query GetRegistriesByIds($ids: [ID!]!) {
@@ -19,7 +20,7 @@ export const registriesByIdsQuery = graphql(`
 export const useRegistriesByIdsQuery = (ids) => {
   const { graphqlBatcher } = useGraphqlBatcher();
 
-  return useQuery({
+  return useQuery<GetRegistriesByIdsQuery>({
     queryKey: ["GetRegistriesByIds", ids.join(",")],
     queryFn: async () =>
       await graphqlBatcher.fetch({

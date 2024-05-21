@@ -10,6 +10,7 @@ const itemDetailsQuery = graphql(`
       id
       itemID
       status
+      data
       disputed
       key0
       key1

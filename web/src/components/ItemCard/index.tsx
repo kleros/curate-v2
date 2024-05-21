@@ -36,7 +36,7 @@ const Container = styled.div`
       height: 64px;
       justify-content: space-between;
       grid-template-rows: 1fr;
-      grid-template-columns: 1fr ${responsiveSize(100, 150, 900)} max-content;
+      grid-template-columns: 1fr ${responsiveSize(150, 180, 900)} max-content;
       padding: 0 32px;
     `
   )}

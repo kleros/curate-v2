@@ -27,7 +27,7 @@ const Container = styled.div<{ isListView: boolean }>`
       display: grid;
       grid-template-rows: repeat(3, min-content);
       grid-template-columns: 21px max-content 1fr max-content;
-      column-gap: ${responsiveSize(8, 12, 900)};
+      column-gap: ${responsiveSize(8, 24, 900)};
       row-gap: 16px;
       padding: 16px;
       h3,
@@ -53,8 +53,8 @@ const Container = styled.div<{ isListView: boolean }>`
 `;
 
 const StyledLogo = styled.img<{ isListView: boolean }>`
-  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
-  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  width: ${({ isListView }) => (isListView ? "40px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "40px" : "125px")};
   object-fit: contain;
   margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;
@@ -93,8 +93,8 @@ const StyledButton = styled(Button)`
 `;
 
 const SkeletonLogo = styled(Skeleton)<{ isListView: boolean }>`
-  width: ${({ isListView }) => (isListView ? "48px" : "125px")};
-  height: ${({ isListView }) => (isListView ? "48px" : "125px")};
+  width: ${({ isListView }) => (isListView ? "40px" : "125px")};
+  height: ${({ isListView }) => (isListView ? "40px" : "125px")};
   border-radius: ${({ isListView }) => (isListView ? "24px" : "62.5px")};
   margin-bottom: ${({ isListView }) => (isListView ? "0px" : "8px")};
 `;

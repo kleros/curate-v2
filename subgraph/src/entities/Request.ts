@@ -14,11 +14,7 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
     log.error(`Item for graphItemID {} not found.`, [graphItemID]);
     return;
   }
-  let registry = Registry.load(event.address.toHexString());
-  if (!registry) {
-    log.error(`Registry at address {} not found`, [event.address.toHexString()]);
-    return;
-  }
+
   const requestIndex = item.numberOfRequests.minus(ONE);
   const requestID = graphItemID + "-" + requestIndex.toString();
   const request = new Request(requestID);
@@ -27,7 +23,7 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.arbitratorExtraData = curate.getArbitratorExtraData();
   request.requester = ensureUser(event.transaction.from.toHexString()).id;
   request.item = item.id;
-  request.registry = registry.id;
+  request.registry = event.address.toHexString();
   request.registryAddress = event.address;
   request.resolutionTime = ZERO;
   request.disputeOutcome = NONE;

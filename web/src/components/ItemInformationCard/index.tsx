@@ -1,15 +1,17 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
-import { useToggle } from "react-use";
-import { Button, Card, Copiable } from "@kleros/ui-components-library";
+import { Card, Copiable } from "@kleros/ui-components-library";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import RemoveModal from "../Modal/RemoveModal";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import { Policies } from "../InformationCard/Policies";
 import FieldsDisplay from "./FieldsDisplay";
 import StatusDisplay from "./StatusDisplay";
 import Skeleton from "react-loading-skeleton";
+import ActionButton from "../ActionButton";
+import { Address } from "viem";
+import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
+import { landscapeStyle } from "styles/landscapeStyle";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -25,6 +27,11 @@ const TopInfo = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   padding: 12px 32px;
+  ${landscapeStyle(
+    () => css`
+      flex-wrap: nowrap;
+    `
+  )};
 `;
 
 const TopLeftInfo = styled.div`
@@ -42,10 +49,11 @@ const TopRightInfo = styled.div`
   align-items: start;
   gap: 48px;
   padding-top: 20px;
+  flex-shrink: 0;
 `;
 
 const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryText};
+  color: ${({ theme }) => theme.primaryBlue};
 `;
 
 const Divider = styled.hr`
@@ -66,12 +74,12 @@ const BottomInfo = styled.div`
 
 interface IItemInformationCard extends ItemDetailsFragment {
   className?: string;
-  chainId?: number;
   policyURI: string;
+  registryAddress: Address;
+  refetch: () => void;
 }
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
-  chainId = 100,
   className,
   registerer,
   status,
@@ -79,9 +87,9 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   policyURI,
   itemID,
   props,
+  registryAddress,
+  refetch = () => {},
 }) => {
-  const [isRemoveItemModalOpen, toggleRemoveItemModal] = useToggle(false);
-
   return (
     <>
       <StyledCard {...{ className }}>
@@ -89,7 +97,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
           <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
           <TopRightInfo>
             <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
-              <StyledLabel>Id</StyledLabel>
+              <StyledLabel>Item Id</StyledLabel>
             </Copiable>
             <StatusDisplay {...{ status, disputed }} />
           </TopRightInfo>
@@ -103,11 +111,18 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
           ) : (
             <Skeleton height={24} />
           )}
-          <Button variant="secondary" text={"Remove Item"} onClick={toggleRemoveItemModal} />
+          <ActionButton
+            {...{
+              status: mapFromSubgraphStatus(status, disputed),
+              itemId: itemID,
+              registryAddress,
+              isItem: true,
+              refetch,
+            }}
+          />
         </BottomInfo>
         <Policies policyURI={policyURI} isItem />
       </StyledCard>
-      {isRemoveItemModalOpen ? <RemoveModal isItem toggleModal={toggleRemoveItemModal} /> : null}
     </>
   );
 };

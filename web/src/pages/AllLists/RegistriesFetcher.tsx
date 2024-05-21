@@ -6,14 +6,13 @@ import RegistriesDisplay from "components/RegistriesDisplay";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { DEFAULT_CHAIN } from "consts/chains";
 import { listOfListsAddresses } from "utils/listOfListsAddresses";
-// import { isUndefined } from "utils/index";
-// import { OrderDirection } from "src/graphql/graphql";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
 import { OrderDirection } from "src/graphql/graphql";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { List_filters } from "consts/filters";
+import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -46,9 +45,9 @@ const RegistriesFetcher: React.FC = () => {
   const registryIds = useMemo(
     () =>
       itemsData
-        ? itemsData?.items
+        ? (itemsData?.items
             .map((item) => item?.props[0]?.value?.toLowerCase() ?? undefined)
-            .filter((id) => !isUndefined(id))
+            .filter((id) => !isUndefined(id)) as string[])
         : [],
     [itemsData]
   );
@@ -56,17 +55,23 @@ const RegistriesFetcher: React.FC = () => {
   // get registries by id
   const { data: registriesData, isLoading: isRegistriesDataLoading } = useRegistriesByIdsQuery(registryIds);
 
+  const sortedRegstries = useMemo(
+    () => (registriesData?.registries ? sortRegistriesByIds(registryIds, registriesData?.registries) : []),
+    [registriesData]
+  );
+
   const combinedListsData = useMemo(() => {
-    return registriesData?.registries.map((registry) => {
+    return sortedRegstries.map((registry) => {
       const registryAsItem = itemsData?.items.find((item) => item?.props[0]?.value?.toLowerCase() === registry.id);
       return {
         ...registry,
         totalItems: registry.items.length,
         status: registryAsItem?.status,
+        disputed: registryAsItem?.disputed,
         itemId: registryAsItem?.id,
       };
     });
-  }, [registriesData, itemsData]);
+  }, [sortedRegstries, itemsData]);
 
   const totalRegistries = useMemo<number>(() => {
     if (!mainCurate || !mainCurate.registry) return 0;
@@ -98,6 +103,7 @@ const RegistriesFetcher: React.FC = () => {
       setCurrentPage={(newPage: number) => navigate(`${location}/${newPage}/${order}/${filter}`)}
       totalPages={totalPages}
       registriesPerPage={registriesPerPage}
+      showPagination={!keywords}
     />
   );
 };

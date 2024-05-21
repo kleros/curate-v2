@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "@kleros/ui-components-library";
 import styled from "styled-components";
+import { formatETH } from "utils/format";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -28,11 +29,11 @@ const StyledQuantity = styled.p`
   font-weight: 600;
 `;
 
-const FeeRequired: React.FC = () => {
+const FeeRequired: React.FC<{ value: bigint }> = ({ value }) => {
   return (
     <StyledCard>
       <StyledHeader>Deposit required</StyledHeader>
-      <StyledQuantity>0.00003 ETH</StyledQuantity>
+      <StyledQuantity>{formatETH(value ?? 1, 5)} ETH</StyledQuantity>
     </StyledCard>
   );
 };

@@ -59,4 +59,6 @@ templates:
           handler: handleConnectedListSet
         - event: ListMetadataSet(string)
           handler: handleListMetadataSet
+        - event: DisputeRequest(indexed address,indexed uint256,uint256,uint256,string)
+          handler: handleRequestChallenged
       file: ./src/Curate.ts

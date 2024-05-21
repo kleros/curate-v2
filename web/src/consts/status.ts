@@ -1,5 +1,6 @@
 export enum Status {
-  Pending,
+  RegistrationPending,
+  ClearingPending,
   Disputed,
   Included,
   Removed,

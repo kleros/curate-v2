@@ -7,6 +7,7 @@ import styled, { css } from "styled-components";
 import { FileUploader } from "@kleros/ui-components-library";
 import { responsiveSize } from "styles/responsiveSize";
 import { landscapeStyle } from "styles/landscapeStyle";
+import { SUPPORTED_FILE_TYPES } from "src/consts";
 
 const StyledFileUploader = styled(FileUploader)`
   width: 84vw;
@@ -22,7 +23,7 @@ const StyledFileUploader = styled(FileUploader)`
 `;
 const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const handleFileUpload = (file: File) => {
-    if (file?.type !== "application/pdf") {
+    if (!SUPPORTED_FILE_TYPES.includes(file?.type)) {
       toast.error("File type not supported", toastOptions);
       return;
     }

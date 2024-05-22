@@ -6,6 +6,7 @@ import LabeledInput from "components/LabeledInput";
 import { responsiveSize } from "styles/responsiveSize";
 import { OPTIONS as toastOptions } from "utils/wrapWithToast";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
+import { SUPPORTED_FILE_TYPES } from "src/consts";
 
 const Container = styled.div`
   width: 100%;
@@ -69,7 +70,7 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
   }, [title, description, fileURI]);
 
   const handleFileUpload = (file: File) => {
-    if (file?.type !== "application/pdf") {
+    if (!SUPPORTED_FILE_TYPES.includes(file?.type)) {
       toast.error("File type not supported", toastOptions);
       return;
     }

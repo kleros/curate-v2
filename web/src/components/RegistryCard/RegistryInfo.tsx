@@ -100,19 +100,22 @@ const SkeletonLogo = styled(Skeleton)<{ isListView: boolean }>`
 `;
 
 interface IListInfo {
-  title: string;
+  title?: string;
   totalItems: number;
-  logoURI: string;
-  chainId: number;
+  logoURI?: string;
   status: Status;
   isListView?: boolean;
 }
 
-const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isListView = false }) => {
+const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isListView = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI));
+  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? DEFAULT_LIST_LOGO));
 
-  useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
+  useEffect(() => {
+    if (!logoURI) return;
+    setImageSrc(getIpfsUrl(logoURI));
+  }, [logoURI]);
+
   return (
     <Container {...{ isListView }}>
       {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}

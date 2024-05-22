@@ -42,7 +42,7 @@ const ItemField: React.FC = () => {
     <Container>
       {itemField ? <Title text={itemField?.label} /> : <StyledSkeleton width={100} height={40} />}
       {itemField ? (
-        <FieldInput fieldProp={{ ...itemField, value }} handleWrite={handleWrite} />
+        <FieldInput key={id} fieldProp={{ ...itemField, value }} handleWrite={handleWrite} />
       ) : (
         <StyledSkeleton width={200} height={100} />
       )}

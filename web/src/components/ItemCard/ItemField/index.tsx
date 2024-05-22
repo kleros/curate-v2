@@ -8,6 +8,7 @@ import FileField, { IFileField } from "./FileField";
 import BooleanField, { IBooleanField } from "./BooleanField";
 import NumberField, { INumberField } from "./NumberField";
 import ChainField, { IChainField } from "./ChainField";
+import LongTextField, { ILongTextField } from "./LongTextField";
 
 type ItemDetails = ItemDetailsFragment["props"][number];
 
@@ -58,6 +59,12 @@ const ItemField: React.FC<IItemField> = ({ detailed, type, ...props }) => {
       const { value } = props as IChainField;
 
       FieldComponent = <ChainField {...{ value }} />;
+      break;
+    }
+    case "longText": {
+      const { value, label } = props as ILongTextField;
+
+      FieldComponent = <LongTextField {...{ value, detailed, label }} />;
       break;
     }
     default: {

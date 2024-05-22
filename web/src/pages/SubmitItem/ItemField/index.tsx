@@ -7,6 +7,7 @@ import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import FieldInput from "./FieldInput";
+import { isUndefined } from "src/utils";
 
 const Container = styled.div`
   display: flex;
@@ -31,7 +32,8 @@ const ItemField: React.FC = () => {
     if (!itemField) return;
     const prevFields = fields ?? {};
 
-    if (!prevFields.values?.[itemField.label]) prevFields.columns.push(itemField);
+    if (isUndefined(prevFields.values?.[itemField.label])) prevFields.columns.push(itemField);
+
     prevFields.values = { ...fields.values, [itemField.label]: val };
     setFields({ ...prevFields });
   };

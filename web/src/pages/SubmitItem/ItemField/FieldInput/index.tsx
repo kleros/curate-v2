@@ -1,4 +1,4 @@
-import { RegistryDetailsQuery } from "src/graphql/graphql";
+import { RegistryDetailsFragment } from "src/graphql/graphql";
 import AddressInput from "./AddressInput";
 import React from "react";
 import LinkInput from "./LinkInput";
@@ -8,8 +8,9 @@ import FileInput from "./FileInput";
 import ImageInput from "./ImageInput";
 import BooleanInput from "./BooleanInput";
 import ChainInput from "./ChainInput";
+import LongTextInput from "./LongTextInput";
 
-type FieldProp = NonNullable<RegistryDetailsQuery["registry"]>["fieldProps"][number] & { value?: string };
+type FieldProp = NonNullable<RegistryDetailsFragment>["fieldProps"][number] & { value?: string };
 export interface IFieldInput {
   fieldProp: FieldProp;
   handleWrite: (value: string) => void;
@@ -48,6 +49,10 @@ const FieldInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
     }
     case "chain": {
       FieldComponent = <ChainInput {...{ fieldProp, handleWrite }} />;
+      break;
+    }
+    case "longText": {
+      FieldComponent = <LongTextInput {...{ fieldProp, handleWrite }} />;
       break;
     }
     default: {

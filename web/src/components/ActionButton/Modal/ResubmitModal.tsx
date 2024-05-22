@@ -1,11 +1,8 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
-import { useClickAway } from "react-use";
-import { Overlay } from "components/Overlay";
 import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
-import { StyledModal } from "./StyledModal";
 import Info from "./Info";
 import { IBaseModal } from ".";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
@@ -18,8 +15,9 @@ import {
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { useItemDetailsQuery } from "hooks/queries/useItemDetailsQuery";
+import Modal from "components/Modal";
 
-const ReStyledModal = styled(StyledModal)`
+const ReStyledModal = styled(Modal)`
   gap: 32px;
 `;
 
@@ -32,8 +30,6 @@ const alertMessage = (isItem: boolean) =>
   ` Make sure you read and understand the Policy before proceeding.`;
 
 const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAddress, itemId, refetch }) => {
-  const containerRef = useRef(null);
-  useClickAway(containerRef, () => toggleModal());
   const { address } = useAccount();
   const publicClient = usePublicClient();
   const [isResubmittingItem, setIsResubmittingItem] = useState(false);
@@ -79,38 +75,35 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
   const { writeAsync: resubmitItem } = useCurateV2AddItem(config);
 
   return (
-    <>
-      <Overlay />
-      <ReStyledModal ref={containerRef}>
-        <Header text={`Resubmit ${isItem ? "Item" : "List"}`} />
-        <DepositRequired value={depositRequired ?? 0} />
-        <Info alertMessage={alertMessage(isItem)} />
-        <Buttons
-          buttonText="Resubmit"
-          toggleModal={toggleModal}
-          isDisabled={isDisabled || isError || isResubmittingItem}
-          isLoading={isLoading}
-          callback={() => {
-            if (!resubmitItem) return;
-            setIsResubmittingItem(true);
-            wrapWithToast(
-              async () =>
-                await resubmitItem().then((response) => {
-                  return response.hash;
-                }),
-              publicClient
-            )
-              .then((res) => {
-                console.log({ res });
-                refetch();
-                toggleModal();
-              })
-              .catch(() => {})
-              .finally(() => setIsResubmittingItem(false));
-          }}
-        />
-      </ReStyledModal>
-    </>
+    <ReStyledModal {...{ toggleModal }}>
+      <Header text={`Resubmit ${isItem ? "Item" : "List"}`} />
+      <DepositRequired value={depositRequired ?? 0} />
+      <Info alertMessage={alertMessage(isItem)} />
+      <Buttons
+        buttonText="Resubmit"
+        toggleModal={toggleModal}
+        isDisabled={isDisabled || isError || isResubmittingItem}
+        isLoading={isLoading}
+        callback={() => {
+          if (!resubmitItem) return;
+          setIsResubmittingItem(true);
+          wrapWithToast(
+            async () =>
+              await resubmitItem().then((response) => {
+                return response.hash;
+              }),
+            publicClient
+          )
+            .then((res) => {
+              console.log({ res });
+              refetch();
+              toggleModal();
+            })
+            .catch(() => {})
+            .finally(() => setIsResubmittingItem(false));
+        }}
+      />
+    </ReStyledModal>
   );
 };
 

@@ -9,6 +9,7 @@ import { Status } from "consts/status";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import StatusBanner from "./StatusBanner";
 import { DEFAULT_LIST_LOGO } from "consts/index";
+import TruncatedText from "../TruncatedText";
 
 const Container = styled.div<{ isListView: boolean }>`
   height: calc(100% - 45px);
@@ -62,16 +63,6 @@ const StyledLogo = styled.img<{ isListView: boolean }>`
 const StyledLabel = styled.label`
   color: ${({ theme }) => theme.secondaryText};
 `;
-
-const StyledTitle = styled.h3`
-  font-weight: 400;
-  margin: 0px;
-`;
-
-const TruncatedTitle = ({ text, maxLength }) => {
-  const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
-  return <StyledTitle>{truncatedText}</StyledTitle>;
-};
 
 const StyledButton = styled(Button)`
   background-color: transparent;
@@ -127,7 +118,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isL
         onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
         style={{ display: imageLoaded ? "block" : "none" }}
       />
-      <TruncatedTitle text={title} maxLength={100} />
+      <TruncatedText text={title ?? ""} maxLength={100} />
       <StyledLabel>{totalItems} items</StyledLabel>
       {isListView && <StatusBanner {...{ status, isListView }} />}
       {isListView && <StyledButton text="Open" Icon={ArrowIcon} />}

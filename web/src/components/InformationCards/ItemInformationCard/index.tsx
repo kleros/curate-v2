@@ -49,7 +49,12 @@ const TopRightInfo = styled.div`
   align-items: start;
   gap: 48px;
   padding-top: 20px;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  ${landscapeStyle(
+    () => css`
+      flex-shrink: 0;
+    `
+  )}
 `;
 
 const StyledLabel = styled.label`

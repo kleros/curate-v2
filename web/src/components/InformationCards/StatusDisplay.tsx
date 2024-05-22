@@ -1,37 +1,37 @@
 import React, { useMemo } from "react";
 import { getStatusColor, getStatusLabel, mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
-import styled from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import { Status } from "consts/status";
 import { Status as SubgraphStatus } from "src/graphql/graphql";
 import { useCurateV2ChallengePeriodDuration } from "hooks/contracts/generated";
 import { useCountdown } from "hooks/useCountdown";
 import { secondsToDayHourMinute } from "utils/date";
 
-const StatusContainer = styled.div<{ status: Status; isList: boolean }>`
+const StatusContainer = styled.div`
   display: flex;
-  .dot {
-    ::before {
-      content: "";
-      display: inline-block;
-      height: 8px;
-      width: 8px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-  }
-  ${({ theme, status }) => {
-    const [frontColor] = getStatusColor(status, theme);
-    return `
-      .front-color {
-        color: ${frontColor};
-      }
-      .dot {
-        ::before {
-          background-color: ${frontColor};
-        }
-      }
-    `;
-  }};
+  gap: 4px 8px;
+  flex-wrap: wrap;
+`;
+
+const StyledLabel = styled.label<{ frontColor: string; withDot?: boolean }>`
+  display: flex;
+  align-items: center;
+  color: ${({ frontColor }) => frontColor};
+  ${({ withDot, frontColor }) =>
+    withDot
+      ? css`
+          ::before {
+            content: "";
+            display: inline-block;
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background-color: ${frontColor};
+            flex-shrink: 0;
+          }
+        `
+      : null}
 `;
 interface IStatusDisplay {
   status: SubgraphStatus;
@@ -45,7 +45,11 @@ const StatusDisplay: React.FC<IStatusDisplay> = ({
   registryAddress,
   latestRequestSubmissionTime,
 }) => {
+  const theme = useTheme();
+
   const processedStatus = mapFromSubgraphStatus(status, disputed);
+  const [frontColor] = getStatusColor(processedStatus, theme);
+
   const { data: challengePeriodDuration } = useCurateV2ChallengePeriodDuration({
     //@ts-ignore
     address: registryAddress,
@@ -64,10 +68,11 @@ const StatusDisplay: React.FC<IStatusDisplay> = ({
     countdown && countdown > 0 && [Status.ClearingPending, Status.RegistrationPending].includes(processedStatus);
 
   return (
-    <StatusContainer {...{ status: processedStatus, isList: false }}>
-      <label className="front-color dot">
-        {getStatusLabel(processedStatus)} {showCountdown ? secondsToDayHourMinute(countdown) : ""}
-      </label>
+    <StatusContainer>
+      <StyledLabel frontColor={frontColor} withDot>
+        {getStatusLabel(processedStatus)}
+      </StyledLabel>
+      <StyledLabel {...{ frontColor }}>{showCountdown ? secondsToDayHourMinute(countdown) : ""}</StyledLabel>
     </StatusContainer>
   );
 };

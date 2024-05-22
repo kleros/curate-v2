@@ -43,11 +43,12 @@ const TopRightInfo = styled.div`
   flex-direction: row;
   gap: 32px;
   flex-wrap: wrap;
-  flex-shrink: 0;
+  flex-shrink: 1;
   align-items: start;
   padding-top: 20px;
   ${landscapeStyle(
     () => css`
+      flex-shrink: 0;
       gap: 0 ${responsiveSize(24, 32, 900)};
     `
   )}

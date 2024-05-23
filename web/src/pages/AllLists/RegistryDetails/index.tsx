@@ -7,6 +7,7 @@ import History from "components/HistoryDisplay";
 import { RegistryDetails as RegistryDetailsType, useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
+import { List_filters } from "consts/filters";
 
 const RegistryDetails: React.FC = () => {
   const { id } = useParams();
@@ -68,7 +69,7 @@ const RegistryDetails: React.FC = () => {
       <Routes>
         <Route path="list/:page/:order/:filter" element={<List registryAddress={listAddress} />} />
         <Route path="history" element={<History itemId={itemId} />} />
-        <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
+        <Route path="*" element={<Navigate to={`list/1/desc/${JSON.stringify(List_filters.Active)}`} replace />} />
       </Routes>
     </div>
   );

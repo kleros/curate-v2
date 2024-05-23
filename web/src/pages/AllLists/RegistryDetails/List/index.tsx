@@ -57,6 +57,8 @@ const List: React.FC<IList> = ({ registryAddress }) => {
         return registry.numberOfAbsent;
       case JSON.stringify(List_filters.Pending):
         return registry.numberOfPending;
+      case JSON.stringify(List_filters.Active):
+        return registry.totalItems - registry.numberOfAbsent;
       default:
         return registry.totalItems;
     }

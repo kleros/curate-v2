@@ -4,6 +4,8 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Tabs as TabsComponent } from "@kleros/ui-components-library";
 import PaperIcon from "assets/svgs/icons/paper.svg";
 import HistoryIcon from "assets/svgs/icons/history.svg";
+import { encodeListURIFilter } from "utils/uri";
+import { List_filters } from "consts/filters";
 
 const StyledTabs = styled(TabsComponent)`
   width: 100%;
@@ -22,7 +24,7 @@ const TABS = [
     text: "List",
     value: 0,
     Icon: PaperIcon,
-    path: "list/1/desc/all",
+    path: `list/1/desc/${encodeListURIFilter(List_filters.Active)}`,
     identifier: "list",
   },
   {

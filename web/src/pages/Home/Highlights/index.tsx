@@ -13,6 +13,8 @@ import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
 import { Status } from "src/graphql/graphql";
+import { List_filters } from "consts/filters";
+import { encodeListURIFilter } from "utils/uri";
 
 const Container = styled.div`
   width: 100%;
@@ -39,6 +41,7 @@ const HighlightedLists = () => {
 
   const { data: itemsData, isLoading: isItemsDataLoading } = useItemsQuery(0, 6, {
     registry: listOfListsAddresses[DEFAULT_CHAIN],
+    ...List_filters.Active,
   });
 
   const registryIds = useMemo(
@@ -93,7 +96,7 @@ const HighlightedLists = () => {
             ))}
       </GridContainer>
       <StyledButton
-        onClick={() => navigateAndScrollTop("/lists/display/1/desc/all")}
+        onClick={() => navigateAndScrollTop(`/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}`)}
         text="Show All"
         variant="secondary"
       />

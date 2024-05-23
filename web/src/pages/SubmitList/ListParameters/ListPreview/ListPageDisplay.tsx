@@ -32,7 +32,6 @@ const ListPageDisplay: React.FC = () => {
         parentRegistryAddress=""
         registerer={{ id: "" }}
         itemId=""
-        refetch={() => {}}
         title={previewData.title}
         description={previewData.description}
         status={Status.Registered}

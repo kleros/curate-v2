@@ -138,15 +138,16 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
                   value: depositRequired,
                 });
 
-                wrapWithToast(async () => await walletClient.writeContract(request), publicClient).then((res) => {
-                  console.log({ res });
-                  refetch();
-                  toggleModal();
-                });
+                wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
+                  .then((res) => {
+                    console.log({ res });
+                    refetch();
+                    toggleModal();
+                  })
+                  .finally(() => setIsChallengingItem(false));
               }
             })
-            .catch((err) => console.log(err))
-            .finally(() => setIsChallengingItem(false));
+            .catch((err) => console.log(err));
         }}
       />
     </ReStyledModal>

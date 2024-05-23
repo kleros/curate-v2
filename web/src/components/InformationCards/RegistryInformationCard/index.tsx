@@ -48,7 +48,6 @@ interface IInformationCard
   itemId: string;
   parentRegistryAddress: string;
   className?: string;
-  refetch: () => void;
 }
 
 const RegistryInformationCard: React.FC<IInformationCard> = ({
@@ -64,7 +63,6 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
   itemId,
   parentRegistryAddress,
   latestRequestSubmissionTime,
-  refetch = () => {},
 }) => (
   <StyledCard {...{ className }}>
     <TopInfo
@@ -90,7 +88,6 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
           registryAddress: parentRegistryAddress as `0x${string}`,
           itemId,
           isItem: false,
-          refetch,
         }}
       />
     </BottomInfo>

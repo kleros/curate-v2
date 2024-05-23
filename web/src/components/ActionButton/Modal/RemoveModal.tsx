@@ -114,15 +114,16 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
                   value: depositRequired,
                 });
 
-                wrapWithToast(async () => await walletClient.writeContract(request), publicClient).then((res) => {
-                  console.log({ res });
-                  refetch();
-                  toggleModal();
-                });
+                wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
+                  .then((res) => {
+                    console.log({ res });
+                    refetch();
+                    toggleModal();
+                  })
+                  .finally(() => setIsRemovingItem(false));
               }
             })
-            .catch((err) => console.log(err))
-            .finally(() => setIsRemovingItem(false));
+            .catch((err) => console.log(err));
         }}
       />
     </ReStyledModal>

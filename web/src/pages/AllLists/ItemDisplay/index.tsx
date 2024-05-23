@@ -8,19 +8,14 @@ import ItemInformationCard from "components/InformationCards/ItemInformationCard
 const ItemDisplay: React.FC = () => {
   const { itemId } = useParams();
   const [, listAddress] = itemId?.split("@");
-  const { data: itemDetails, refetch: refetchItemDetails } = useItemDetailsQuery(itemId);
-  const { data: registryDetails, refetch: refetchRegistryDetails } = useRegistryDetailsQuery(listAddress);
+  const { data: itemDetails } = useItemDetailsQuery(itemId);
+  const { data: registryDetails } = useRegistryDetailsQuery(listAddress);
 
-  const refetch = () => {
-    refetchItemDetails();
-    refetchRegistryDetails();
-  };
   return (
     <div>
       <ItemInformationCard
         {...itemDetails?.item}
         policyURI={registryDetails?.registry.policyURI ?? ""}
-        refetch={refetch}
         registryAddress={listAddress}
       />
 

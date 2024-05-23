@@ -15,15 +15,8 @@ const RegistryDetails: React.FC = () => {
   const [listAddress, itemId] = id?.split("-");
   const [, registryAddress] = itemId.split("@");
 
-  const { data: itemDetails, refetch: refetchItemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
-  const { data: registryDetails, refetch: refetchRegistryDetails } = useRegistryDetailsQuery(
-    listAddress?.toLowerCase()
-  );
-
-  const refetch = () => {
-    refetchItemDetails();
-    refetchRegistryDetails();
-  };
+  const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
+  const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
 
   const {
     title,
@@ -59,7 +52,6 @@ const RegistryDetails: React.FC = () => {
           status,
           disputed,
           itemId: registryAsitemId,
-          refetch,
           registerer,
           latestRequestSubmissionTime,
         }}

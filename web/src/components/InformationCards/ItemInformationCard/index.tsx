@@ -82,7 +82,6 @@ interface IItemInformationCard extends ItemDetails {
   className?: string;
   policyURI: string;
   registryAddress: Address;
-  refetch: () => void;
 }
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
@@ -95,7 +94,6 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   props,
   registryAddress,
   latestRequestSubmissionTime,
-  refetch = () => {},
 }) => {
   return (
     <>
@@ -124,7 +122,6 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
               itemId: itemID,
               registryAddress,
               isItem: true,
-              refetch,
             }}
           />
         </BottomInfo>

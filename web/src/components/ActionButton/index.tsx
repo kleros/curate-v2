@@ -1,5 +1,5 @@
 import { Button } from "@kleros/ui-components-library";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Address } from "viem";
 import { COURT_SITE } from "consts/index";
 import { Status } from "consts/status";
@@ -10,6 +10,7 @@ import { useToggle } from "react-use";
 import Modal, { getModalButtonText } from "./Modal";
 import ExecuteButton from "./ExecuteButton";
 import { useCurateV2ChallengePeriodDuration } from "hooks/contracts/generated";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StyledKlerosIcon = styled(KlerosIcon)`
   path {
@@ -22,10 +23,11 @@ interface IActionButton {
   registryAddress: Address;
   itemId: string;
   isItem: boolean;
-  refetch: () => void;
 }
 
-const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId, isItem, refetch }) => {
+const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId, isItem }) => {
+  const queryClient = useQueryClient();
+
   const [isModalOpen, toggleModal] = useToggle(false);
 
   const { data: requests, isLoading } = useItemRequests(`${itemId}@${registryAddress}`);
@@ -39,6 +41,11 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
     if (!latestRequest || !challengePeriodDuration) return false;
     return !latestRequest.resolved && Date.now() / 1000 - latestRequest.submissionTime > challengePeriodDuration;
   }, [latestRequest, challengePeriodDuration]);
+
+  const refetch = useCallback(() => {
+    queryClient.invalidateQueries(["refetchOnBlock", `itemDetailsQuery${itemId}@${registryAddress}`]);
+    queryClient.invalidateQueries(["refetchOnBlock", `registryDetailsQuery${registryAddress}`]);
+  }, [itemId, registryAddress, queryClient]);
 
   let ButtonComponent: JSX.Element | null = useMemo(() => {
     if (status === Status.Disputed)

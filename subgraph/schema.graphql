@@ -149,6 +149,7 @@ type ItemProp @entity {
 
 type FieldProp @entity {
   id: ID!
+  position: BigInt!
   type: String!
   label: String!
   description: String!

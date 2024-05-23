@@ -35,7 +35,7 @@ export const registryFragment = graphql(`
     numberOfRegistered
     numberOfDisputed
 
-    fieldProps {
+    fieldProps(orderBy: position) {
       label
       description
       type

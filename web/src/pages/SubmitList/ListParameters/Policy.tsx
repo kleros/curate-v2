@@ -9,6 +9,7 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { toast } from "react-toastify";
 import { OPTIONS as toastOptions } from "utils/wrapWithToast";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
+import { SUPPORTED_FILE_TYPES } from "src/consts";
 
 const Container = styled.div`
   display: flex;
@@ -40,7 +41,7 @@ const Policy: React.FC = () => {
   const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
 
   const handleFileUpload = (file: File) => {
-    if (file?.type !== "application/pdf") {
+    if (!SUPPORTED_FILE_TYPES.includes(file?.type)) {
       toast.error("File type not supported", toastOptions);
       return;
     }

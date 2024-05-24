@@ -1,11 +1,8 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
-import { useClickAway } from "react-use";
-import { Overlay } from "components/Overlay";
 import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
-import { StyledModal } from "./StyledModal";
 import Info from "./Info";
 import { IBaseModal } from ".";
 import { useAccount, useBalance, usePublicClient, useWalletClient } from "wagmi";
@@ -18,8 +15,9 @@ import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { wrapWithToast } from "utils/wrapWithToast";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
+import Modal from "components/Modal";
 
-const ReStyledModal = styled(StyledModal)`
+const ReStyledModal = styled(Modal)`
   gap: 32px;
 `;
 
@@ -32,8 +30,6 @@ const alertMessage = (isItem: boolean) =>
   ` Make sure you read and understand the Policy before proceeding.`;
 
 const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddress, itemId, refetch }) => {
-  const containerRef = useRef(null);
-  useClickAway(containerRef, () => toggleModal());
   const { address } = useAccount();
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
@@ -87,52 +83,50 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
   return (
-    <>
-      <Overlay />
-      <ReStyledModal ref={containerRef}>
-        <Header text={`Remove ${isItem ? "Item" : "List"}`} />
-        <DepositRequired value={depositRequired ?? 0} />
-        <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
-        <Info alertMessage={alertMessage(isItem)} />
-        <Buttons
-          buttonText="Remove"
-          toggleModal={toggleModal}
-          isDisabled={isDisabled || isRemovingItem}
-          isLoading={isLoading}
-          callback={() => {
-            setIsRemovingItem(true);
+    <ReStyledModal {...{ toggleModal }}>
+      <Header text={`Remove ${isItem ? "Item" : "List"}`} />
+      <DepositRequired value={depositRequired ?? 0} />
+      <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
+      <Info alertMessage={alertMessage(isItem)} />
+      <Buttons
+        buttonText="Remove"
+        toggleModal={toggleModal}
+        isDisabled={isDisabled || isRemovingItem}
+        isLoading={isLoading}
+        callback={() => {
+          setIsRemovingItem(true);
 
-            const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
-              type: "application/json",
-            });
+          const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
+            type: "application/json",
+          });
 
-            uploadFileToIPFS(evidenceFile)
-              .then(async (res) => {
-                if (res.status === 200 && walletClient) {
-                  const response = await res.json();
-                  const fileURI = response["cids"][0];
+          uploadFileToIPFS(evidenceFile)
+            .then(async (res) => {
+              if (res.status === 200 && walletClient) {
+                const response = await res.json();
+                const fileURI = response["cids"][0];
 
-                  const { request } = await prepareWriteCurateV2({
-                    //@ts-ignore
-                    address: registryAddress,
-                    functionName: "removeItem",
-                    args: [itemId as `0x${string}`, fileURI],
-                    value: depositRequired,
-                  });
+                const { request } = await prepareWriteCurateV2({
+                  //@ts-ignore
+                  address: registryAddress,
+                  functionName: "removeItem",
+                  args: [itemId as `0x${string}`, fileURI],
+                  value: depositRequired,
+                });
 
-                  wrapWithToast(async () => await walletClient.writeContract(request), publicClient).then((res) => {
+                wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
+                  .then((res) => {
                     console.log({ res });
                     refetch();
                     toggleModal();
-                  });
-                }
-              })
-              .catch((err) => console.log(err))
-              .finally(() => setIsRemovingItem(false));
-          }}
-        />
-      </ReStyledModal>
-    </>
+                  })
+                  .finally(() => setIsRemovingItem(false));
+              }
+            })
+            .catch((err) => console.log(err));
+        }}
+      />
+    </ReStyledModal>
   );
 };
 

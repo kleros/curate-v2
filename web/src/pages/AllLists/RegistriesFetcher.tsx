@@ -84,6 +84,8 @@ const RegistriesFetcher: React.FC = () => {
         return mainCurate.registry.numberOfAbsent;
       case JSON.stringify(List_filters.Pending):
         return mainCurate.registry.numberOfPending;
+      case JSON.stringify(List_filters.Active):
+        return mainCurate.registry.totalItems - mainCurate.registry.numberOfAbsent;
       default:
         return mainCurate.registry.totalItems;
     }

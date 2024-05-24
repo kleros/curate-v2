@@ -177,6 +177,8 @@ const getMockValueForType = (type: string) => {
   switch (type) {
     case "text":
       return "Ethereum";
+    case "longText":
+      return "Lorem ipsum dolor sit amet, consectetur amet";
     case "address":
       return "0x922911F4f80a569a4425fa083456239838F7F003";
     case "link":

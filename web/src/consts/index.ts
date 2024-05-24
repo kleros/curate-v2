@@ -21,3 +21,5 @@ export const DEFAULT_LIST_LOGO = "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS
 export const CURATION_POLICY = `${IPFS_GATEWAY}/ipfs/QmWciZMi8mBJg34FapRHK4Yh7a6UqmxrpcKQ3KRNMXzjfx`;
 
 export const COURT_SITE = "https://dev--kleros-v2.netlify.app/#/cases";
+
+export const SUPPORTED_FILE_TYPES = ["application/pdf", "text/rtf", "text/markdown", "text/plain"];

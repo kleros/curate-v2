@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useParams } from "react-router-dom";
-import InformationCard from "components/InformationCard";
+import RegistryInformationCard from "components/InformationCards/RegistryInformationCard";
 import Tabs from "./Tabs";
 import List from "./List";
 import History from "components/HistoryDisplay";
-import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
+import { RegistryDetails as RegistryDetailsType, useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
-import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
+import { List_filters } from "consts/filters";
 
 const RegistryDetails: React.FC = () => {
   const { id } = useParams();
@@ -15,15 +15,8 @@ const RegistryDetails: React.FC = () => {
   const [listAddress, itemId] = id?.split("-");
   const [, registryAddress] = itemId.split("@");
 
-  const { data: itemDetails, refetch: refetchItemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
-  const { data: registryDetails, refetch: refetchRegistryDetails } = useRegistryDetailsQuery(
-    listAddress?.toLowerCase()
-  );
-
-  const refetch = () => {
-    refetchItemDetails();
-    refetchRegistryDetails();
-  };
+  const { data: itemDetails } = useItemDetailsQuery(itemId?.toLowerCase());
+  const { data: registryDetails } = useRegistryDetailsQuery(listAddress?.toLowerCase());
 
   const {
     title,
@@ -35,6 +28,7 @@ const RegistryDetails: React.FC = () => {
     disputed,
     setRegistryDetails,
     itemID: registryAsitemId,
+    latestRequestSubmissionTime,
   } = useRegistryDetailsContext();
 
   useEffect(() => {
@@ -42,33 +36,32 @@ const RegistryDetails: React.FC = () => {
       setRegistryDetails({
         ...registryDetails.registry,
         ...itemDetails.item,
-        registerer: registryDetails?.registry?.registerer,
-      });
+      } as RegistryDetailsType);
     }
   }, [itemDetails, registryDetails, setRegistryDetails]);
 
   return (
     <div>
-      <InformationCard
+      <RegistryInformationCard
         id={listAddress}
         {...{
           title,
           logoURI,
           description,
           policyURI,
-          status: mapFromSubgraphStatus(status, disputed),
+          status,
+          disputed,
           itemId: registryAsitemId,
-          refetch,
+          registerer,
+          latestRequestSubmissionTime,
         }}
-        registryAddress={registryAddress}
-        registerer={registerer?.id}
-        explorerAddress={listAddress}
+        parentRegistryAddress={registryAddress}
       />
       <Tabs />
       <Routes>
         <Route path="list/:page/:order/:filter" element={<List registryAddress={listAddress} />} />
         <Route path="history" element={<History itemId={itemId} />} />
-        <Route path="*" element={<Navigate to="list/1/desc/all" replace />} />
+        <Route path="*" element={<Navigate to={`list/1/desc/${JSON.stringify(List_filters.Active)}`} replace />} />
       </Routes>
     </div>
   );

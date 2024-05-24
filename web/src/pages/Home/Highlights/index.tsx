@@ -1,12 +1,9 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
-import { useWindowSize } from "react-use";
 import { Button } from "@kleros/ui-components-library";
 import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
-import { SkeletonRegistryCard, SkeletonRegistryListItem } from "components/StyledSkeleton";
-import { useIsListView } from "context/IsListViewProvider";
+import { SkeletonRegistryCard } from "components/StyledSkeleton";
 import { DEFAULT_CHAIN } from "consts/chains";
 import { isUndefined } from "utils/index";
 import { listOfListsAddresses } from "utils/listOfListsAddresses";
@@ -15,6 +12,9 @@ import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
 import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
+import { Status } from "src/graphql/graphql";
+import { List_filters } from "consts/filters";
+import { encodeListURIFilter } from "utils/uri";
 
 const Container = styled.div`
   width: 100%;
@@ -32,24 +32,16 @@ const GridContainer = styled.div`
   gap: var(--gap);
 `;
 
-const ListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-`;
-
 const StyledButton = styled(Button)`
   margin: 0 auto;
 `;
 
 const HighlightedLists = () => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
-  const { isListView } = useIsListView();
-  const { width } = useWindowSize();
-  const screenIsBig = useMemo(() => width > BREAKPOINT_LANDSCAPE, [width]);
+
   const { data: itemsData, isLoading: isItemsDataLoading } = useItemsQuery(0, 6, {
     registry: listOfListsAddresses[DEFAULT_CHAIN],
+    ...List_filters.Active,
   });
 
   const registryIds = useMemo(
@@ -87,35 +79,24 @@ const HighlightedLists = () => {
   return (
     <Container>
       <Header />
-      {isListView && screenIsBig ? (
-        <ListContainer>
-          {registriesLoading
-            ? [...Array(6)].map((_, i) => <SkeletonRegistryListItem key={i} />)
-            : combinedListsData?.map((registry, i) => (
-                <RegistryCard
-                  key={i}
-                  {...registry}
-                  totalItems={registry.totalItems}
-                  status={mapFromSubgraphStatus(registry.status, registry.disputed)}
-                />
-              ))}
-        </ListContainer>
-      ) : (
-        <GridContainer>
-          {registriesLoading
-            ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
-            : combinedListsData?.map((registry, i) => (
-                <RegistryCard
-                  key={i}
-                  {...registry}
-                  totalItems={registry.totalItems}
-                  status={mapFromSubgraphStatus(registry.status, registry.disputed)}
-                />
-              ))}
-        </GridContainer>
-      )}
+      <GridContainer>
+        {registriesLoading
+          ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
+          : combinedListsData?.map((registry, i) => (
+              <RegistryCard
+                key={i}
+                {...registry}
+                totalItems={registry.totalItems}
+                status={mapFromSubgraphStatus(
+                  registry.status ?? Status.RegistrationRequested,
+                  registry.disputed ?? false
+                )}
+                overrideIsListView
+              />
+            ))}
+      </GridContainer>
       <StyledButton
-        onClick={() => navigateAndScrollTop("/lists/display/1/desc/all")}
+        onClick={() => navigateAndScrollTop(`/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}`)}
         text="Show All"
         variant="secondary"
       />

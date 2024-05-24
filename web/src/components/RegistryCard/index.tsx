@@ -6,6 +6,8 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import StatusBanner from "./StatusBanner";
 import RegistryInfo from "./RegistryInfo";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
+import { GetRegistriesByIdsQuery } from "src/graphql/graphql";
+import { Status } from "src/consts/status";
 
 const StyledCard = styled(Card)`
   width: 100%;
@@ -24,21 +26,15 @@ const StyledListItem = styled(Card)`
   )}
 `;
 
-type List = [number];
+type List = GetRegistriesByIdsQuery["registries"][number];
 interface IListCard extends List {
   overrideIsListView?: boolean;
+  itemId?: string;
+  totalItems: number;
+  status: Status;
 }
 
-const RegistryCard: React.FC<IListCard> = ({
-  id,
-  itemId,
-  title,
-  logoURI,
-  totalItems,
-  status,
-  chainId,
-  overrideIsListView,
-}) => {
+const RegistryCard: React.FC<IListCard> = ({ id, itemId, title, logoURI, totalItems, status, overrideIsListView }) => {
   const { isListView } = useIsListView();
   const navigateAndScrollTop = useNavigateAndScrollTop();
 
@@ -48,15 +44,15 @@ const RegistryCard: React.FC<IListCard> = ({
     <>
       {!isListView || overrideIsListView ? (
         <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/1/desc/all`)}>
-          <StatusBanner {...{ status, chainId }} />
-          <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} />
+          <StatusBanner {...{ status }} />
+          <RegistryInfo {...{ title, logoURI, totalItems, status }} />
         </StyledCard>
       ) : (
         <StyledListItem
           hover
           onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/desc/all`)}
         >
-          <RegistryInfo {...{ title, logoURI, totalItems, status, chainId }} isListView />
+          <RegistryInfo {...{ title, logoURI, totalItems, status }} isListView />
         </StyledListItem>
       )}
     </>

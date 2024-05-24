@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { json, log } from "@graphprotocol/graph-ts";
+import { BigInt, json, log } from "@graphprotocol/graph-ts";
 import { Item, Request, Registry, FieldProp } from "../generated/schema";
 
 import {
@@ -219,6 +219,7 @@ export function handleListMetadataSet(event: ListMetadataSet): void {
     let fieldPropId = registry.id + "@" + checkedLabel;
     let fieldProp = new FieldProp(fieldPropId);
 
+    fieldProp.position = BigInt.fromI32(i);
     fieldProp.type = JSONValueToMaybeString(_type);
     fieldProp.label = JSONValueToMaybeString(label);
     fieldProp.description = JSONValueToMaybeString(description);

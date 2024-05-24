@@ -9,6 +9,7 @@ import { Status } from "consts/status";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import StatusBanner from "./StatusBanner";
 import { DEFAULT_LIST_LOGO } from "consts/index";
+import TruncatedText from "../TruncatedText";
 
 const Container = styled.div<{ isListView: boolean }>`
   height: calc(100% - 45px);
@@ -63,16 +64,6 @@ const StyledLabel = styled.label`
   color: ${({ theme }) => theme.secondaryText};
 `;
 
-const StyledTitle = styled.h3`
-  font-weight: 400;
-  margin: 0px;
-`;
-
-const TruncatedTitle = ({ text, maxLength }) => {
-  const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
-  return <StyledTitle>{truncatedText}</StyledTitle>;
-};
-
 const StyledButton = styled(Button)`
   background-color: transparent;
   padding: 0;
@@ -100,19 +91,22 @@ const SkeletonLogo = styled(Skeleton)<{ isListView: boolean }>`
 `;
 
 interface IListInfo {
-  title: string;
+  title?: string;
   totalItems: number;
-  logoURI: string;
-  chainId: number;
+  logoURI?: string;
   status: Status;
   isListView?: boolean;
 }
 
-const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, status, isListView = false }) => {
+const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isListView = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI));
+  const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? DEFAULT_LIST_LOGO));
 
-  useEffect(() => setImageSrc(getIpfsUrl(logoURI)), [logoURI]);
+  useEffect(() => {
+    if (!logoURI) return;
+    setImageSrc(getIpfsUrl(logoURI));
+  }, [logoURI]);
+
   return (
     <Container {...{ isListView }}>
       {!imageLoaded ? <SkeletonLogo isListView={isListView} /> : null}
@@ -124,7 +118,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, chainId, st
         onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
         style={{ display: imageLoaded ? "block" : "none" }}
       />
-      <TruncatedTitle text={title} maxLength={100} />
+      <TruncatedText text={title ?? ""} maxLength={100} />
       <StyledLabel>{totalItems} items</StyledLabel>
       {isListView && <StatusBanner {...{ status, isListView }} />}
       {isListView && <StyledButton text="Open" Icon={ArrowIcon} />}

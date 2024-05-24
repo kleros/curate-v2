@@ -95,6 +95,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
       <DropdownSelect
         items={[
           { text: "All Status", dot: "grey", value: JSON.stringify({}) },
+          { text: "Active", dot: "orange", value: JSON.stringify(List_filters.Active) },
           {
             text: "Pending",
             dot: "blue",

@@ -17,6 +17,7 @@ const itemDetailsQuery = graphql(`
       key2
       key3
       key4
+      latestRequestSubmissionTime
       latestChallenger {
         id
       }

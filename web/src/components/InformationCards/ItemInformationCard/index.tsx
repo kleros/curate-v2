@@ -1,17 +1,17 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
 import { Card, Copiable } from "@kleros/ui-components-library";
-import AliasDisplay from "components/RegistryInfo/AliasDisplay";
-import { ItemDetailsFragment } from "src/graphql/graphql";
-import { Policies } from "../InformationCard/Policies";
-import FieldsDisplay from "./FieldsDisplay";
-import StatusDisplay from "./StatusDisplay";
+import styled, { css } from "styled-components";
 import Skeleton from "react-loading-skeleton";
-import ActionButton from "../ActionButton";
-import { Address } from "viem";
-import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
+import AliasDisplay from "components/RegistryInfo/AliasDisplay";
+import ActionButton from "components/ActionButton";
+import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
+import { responsiveSize } from "styles/responsiveSize";
 import { landscapeStyle } from "styles/landscapeStyle";
+import { Policies } from "../RegistryInformationCard/Policies";
+import FieldsDisplay from "./FieldsDisplay";
+import StatusDisplay from "../StatusDisplay";
+import { ItemDetailsQuery } from "src/graphql/graphql";
+import { Address } from "viem";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -49,7 +49,12 @@ const TopRightInfo = styled.div`
   align-items: start;
   gap: 48px;
   padding-top: 20px;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  ${landscapeStyle(
+    () => css`
+      flex-shrink: 0;
+    `
+  )}
 `;
 
 const StyledLabel = styled.label`
@@ -72,11 +77,11 @@ const BottomInfo = styled.div`
   justify-content: space-between;
 `;
 
-interface IItemInformationCard extends ItemDetailsFragment {
+type ItemDetails = NonNullable<ItemDetailsQuery["item"]>;
+interface IItemInformationCard extends ItemDetails {
   className?: string;
   policyURI: string;
   registryAddress: Address;
-  refetch: () => void;
 }
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
@@ -88,7 +93,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   itemID,
   props,
   registryAddress,
-  refetch = () => {},
+  latestRequestSubmissionTime,
 }) => {
   return (
     <>
@@ -99,7 +104,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
             <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
               <StyledLabel>Item Id</StyledLabel>
             </Copiable>
-            <StatusDisplay {...{ status, disputed }} />
+            <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
           </TopRightInfo>
         </TopInfo>
         <Divider />
@@ -117,7 +122,6 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
               itemId: itemID,
               registryAddress,
               isItem: true,
-              refetch,
             }}
           />
         </BottomInfo>

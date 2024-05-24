@@ -5,6 +5,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import HomeIcon from "svgs/icons/home.svg";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { encodeListURIFilter } from "utils/uri";
+import { List_filters } from "consts/filters";
 
 const StyledBreadcrumb = styled(BreadcrumbBase)`
   margin-bottom: 32px;
@@ -45,8 +47,8 @@ const Breadcrumb: React.FC = () => {
 
   const breadcrumbItems = useMemo(() => {
     const baseItems = [
-      { text: <StyledHomeIcon />, value: "/lists/display/1/desc/all" },
-      { text: "All Lists", value: "/lists/display/1/desc/all" },
+      { text: <StyledHomeIcon />, value: "/" },
+      { text: "All Lists", value: `/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}` },
     ];
     switch (page) {
       case "allLists":

@@ -9,7 +9,6 @@ import Modal from "components/Modal";
 
 const Container = styled.p`
   margin: 0px;
-  cursor: pointer;
 `;
 
 const StyledModal = styled(Modal)`
@@ -19,6 +18,11 @@ const StyledModal = styled(Modal)`
 const TextDisplay = styled(Textarea)`
   width: 100%;
   height: 80vh;
+`;
+
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.primaryBlue};
+  cursor: pointer;
 `;
 
 const LongTextFullDisplay: React.FC<{ text: string; toggleModal: () => void }> = ({ text, toggleModal }) => (
@@ -40,13 +44,14 @@ const LongTextField: React.FC<ILongTextField> = ({ value, detailed, label }) => 
   const [isModalOpen, toggleModal] = useToggle(false);
   return (
     <>
-      <Container onClick={toggleModal}>
+      <Container>
         {detailed ? (
           <WithHelpTooltip tooltipMsg={label ?? ""}>
-            <TruncatedText text={value} maxLength={50} />
+            <TruncatedText text={value} maxLength={40} />
+            &nbsp; <StyledLabel onClick={toggleModal}>[Read More]</StyledLabel>
           </WithHelpTooltip>
         ) : (
-          <TruncatedText text={value} maxLength={50} />
+          <TruncatedText text={value} maxLength={30} />
         )}
       </Container>
       {isModalOpen && <LongTextFullDisplay text={value} toggleModal={toggleModal} />}

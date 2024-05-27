@@ -17,6 +17,7 @@ import ItemPreview from "./ItemParameters/ItemPreview";
 import CustomName from "./ItemParameters/CustomName";
 import AdvancedParameters from "./AdvancedParameters";
 import DeployList from "./DeployList";
+import { EnsureAuth } from "components/EnsureAuth";
 
 const Container = styled.div`
   display: flex;
@@ -36,6 +37,10 @@ const ConnectWalletContainer = styled.div`
   align-items: center;
   text-align: center;
   color: ${({ theme }) => theme.primaryText};
+`;
+
+const StyledEnsureAuth = styled(EnsureAuth)`
+  align-self: center;
 `;
 
 const MiddleContentContainer = styled.div`
@@ -73,22 +78,24 @@ const SubmitList: React.FC = () => {
       <Container>
         {isConnected && !isTimelineHidden ? <StyledLabel>Create a List</StyledLabel> : null}
         {isConnected ? (
-          <MiddleContentContainer>
-            {isConnected && !isTimelineHidden ? <Timeline /> : null}
-            <Routes>
-              <Route index element={<Navigate to="title" replace />} />
-              <Route path="/title/*" element={<Title />} />
-              <Route path="/description/*" element={<Description />} />
-              <Route path="/logo/*" element={<LogoUpload />} />
-              <Route path="/policy/*" element={<Policy />} />
-              <Route path="/deposit/*" element={<Deposit />} />
-              <Route path="/fields/*" element={<Fields />} />
-              <Route path="/item-preview/*" element={<ItemPreview />} />
-              <Route path="/custom/*" element={<CustomName />} />
-              <Route path="/advanced/*" element={<AdvancedParameters />} />
-              <Route path="/deploy/*" element={<DeployList />} />
-            </Routes>
-          </MiddleContentContainer>
+          <StyledEnsureAuth>
+            <MiddleContentContainer>
+              {isConnected && !isTimelineHidden ? <Timeline /> : null}
+              <Routes>
+                <Route index element={<Navigate to="title" replace />} />
+                <Route path="/title/*" element={<Title />} />
+                <Route path="/description/*" element={<Description />} />
+                <Route path="/logo/*" element={<LogoUpload />} />
+                <Route path="/policy/*" element={<Policy />} />
+                <Route path="/deposit/*" element={<Deposit />} />
+                <Route path="/fields/*" element={<Fields />} />
+                <Route path="/item-preview/*" element={<ItemPreview />} />
+                <Route path="/custom/*" element={<CustomName />} />
+                <Route path="/advanced/*" element={<AdvancedParameters />} />
+                <Route path="/deploy/*" element={<DeployList />} />
+              </Routes>
+            </MiddleContentContainer>
+          </StyledEnsureAuth>
         ) : (
           <ConnectWalletContainer>
             To create a new list, connect first

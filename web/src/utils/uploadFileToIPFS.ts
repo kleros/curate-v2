@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import { OPTIONS as toastOptions } from "utils/wrapWithToast";
 
 export function uploadFileToIPFS(file: File): Promise<Response> {
+  const authToken = sessionStorage.getItem("auth-token")?.replace(/"/g, "");
+
   return toast.promise<Response, Error>(
     (async () => {
       const formData = new FormData();
@@ -11,6 +13,9 @@ export function uploadFileToIPFS(file: File): Promise<Response> {
 
       const response = await fetch(url, {
         method: "POST",
+        headers: {
+          "x-auth-token": authToken ?? "",
+        },
         body: formData,
       });
 

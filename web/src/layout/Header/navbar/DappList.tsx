@@ -78,7 +78,7 @@ const ITEMS = [
   {
     text: "Curate V2",
     Icon: Curate,
-    url: "https://curate-v2.netlify.app/",
+    url: "https://curate-v2.kleros.builders/",
   },
   {
     text: "Resolver V2",

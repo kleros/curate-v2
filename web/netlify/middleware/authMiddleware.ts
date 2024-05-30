@@ -9,7 +9,7 @@ export const authMiddleware = () => {
       if (!authToken) {
         return {
           statusCode: 400,
-          body: JSON.stringify({ message: `Error : Missing x-auth-token in Header}` }),
+          body: JSON.stringify({ message: "Error : Missing x-auth-token in Header" }),
         };
       }
 

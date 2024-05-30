@@ -13,7 +13,7 @@ export const useUserSettings = () => {
     queryFn: async () => {
       try {
         if (!authToken) return;
-        const res = await fetch(`/.netlify/functions/fetch-settings`, {
+        const res = await fetch("/.netlify/functions/fetch-settings", {
           method: "POST",
           headers: {
             "x-auth-token": authToken,

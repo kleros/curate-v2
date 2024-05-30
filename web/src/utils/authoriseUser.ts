@@ -9,7 +9,7 @@ type AuthoriseUserData = {
 
 export function authoriseUser(authData: AuthoriseUserData): Promise<Response> {
   return toast.promise<Response, Error>(
-    fetch(`/.netlify/functions/authUser`, {
+    fetch('/.netlify/functions/authUser', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

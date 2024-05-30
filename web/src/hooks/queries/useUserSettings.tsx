@@ -9,7 +9,7 @@ export const useUserSettings = () => {
   return useQuery({
     queryKey: [`UserSettings`],
     enabled: isEnabled,
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
     queryFn: async () => {
       try {
         if (!authToken) return;

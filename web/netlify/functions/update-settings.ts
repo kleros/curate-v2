@@ -64,7 +64,14 @@ const updateSettings = async (event) => {
     if (event?.auth?.id.toLowerCase() !== lowerCaseAddress) {
       throw new Error("Unauthorised user");
     }
-    const supabase = createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_CLIENT_API_KEY!);
+
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseApiKey = process.env.SUPABASE_CLIENT_API_KEY;
+
+    if (!supabaseUrl || !supabaseApiKey) {
+      throw new Error("Supabase URL or API key is undefined");
+    }
+    const supabase = createClient<Database>(supabaseUrl, supabaseApiKey);
 
     // If the message is empty, delete the user record
     if (email === "" && telegram === "") {

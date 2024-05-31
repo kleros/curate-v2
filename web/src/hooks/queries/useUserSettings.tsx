@@ -7,7 +7,7 @@ export const useUserSettings = () => {
   const isEnabled = !isUndefined(authToken);
 
   return useQuery({
-    queryKey: [`UserSettings`],
+    queryKey: ["UserSettings"],
     enabled: isEnabled,
     staleTime: Number.POSITIVE_INFINITY,
     queryFn: async () => {

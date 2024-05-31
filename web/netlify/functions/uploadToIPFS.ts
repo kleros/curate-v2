@@ -51,7 +51,7 @@ const parseMultipart = ({ headers, body, isBase64Encoded }) =>
     bb.end();
   });
 
-const pinToFilebase = async (data: FormData, dapp: string, operation: string): Promise<Array<string>> => {
+const pinToFilebase = async (data: FormData, operation: string): Promise<Array<string>> => {
   const cids = new Array<string>();
   for (const [_, dataElement] of Object.entries(data)) {
     if (dataElement.isFile) {
@@ -69,23 +69,18 @@ const pinToFilebase = async (data: FormData, dapp: string, operation: string): P
 export const uploadToIpfs = async (event) => {
   const { queryStringParameters } = event;
 
-  if (
-    !queryStringParameters ||
-    !queryStringParameters.dapp ||
-    !queryStringParameters.key ||
-    !queryStringParameters.operation
-  ) {
+  if (!queryStringParameters?.operation) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message: "Invalid query parameters" }),
+      body: JSON.stringify({ message: "Invalid query parameters, missing query : operation " }),
     };
   }
 
-  const { dapp, operation } = queryStringParameters;
+  const { operation } = queryStringParameters;
 
   try {
     const parsed = await parseMultipart(event);
-    const cids = await pinToFilebase(parsed, dapp, operation);
+    const cids = await pinToFilebase(parsed, operation);
 
     return {
       statusCode: 200,

@@ -9,7 +9,13 @@ const fetchSettings = async (event) => {
     const address = event.auth.id;
     const lowerCaseAddress = address.toLowerCase() as `0x${string}`;
 
-    const supabase = createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_CLIENT_API_KEY!);
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseApiKey = process.env.SUPABASE_CLIENT_API_KEY;
+
+    if (!supabaseUrl || !supabaseApiKey) {
+      throw new Error("Supabase URL or API key is undefined");
+    }
+    const supabase = createClient<Database>(supabaseUrl, supabaseApiKey);
 
     const { error, data } = await supabase
       .from("user-settings")
@@ -18,7 +24,7 @@ const fetchSettings = async (event) => {
       .single();
 
     if (!data) {
-      return { statusCode: 404, message: `Error : User not found` };
+      return { statusCode: 404, message: "Error : User not found" };
     }
 
     if (error) {

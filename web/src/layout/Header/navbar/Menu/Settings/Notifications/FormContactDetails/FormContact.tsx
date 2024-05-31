@@ -51,7 +51,7 @@ const FormContact: React.FC<IForm> = ({
       return undefined;
     }
     return contactIsValid ? "success" : "error";
-  }, [contactInput, contactIsValid]);
+  }, [contactInput, contactIsValid, isEditing]);
 
   return (
     <>

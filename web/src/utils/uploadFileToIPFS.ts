@@ -9,7 +9,7 @@ export function uploadFileToIPFS(file: File): Promise<Response> {
       const formData = new FormData();
       formData.append("file", file, file.name);
 
-      const url = "/.netlify/functions/uploadToIPFS?dapp=curate&key=curate-v2&operation=file";
+      const url = "/.netlify/functions/uploadToIPFS?operation=file";
 
       const response = await fetch(url, {
         method: "POST",

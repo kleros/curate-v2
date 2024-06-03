@@ -16,6 +16,7 @@ import { wrapWithToast } from "utils/wrapWithToast";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import Modal from "components/Modal";
+import { EnsureAuth } from "components/EnsureAuth";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -88,44 +89,46 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <DepositRequired value={depositRequired ?? 0} />
       <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
       <Info alertMessage={alertMessage(isItem)} />
-      <Buttons
-        buttonText="Remove"
-        toggleModal={toggleModal}
-        isDisabled={isDisabled || isRemovingItem}
-        isLoading={isLoading}
-        callback={() => {
-          setIsRemovingItem(true);
+      <EnsureAuth>
+        <Buttons
+          buttonText="Remove"
+          toggleModal={toggleModal}
+          isDisabled={isDisabled || isRemovingItem}
+          isLoading={isLoading}
+          callback={() => {
+            setIsRemovingItem(true);
 
-          const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
-            type: "application/json",
-          });
+            const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
+              type: "application/json",
+            });
 
-          uploadFileToIPFS(evidenceFile)
-            .then(async (res) => {
-              if (res.status === 200 && walletClient) {
-                const response = await res.json();
-                const fileURI = response["cids"][0];
+            uploadFileToIPFS(evidenceFile)
+              .then(async (res) => {
+                if (res.status === 200 && walletClient) {
+                  const response = await res.json();
+                  const fileURI = response["cids"][0];
 
-                const { request } = await prepareWriteCurateV2({
-                  //@ts-ignore
-                  address: registryAddress,
-                  functionName: "removeItem",
-                  args: [itemId as `0x${string}`, fileURI],
-                  value: depositRequired,
-                });
+                  const { request } = await prepareWriteCurateV2({
+                    //@ts-ignore
+                    address: registryAddress,
+                    functionName: "removeItem",
+                    args: [itemId as `0x${string}`, fileURI],
+                    value: depositRequired,
+                  });
 
-                wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
-                  .then((res) => {
-                    console.log({ res });
-                    refetch();
-                    toggleModal();
-                  })
-                  .finally(() => setIsRemovingItem(false));
-              }
-            })
-            .catch((err) => console.log(err));
-        }}
-      />
+                  wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
+                    .then((res) => {
+                      console.log({ res });
+                      refetch();
+                      toggleModal();
+                    })
+                    .finally(() => setIsRemovingItem(false));
+                }
+              })
+              .catch((err) => console.log(err));
+          }}
+        />
+      </EnsureAuth>
     </ReStyledModal>
   );
 };

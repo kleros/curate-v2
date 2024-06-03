@@ -11,6 +11,7 @@ import Header from "./Header";
 import ItemField from "./ItemField";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
+import { EnsureAuth } from "components/EnsureAuth";
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +31,10 @@ const ConnectWalletContainer = styled.div`
   align-items: center;
   text-align: center;
   color: ${({ theme }) => theme.primaryText};
+`;
+
+const StyledEnsureAuth = styled(EnsureAuth)`
+  align-self: center;
 `;
 
 const MiddleContentContainer = styled.div`
@@ -62,15 +67,17 @@ const SubmitItem: React.FC = () => {
       {<Header />}
       <Container>
         {isConnected ? (
-          <MiddleContentContainer>
-            {isConnected && !isPreviewPage ? <Timeline /> : null}
-            <Routes>
-              <Route index element={<Navigate to="item-field/0" replace />} />
-              <Route path="/item-field/:id" element={<ItemField />} />
-              <Route path="/policy/*" element={<Policy />} />
-              <Route path="/preview/*" element={<Preview />} />
-            </Routes>
-          </MiddleContentContainer>
+          <StyledEnsureAuth>
+            <MiddleContentContainer>
+              {isConnected && !isPreviewPage ? <Timeline /> : null}
+              <Routes>
+                <Route index element={<Navigate to="item-field/0" replace />} />
+                <Route path="/item-field/:id" element={<ItemField />} />
+                <Route path="/policy/*" element={<Policy />} />
+                <Route path="/preview/*" element={<Preview />} />
+              </Routes>
+            </MiddleContentContainer>
+          </StyledEnsureAuth>
         ) : (
           <ConnectWalletContainer>
             To submit a new item, connect first

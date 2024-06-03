@@ -4790,6 +4790,7 @@ __metadata:
     "@filebase/client": "npm:^0.0.5"
     "@graphql-codegen/cli": "npm:^4.0.1"
     "@graphql-codegen/client-preset": "npm:^4.2.0"
+    "@kleros/kleros-v2-contracts": "npm:^0.3.2"
     "@kleros/ui-components-library": "npm:^2.12.0"
     "@middy/core": "npm:^5.3.5"
     "@middy/http-json-body-parser": "npm:^5.3.5"

@@ -1,4 +1,8 @@
-export const KLEROS_ARBITRATOR = "0xA54e7A16d7460e38a8F324eF46782FB520d58CE8";
+import { disputeTemplateRegistryAddress, evidenceModuleAddress, klerosCoreAddress } from "hooks/contracts/generated";
+import { DEFAULT_CHAIN } from "./chains";
+
+export const KLEROS_ARBITRATOR = klerosCoreAddress[DEFAULT_CHAIN];
+export const EVIDENCE_MODULE = evidenceModuleAddress[DEFAULT_CHAIN];
+export const TEMPLATE_REGISTRY = disputeTemplateRegistryAddress[DEFAULT_CHAIN];
+// TODO: this would be ?
 export const KLEROS_GOVERNOR = "0xf1C7c037891525E360C59f708739Ac09A7670c59";
-export const EVIDENCE_MODULE = "0x57fd453FB0d16f8ca174E7386102D7170E17Be09";
-export const TEMPLATE_REGISTRY = "0x596D3B09E684D62217682216e9b7a0De75933391";

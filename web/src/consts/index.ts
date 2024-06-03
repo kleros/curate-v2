@@ -1,4 +1,5 @@
 import { version, gitCommitHash, gitCommitShortHash, gitBranch, gitTags, clean } from "../generatedGitInfo.json";
+import GeneratedMainCurate from "../generatedMainCurateAddress.json";
 
 export const ONE_BASIS_POINT = 10000n;
 export const IPFS_GATEWAY = process.env.REACT_APP_IPFS_GATEWAY || "https://cdn.kleros.link";
@@ -23,3 +24,5 @@ export const CURATION_POLICY = `${IPFS_GATEWAY}/ipfs/QmWciZMi8mBJg34FapRHK4Yh7a6
 export const COURT_SITE = "https://dev--kleros-v2.netlify.app/#/cases";
 
 export const SUPPORTED_FILE_TYPES = ["application/pdf", "text/rtf", "text/markdown", "text/plain"];
+
+export const MAIN_CURATE_ADDRESS = GeneratedMainCurate.mainCurateAddress;

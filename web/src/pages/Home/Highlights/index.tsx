@@ -4,9 +4,7 @@ import { Button } from "@kleros/ui-components-library";
 import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
 import { SkeletonRegistryCard } from "components/StyledSkeleton";
-import { DEFAULT_CHAIN } from "consts/chains";
 import { isUndefined } from "utils/index";
-import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
@@ -15,6 +13,7 @@ import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
 import { Status } from "src/graphql/graphql";
 import { List_filters } from "consts/filters";
 import { encodeListURIFilter } from "utils/uri";
+import { MAIN_CURATE_ADDRESS } from "src/consts";
 
 const Container = styled.div`
   width: 100%;
@@ -40,7 +39,7 @@ const HighlightedLists = () => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
 
   const { data: itemsData, isLoading: isItemsDataLoading } = useItemsQuery(0, 6, {
-    registry: listOfListsAddresses[DEFAULT_CHAIN],
+    registry: MAIN_CURATE_ADDRESS,
     ...List_filters.Active,
   });
 

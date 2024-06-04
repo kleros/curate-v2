@@ -5,6 +5,8 @@ import { isUndefined } from ".";
 import { KLEROS_ARBITRATOR, TEMPLATE_REGISTRY } from "consts/arbitration";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 import { arbitrum } from "viem/chains";
+import { netlifyUri } from "src/generatedNetlifyInfo.json";
+import { DEFAULT_CHAIN } from "consts/chains";
 
 export const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
   const baseTemplate = { ...listData } as IList;
@@ -107,8 +109,9 @@ const constructRegistrationTemplate = (listMetadata: IListMetadata) => {
     category: "Curated Lists",
 
     policyURI: listMetadata.policyURI,
-    frontendUrl: window.origin,
-    arbitratorChainID: "421614",
+    frontendUrl: `${netlifyUri}/#/lists/item/{{ itemID }}@{{listAddress}}`,
+    //TODO : this will depend on the chain the dispute is created on?
+    arbitratorChainID: DEFAULT_CHAIN,
     arbitratorAddress: KLEROS_ARBITRATOR,
   });
 };
@@ -149,8 +152,8 @@ const constructRemovalTemplate = (listMetadata: IListMetadata) => {
     category: "Curated Lists",
 
     policyURI: listMetadata.policyURI,
-    frontendUrl: window.origin,
-    arbitratorChainID: "421614",
+    frontendUrl: `${netlifyUri}/#/lists/item/{{ itemID }}@{{listAddress}}`,
+    arbitratorChainID: DEFAULT_CHAIN,
     arbitratorAddress: KLEROS_ARBITRATOR,
   });
 };

@@ -84,9 +84,7 @@ const AdvancedParameters: React.FC = () => {
     <Container>
       <Header text="Advanced Options" />
       <LabelAndButtonContainer>
-        <StyledLabel>
-          By default, the recommended parameters are selected. You can edit them or skip them by clicking on Next.
-        </StyledLabel>
+        <StyledLabel>By default, the recommended parameters are selected. You can edit them.</StyledLabel>
         <ButtonContainer>
           <LightButton text="Reset" Icon={HistoryIcon} onClick={reset} />{" "}
           <LightButton

@@ -33,7 +33,7 @@ import { MAIN_CURATE_ADDRESS } from "src/consts";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
-    fill: #000;
+    fill: ${({ theme }) => theme.whiteBackground};
   }
 `;
 

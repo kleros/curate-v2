@@ -16,11 +16,10 @@ QUERY='{"query":"{\n    mainCurate(id:\"0\"){\n        address\n    }\n}","varia
 OUTPUT_FILE="src/generatedMainCurateAddress.json"
 
 TEMP_FILE=$(mktemp)
-curl "$REACT_APP_ARBSEPOLIA_SUBGRAPH" -s -X POST -H "Content-Type: application/json" --data "$QUERY"  -o $TEMP_FILE
 
-if [ $? -eq 0 ]; then
-  ADDRESS=$(jq -r '.data.mainCurate.address' $TEMP_FILE)
-  echo "{\"mainCurateAddress\": \"$ADDRESS\"}" > $OUTPUT_FILE
+if curl "$REACT_APP_ARBSEPOLIA_SUBGRAPH" -s -X POST -H "Content-Type: application/json" --data "$QUERY"  -o "$TEMP_FILE"; then
+  ADDRESS=$(jq -r '.data.mainCurate.address' "$TEMP_FILE")
+  echo "{\"mainCurateAddress\": \"$ADDRESS\"}" > "$OUTPUT_FILE"
 
   echo -e "✔ Main Curate address fetched and saved to $OUTPUT_FILE"
 else
@@ -28,6 +27,6 @@ else
   exit 1
 fi
 
-rm $TEMP_FILE
+rm "$TEMP_FILE"
 
 node "$SCRIPT_DIR/gitInfo.js"

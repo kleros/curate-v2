@@ -59,7 +59,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
       return <ExecuteButton {...{ registryAddress, itemId, refetch }} />;
 
     return <Button variant="secondary" text={getModalButtonText(status ?? 0, isItem)} onClick={toggleModal} />;
-  }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId]);
+  }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId, isItem, toggleModal, refetch]);
 
   return (
     <>

@@ -57,7 +57,7 @@ const HighlightedLists = () => {
 
   const sortedRegstries = useMemo(
     () => (registriesData?.registries ? sortRegistriesByIds(registryIds, registriesData?.registries) : []),
-    [registriesData]
+    [registriesData, registryIds]
   );
 
   const combinedListsData = useMemo(() => {

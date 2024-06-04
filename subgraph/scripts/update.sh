@@ -23,7 +23,7 @@ function update() #hardhatNetwork #graphNetwork #dataSourceIndex #contract
     
     # Set the ABIs path for this Hardhat network
     abiIndex=0
-    for f in "$(yq e .dataSources[$dataSourceIndex].mapping.abis[].file subgraph.yaml -o json -I 0 | jq -sr '.[]')"
+    for f in $(yq e .dataSources[$dataSourceIndex].mapping.abis[].file subgraph.yaml -o json -I 0 | jq -sr '.[]')
     do
         f2=$(echo "$f" | sed "s|\(.*\/deployments\/\).*\/|\1$hardhatNetwork\/|")
         yq -i ".dataSources[$dataSourceIndex].mapping.abis[$abiIndex].file=\"$f2\"" "$SCRIPT_DIR"/../subgraph.yaml
@@ -40,7 +40,7 @@ function updateTemplates() #hardhatNetwork #templateIndex #contract
 
     # Set the ABIs path for this Hardhat network
     abiIndex=0
-    for f in "$(yq e .templates[$templateIndex].mapping.abis[].file subgraph.yaml -o json -I 0 | jq -sr '.[]')"
+    for f in $(yq e .templates[$templateIndex].mapping.abis[].file subgraph.yaml -o json -I 0 | jq -sr '.[]')
     do
         f2=$(echo "$f" | sed "s|\(.*\/deployments\/\).*\/|\1$hardhatNetwork\/|")
         yq -i ".templates[$templateIndex].mapping.abis[$abiIndex].file=\"$f2\"" "$SCRIPT_DIR"/../subgraph.yaml

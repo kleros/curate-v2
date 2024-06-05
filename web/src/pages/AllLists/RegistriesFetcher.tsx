@@ -4,8 +4,6 @@ import { useWindowSize } from "react-use";
 import { useListRootPath, decodeListURIFilter } from "utils/uri";
 import RegistriesDisplay from "components/RegistriesDisplay";
 import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
-import { DEFAULT_CHAIN } from "consts/chains";
-import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
@@ -13,6 +11,7 @@ import { OrderDirection } from "src/graphql/graphql";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { List_filters } from "consts/filters";
 import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
+import { MAIN_CURATE_ADDRESS } from "src/consts";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -28,14 +27,14 @@ const RegistriesFetcher: React.FC = () => {
   const registrySkip = registriesPerPage * (pageNumber - 1);
 
   const decodedFilter = decodeListURIFilter(filter ?? "all");
-  const { data: mainCurate } = useRegistryDetailsQuery(listOfListsAddresses[DEFAULT_CHAIN]);
+  const { data: mainCurate } = useRegistryDetailsQuery(MAIN_CURATE_ADDRESS);
 
   // get items from the main curate as these are the registries
   const { data: itemsData, isLoading: isItemDataLoading } = useItemsQuery(
     registrySkip,
     registriesPerPage,
     {
-      registry: listOfListsAddresses[DEFAULT_CHAIN],
+      registry: MAIN_CURATE_ADDRESS,
       ...decodedFilter,
     },
     order === "asc" ? OrderDirection.Asc : OrderDirection.Desc,

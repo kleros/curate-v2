@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { Link, useLocation } from "react-router-dom";
 import { useOpenContext } from "../MobileHeader";
-import { CURATION_POLICY } from "consts/index";
+import { IPFS_GATEWAY, MAIN_CURATE_ADDRESS } from "consts/index";
+import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { isUndefined } from "utils/index";
 
 const Container = styled.div`
   display: flex;
@@ -48,14 +50,21 @@ const StyledLink = styled(Link)<{ isActive: boolean }>`
   )};
 `;
 
-const links = [
-  { to: "/", text: "Home" },
-  { to: CURATION_POLICY, text: "Curation Policy" },
-];
-
 const Explore: React.FC = () => {
   const location = useLocation();
   const { toggleIsOpen } = useOpenContext();
+  const { data: mainCurate } = useRegistryDetailsQuery(MAIN_CURATE_ADDRESS);
+
+  const links = useMemo(
+    () => [
+      { to: "/", text: "Home" },
+      {
+        to: isUndefined(mainCurate) ? "/" : `${IPFS_GATEWAY}${mainCurate.registry.policyURI}`,
+        text: "Curation Policy",
+      },
+    ],
+    [mainCurate]
+  );
 
   return (
     <Container>

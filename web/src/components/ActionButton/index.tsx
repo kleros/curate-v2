@@ -50,7 +50,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
   let ButtonComponent: JSX.Element | null = useMemo(() => {
     if (status === Status.Disputed)
       return (
-        <a href={`${COURT_SITE}/${disputeId}/overview`} target="_blank" rel="noreferrer">
+        <a href={`${COURT_SITE}/cases/${disputeId}/overview`} target="_blank" rel="noreferrer">
           <Button disabled={isLoading} Icon={StyledKlerosIcon} text={`View Case #${disputeId ?? 0}`} />
         </a>
       );
@@ -59,7 +59,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
       return <ExecuteButton {...{ registryAddress, itemId, refetch }} />;
 
     return <Button variant="secondary" text={getModalButtonText(status ?? 0, isItem)} onClick={toggleModal} />;
-  }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId]);
+  }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId, isItem, toggleModal, refetch]);
 
   return (
     <>

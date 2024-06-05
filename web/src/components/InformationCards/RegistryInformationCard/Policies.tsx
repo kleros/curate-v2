@@ -4,10 +4,9 @@ import { landscapeStyle } from "styles/landscapeStyle";
 import Skeleton from "react-loading-skeleton";
 import PolicyIcon from "svgs/icons/policy.svg";
 import { responsiveSize } from "styles/responsiveSize";
-import { DEFAULT_CHAIN } from "consts/chains";
 import { getIpfsUrl } from "utils/getIpfsUrl";
-import { listOfListsAddresses } from "utils/listOfListsAddresses";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { MAIN_CURATE_ADDRESS } from "src/consts";
 
 const ShadeArea = styled.div`
   display: flex;
@@ -61,7 +60,7 @@ interface IPolicies {
 }
 
 export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
-  const { data: parentRegistryDetails } = useRegistryDetailsQuery(listOfListsAddresses[DEFAULT_CHAIN]);
+  const { data: parentRegistryDetails } = useRegistryDetailsQuery(MAIN_CURATE_ADDRESS);
 
   return (
     <ShadeArea>

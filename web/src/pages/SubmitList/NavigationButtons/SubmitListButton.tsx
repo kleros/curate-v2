@@ -29,12 +29,11 @@ import {
   retrieveSubmittedListId,
 } from "utils/submitListUtils";
 import { EnsureChain } from "components/EnsureChain";
-import { listOfListsAddresses } from "utils/listOfListsAddresses";
-import { DEFAULT_CHAIN } from "consts/chains";
+import { MAIN_CURATE_ADDRESS } from "src/consts";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
-    fill: #000;
+    fill: ${({ theme }) => theme.whiteBackground};
   }
 `;
 
@@ -76,7 +75,7 @@ const SubmitListButton: React.FC = () => {
 
   const { writeAsync: submit } = useCurateFactoryDeploy(config);
   const { writeAsync: submitListToCurate } = useCurateV2AddItem({
-    address: listOfListsAddresses[DEFAULT_CHAIN],
+    address: MAIN_CURATE_ADDRESS,
   });
 
   // calculate total cost to submit the list to Curate
@@ -134,7 +133,7 @@ const SubmitListButton: React.FC = () => {
           setProgress(ListProgress.SubmitSuccess);
           const submittedListId = retrieveSubmittedListId(res.result.logs[0]);
 
-          setSubmittedListItemId(`${deployedAddress}-${submittedListId}@${listOfListsAddresses[DEFAULT_CHAIN]}`);
+          setSubmittedListItemId(`${deployedAddress}-${submittedListId}@${MAIN_CURATE_ADDRESS}`);
 
           resetListData();
         } else {

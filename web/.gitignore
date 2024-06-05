@@ -31,6 +31,7 @@ src/hooks/contracts
 src/graphql
 generatedGitInfo.json
 generatedNetlifyInfo.json
+generatedMainCurateAddress.json
 
 # logs
 npm-debug.log*

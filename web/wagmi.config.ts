@@ -33,6 +33,28 @@ const readArtifacts = async (viemChainName: string, hardhatChainName?: string) =
       });
     }
   }
+
+  // read external contracts, Ex :- KlerosCore, EvidenceModule
+  const externalContractsdirectoryPath = `../node_modules/@kleros/kleros-v2-contracts/deployments/${
+    hardhatChainName ?? viemChainName
+  }`;
+  const externalfiles = await readdir(externalContractsdirectoryPath);
+  for (const file of externalfiles) {
+    const { name, ext } = parse(file);
+    if (ext === ".json") {
+      const filePath = join(externalContractsdirectoryPath, file);
+      const fileContent = await readFile(filePath, "utf-8");
+      const jsonContent = JSON.parse(fileContent);
+      results.push({
+        name,
+        address: {
+          [chain.id]: jsonContent.address as `0x{string}`,
+        },
+        abi: jsonContent.abi,
+      });
+    }
+  }
+
   return results;
 };
 

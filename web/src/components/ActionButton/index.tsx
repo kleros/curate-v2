@@ -11,6 +11,7 @@ import Modal, { getModalButtonText } from "./Modal";
 import ExecuteButton from "./ExecuteButton";
 import { useCurateV2ChallengePeriodDuration } from "hooks/contracts/generated";
 import { useQueryClient } from "@tanstack/react-query";
+import { isUndefined } from "src/utils";
 
 const StyledKlerosIcon = styled(KlerosIcon)`
   path {
@@ -48,17 +49,26 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
   }, [itemId, registryAddress, queryClient]);
 
   let ButtonComponent: JSX.Element | null = useMemo(() => {
+    const disabled = isUndefined(registryAddress) || isUndefined(itemId) || isLoading;
+
     if (status === Status.Disputed)
       return (
         <a href={`${COURT_SITE}/cases/${disputeId}/overview`} target="_blank" rel="noreferrer">
-          <Button disabled={isLoading} Icon={StyledKlerosIcon} text={`View Case #${disputeId ?? 0}`} />
+          <Button disabled={disabled} Icon={StyledKlerosIcon} text={`View Case #${disputeId ?? 0}`} />
         </a>
       );
 
     if (isExecutable && ![Status.Included, Status.Removed].includes(status))
-      return <ExecuteButton {...{ registryAddress, itemId, refetch }} />;
+      return <ExecuteButton {...{ registryAddress, itemId, refetch, disabled }} />;
 
-    return <Button variant="secondary" text={getModalButtonText(status ?? 0, isItem)} onClick={toggleModal} />;
+    return (
+      <Button
+        variant="secondary"
+        disabled={disabled}
+        text={getModalButtonText(status ?? 0, isItem)}
+        onClick={toggleModal}
+      />
+    );
   }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId, isItem, toggleModal, refetch]);
 
   return (

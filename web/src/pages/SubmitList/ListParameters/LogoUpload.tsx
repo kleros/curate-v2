@@ -41,16 +41,31 @@ const LogoUpload: React.FC = () => {
       toast.error("File type not supported", toastOptions);
       return;
     }
-    setIsLogoUploading(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const image = new Image();
+      image.onload = () => {
+        if (image.width !== image.height) {
+          toast.error("Image aspect ratio must be 1:1", toastOptions);
+          return;
+        }
 
-    uploadFileToIPFS(file)
-      .then(async (res) => {
-        const response = await res.json();
-        const logoURI = response["cids"][0];
-        setListMetadata({ ...listMetadata, logoURI });
-      })
-      .catch((err) => console.log(err))
-      .finally(() => setIsLogoUploading(false));
+        setIsLogoUploading(true);
+
+        uploadFileToIPFS(file)
+          .then(async (res) => {
+            const response = await res.json();
+            const logoURI = response.cids[0];
+            setListMetadata({ ...listMetadata, logoURI });
+          })
+          .catch((err) => console.log(err))
+          .finally(() => setIsLogoUploading(false));
+      };
+
+      image.src = event.target?.result as string;
+    };
+
+    reader.readAsDataURL(file);
   };
   return (
     <Container>

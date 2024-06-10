@@ -10,8 +10,9 @@ interface IExecuteButton {
   registryAddress: Address;
   itemId: string;
   refetch: () => void;
+  disabled?: boolean;
 }
-const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refetch }) => {
+const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refetch, disabled }) => {
   const publicClient = usePublicClient();
   const [isExecuting, setIsExecuting] = useState(false);
 
@@ -26,7 +27,7 @@ const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refe
     <EnsureChain>
       <Button
         text="Execute"
-        disabled={isLoading || isError || isExecuting || isPreparingConfig}
+        disabled={isLoading || isError || isExecuting || isPreparingConfig || disabled}
         isLoading={isLoading || isExecuting}
         onClick={() => {
           if (!executeRequest) return;

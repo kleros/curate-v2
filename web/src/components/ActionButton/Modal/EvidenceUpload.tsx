@@ -58,7 +58,7 @@ interface IEvidenceUpload {
 const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceUploading }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [fileURI, setFileUri] = useState("");
+  const [fileURI, setFileURI] = useState("");
 
   useEffect(() => {
     setEvidence({
@@ -79,7 +79,7 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
       .then(async (res) => {
         const response = await res.json();
         const fileURI = response["cids"][0];
-        setFileUri(fileURI);
+        setFileURI(fileURI);
       })
       .catch((err) => console.log(err))
       .finally(() => setIsEvidenceUploading(false));

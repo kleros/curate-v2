@@ -17,7 +17,6 @@ import { IBaseModal } from ".";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import Modal from "components/Modal";
-import { EnsureAuth } from "components/EnsureAuth";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -113,46 +112,44 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       <DepositRequired value={depositRequired} />
       <EvidenceUpload {...{ setEvidence, setIsEvidenceUploading }} />
       <Info alertMessage={alertMessage} />
-      <EnsureAuth>
-        <Buttons
-          buttonText="Challenge"
-          toggleModal={toggleModal}
-          isDisabled={isDisabled || isChallengingItem}
-          isLoading={isLoading}
-          callback={async () => {
-            setIsChallengingItem(true);
+      <Buttons
+        buttonText="Challenge"
+        toggleModal={toggleModal}
+        isDisabled={isDisabled || isChallengingItem}
+        isLoading={isLoading}
+        callback={async () => {
+          setIsChallengingItem(true);
 
-            const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
-              type: "application/json",
-            });
+          const evidenceFile = new File([JSON.stringify(evidence)], "evidence.json", {
+            type: "application/json",
+          });
 
-            uploadFileToIPFS(evidenceFile)
-              .then(async (res) => {
-                if (res.status === 200 && walletClient) {
-                  const response = await res.json();
-                  const fileURI = response["cids"][0];
+          uploadFileToIPFS(evidenceFile)
+            .then(async (res) => {
+              if (res.status === 200 && walletClient) {
+                const response = await res.json();
+                const fileURI = response["cids"][0];
 
-                  const { request } = await prepareWriteCurateV2({
-                    //@ts-ignore
-                    address: registryAddress,
-                    functionName: "challengeRequest",
-                    args: [itemId as `0x${string}`, fileURI],
-                    value: depositRequired,
-                  });
+                const { request } = await prepareWriteCurateV2({
+                  //@ts-ignore
+                  address: registryAddress,
+                  functionName: "challengeRequest",
+                  args: [itemId as `0x${string}`, fileURI],
+                  value: depositRequired,
+                });
 
-                  wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
-                    .then((res) => {
-                      console.log({ res });
-                      refetch();
-                      toggleModal();
-                    })
-                    .finally(() => setIsChallengingItem(false));
-                }
-              })
-              .catch((err) => console.log(err));
-          }}
-        />
-      </EnsureAuth>
+                wrapWithToast(async () => await walletClient.writeContract(request), publicClient)
+                  .then((res) => {
+                    console.log({ res });
+                    refetch();
+                    toggleModal();
+                  })
+                  .finally(() => setIsChallengingItem(false));
+              }
+            })
+            .catch((err) => console.log(err));
+        }}
+      />
     </ReStyledModal>
   );
 };

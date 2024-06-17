@@ -28,7 +28,6 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.resolutionTime = ZERO;
   request.disputeOutcome = NONE;
   request.resolved = false;
-  request.disputeID = ZERO;
   request.submissionTime = event.block.timestamp;
   request.requestType = item.status;
   request.creationTx = event.transaction.hash;

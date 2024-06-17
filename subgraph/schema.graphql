@@ -163,7 +163,9 @@ type Request @entity {
   "True if a dispute was raised."
   disputed: Boolean!
   "ID of the dispute, if any."
-  disputeID: BigInt!
+  disputeID: BigInt
+  "External Dispute ID of the dispute, if any."
+  externalDisputeID: BigInt
   "Time when the request was made. Used to track when the challenge period ends."
   submissionTime: BigInt!
   "True if the request was executed and/or any raised disputes were resolved."

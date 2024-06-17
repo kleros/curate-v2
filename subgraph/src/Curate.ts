@@ -284,6 +284,7 @@ export function handleRequestChallenged(event: DisputeRequest): void {
   request.disputed = true;
   request.challenger = ensureUser(event.transaction.from.toHexString()).id;
   request.disputeID = event.params._arbitrableDisputeID;
+  request.externalDisputeID = event.params._externalDisputeID;
 
   request.save();
   item.save();

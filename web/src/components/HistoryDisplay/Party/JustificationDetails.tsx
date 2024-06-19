@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import AttachmentIcon from "svgs/icons/attachment.svg";
+import { customScrollbar } from "styles/customScrollbar";
 
 const Container = styled.div`
   width: 100%;
@@ -19,6 +20,7 @@ const DescriptionContainer = styled.div`
   max-height: 400px;
   width: 100%;
   overflow-y: scroll;
+  ${customScrollbar}
 `;
 
 const StyledA = styled.a`

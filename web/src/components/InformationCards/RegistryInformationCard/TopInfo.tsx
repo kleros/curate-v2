@@ -77,8 +77,9 @@ const StyledP = styled.p`
   margin: 0;
 `;
 
-const StyledLabel = styled.label`
+const StyledA = styled.a`
   color: ${({ theme }) => theme.primaryBlue};
+  text-decoration: none;
 `;
 
 const SkeletonLogo = styled(Skeleton)`
@@ -138,17 +139,14 @@ const TopInfo: React.FC<ITopInfo> = ({
       </TopLeftInfo>
       <TopRightInfo>
         <Copiable copiableContent={id ?? ""} info="Copy Registry Address" iconPlacement="left">
-          <StyledLabel>{shortenAddress(registryAddress)}</StyledLabel>
-        </Copiable>
-        {id ? (
-          <a
+          <StyledA
             href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
             target="_blank"
             rel="noreferrer"
           >
-            <StyledEtherscanIcon />
-          </a>
-        ) : null}
+            {shortenAddress(id ?? "")}
+          </StyledA>
+        </Copiable>
         <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
       </TopRightInfo>
     </TopInfoContainer>

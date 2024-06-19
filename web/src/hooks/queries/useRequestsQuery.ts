@@ -8,6 +8,7 @@ export const requestDetailsFragment = graphql(`
     id
     disputed
     disputeID
+    externalDisputeID
     submissionTime
     resolved
     requester {
@@ -15,6 +16,11 @@ export const requestDetailsFragment = graphql(`
     }
     challenger {
       id
+    }
+    item {
+      itemID
+      status
+      registryAddress
     }
     arbitrator
     arbitratorExtraData
@@ -25,6 +31,7 @@ export const requestDetailsFragment = graphql(`
     finalRuling
     creationTx
     resolutionTx
+    challengeTime
   }
 `);
 

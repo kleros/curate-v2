@@ -1,5 +1,5 @@
 import { log } from "@graphprotocol/graph-ts";
-import { Item, Registry, Request } from "../../generated/schema";
+import { Item, Request } from "../../generated/schema";
 import { Curate, RequestSubmitted } from "../../generated/templates/Curate/Curate";
 import { NONE, ONE, ZERO } from "../utils";
 import { ensureCounter } from "./Counters";
@@ -28,10 +28,10 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.resolutionTime = ZERO;
   request.disputeOutcome = NONE;
   request.resolved = false;
-  request.disputeID = ZERO;
   request.submissionTime = event.block.timestamp;
   request.requestType = item.status;
   request.creationTx = event.transaction.hash;
+  request.externalDisputeID = event.params._requestID;
 
   let counter = ensureCounter();
   let deposit = item.status.includes("registrationRequested")

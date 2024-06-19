@@ -15,13 +15,14 @@ interface IQuery {
   document: TypedDocumentNode<any, any>;
   variables: Record<string, any>;
   chainId?: number;
+  isCore?: boolean;
 }
 
 const Context = createContext<IGraphqlBatcher | undefined>(undefined);
 
 const fetcher = async (queries: IQuery[]) => {
-  const promises = queries.map(async ({ id, document, variables, chainId }) => {
-    const url = getGraphqlUrl(false, chainId ?? arbitrumSepolia.id);
+  const promises = queries.map(async ({ id, document, variables, chainId, isCore = false }) => {
+    const url = getGraphqlUrl(isCore, chainId ?? arbitrumSepolia.id);
     try {
       return request(url, document, variables).then((result) => ({ id, result }));
     } catch (error) {

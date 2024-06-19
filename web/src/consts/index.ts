@@ -20,7 +20,7 @@ export const ETH_SIGNATURE_REGEX = /^0x[a-fA-F0-9]{130}$/;
 
 export const DEFAULT_LIST_LOGO = "ipfs://QmWfxEmfEWwM6LDgER2Qp2XZpK1MbDtNp7uGqCS4UPNtgJ/symbol-CURATE.png";
 
-export const COURT_SITE = process.env.COURT_SITE || "https://v2.kleros.builders";
+export const COURT_SITE = process.env.COURT_SITE ?? "https://v2.kleros.builders/#";
 
 export const SUPPORTED_FILE_TYPES = ["application/pdf", "text/rtf", "text/markdown", "text/plain"];
 

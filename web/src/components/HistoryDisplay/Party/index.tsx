@@ -35,10 +35,12 @@ interface IParty {
 
 const Party: React.FC<IParty> = ({ request, isRemoval = false }) => {
   const [isOpen, toggleModal] = useToggle(false);
+  const aliasAddress = isRemoval ? request.requester.id : request?.challenger?.id;
+
   return (
     <Container>
       <label>by</label>
-      <AliasDisplay address={request?.challenger?.id ?? ""} />
+      <AliasDisplay address={aliasAddress ?? ""} />
       <label>-</label>
       <StyledLabel onClick={toggleModal}>
         <StyledDoc /> Justification

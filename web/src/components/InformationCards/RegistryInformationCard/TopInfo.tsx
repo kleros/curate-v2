@@ -11,6 +11,7 @@ import { isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import EtherscanIcon from "svgs/icons/etherscan.svg";
+import { shortenAddress } from "utils/shortenAddress";
 
 const TopInfoContainer = styled.div`
   display: flex;
@@ -136,8 +137,8 @@ const TopInfo: React.FC<ITopInfo> = ({
         {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
       </TopLeftInfo>
       <TopRightInfo>
-        <Copiable copiableContent={id ?? ""} info="Copy Registry Address">
-          <StyledLabel>Registry Address</StyledLabel>
+        <Copiable copiableContent={id ?? ""} info="Copy Registry Address" iconPlacement="left">
+          <StyledLabel>{shortenAddress(registryAddress)}</StyledLabel>
         </Copiable>
         {id ? (
           <a

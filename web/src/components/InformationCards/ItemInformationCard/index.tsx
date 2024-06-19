@@ -77,6 +77,13 @@ const BottomInfo = styled.div`
   justify-content: space-between;
 `;
 
+const AliasContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+`;
+
 type ItemDetails = NonNullable<ItemDetailsQuery["item"]>;
 interface IItemInformationCard extends ItemDetails {
   className?: string;
@@ -101,7 +108,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
         <TopInfo>
           <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
           <TopRightInfo>
-            <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
+            <Copiable copiableContent={itemID ?? ""} info="Copy Item Id" iconPlacement="left">
               <StyledLabel>Item Id</StyledLabel>
             </Copiable>
             <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
@@ -110,9 +117,14 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
         <Divider />
         <BottomInfo>
           {registerer?.id ? (
-            <Copiable copiableContent={registerer.id}>
-              <AliasDisplay address={registerer.id} />
-            </Copiable>
+            <AliasContainer>
+              <small>Submitted by :</small>
+              <Copiable copiableContent={registerer.id}>
+                <AliasContainer>
+                  <AliasDisplay address={registerer.id} />
+                </AliasContainer>
+              </Copiable>
+            </AliasContainer>
           ) : (
             <Skeleton height={24} />
           )}

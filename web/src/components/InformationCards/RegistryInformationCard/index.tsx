@@ -87,7 +87,7 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
     <Divider />
     <BottomInfo>
       <AliasContainer>
-        <small>Submitted by :</small>
+        <small>Submitted by:</small>
         <Copiable copiableContent={registerer?.id ?? ""}>
           <AliasDisplay address={registerer?.id} />
         </Copiable>

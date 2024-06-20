@@ -10,7 +10,6 @@ import { responsiveSize } from "src/styles/responsiveSize";
 import { isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
-import EtherscanIcon from "svgs/icons/etherscan.svg";
 import { shortenAddress } from "utils/shortenAddress";
 
 const TopInfoContainer = styled.div`
@@ -55,12 +54,6 @@ const TopRightInfo = styled.div`
   )}
 `;
 
-const StyledEtherscanIcon = styled(EtherscanIcon)`
-  display: flex;
-  height: 16px;
-  width: 16px;
-`;
-
 const StyledLogo = styled.img<{ isListView: boolean }>`
   width: ${({ isListView }) => (isListView ? "40px" : "125px")};
   height: ${({ isListView }) => (isListView ? "40px" : "125px")};
@@ -80,6 +73,9 @@ const StyledP = styled.p`
 const StyledA = styled.a`
   color: ${({ theme }) => theme.primaryBlue};
   text-decoration: none;
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 const SkeletonLogo = styled(Skeleton)`

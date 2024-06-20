@@ -10,7 +10,7 @@ import { responsiveSize } from "src/styles/responsiveSize";
 import { isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
-import EtherscanIcon from "svgs/icons/etherscan.svg";
+import { shortenAddress } from "utils/shortenAddress";
 
 const TopInfoContainer = styled.div`
   display: flex;
@@ -54,12 +54,6 @@ const TopRightInfo = styled.div`
   )}
 `;
 
-const StyledEtherscanIcon = styled(EtherscanIcon)`
-  display: flex;
-  height: 16px;
-  width: 16px;
-`;
-
 const StyledLogo = styled.img<{ isListView: boolean }>`
   width: ${({ isListView }) => (isListView ? "40px" : "125px")};
   height: ${({ isListView }) => (isListView ? "40px" : "125px")};
@@ -76,8 +70,12 @@ const StyledP = styled.p`
   margin: 0;
 `;
 
-const StyledLabel = styled.label`
+const StyledA = styled.a`
   color: ${({ theme }) => theme.primaryBlue};
+  text-decoration: none;
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 const SkeletonLogo = styled(Skeleton)`
@@ -136,18 +134,15 @@ const TopInfo: React.FC<ITopInfo> = ({
         {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
       </TopLeftInfo>
       <TopRightInfo>
-        <Copiable copiableContent={id ?? ""} info="Copy Registry Address">
-          <StyledLabel>Registry Address</StyledLabel>
-        </Copiable>
-        {id ? (
-          <a
+        <Copiable copiableContent={id ?? ""} info="Copy Registry Address" iconPlacement="left">
+          <StyledA
             href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
             target="_blank"
             rel="noreferrer"
           >
-            <StyledEtherscanIcon />
-          </a>
-        ) : null}
+            {shortenAddress(id ?? "")}
+          </StyledA>
+        </Copiable>
         <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
       </TopRightInfo>
     </TopInfoContainer>

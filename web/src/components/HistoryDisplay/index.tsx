@@ -1,14 +1,15 @@
 import { Card, CustomTimeline, _TimelineItem1 } from "@kleros/ui-components-library";
 import React from "react";
-import styled, { Theme, useTheme } from "styled-components";
+import styled, { css, Theme, useTheme } from "styled-components";
 import Header from "./Header";
 import { useItemRequests } from "queries/useRequestsQuery";
 import { RequestDetailsFragment, Ruling, Status } from "src/graphql/graphql";
 import { formatDate } from "utils/date";
-import { shortenAddress } from "utils/shortenAddress";
 import CheckIcon from "assets/svgs/icons/check-circle-outline.svg";
 import ClosedIcon from "assets/svgs/icons/close-circle.svg";
 import { HistorySkeletonCard } from "../StyledSkeleton";
+import Party from "./Party";
+import { landscapeStyle } from "styles/landscapeStyle";
 
 const Container = styled(Card)`
   display: flex;
@@ -23,6 +24,14 @@ const Container = styled(Card)`
 const StyledTimeline = styled(CustomTimeline)`
   width: 100%;
   margin-bottom: 30px;
+  .party-wrapper {
+    max-height: none;
+    ${landscapeStyle(
+      () => css`
+        max-height: 32px;
+      `
+    )}
+  }
 `;
 
 interface IHistory {
@@ -51,7 +60,7 @@ const History: React.FC<IHistory> = ({ itemId, isItem }) => {
 const constructItemsFromRequest = (
   request: RequestDetailsFragment,
   theme: Theme,
-  isItem?: Boolean
+  isItem?: boolean
 ): _TimelineItem1[] => {
   const historyItems: _TimelineItem1[] = [];
 
@@ -66,10 +75,10 @@ const constructItemsFromRequest = (
 
     if (request.disputed && request.challenger) {
       historyItems.push({
-        title: `${isItem ? "Submission" : "Registration"} Challenged`,
+        title: `${isItem ? "Submission" : "Registration"} Challenged - Case ${request.disputeID}`,
         variant: theme.secondaryPurple,
-        party: `- Case ${request.disputeID} by ${shortenAddress(request.challenger.id)}`,
-        subtitle: formatDate(request.submissionTime),
+        party: <Party {...{ request }} />,
+        subtitle: formatDate(request.challengeTime),
         rightSided: true,
       });
     }
@@ -92,14 +101,14 @@ const constructItemsFromRequest = (
       variant: theme.primaryBlue,
       subtitle: formatDate(request.submissionTime),
       rightSided: true,
-      party: `- By ${shortenAddress(request.requester.id)}`,
+      party: <Party {...{ request }} isRemoval />,
     });
 
     if (request.disputed && request.challenger) {
       historyItems.push({
-        title: "Removal Challenged",
+        title: `Removal Challenged - Case ${request.disputeID}`,
         variant: theme.secondaryPurple,
-        party: `- Case #${request.disputeID} by ${shortenAddress(request.challenger.id)}`,
+        party: <Party {...{ request }} />,
         subtitle: formatDate(request.submissionTime),
         rightSided: true,
       });

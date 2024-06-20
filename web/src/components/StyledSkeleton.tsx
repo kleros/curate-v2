@@ -38,6 +38,28 @@ const HistoryDateSkeleton = styled(Skeleton)`
   width: 100px;
 `;
 
+const SkeletonJustificationContainer = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+`;
+
+const SkeletonJustificationTitle = styled(Skeleton)`
+  width: ${responsiveSize(100, 160)};
+  height: 24px;
+  margin-left: auto;
+`;
+
+const SkeletonJustificationDescription = styled(Skeleton)`
+  height: 60px;
+`;
+
+const SkeletonJustificationAttachment = styled(Skeleton)`
+  width: ${responsiveSize(60, 80)};
+  height: 24px;
+`;
+
 export const HistorySkeletonCard = () => (
   <HistorySkeletonContainer>
     <HistoryStatusSkeleton />
@@ -51,6 +73,14 @@ export const SkeletonRegistryCard = () => (
   <SkeletonRegistryCardContainer>
     <StyledSkeletonRegistryCard />
   </SkeletonRegistryCardContainer>
+);
+
+export const SkeletonJustificationCard = () => (
+  <SkeletonJustificationContainer>
+    <SkeletonJustificationTitle />
+    <SkeletonJustificationDescription />
+    <SkeletonJustificationAttachment />
+  </SkeletonJustificationContainer>
 );
 
 export const SkeletonRegistryListItem = () => <StyledSkeletonRegistryListItem />;

@@ -32,6 +32,13 @@ const BottomInfo = styled.div`
   justify-content: space-between;
 `;
 
+const AliasContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+`;
+
 interface IInformationCard
   extends Pick<
     RegistryDetails,
@@ -79,9 +86,12 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
     />
     <Divider />
     <BottomInfo>
-      <Copiable copiableContent={registerer?.id ?? ""}>
-        <AliasDisplay address={registerer?.id} />
-      </Copiable>
+      <AliasContainer>
+        <small>Submitted by:</small>
+        <Copiable copiableContent={registerer?.id ?? ""}>
+          <AliasDisplay address={registerer?.id} />
+        </Copiable>
+      </AliasContainer>
       <ActionButton
         {...{
           status: mapFromSubgraphStatus(status, disputed),

@@ -163,7 +163,9 @@ type Request @entity {
   "True if a dispute was raised."
   disputed: Boolean!
   "ID of the dispute, if any."
-  disputeID: BigInt!
+  disputeID: BigInt
+  "External ID of the dispute, this is always there since it's just requestID. Please use disputed field to check if the dispute was created."
+  externalDisputeID: BigInt!
   "Time when the request was made. Used to track when the challenge period ends."
   submissionTime: BigInt!
   "True if the request was executed and/or any raised disputes were resolved."
@@ -172,6 +174,8 @@ type Request @entity {
   requester: User!
   "The party that challenged the request"
   challenger: User
+  "Time when the request was challenged."
+  challengeTime: BigInt
   "The arbitrator trusted to solve disputes for this request."
   arbitrator: Bytes!
   "The extra data for the trusted arbitrator of this request."

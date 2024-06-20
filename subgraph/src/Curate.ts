@@ -283,6 +283,7 @@ export function handleRequestChallenged(event: DisputeRequest): void {
 
   request.disputed = true;
   request.challenger = ensureUser(event.transaction.from.toHexString()).id;
+  request.challengeTime = event.block.timestamp;
   request.disputeID = event.params._arbitrableDisputeID;
 
   request.save();

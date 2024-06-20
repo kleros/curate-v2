@@ -77,6 +77,13 @@ const BottomInfo = styled.div`
   justify-content: space-between;
 `;
 
+const AliasContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+`;
+
 type ItemDetails = NonNullable<ItemDetailsQuery["item"]>;
 interface IItemInformationCard extends ItemDetails {
   className?: string;
@@ -96,38 +103,41 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   latestRequestSubmissionTime,
 }) => {
   return (
-    <>
-      <StyledCard {...{ className }}>
-        <TopInfo>
-          <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
-          <TopRightInfo>
-            <Copiable copiableContent={itemID ?? ""} info="Copy Item Id">
-              <StyledLabel>Item Id</StyledLabel>
-            </Copiable>
-            <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
-          </TopRightInfo>
-        </TopInfo>
-        <Divider />
-        <BottomInfo>
-          {registerer?.id ? (
+    <StyledCard {...{ className }}>
+      <TopInfo>
+        <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
+        <TopRightInfo>
+          <Copiable copiableContent={itemID ?? ""} info="Copy Item Id" iconPlacement="left">
+            <StyledLabel>Item Id</StyledLabel>
+          </Copiable>
+          <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
+        </TopRightInfo>
+      </TopInfo>
+      <Divider />
+      <BottomInfo>
+        {registerer?.id ? (
+          <AliasContainer>
+            <small>Submitted by:</small>
             <Copiable copiableContent={registerer.id}>
-              <AliasDisplay address={registerer.id} />
+              <AliasContainer>
+                <AliasDisplay address={registerer.id} />
+              </AliasContainer>
             </Copiable>
-          ) : (
-            <Skeleton height={24} />
-          )}
-          <ActionButton
-            {...{
-              status: mapFromSubgraphStatus(status, disputed),
-              itemId: itemID,
-              registryAddress,
-              isItem: true,
-            }}
-          />
-        </BottomInfo>
-        <Policies policyURI={policyURI} isItem />
-      </StyledCard>
-    </>
+          </AliasContainer>
+        ) : (
+          <Skeleton height={24} />
+        )}
+        <ActionButton
+          {...{
+            status: mapFromSubgraphStatus(status, disputed),
+            itemId: itemID,
+            registryAddress,
+            isItem: true,
+          }}
+        />
+      </BottomInfo>
+      <Policies policyURI={policyURI} isItem />
+    </StyledCard>
   );
 };
 export default ItemInformationCard;

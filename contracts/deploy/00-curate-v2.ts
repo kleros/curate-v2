@@ -59,7 +59,7 @@ const removalTemplate = `{
 const dataMappings = `[
   {
     "type": "graphql",
-    "endpoint": "https://gateway-arbitrum.network.thegraph.com/api/{{graphApiKey}}/subgraphs/id/H93eWJbDpYKAtkLmsMn7Su3ZLZwAwLN5VoyvQH4NbGAv",
+    "endpoint": "https://gateway-arbitrum.network.thegraph.com/api/{{{graphApiKey}}}/subgraphs/id/H93eWJbDpYKAtkLmsMn7Su3ZLZwAwLN5VoyvQH4NbGAv",
     "query": "query SearchRequestByDisputeID($externalDisputeID: BigInt!) { requests(where: { externalDisputeID: $externalDisputeID }) { id disputeID submissionTime resolved requester { id } challenger { id } arbitrator arbitratorExtraData deposit disputeOutcome requestType item { id itemID data status registry { id title description policyURI } } } }",
     "variables": {
       "externalDisputeID": "{{externalDisputeID}}"

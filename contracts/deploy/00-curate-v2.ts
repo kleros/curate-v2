@@ -85,7 +85,7 @@ const dataMappings = `[
   },
   {
     "type": "json",
-    "value": "{{itemData}}",
+    "value": "{{{itemData}}}",
     "seek": [
       "columns[0].label",
       "columns[0].description"

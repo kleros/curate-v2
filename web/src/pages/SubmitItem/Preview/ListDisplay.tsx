@@ -32,7 +32,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
 
   return (
     <Container>
-      <StyledP>Check how the item is displayed on the List page:</StyledP>
+      <StyledP>Check how the item is displayed on the Item page:</StyledP>
       <ItemInformationCard
         props={props}
         policyURI="/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"

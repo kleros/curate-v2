@@ -69,7 +69,7 @@ const List: React.FC<IList> = ({ registryAddress }) => {
       <Search />
       <StatsAndFilters fields={[{ label: "Items", value: totalItems?.toString() }]} />
       <ListContainer>
-        {registryDetails?.registry.items
+        {registryDetails?.registry?.items
           ? registryDetails?.registry.items.map((item) => <ItemCard key={item.id} {...(item as ItemDetailsFragment)} />)
           : Array.from({ length: 3 }).map((_, index) => <SkeletonItemCard key={index} />)}
       </ListContainer>

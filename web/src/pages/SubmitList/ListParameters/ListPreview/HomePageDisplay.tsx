@@ -5,6 +5,7 @@ import RegistryCard from "components/RegistryCard";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { Status } from "src/graphql/graphql";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
+import { DEFAULT_LIST_LOGO } from "src/consts";
 
 const Container = styled.div`
   display: flex;
@@ -27,10 +28,9 @@ const HomePageDisplay: React.FC = () => {
         id={"1"}
         title={previewData.title}
         status={mapFromSubgraphStatus(Status.RegistrationRequested, false)}
-        logoURI={previewData?.logoURI}
-        chainId={421614}
+        logoURI={previewData?.logoURI ?? DEFAULT_LIST_LOGO}
         totalItems={23}
-        overrideIsList
+        overrideIsListView
       />
     </Container>
   );

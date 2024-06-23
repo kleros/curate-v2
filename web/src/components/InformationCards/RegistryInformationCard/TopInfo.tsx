@@ -134,15 +134,19 @@ const TopInfo: React.FC<ITopInfo> = ({
         {isUndefined(description) ? <SkeletonDescription /> : <StyledP>{description}</StyledP>}
       </TopLeftInfo>
       <TopRightInfo>
-        <Copiable copiableContent={id ?? ""} info="Copy Registry Address" iconPlacement="left">
-          <StyledA
-            href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {shortenAddress(id ?? "")}
-          </StyledA>
-        </Copiable>
+        {id !== "" ? (
+          <Copiable copiableContent={id} info="Copy Registry Address" iconPlacement="left">
+            <StyledA
+              href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {shortenAddress(id)}
+            </StyledA>
+          </Copiable>
+        ) : (
+          <Skeleton width={80} height={16} />
+        )}
         <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
       </TopRightInfo>
     </TopInfoContainer>

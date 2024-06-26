@@ -4696,6 +4696,7 @@ __metadata:
   dependencies:
     "@kleros/curate-v2-eslint-config": "workspace:^"
     "@kleros/curate-v2-prettier-config": "workspace:^"
+    "@kleros/curate-v2-templates": "workspace:^"
     "@kleros/curate-v2-tsconfig": "workspace:^"
     "@kleros/kleros-v2-contracts": "npm:^0.3.2"
     "@logtail/pino": "npm:^0.4.0"

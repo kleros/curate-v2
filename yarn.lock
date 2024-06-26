@@ -4696,6 +4696,7 @@ __metadata:
   dependencies:
     "@kleros/curate-v2-eslint-config": "workspace:^"
     "@kleros/curate-v2-prettier-config": "workspace:^"
+    "@kleros/curate-v2-templates": "workspace:^"
     "@kleros/curate-v2-tsconfig": "workspace:^"
     "@kleros/kleros-v2-contracts": "npm:^0.3.2"
     "@logtail/pino": "npm:^0.4.0"
@@ -4775,6 +4776,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@kleros/curate-v2-templates@workspace:^, @kleros/curate-v2-templates@workspace:templates":
+  version: 0.0.0-use.local
+  resolution: "@kleros/curate-v2-templates@workspace:templates"
+  languageName: unknown
+  linkType: soft
+
 "@kleros/curate-v2-tsconfig@workspace:^, @kleros/curate-v2-tsconfig@workspace:tsconfig":
   version: 0.0.0-use.local
   resolution: "@kleros/curate-v2-tsconfig@workspace:tsconfig"
@@ -4790,6 +4797,7 @@ __metadata:
     "@filebase/client": "npm:^0.0.5"
     "@graphql-codegen/cli": "npm:^4.0.1"
     "@graphql-codegen/client-preset": "npm:^4.2.0"
+    "@kleros/curate-v2-templates": "workspace:^"
     "@kleros/kleros-v2-contracts": "npm:^0.3.2"
     "@kleros/ui-components-library": "npm:^2.13.1"
     "@middy/core": "npm:^5.3.5"

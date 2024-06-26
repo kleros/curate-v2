@@ -32,7 +32,7 @@ const ItemDisplay: React.FC<IItemDisplay> = ({}) => {
 
   return (
     <Container>
-      <StyledP>Check how the item is displayed on the Item page:</StyledP>
+      <StyledP>Check how the item is displayed on the List page:</StyledP>
       <ItemCard props={props} status={Status.RegistrationRequested} />
     </Container>
   );

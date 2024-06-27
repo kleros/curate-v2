@@ -47,6 +47,7 @@ const Header: React.FC = () => {
   return (
     <Container>
       <StyledBanner
+        autoHide
         theme={{
           colors: {
             main: theme.whiteBackground,

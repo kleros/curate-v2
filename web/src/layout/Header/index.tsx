@@ -1,18 +1,25 @@
 import React from "react";
-import styled from "styled-components";
-import MobileHeader from "./MobileHeader";
+import styled, { useTheme } from "styled-components";
+
 import DesktopHeader from "./DesktopHeader";
+import MobileHeader from "./MobileHeader";
+import { StatusBanner } from "subgraph-status";
+import { getGraphqlUrl } from "utils/getGraphqlUrl";
 
 const Container = styled.div`
   position: sticky;
-  z-index: 1;
+  z-index: 30;
   top: 0;
   width: 100%;
-  height: 64px;
   background-color: ${({ theme }) => theme.primaryPurple};
 
-  padding: 0 24px;
   display: flex;
+  flex-wrap: wrap;
+`;
+
+const HeaderContainer = styled.div`
+  width: 100%;
+  padding: 4px 24px 8px;
 `;
 
 export const PopupContainer = styled.div`
@@ -24,11 +31,39 @@ export const PopupContainer = styled.div`
   z-index: 30;
 `;
 
+const StyledBanner = styled(StatusBanner)`
+  position: sticky !important;
+  .status-text {
+    h2 {
+      margin: 0;
+      line-height: 24px;
+    }
+  }
+`;
+
 const Header: React.FC = () => {
+  const theme = useTheme();
+
   return (
     <Container>
-      <DesktopHeader />
-      <MobileHeader />
+      <StyledBanner
+        autoHide
+        theme={{
+          colors: {
+            main: theme.whiteBackground,
+            primary: theme.primaryText,
+            secondary: theme.secondaryText,
+          },
+        }}
+        subgraphs={[
+          { name: "Curate", url: getGraphqlUrl(false) },
+          { name: "Kleros Core", url: getGraphqlUrl(true) },
+        ]}
+      />
+      <HeaderContainer>
+        <DesktopHeader />
+        <MobileHeader />
+      </HeaderContainer>
     </Container>
   );
 };

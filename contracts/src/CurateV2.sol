@@ -392,7 +392,7 @@ contract CurateV2 is IArbitrableV2 {
 
     /// @dev Submit a request to remove an item from the list. Accepts enough ETH to cover the deposit, reimburses the rest.
     /// @param _itemID The ID of the item to remove.
-    /// @param _evidence A link to evidence using its URI.
+    /// @param _evidence Stringified evidence object, example: '{"name" : "Justification", "description" : "Description", "fileURI" : "/ipfs/QmWQV5ZFFhEJiW8Lm7ay2zLxC2XS4wx1b2W7FfdrLMyQQc"}'.
     function removeItem(bytes32 _itemID, string calldata _evidence) external payable {
         Item storage item = items[_itemID];
 
@@ -430,7 +430,7 @@ contract CurateV2 is IArbitrableV2 {
 
     /// @dev Challenges the request of the item. Accepts enough ETH to cover the deposit, reimburses the rest.
     /// @param _itemID The ID of the item which request to challenge.
-    /// @param _evidence A link to evidence using its URI.
+    /// @param _evidence Stringified evidence object, example: '{"name" : "Justification", "description" : "Description", "fileURI" : "/ipfs/QmWQV5ZFFhEJiW8Lm7ay2zLxC2XS4wx1b2W7FfdrLMyQQc"}'.
     function challengeRequest(bytes32 _itemID, string calldata _evidence) external payable {
         Item storage item = items[_itemID];
         require(item.status > Status.Registered, "The item must have a pending request.");

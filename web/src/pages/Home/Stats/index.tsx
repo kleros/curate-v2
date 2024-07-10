@@ -69,7 +69,11 @@ const Stats = () => {
       },
       {
         title: "All time deposits",
-        text: `${formatUSD(ethDeposit * pricesData?.[CoinIds.ETH]?.price)}`,
+        text: `${
+          ethDeposit && pricesData?.[CoinIds.ETH]?.price
+            ? formatUSD(ethDeposit * pricesData?.[CoinIds.ETH]?.price)
+            : "0$"
+        }`,
         subtext: `${ethDeposit} ETH`,
         color: "green",
         icon: DollarIcon,

@@ -65,7 +65,7 @@ const StyledP = styled.p`
 const ChainContainer = styled.div`
   display: flex;
   gap: 8px;
-  align-items: top;
+  align-items: center;
   justify-content: center;
 `;
 

@@ -26,12 +26,11 @@ const StyledLabel = styled.label`
 `;
 
 const LongTextFullDisplay: React.FC<{ text: string; toggleModal: () => void }> = ({ text, toggleModal }) => (
-  <>
-    <Overlay />
+  <Overlay>
     <StyledModal {...{ toggleModal }}>
       <TextDisplay value={text} disabled />
     </StyledModal>
-  </>
+  </Overlay>
 );
 
 export interface ILongTextField {

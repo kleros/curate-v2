@@ -122,7 +122,6 @@ const DesktopHeader = () => {
       </Container>
       {(isDappListOpen || isHelpOpen || isSettingsOpen) && (
         <PopupContainer>
-          <Overlay />
           {isDappListOpen && <DappList {...{ toggleIsDappListOpen, isDappListOpen }} />}
           {isHelpOpen && <Help {...{ toggleIsHelpOpen, isHelpOpen }} />}
           {isSettingsOpen && <Settings {...{ toggleIsSettingsOpen, isSettingsOpen }} />}

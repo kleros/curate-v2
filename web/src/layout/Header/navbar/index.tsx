@@ -99,7 +99,6 @@ const NavBar: React.FC = () => {
       </Container>
       {(isDappListOpen || isHelpOpen || isSettingsOpen) && (
         <PopupContainer>
-          <Overlay />
           {isDappListOpen && <DappList {...{ toggleIsDappListOpen }} />}
           {isHelpOpen && <Help {...{ toggleIsHelpOpen }} />}
           {isSettingsOpen && <Settings {...{ toggleIsSettingsOpen }} />}

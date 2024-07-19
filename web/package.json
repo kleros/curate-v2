@@ -110,6 +110,7 @@
     "react-use": "^17.4.3",
     "siwe": "^2.3.2",
     "styled-components": "^5.3.11",
+    "subgraph-status": "^1.2.3",
     "viem": "^1.21.4",
     "wagmi": "^1.4.13"
   }

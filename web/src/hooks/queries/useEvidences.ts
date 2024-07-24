@@ -10,6 +10,9 @@ const evidencesQuery = graphql(`
     evidences(where: { evidenceGroup: $evidenceGroupID }, orderBy: timestamp, orderDirection: asc, first: 2) {
       evidence
       timestamp
+      name
+      description
+      fileURI
     }
   }
 `);

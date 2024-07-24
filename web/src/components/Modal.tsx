@@ -32,12 +32,11 @@ const Modal: React.FC<{ children: React.ReactNode; toggleModal: () => void; clas
   const containerRef = useRef(null);
   useClickAway(containerRef, () => toggleModal());
   return (
-    <>
-      <Overlay />
+    <Overlay>
       <StyledModal {...{ className }} ref={containerRef}>
         {children}
       </StyledModal>
-    </>
+    </Overlay>
   );
 };
 

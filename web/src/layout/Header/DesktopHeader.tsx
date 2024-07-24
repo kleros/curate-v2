@@ -3,7 +3,9 @@ import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { useToggle } from "react-use";
 import { Link } from "react-router-dom";
+import { useAccount, useNetwork } from "wagmi";
 import { useLockOverlayScroll } from "hooks/useLockOverlayScroll";
+import { DEFAULT_CHAIN } from "consts/chains";
 import KlerosSolutionsIcon from "svgs/menu-icons/kleros-solutions.svg";
 import DappLogo from "svgs/header/dapp-logo.svg";
 import ConnectWallet from "components/ConnectWallet";
@@ -13,7 +15,6 @@ import Explore from "./navbar/Explore";
 import Menu from "./navbar/Menu";
 import Help from "./navbar/Menu/Help";
 import Settings from "./navbar/Menu/Settings";
-import { Overlay } from "components/Overlay";
 import { PopupContainer } from ".";
 
 const Container = styled.div`
@@ -69,16 +70,28 @@ const StyledKlerosSolutionsIcon = styled(KlerosSolutionsIcon)`
   fill: ${({ theme }) => theme.white} !important;
 `;
 
-const ConnectWalletContainer = styled.div`
+const ConnectWalletContainer = styled.div<{ isConnected: boolean; isDefaultChain: boolean }>`
   label {
     color: ${({ theme }) => theme.white};
   }
-`;
 
+  ${({ isConnected, isDefaultChain }) =>
+    isConnected &&
+    isDefaultChain &&
+    css`
+      cursor: pointer;
+      & > * {
+        pointer-events: none;
+      }
+    `}
+`;
 const DesktopHeader = () => {
   const [isDappListOpen, toggleIsDappListOpen] = useToggle(false);
   const [isHelpOpen, toggleIsHelpOpen] = useToggle(false);
   const [isSettingsOpen, toggleIsSettingsOpen] = useToggle(false);
+  const { chain } = useNetwork();
+  const { isConnected } = useAccount();
+  const isDefaultChain = chain?.id === DEFAULT_CHAIN;
   useLockOverlayScroll(isDappListOpen || isHelpOpen || isSettingsOpen);
 
   return (
@@ -104,7 +117,10 @@ const DesktopHeader = () => {
         </MiddleSide>
 
         <RightSide>
-          <ConnectWalletContainer>
+          <ConnectWalletContainer
+            {...{ isConnected, isDefaultChain }}
+            onClick={isConnected && isDefaultChain ? toggleIsSettingsOpen : undefined}
+          >
             <ConnectWallet />
           </ConnectWalletContainer>
           <Menu {...{ toggleIsHelpOpen, toggleIsSettingsOpen }} />
@@ -112,7 +128,6 @@ const DesktopHeader = () => {
       </Container>
       {(isDappListOpen || isHelpOpen || isSettingsOpen) && (
         <PopupContainer>
-          <Overlay />
           {isDappListOpen && <DappList {...{ toggleIsDappListOpen, isDappListOpen }} />}
           {isHelpOpen && <Help {...{ toggleIsHelpOpen, isHelpOpen }} />}
           {isSettingsOpen && <Settings {...{ toggleIsSettingsOpen, isSettingsOpen }} />}

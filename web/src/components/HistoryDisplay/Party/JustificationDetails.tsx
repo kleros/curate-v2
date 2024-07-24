@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import AttachmentIcon from "svgs/icons/attachment.svg";
 import { customScrollbar } from "styles/customScrollbar";
+import { Evidence } from "src/graphql/graphql";
 
 const Container = styled.div`
   width: 100%;
@@ -32,18 +33,14 @@ const StyledA = styled.a`
   }
 `;
 
-export type Justification = {
-  name: string;
-  description: string;
-  fileURI?: string;
-};
+export type Justification = Pick<Evidence, "name" | "description" | "evidence" | "fileURI">;
 
 const JustificationDetails: React.FC<{ justification: Justification }> = ({ justification }) => {
   return (
     <Container>
-      <JustificationTitle>{justification.name}</JustificationTitle>
+      <JustificationTitle>{justification.name ?? "Unable to determine title"}</JustificationTitle>
       <DescriptionContainer>
-        <ReactMarkdown>{justification.description}</ReactMarkdown>
+        <ReactMarkdown>{justification.description ?? "Unable to determine description"}</ReactMarkdown>
       </DescriptionContainer>
       {justification?.fileURI && (
         <StyledA href={getIpfsUrl(justification.fileURI)}>

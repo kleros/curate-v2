@@ -8,6 +8,13 @@ import { RegistryDetails as RegistryDetailsType, useRegistryDetailsContext } fro
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { useItemDetailsQuery } from "queries/useItemDetailsQuery";
 import { List_filters } from "consts/filters";
+import ItemsDownloadLabel from "./ItemsDownloadLabel";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const RegistryDetails: React.FC = () => {
   const { id } = useParams();
@@ -41,7 +48,7 @@ const RegistryDetails: React.FC = () => {
   }, [itemDetails, registryDetails, setRegistryDetails]);
 
   return (
-    <div>
+    <Container>
       <RegistryInformationCard
         id={listAddress}
         {...{
@@ -63,7 +70,8 @@ const RegistryDetails: React.FC = () => {
         <Route path="history" element={<History itemId={itemId} />} />
         <Route path="*" element={<Navigate to={`list/1/desc/${JSON.stringify(List_filters.Active)}`} replace />} />
       </Routes>
-    </div>
+      <ItemsDownloadLabel registryAddress={listAddress} />
+    </Container>
   );
 };
 

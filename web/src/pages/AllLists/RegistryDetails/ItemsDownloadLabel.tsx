@@ -31,27 +31,20 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
   useEffect(() => {
     if (!items || !ref.current) return;
     setIsPreparing(true);
-    const flattenedItems = items.flatMap((item) => {
-      let isFirstRow = true;
+    const flattenedItems = items.map((item) => {
+      const row = {
+        id: item.id,
+        status: item.status,
+        disputed: item.disputed,
+      };
 
-      return item.props.map((prop) => {
-        // Create the row with the item details for the first row, otherwise leave them empty
-        const row = {
-          id: isFirstRow ? item.id : "",
-          status: isFirstRow ? item.status : "",
-          disputed: isFirstRow ? item.disputed : "",
-          propLabel: prop.label,
-          propDescription: prop.description,
-          propValue: prop.value,
-          propIsIdentifier: prop.isIdentifier,
-          propType: prop.type,
-        };
-
-        isFirstRow = false;
-
-        return row;
+      item.props.forEach((prop) => {
+        row[`${prop.label} (${prop.description})`] = prop.value;
       });
+
+      return row;
     });
+
     const csvData = json2csv(flattenedItems);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
     const link = ref.current;
@@ -59,7 +52,7 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);
       link.setAttribute("href", url);
-      link.setAttribute("download", `${registryAddress}.csv`);
+      link.setAttribute("download", `Kleros-Curate-${registryAddress}.csv`);
       link.click();
     }
 

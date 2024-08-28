@@ -63,7 +63,7 @@ const FieldsContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: start;
-  width: max-content;
+  width: fit-content;
   gap: 16px;
   grid-column: span 2;
   ${landscapeStyle(

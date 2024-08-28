@@ -4851,6 +4851,7 @@ __metadata:
     graphql: "npm:^16.8.1"
     graphql-request: "npm:~6.1.0"
     jose: "npm:^5.3.0"
+    json-2-csv: "npm:^5.5.5"
     lru-cache: "npm:^7.18.3"
     moment: "npm:^2.30.1"
     overlayscrollbars: "npm:^2.4.6"
@@ -14210,6 +14211,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"deeks@npm:3.1.0":
+  version: 3.1.0
+  resolution: "deeks@npm:3.1.0"
+  checksum: 4297893cb792bc207b1fdac6090094c8c666669227b385bc69d98ea751294614948288a39a38faa0a44d7045d1bf05eacd188eea7516a1a7d0fee9a7faa34e7d
+  languageName: node
+  linkType: hard
+
 "deep-eql@npm:^4.0.1, deep-eql@npm:^4.1.3":
   version: 4.1.3
   resolution: "deep-eql@npm:4.1.3"
@@ -14520,6 +14528,13 @@ __metadata:
   dependencies:
     "@leichtgewicht/ip-codec": "npm:^2.0.1"
   checksum: ef5496dd5a906e22ed262cbe1a6f5d532c0893c4f1884a7aa37d4d0d8b8376a2b43f749aab087c8bb1354d67b40444f7fca8de4017b161a4cea468543061aed3
+  languageName: node
+  linkType: hard
+
+"doc-path@npm:4.1.1":
+  version: 4.1.1
+  resolution: "doc-path@npm:4.1.1"
+  checksum: 455dd7458d4fa9ec0662fc307c4c3a7112bd0d554b8a6e0e86a6c6554f125727b4f80af430c1038f5d471ed5586c95354260928a31b80e632519480d745af713
   languageName: node
   linkType: hard
 
@@ -20305,6 +20320,16 @@ __metadata:
   bin:
     jsesc: bin/jsesc
   checksum: fab949f585c71e169c5cbe00f049f20de74f067081bbd64a55443bad1c71e1b5a5b448f2359bf2fe06f5ed7c07e2e4a9101843b01c823c30b6afc11f5bfaf724
+  languageName: node
+  linkType: hard
+
+"json-2-csv@npm:^5.5.5":
+  version: 5.5.5
+  resolution: "json-2-csv@npm:5.5.5"
+  dependencies:
+    deeks: "npm:3.1.0"
+    doc-path: "npm:4.1.1"
+  checksum: 671a72d484349fa2b74e32fb35f02706ea056dee0d840c89b39165ef5f35fddc515b6c1ff9b684689796060af229c7161ce2af5f1d0646bea7694b881187b9d1
   languageName: node
   linkType: hard
 

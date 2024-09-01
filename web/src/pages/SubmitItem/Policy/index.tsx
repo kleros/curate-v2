@@ -21,7 +21,10 @@ const Policy: React.FC = () => {
       <ReadPolicy />
       <Info />
       <ConfirmationBox />
-      <NavigationButtons prevRoute={`../item-field/${fieldProps?.length - 1 ?? 0}`} nextRoute="../preview" />
+      <NavigationButtons
+        prevRoute={`../item-field/${fieldProps?.length ? fieldProps.length - 1 : 0}`}
+        nextRoute="../preview"
+      />
     </Container>
   );
 };

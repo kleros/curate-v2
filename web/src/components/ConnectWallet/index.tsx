@@ -1,23 +1,24 @@
-import React from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { useWeb3Modal } from "@web3modal/react";
+import React, { useCallback } from "react";
+import { useAccount, useSwitchChain } from "wagmi";
 import { Button } from "@kleros/ui-components-library";
 import { SUPPORTED_CHAINS, DEFAULT_CHAIN } from "consts/chains";
 import AccountDisplay from "./AccountDisplay";
+import { useWeb3Modal, useWeb3ModalState } from "@web3modal/wagmi/react";
 
 export const SwitchChainButton: React.FC = () => {
-  const { switchNetwork, isLoading } = useSwitchNetwork();
-  const handleSwitch = () => {
-    if (!switchNetwork) {
+  const { switchChain, isLoading } = useSwitchChain();
+  const handleSwitch = useCallback(() => {
+    if (!switchChain) {
       console.error("Cannot switch network. Please do it manually.");
       return;
     }
     try {
-      switchNetwork(DEFAULT_CHAIN);
+      switchChain({ chainId: DEFAULT_CHAIN });
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [switchChain]);
+
   return (
     <Button
       isLoading={isLoading}
@@ -28,14 +29,23 @@ export const SwitchChainButton: React.FC = () => {
   );
 };
 
-const ConnectButton: React.FC = () => {
-  const { open, isOpen } = useWeb3Modal();
-  return <Button disabled={isOpen} small text={"Connect"} onClick={async () => open({ route: "ConnectWallet" })} />;
+const ConnectButton: React.FC<{ className?: string }> = ({ className }) => {
+  const { open } = useWeb3Modal();
+  const { open: isOpen } = useWeb3ModalState();
+  return (
+    <Button
+      {...{ className }}
+      disabled={isOpen}
+      small
+      text={"Connect"}
+      onClick={async () => open({ view: "Connect" })}
+    />
+  );
 };
 
 const ConnectWallet: React.FC = () => {
-  const { chain } = useNetwork();
-  const { isConnected } = useAccount();
+  const { isConnected, chain } = useAccount();
+
   if (isConnected) {
     if (chain && chain.id !== DEFAULT_CHAIN) {
       return <SwitchChainButton />;

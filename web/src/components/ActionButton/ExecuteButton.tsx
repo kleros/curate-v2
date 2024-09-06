@@ -2,9 +2,9 @@ import { Button } from "@kleros/ui-components-library";
 import React, { useState } from "react";
 import { Address } from "viem";
 import { usePublicClient } from "wagmi";
-import { useCurateV2ExecuteRequest, usePrepareCurateV2ExecuteRequest } from "hooks/contracts/generated";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { EnsureChain } from "../EnsureChain";
+import { useSimulateCurateV2ExecuteRequest, useWriteCurateV2ExecuteRequest } from "hooks/useContract";
 
 interface IExecuteButton {
   registryAddress: Address;
@@ -17,12 +17,11 @@ const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refe
   const [isExecuting, setIsExecuting] = useState(false);
 
   const {
-    config,
+    data: config,
     isError,
     isLoading: isPreparingConfig,
-    //@ts-ignore
-  } = usePrepareCurateV2ExecuteRequest({ address: registryAddress, args: [itemId as `0x${string}`] });
-  const { writeAsync: executeRequest, isLoading } = useCurateV2ExecuteRequest(config);
+  } = useSimulateCurateV2ExecuteRequest({ address: registryAddress, args: [itemId as `0x${string}`] });
+  const { writeContractAsync: executeRequest, isLoading } = useWriteCurateV2ExecuteRequest();
   return (
     <EnsureChain>
       <Button
@@ -30,15 +29,9 @@ const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refe
         disabled={isLoading || isError || isExecuting || isPreparingConfig || disabled}
         isLoading={isLoading || isExecuting}
         onClick={() => {
-          if (!executeRequest) return;
+          if (!executeRequest || !config || !publicClient) return;
           setIsExecuting(true);
-          wrapWithToast(
-            async () =>
-              await executeRequest().then((response) => {
-                return response.hash;
-              }),
-            publicClient
-          )
+          wrapWithToast(async () => await executeRequest(config.request), publicClient)
             .then(() => refetch())
             .catch(() => {})
             .finally(() => setIsExecuting(false));

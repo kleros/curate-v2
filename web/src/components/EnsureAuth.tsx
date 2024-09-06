@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import * as jwt from "jose";
 import { SiweMessage } from "siwe";
-import { useAccount, useNetwork, useSignMessage } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 
 import { Button } from "@kleros/ui-components-library";
 
@@ -20,8 +20,7 @@ export const EnsureAuth: React.FC<IEnsureAuth> = ({ children, className }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [authToken, setAuthToken] = useSessionStorage<string | null>("auth-token", localToken);
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { address, chain } = useAccount();
 
   const { signMessageAsync } = useSignMessage();
 

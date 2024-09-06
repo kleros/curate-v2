@@ -25,3 +25,5 @@ export const COURT_SITE = import.meta.env.COURT_SITE ?? "https://v2.kleros.build
 export const SUPPORTED_FILE_TYPES = ["application/pdf", "text/rtf", "text/markdown", "text/plain"];
 
 export const MAIN_CURATE_ADDRESS = GeneratedMainCurate.mainCurateAddress;
+
+export const isProductionDeployment = () => import.meta.env.REACT_APP_DEPLOYMENT === "mainnet";

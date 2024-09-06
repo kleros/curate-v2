@@ -9,9 +9,9 @@ import styled from "styled-components";
 import { useToggle } from "react-use";
 import Modal, { getModalButtonText } from "./Modal";
 import ExecuteButton from "./ExecuteButton";
-import { useCurateV2ChallengePeriodDuration } from "hooks/contracts/generated";
 import { useQueryClient } from "@tanstack/react-query";
 import { isUndefined } from "src/utils";
+import { useReadCurateV2ChallengePeriodDuration } from "hooks/useContract";
 
 const StyledKlerosIcon = styled(KlerosIcon)`
   path {
@@ -32,8 +32,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
   const [isModalOpen, toggleModal] = useToggle(false);
 
   const { data: requests, isLoading } = useItemRequests(`${itemId}@${registryAddress}`);
-  //@ts-ignore
-  const { data: challengePeriodDuration } = useCurateV2ChallengePeriodDuration({ address: registryAddress });
+  const { data: challengePeriodDuration } = useReadCurateV2ChallengePeriodDuration({ address: registryAddress });
 
   const latestRequest = requests?.requests?.[requests.requests.length - 1];
   const disputeId = latestRequest?.disputeID;

@@ -3,9 +3,9 @@ import { getStatusColor, getStatusLabel, mapFromSubgraphStatus } from "../Regist
 import styled, { css, useTheme } from "styled-components";
 import { Status } from "consts/status";
 import { Status as SubgraphStatus } from "src/graphql/graphql";
-import { useCurateV2ChallengePeriodDuration } from "hooks/contracts/generated";
 import { useCountdown } from "hooks/useCountdown";
 import { secondsToDayHourMinute } from "utils/date";
+import { useReadCurateV2ChallengePeriodDuration } from "hooks/useContract";
 
 const StatusContainer = styled.div`
   display: flex;
@@ -50,10 +50,11 @@ const StatusDisplay: React.FC<IStatusDisplay> = ({
   const processedStatus = mapFromSubgraphStatus(status, disputed);
   const [frontColor] = getStatusColor(processedStatus, theme);
 
-  const { data: challengePeriodDuration } = useCurateV2ChallengePeriodDuration({
-    //@ts-ignore
-    address: registryAddress,
-    enabled: [Status.ClearingPending, Status.RegistrationPending].includes(processedStatus),
+  const { data: challengePeriodDuration } = useReadCurateV2ChallengePeriodDuration({
+    address: registryAddress as `0x${string}`,
+    query: {
+      enabled: [Status.ClearingPending, Status.RegistrationPending].includes(processedStatus),
+    },
   });
 
   const challengePeriodDeadline = useMemo(() => {

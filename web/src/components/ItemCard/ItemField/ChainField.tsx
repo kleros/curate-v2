@@ -18,8 +18,6 @@ export interface IChainField {
 }
 
 const ChainField: React.FC<IChainField> = ({ value }) => {
-  console.log({ value });
-
   const chain = getChainById(Number(value));
 
   const chainName = getChainName(chain.id);

@@ -2,8 +2,7 @@ import React from "react";
 import { IFieldInput } from ".";
 import { DropdownSelect } from "@kleros/ui-components-library";
 import { getChainName } from "components/ChainIcon";
-import { mainnet } from "wagmi";
-import { arbitrum, gnosis, polygon } from "viem/chains";
+import { arbitrum, gnosis, mainnet, polygon } from "viem/chains";
 
 const ChainInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const handleChange = (value: string | number) => {

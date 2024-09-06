@@ -6,16 +6,16 @@ import DepositRequired from "./DepositRequired";
 import Info from "./Info";
 import { IBaseModal } from ".";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
-import {
-  useCurateV2AddItem,
-  useCurateV2GetArbitratorExtraData,
-  useCurateV2SubmissionBaseDeposit,
-  usePrepareCurateV2AddItem,
-} from "hooks/contracts/generated";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { useItemDetailsQuery } from "hooks/queries/useItemDetailsQuery";
 import Modal from "components/Modal";
+import {
+  useReadCurateV2GetArbitratorExtraData,
+  useReadCurateV2SubmissionBaseDeposit,
+  useSimulateCurateV2AddItem,
+  useWriteCurateV2AddItem,
+} from "hooks/useContract";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -36,13 +36,11 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
   const { data: itemData, isLoading: isItemDataLoading } = useItemDetailsQuery(`${itemId}@${registryAddress}`);
 
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData({
-    // @ts-ignore
+  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
     address: registryAddress,
   });
 
-  const { data: removalDeposit, isLoading: isSubmissionDepositLoading } = useCurateV2SubmissionBaseDeposit({
-    //@ts-ignore
+  const { data: removalDeposit, isLoading: isSubmissionDepositLoading } = useReadCurateV2SubmissionBaseDeposit({
     address: registryAddress,
   });
 
@@ -64,15 +62,16 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance]);
 
-  const { config, isError } = usePrepareCurateV2AddItem({
-    enabled: address && registryAddress && !isLoading && !isDisabled && !isItemDataLoading,
-    //@ts-ignore
+  const { data: config, isError } = useSimulateCurateV2AddItem({
+    query: {
+      enabled: address && registryAddress && !isLoading && !isDisabled && !isItemDataLoading,
+    },
     address: registryAddress,
     args: [itemData?.item?.data ?? ""],
     value: depositRequired,
   });
 
-  const { writeAsync: resubmitItem } = useCurateV2AddItem(config);
+  const { writeContractAsync: resubmitItem } = useWriteCurateV2AddItem();
 
   return (
     <ReStyledModal {...{ toggleModal }}>
@@ -85,17 +84,10 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
         isDisabled={isDisabled || isError || isResubmittingItem}
         isLoading={isLoading}
         callback={() => {
-          if (!resubmitItem) return;
+          if (!resubmitItem || !config?.request || !publicClient) return;
           setIsResubmittingItem(true);
-          wrapWithToast(
-            async () =>
-              await resubmitItem().then((response) => {
-                return response.hash;
-              }),
-            publicClient
-          )
+          wrapWithToast(async () => await resubmitItem(config.request), publicClient)
             .then((res) => {
-              console.log({ res });
               refetch();
               toggleModal();
             })

@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 import { usePublicClient } from "wagmi";
 import { EnsureChain } from "components/EnsureChain";
-import { useCurateV2AddItem, usePrepareCurateV2AddItem } from "hooks/contracts/generated";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { isUndefined } from "utils/index";
 import { Log, decodeEventLog, parseAbi } from "viem";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useNavigate } from "react-router-dom";
+import { useSimulateCurateV2AddItem, useWriteCurateV2AddItem } from "hooks/useContract";
 
 const StyledButton = styled(Button)``;
 
@@ -21,14 +21,16 @@ const SubmitItemButton: React.FC = () => {
   const { fields, submissionDeposit, resetItemData } = useSubmitItemContext();
   const { id: registryAddress } = useRegistryDetailsContext();
 
-  const { data: config } = usePrepareCurateV2AddItem({
-    address: registryAddress,
-    enabled: Boolean(fields && submissionDeposit && registryAddress),
+  const { data: config } = useSimulateCurateV2AddItem({
+    query: {
+      enabled: Boolean(fields && submissionDeposit && registryAddress),
+    },
+    address: registryAddress as `0x${string}`,
     args: [JSON.stringify(fields)],
     value: BigInt(submissionDeposit ?? 0),
   });
 
-  const { writeAsync: submitItem, isLoading } = useCurateV2AddItem(config);
+  const { writeContractAsync: submitItem, isLoading } = useWriteCurateV2AddItem();
 
   const isButtonDisabled = useMemo(() => isSubmittingItem, [isSubmittingItem]);
 
@@ -39,13 +41,11 @@ const SubmitItemButton: React.FC = () => {
         disabled={isButtonDisabled}
         isLoading={isLoading}
         onClick={() => {
-          if (submitItem) {
+          if (submitItem && publicClient && config) {
             setIsSubmittingItem(true);
-            wrapWithToast(async () => await submitItem().then((response) => response.hash), publicClient)
+            wrapWithToast(async () => await submitItem(config?.request), publicClient)
               .then((res) => {
                 if (res.status && !isUndefined(res.result)) {
-                  console.log({ res });
-
                   const itemId = retrieveItemId(res.result.logs[0]);
                   resetItemData();
                   navigate(`/lists/item/${itemId}@${registryAddress}`);

@@ -4,13 +4,10 @@ import { createClient } from "@supabase/supabase-js";
 import * as jwt from "jose";
 import { SiweMessage } from "siwe";
 
-import { DEFAULT_CHAIN } from "consts/chains";
-import { ETH_SIGNATURE_REGEX } from "consts/index";
-
 import { netlifyUri, netlifyDeployUri, netlifyDeployPrimeUri } from "src/generatedNetlifyInfo.json";
 import { Database } from "src/types/supabase-notification";
 import { ethers } from "ethers";
-import { isProductionDeployment } from "consts/processEnvConst";
+import { ETH_SIGNATURE_REGEX, isProductionDeployment, DEFAULT_CHAIN } from "consts/processEnvConst";
 
 const authUser = async (event) => {
   try {

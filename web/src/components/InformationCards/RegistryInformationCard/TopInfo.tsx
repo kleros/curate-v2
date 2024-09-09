@@ -11,6 +11,7 @@ import { isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { shortenAddress } from "utils/shortenAddress";
+import { Link } from "react-router-dom";
 
 const TopInfoContainer = styled.div`
   display: flex;
@@ -122,12 +123,14 @@ const TopInfo: React.FC<ITopInfo> = ({
           {isUndefined(logoURI) ? (
             <SkeletonLogo />
           ) : (
-            <StyledLogo
-              src={imageSrc}
-              onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
-              alt="List Img"
-              isListView={false}
-            />
+            <Link to={`/attachment/?url=${imageSrc}`}>
+              <StyledLogo
+                src={imageSrc}
+                onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
+                alt="List Img"
+                isListView={false}
+              />
+            </Link>
           )}
           {isUndefined(title) ? <SkeletonTitle /> : <StyledTitle>{title}</StyledTitle>}
         </LogoAndTitle>

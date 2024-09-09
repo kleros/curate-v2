@@ -16,7 +16,7 @@ export default defineConfig({
       },
     },
   },
-  envPrefix: ["REACT_APP", "ALCHEMY", "WALLETCONNECT_PROJECT_ID"],
+  envPrefix: ["REACT_APP", "ALCHEMY", "WALLETCONNECT_PROJECT_ID", "COURT_SITE"],
   plugins: [
     svgr({
       include: ["**/*.svg", "tsx:**/*.svg"],

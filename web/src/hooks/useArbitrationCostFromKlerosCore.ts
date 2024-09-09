@@ -1,4 +1,4 @@
-import { useContractRead } from "wagmi";
+import { useReadContract } from "wagmi";
 
 const KLEROS_CORE_ADDRESS = "0xA54e7A16d7460e38a8F324eF46782FB520d58CE8";
 const KLEROS_CORE_ABI = [
@@ -24,7 +24,7 @@ const KLEROS_CORE_ABI = [
 ];
 
 export const useArbitrationCost = (arbitratorExtraData) => {
-  const { data, isError, isLoading } = useContractRead({
+  const { data, isError, isLoading } = useReadContract({
     address: KLEROS_CORE_ADDRESS,
     abi: KLEROS_CORE_ABI,
     functionName: "arbitrationCost",
@@ -32,7 +32,7 @@ export const useArbitrationCost = (arbitratorExtraData) => {
   });
 
   return {
-    arbitrationCost: data ? data : null,
+    arbitrationCost: data ?? null,
     isLoading,
     isError,
   };

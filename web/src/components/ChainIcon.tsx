@@ -1,6 +1,5 @@
 import React from "react";
-import { arbitrum, arbitrumSepolia, gnosis, gnosisChiado, polygon, polygonMumbai } from "viem/chains";
-import { mainnet, sepolia } from "wagmi";
+import { arbitrum, arbitrumSepolia, gnosis, gnosisChiado, mainnet, polygon, polygonMumbai, sepolia } from "viem/chains";
 import EthIcon from "svgs/chains/ethereum.svg";
 import PolygonIcon from "svgs/chains/polygon.svg";
 import GnosisIcon from "svgs/chains/gnosis.svg";

@@ -3,15 +3,14 @@ import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import { Card } from "@kleros/ui-components-library";
-import GnosisIcon from "svgs/chains/gnosis.svg";
 import PileCoinsIcon from "svgs/icons/pile-coins.svg";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import Skeleton from "react-loading-skeleton";
 import { useParams } from "react-router-dom";
-import { useCurateV2GetArbitratorExtraData, useCurateV2SubmissionBaseDeposit } from "hooks/contracts/generated";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { formatUnitsWei, formatValue } from "utils/format";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
+import { useReadCurateV2GetArbitratorExtraData, useReadCurateV2SubmissionBaseDeposit } from "hooks/useContract";
 
 const Container = styled.div`
   display: flex;
@@ -83,16 +82,6 @@ const Amount = styled.p`
   margin: 0;
 `;
 
-const Chain = styled.div`
-  display: flex;
-  flex-direction: row;
-
-  svg {
-    margin-right: 8px;
-    width: 24px;
-  }
-`;
-
 interface IHeader {}
 
 const Header: React.FC<IHeader> = ({}) => {
@@ -101,8 +90,11 @@ const Header: React.FC<IHeader> = ({}) => {
   const { id } = useParams();
   const [listAddress, _]: string[] = id?.split("-");
 
-  const { data: deposit } = useCurateV2SubmissionBaseDeposit({ address: listAddress });
-  const { data: arbitratorExtraData } = useCurateV2GetArbitratorExtraData({ address: listAddress });
+  const { data: deposit } = useReadCurateV2SubmissionBaseDeposit({ address: listAddress as `0x${string}` });
+
+  const { data: arbitratorExtraData } = useReadCurateV2GetArbitratorExtraData({
+    address: listAddress as `0x${string}`,
+  });
 
   const { arbitrationCost } = useArbitrationCost(arbitratorExtraData);
 

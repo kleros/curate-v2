@@ -6,18 +6,17 @@ import DepositRequired from "./DepositRequired";
 import Info from "./Info";
 import { IBaseModal } from ".";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
-import {
-  useCurateV2GetArbitratorExtraData,
-  useCurateV2RemovalBaseDeposit,
-  useCurateV2RemoveItem,
-  usePrepareCurateV2RemoveItem,
-} from "hooks/contracts/generated";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { wrapWithToast } from "utils/wrapWithToast";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
-import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import Modal from "components/Modal";
 import { isUndefined } from "src/utils";
+import {
+  useReadCurateV2GetArbitratorExtraData,
+  useReadCurateV2RemovalBaseDeposit,
+  useSimulateCurateV2RemoveItem,
+  useWriteCurateV2RemoveItem,
+} from "hooks/useContract";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -41,13 +40,11 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
 
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData({
-    //@ts-ignore
+  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
     address: registryAddress,
   });
 
-  const { data: removalDeposit, isLoading: isRemovalDepositLoading } = useCurateV2RemovalBaseDeposit({
-    //@ts-ignore
+  const { data: removalDeposit, isLoading: isRemovalDepositLoading } = useReadCurateV2RemovalBaseDeposit({
     address: registryAddress,
   });
 
@@ -65,16 +62,14 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
-  const { config } = usePrepareCurateV2RemoveItem({
-    enabled: !isDisabled || !isUndefined(evidence),
-    //@ts-ignore
+  const { data: config } = useSimulateCurateV2RemoveItem({
+    query: { enabled: !isDisabled && !isUndefined(evidence) },
     address: registryAddress,
-    functionName: "removeItem",
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
   });
 
-  const { writeAsync: removeItem } = useCurateV2RemoveItem(config);
+  const { writeContractAsync: removeItem } = useWriteCurateV2RemoveItem();
   const isLoading = useMemo(
     () =>
       isBalanceLoading ||
@@ -105,9 +100,9 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
         isDisabled={isDisabled || isRemovingItem}
         isLoading={isLoading}
         callback={() => {
-          if (removeItem) {
+          if (removeItem && publicClient && config) {
             setIsRemovingItem(true);
-            wrapWithToast(async () => await removeItem().then((response) => response.hash), publicClient)
+            wrapWithToast(async () => await removeItem(config.request), publicClient)
               .then((res) => {
                 refetch();
                 toggleModal();

@@ -1,9 +1,10 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
-import { useAccount, useNetwork, useEnsAvatar, useEnsName } from "wagmi";
+import { useAccount, useEnsAvatar, useEnsName } from "wagmi";
 import Identicon from "react-identicons";
 import { shortenAddress } from "utils/shortenAddress";
+import { normalize } from "viem/ens";
 
 const Container = styled.div`
   display: flex;
@@ -110,7 +111,7 @@ export const IdenticonOrAvatar: React.FC<IIdenticonOrAvatar> = ({ size = "16", a
     chainId: 1,
   });
   const { data: avatar } = useEnsAvatar({
-    name,
+    name: normalize(name ?? ""),
     chainId: 1,
   });
 
@@ -138,7 +139,7 @@ export const AddressOrName: React.FC<IAddressOrName> = ({ address: propAddress }
 };
 
 export const ChainDisplay: React.FC = () => {
-  const { chain } = useNetwork();
+  const { chain } = useAccount();
   return <label>{chain?.name}</label>;
 };
 

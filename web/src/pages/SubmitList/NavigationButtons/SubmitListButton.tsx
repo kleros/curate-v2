@@ -1,23 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@kleros/ui-components-library";
 import { Address } from "viem";
-import { useAccount, useNetwork, usePublicClient } from "wagmi";
+import { useAccount, usePublicClient } from "wagmi";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import CheckCircle from "svgs/icons/check-circle-outline.svg";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
-import {
-  curateV2ABI,
-  curateV2Address,
-  useCurateFactoryDeploy,
-  useCurateV2AddItem,
-  useCurateV2GetArbitratorExtraData,
-  useCurateV2SubmissionBaseDeposit,
-  usePrepareCurateFactoryDeploy,
-} from "hooks/contracts/generated";
-
 import { isUndefined } from "utils/index";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { formatUnitsWei } from "utils/format";
@@ -30,6 +20,12 @@ import {
 } from "utils/submitListUtils";
 import { EnsureChain } from "components/EnsureChain";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
+import {
+  useReadCurateV2GetArbitratorExtraData,
+  useReadCurateV2SubmissionBaseDeposit,
+  useWriteCurateV2AddItem,
+} from "hooks/useContract";
+import { curateV2Abi, useSimulateCurateFactoryDeploy, useWriteCurateFactoryDeploy } from "hooks/contracts/generated";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -51,14 +47,15 @@ const SubmitListButton: React.FC = () => {
   } = useSubmitListContext();
   const publicClient = usePublicClient();
   const { address } = useAccount();
-  const { chain } = useNetwork();
   const [isEstimatingCost, setIsEstimatingCost] = useState(false);
   const [submittedListItemId, setSubmittedListItemId] = useState("");
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
-  const { data: config } = usePrepareCurateFactoryDeploy({
-    enabled: areListParamsValid(listParams),
+  const { data: config } = useSimulateCurateFactoryDeploy({
+    query: {
+      enabled: areListParamsValid(listParams),
+    },
     args: [
       listParams.governor as `0x${string}`,
       listParams.arbitrator as `0x${string}`,
@@ -73,14 +70,17 @@ const SubmitListButton: React.FC = () => {
     ],
   });
 
-  const { writeAsync: submit } = useCurateFactoryDeploy(config);
-  const { writeAsync: submitListToCurate } = useCurateV2AddItem({
-    address: MAIN_CURATE_ADDRESS,
-  });
+  const { writeContractAsync: submit } = useWriteCurateFactoryDeploy();
+
+  const { writeContractAsync: submitListToCurate } = useWriteCurateV2AddItem();
 
   // calculate total cost to submit the list to Curate
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData();
-  const { data: submissionBaseDeposit } = useCurateV2SubmissionBaseDeposit();
+  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
+    address: MAIN_CURATE_ADDRESS as `0x${string}`,
+  });
+  const { data: submissionBaseDeposit } = useReadCurateV2SubmissionBaseDeposit({
+    address: MAIN_CURATE_ADDRESS as `0x${string}`,
+  });
   const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
 
   const totalCostToSubmit = useMemo(() => {
@@ -92,13 +92,13 @@ const SubmitListButton: React.FC = () => {
   // estimate gas cost
   useEffect(() => {
     const estimateTotalCost = async () => {
-      if (!config?.request || !totalCostToSubmit || !address) return;
+      if (!config?.request || !totalCostToSubmit || !address || !publicClient) return;
       setIsEstimatingCost(true);
       const price = await publicClient.getGasPrice();
       const gasRequiredToDeploy = await publicClient.estimateContractGas(config.request);
       const gasRequiredToSubmit = await publicClient.estimateContractGas({
-        address: curateV2Address[chain?.id ?? 421614],
-        abi: curateV2ABI,
+        address: MAIN_CURATE_ADDRESS as `0x${string}`,
+        abi: curateV2Abi,
         functionName: "addItem",
         account: address,
         args: [""],
@@ -111,21 +111,22 @@ const SubmitListButton: React.FC = () => {
     };
 
     estimateTotalCost();
-  }, [config, totalCostToSubmit]);
+  }, [config, totalCostToSubmit, publicClient, address]);
 
   // submit deployed list to Curate
   const submitList = (deployedAddress: Address) => {
-    if (!deployedAddress || !submitListToCurate || !totalCostToSubmit) {
+    if (!deployedAddress || !submitListToCurate || !totalCostToSubmit || !publicClient) {
       setProgress(ListProgress.Failed);
+      return;
     }
     setProgress(ListProgress.ConfirmingSubmit);
     wrapWithToast(
       async () =>
-        await submitListToCurate({ args: [createItemFromList(deployedAddress)], value: totalCostToSubmit }).then(
-          (response) => {
-            return response.hash;
-          }
-        ),
+        await submitListToCurate({
+          address: MAIN_CURATE_ADDRESS as `0x${string}`,
+          args: [createItemFromList(deployedAddress)],
+          value: totalCostToSubmit,
+        }),
       publicClient
     )
       .then((res) => {
@@ -160,16 +161,10 @@ const SubmitListButton: React.FC = () => {
   );
 
   const handleDeploy = () => {
-    if (submit) {
+    if (submit && config && publicClient) {
       setIsSubmittingList(true);
       setProgress(ListProgress.ConfirmingDeploy);
-      wrapWithToast(
-        async () =>
-          await submit().then((response) => {
-            return response.hash;
-          }),
-        publicClient
-      )
+      wrapWithToast(async () => await submit(config.request), publicClient)
         .then((res) => {
           if (res.status && !isUndefined(res.result)) {
             setProgress(ListProgress.Deployed);

@@ -58,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@typescript-eslint/utils": "^5.62.0",
-    "@wagmi/cli": "^1.5.2",
+    "@wagmi/cli": "^2.1.15",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-react": "^7.33.2",
@@ -83,6 +83,7 @@
     "@tanstack/react-query": "^4.28.0",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/react": "^2.2.2",
+    "@web3modal/wagmi": "^5.1.6",
     "@yornaath/batshit": "^0.9.0",
     "amqplib": "^0.10.3",
     "chart.js": "^3.9.1",
@@ -112,7 +113,7 @@
     "siwe": "^2.3.2",
     "styled-components": "^5.3.11",
     "subgraph-status": "^1.2.3",
-    "viem": "^1.21.4",
-    "wagmi": "^1.4.13"
+    "viem": "^2.21.2",
+    "wagmi": "^2.12.8"
   }
 }

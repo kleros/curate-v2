@@ -4,13 +4,6 @@ import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
 import Info from "./Info";
-import {
-  useCurateV2ChallengeRequest,
-  useCurateV2GetArbitratorExtraData,
-  useCurateV2RemovalChallengeBaseDeposit,
-  useCurateV2SubmissionChallengeBaseDeposit,
-  usePrepareCurateV2ChallengeRequest,
-} from "hooks/contracts/generated";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { wrapWithToast } from "utils/wrapWithToast";
@@ -18,6 +11,13 @@ import { IBaseModal } from ".";
 import EvidenceUpload, { Evidence } from "./EvidenceUpload";
 import Modal from "components/Modal";
 import { isUndefined } from "src/utils";
+import {
+  useReadCurateV2GetArbitratorExtraData,
+  useReadCurateV2RemovalChallengeBaseDeposit,
+  useReadCurateV2SubmissionChallengeBaseDeposit,
+  useSimulateCurateV2ChallengeRequest,
+  useWriteCurateV2ChallengeRequest,
+} from "hooks/useContract";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -54,18 +54,15 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
 
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useCurateV2GetArbitratorExtraData({
-    // @ts-ignore
+  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
     address: registryAddress,
   });
 
   const { data: submissionChallengeDeposit, isLoading: isSubmissionChallengeDepositLoading } =
-    //@ts-ignore
-    useCurateV2SubmissionChallengeBaseDeposit({ address: registryAddress });
+    useReadCurateV2SubmissionChallengeBaseDeposit({ address: registryAddress });
 
   const { data: removalChallengeDeposit, isLoading: isRemovalChallengeDepositLoading } =
-    useCurateV2RemovalChallengeBaseDeposit({
-      //@ts-ignore
+    useReadCurateV2RemovalChallengeBaseDeposit({
       address: registryAddress,
     });
 
@@ -86,16 +83,14 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
-  const { config } = usePrepareCurateV2ChallengeRequest({
-    enabled: !isUndefined(itemId) && !isUndefined(evidence) && !isDisabled,
-    //@ts-ignore
+  const { data: config } = useSimulateCurateV2ChallengeRequest({
+    query: { enabled: !isUndefined(itemId) && !isUndefined(evidence) && !isDisabled },
     address: registryAddress,
-    functionName: "challengeRequest",
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
   });
 
-  const { writeAsync: challengeRequest } = useCurateV2ChallengeRequest(config);
+  const { writeContractAsync: challengeRequest } = useWriteCurateV2ChallengeRequest();
 
   const isLoading = useMemo(
     () =>
@@ -129,9 +124,9 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
         isDisabled={isDisabled || isChallengingItem}
         isLoading={isLoading}
         callback={() => {
-          if (challengeRequest) {
+          if (challengeRequest && publicClient && config) {
             setIsChallengingItem(true);
-            wrapWithToast(async () => await challengeRequest().then((response) => response.hash), publicClient)
+            wrapWithToast(async () => await challengeRequest(config.request), publicClient)
               .then(() => {
                 refetch();
                 toggleModal();

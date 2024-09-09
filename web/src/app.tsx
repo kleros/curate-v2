@@ -7,7 +7,6 @@ import Web3Provider from "context/Web3Provider";
 import IsListViewProvider from "context/IsListViewProvider";
 import QueryClientProvider from "context/QueryClientProvider";
 import StyledComponentsProvider from "context/StyledComponentsProvider";
-import RefetchOnBlock from "context/RefetchOnBlock";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
@@ -21,10 +20,9 @@ import { SubmitListProvider } from "./context/SubmitListContext";
 const App: React.FC = () => {
   return (
     <StyledComponentsProvider>
-      <QueryClientProvider>
-        <RefetchOnBlock />
+      <Web3Provider>
         <GraphqlBatcherProvider>
-          <Web3Provider>
+          <QueryClientProvider>
             <IsListViewProvider>
               <SubmitListProvider>
                 <SubmitItemProvider>
@@ -47,9 +45,9 @@ const App: React.FC = () => {
                 </SubmitItemProvider>
               </SubmitListProvider>
             </IsListViewProvider>
-          </Web3Provider>
+          </QueryClientProvider>
         </GraphqlBatcherProvider>
-      </QueryClientProvider>
+      </Web3Provider>
     </StyledComponentsProvider>
   );
 };

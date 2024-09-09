@@ -4,11 +4,10 @@ import { createClient } from "@supabase/supabase-js";
 import * as jwt from "jose";
 import { SiweMessage } from "siwe";
 
-import { DEFAULT_CHAIN } from "consts/chains";
-import { ETH_SIGNATURE_REGEX } from "consts/index";
-
 import { netlifyUri, netlifyDeployUri, netlifyDeployPrimeUri } from "src/generatedNetlifyInfo.json";
 import { Database } from "src/types/supabase-notification";
+import { ethers } from "ethers";
+import { ETH_SIGNATURE_REGEX, isProductionDeployment, DEFAULT_CHAIN } from "consts/processEnvConst";
 
 const authUser = async (event) => {
   try {
@@ -74,9 +73,14 @@ const authUser = async (event) => {
     }
 
     try {
-      await siweMessage.verify({ signature, nonce: nonceData.nonce, time: new Date().toISOString() });
+      // If the main Alchemy API key is permissioned, it won't work in a Netlify Function so we use a dedicated API key
+      const alchemyApiKey = process.env.ALCHEMY_FUNCTIONS_API_KEY ?? process.env.ALCHEMY_API_KEY;
+      const alchemyChain = isProductionDeployment() ? "arb-mainnet" : "arb-sepolia";
+      const alchemyRpcURL = `https://${alchemyChain}.g.alchemy.com/v2/${alchemyApiKey}`;
+      const provider = new ethers.providers.JsonRpcProvider(alchemyRpcURL);
+      await siweMessage.verify({ signature, nonce: nonceData.nonce, time: new Date().toISOString() }, { provider });
     } catch (err) {
-      throw new Error("Invalid signer");
+      throw new Error("Invalid signer: " + JSON.stringify(err));
     }
 
     const { error } = await supabase.from("user-nonce").delete().match({ address: lowerCaseAddress });

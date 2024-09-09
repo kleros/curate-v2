@@ -58,8 +58,9 @@ const Explore: React.FC = () => {
 
   const links = useMemo(
     () => [
-      { to: "/", text: "Home" },
+      { identifier: "/", to: "/", text: "Home" },
       {
+        identifier: "/attachment/",
         to: isUndefined(mainCurate) ? "/" : `/attachment/?url=${getIpfsUrl(mainCurate.registry.policyURI ?? "")}`,
         text: "Curation Policy",
       },
@@ -70,9 +71,13 @@ const Explore: React.FC = () => {
   return (
     <Container>
       <Title>Explore</Title>
-      {links.map(({ to, text }) => (
+      {links.map(({ to, text, identifier }) => (
         <LinkContainer key={text}>
-          <StyledLink to={to} onClick={toggleIsOpen} isActive={location.pathname.startsWith(to)}>
+          <StyledLink
+            to={to}
+            onClick={toggleIsOpen}
+            isActive={identifier === "/" ? location.pathname === "/" : location.pathname.startsWith(identifier)}
+          >
             {text}
           </StyledLink>
         </LinkContainer>

@@ -72,6 +72,7 @@
     "vite-tsconfig-paths": "^5.0.1"
   },
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.17.0",
     "@filebase/client": "^0.0.5",
     "@kleros/curate-v2-templates": "workspace:^",
     "@kleros/ui-components-library": "^2.13.1",

@@ -16,6 +16,7 @@ import SubmitItem from "./pages/SubmitItem";
 import SubmitList from "./pages/SubmitList";
 import { RegistryDetailsProvider } from "context/RegistryDetailsContext";
 import { SubmitListProvider } from "./context/SubmitListContext";
+import AttachmentDisplay from "./pages/AttachmentDisplay";
 
 const App: React.FC = () => {
   return (
@@ -39,6 +40,7 @@ const App: React.FC = () => {
                         }
                       />
                       <Route path="submit-list/*" element={<SubmitList />} />
+                      <Route path="attachment/*" element={<AttachmentDisplay />} />
                       <Route path="*" element={<h1>404 not found</h1>} />
                     </Route>
                   </SentryRoutes>

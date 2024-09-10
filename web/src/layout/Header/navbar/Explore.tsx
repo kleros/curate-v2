@@ -3,9 +3,10 @@ import styled, { css } from "styled-components";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { Link, useLocation } from "react-router-dom";
 import { useOpenContext } from "../MobileHeader";
-import { IPFS_GATEWAY, MAIN_CURATE_ADDRESS } from "consts/index";
+import { MAIN_CURATE_ADDRESS } from "consts/index";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { isUndefined } from "utils/index";
+import { getIpfsUrl } from "utils/getIpfsUrl";
 
 const Container = styled.div`
   display: flex;
@@ -57,9 +58,10 @@ const Explore: React.FC = () => {
 
   const links = useMemo(
     () => [
-      { to: "/", text: "Home" },
+      { identifier: "/", to: "/", text: "Home" },
       {
-        to: isUndefined(mainCurate) ? "/" : `${IPFS_GATEWAY}${mainCurate.registry.policyURI}`,
+        identifier: "/attachment/",
+        to: isUndefined(mainCurate) ? "/" : `/attachment/?url=${getIpfsUrl(mainCurate.registry.policyURI ?? "")}`,
         text: "Curation Policy",
       },
     ],
@@ -69,9 +71,13 @@ const Explore: React.FC = () => {
   return (
     <Container>
       <Title>Explore</Title>
-      {links.map(({ to, text }) => (
+      {links.map(({ to, text, identifier }) => (
         <LinkContainer key={text}>
-          <StyledLink to={to} onClick={toggleIsOpen} isActive={location.pathname.startsWith(to)}>
+          <StyledLink
+            to={to}
+            onClick={toggleIsOpen}
+            isActive={identifier === "/" ? location.pathname === "/" : location.pathname.startsWith(identifier)}
+          >
             {text}
           </StyledLink>
         </LinkContainer>

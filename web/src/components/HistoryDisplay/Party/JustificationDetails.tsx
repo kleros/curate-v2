@@ -5,6 +5,7 @@ import { getIpfsUrl } from "utils/getIpfsUrl";
 import AttachmentIcon from "svgs/icons/attachment.svg";
 import { customScrollbar } from "styles/customScrollbar";
 import { Evidence } from "src/graphql/graphql";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -24,7 +25,7 @@ const DescriptionContainer = styled.div`
   ${customScrollbar}
 `;
 
-const StyledA = styled.a`
+const StyledA = styled(Link)`
   display: flex;
   gap: 6px;
   > svg {
@@ -43,7 +44,7 @@ const JustificationDetails: React.FC<{ justification: Justification }> = ({ just
         <ReactMarkdown>{justification.description ?? "Unable to determine description"}</ReactMarkdown>
       </DescriptionContainer>
       {justification?.fileURI && (
-        <StyledA href={getIpfsUrl(justification.fileURI)}>
+        <StyledA to={`/attachment/?url=${getIpfsUrl(justification.fileURI)}`}>
           <AttachmentIcon />
           View attached file
         </StyledA>

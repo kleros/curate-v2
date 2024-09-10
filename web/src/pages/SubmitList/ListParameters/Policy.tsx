@@ -11,6 +11,7 @@ import { OPTIONS as toastOptions } from "utils/wrapWithToast";
 import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import { SUPPORTED_FILE_TYPES } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -65,13 +66,13 @@ const Policy: React.FC = () => {
         Fundamental to any list, the List Policy provides users with a set of rules that define what is allowed, and
         what isn’t allowed to be included in the list. Make sure to write it clearly, avoiding double interpretations.
         <br />
-        <a
-          href={getIpfsUrl("/ipfs/QmVcsLZYoXhzeM7S828aMK8Wh3VyUiSaKUG4YFYR2KjLyD/auditors-acceptance-policy-v1.pdf")}
-          target="_blank"
-          rel="noreferrer"
+        <Link
+          to={`/attachment/?url=${getIpfsUrl(
+            "/ipfs/QmVcsLZYoXhzeM7S828aMK8Wh3VyUiSaKUG4YFYR2KjLyD/auditors-acceptance-policy-v1.pdf"
+          )}`}
         >
           Check a Policy example
-        </a>{" "}
+        </Link>{" "}
         .
       </StyledLabel>
       <StyledFileUploader callback={handleFileUpload} variant="info" msg="You can add the List Policy file in PDF." />

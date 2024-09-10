@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 
@@ -15,7 +16,11 @@ export interface IImageField {
 
 const ImageField: React.FC<IImageField> = ({ value, detailed }) => {
   const imgUrl = getIpfsUrl(value);
-  return <StyledImg src={imgUrl} {...{ detailed }} />;
+  return (
+    <Link to={`/attachment/?url=${imgUrl}`}>
+      <StyledImg src={imgUrl} {...{ detailed }} />
+    </Link>
+  );
 };
 
 export default ImageField;

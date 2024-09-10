@@ -7,6 +7,7 @@ import { responsiveSize } from "styles/responsiveSize";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
+import { Link } from "react-router-dom";
 
 const ShadeArea = styled.div`
   display: flex;
@@ -37,7 +38,7 @@ const StyledP = styled.p`
   )};
 `;
 
-const StyledA = styled.a`
+const StyledA = styled(Link)`
   display: flex;
   align-items: center;
   gap: 4px;
@@ -69,11 +70,7 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
         {!isItem ? (
           <>
             {parentRegistryDetails ? (
-              <StyledA
-                href={getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <StyledA to={`/attachment/?url=${getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}`}>
                 <StyledPolicyIcon />
                 Curation Policy
               </StyledA>
@@ -83,7 +80,7 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
           </>
         ) : null}
         {policyURI ? (
-          <StyledA href={getIpfsUrl(policyURI)} target="_blank" rel="noreferrer">
+          <StyledA to={`/attachment/?url=${getIpfsUrl(policyURI)}`}>
             <StyledPolicyIcon />
             List Policy
           </StyledA>

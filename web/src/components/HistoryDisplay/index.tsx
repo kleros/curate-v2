@@ -1,5 +1,5 @@
 import { Card, CustomTimeline, _TimelineItem1 } from "@kleros/ui-components-library";
-import React from "react";
+import React, { useMemo } from "react";
 import styled, { css, Theme, useTheme } from "styled-components";
 import Header from "./Header";
 import { useItemRequests } from "queries/useRequestsQuery";
@@ -34,6 +34,11 @@ const StyledTimeline = styled(CustomTimeline)`
   }
 `;
 
+const StyledLabel = styled.label`
+  align-self: center;
+  padding-bottom: 32px;
+`;
+
 interface IHistory {
   itemId: string;
   isItem?: boolean;
@@ -41,18 +46,29 @@ interface IHistory {
 
 const History: React.FC<IHistory> = ({ itemId, isItem }) => {
   const theme = useTheme();
-  const { data } = useItemRequests(itemId);
+  const { data, isLoading } = useItemRequests(itemId);
 
-  const items = data?.requests.reduce<_TimelineItem1[]>((acc, request) => {
-    const history = constructItemsFromRequest(request, theme, isItem);
-    acc.push(...history);
-    return acc;
-  }, []);
+  const items = useMemo(
+    () =>
+      data?.requests.reduce<_TimelineItem1[]>((acc, request) => {
+        const history = constructItemsFromRequest(request, theme, isItem);
+        acc.push(...history);
+        return acc;
+      }, []),
+    [data]
+  );
+
+  const Component = useMemo(() => {
+    if (!items || isLoading) return <HistorySkeletonCard />;
+    else if (items.length === 0) return <StyledLabel>No requests yet.</StyledLabel>;
+
+    return <StyledTimeline {...{ items }} />;
+  }, [items, isLoading]);
 
   return (
     <Container>
       <Header />
-      {items ? <StyledTimeline {...{ items }} /> : <HistorySkeletonCard />}
+      {Component}
     </Container>
   );
 };

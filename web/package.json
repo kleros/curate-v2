@@ -75,7 +75,7 @@
     "@cyntler/react-doc-viewer": "^1.17.0",
     "@filebase/client": "^0.0.5",
     "@kleros/curate-v2-templates": "workspace:^",
-    "@kleros/ui-components-library": "^2.13.1",
+    "@kleros/ui-components-library": "^2.15.0",
     "@middy/core": "^5.3.5",
     "@middy/http-json-body-parser": "^5.3.5",
     "@sentry/react": "^7.93.0",

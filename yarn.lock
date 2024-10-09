@@ -5388,7 +5388,7 @@ __metadata:
     "@graphql-codegen/client-preset": "npm:^4.2.0"
     "@kleros/curate-v2-templates": "workspace:^"
     "@kleros/kleros-v2-contracts": "npm:^0.3.2"
-    "@kleros/ui-components-library": "npm:^2.13.1"
+    "@kleros/ui-components-library": "npm:^2.15.0"
     "@middy/core": "npm:^5.3.5"
     "@middy/http-json-body-parser": "npm:^5.3.5"
     "@netlify/functions": "npm:^1.6.0"
@@ -5463,9 +5463,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kleros/ui-components-library@npm:^2.13.1":
-  version: 2.13.1
-  resolution: "@kleros/ui-components-library@npm:2.13.1"
+"@kleros/ui-components-library@npm:^2.15.0":
+  version: 2.15.0
+  resolution: "@kleros/ui-components-library@npm:2.15.0"
   dependencies:
     "@datepicker-react/hooks": "npm:^2.8.4"
     "@swc/helpers": "npm:^0.3.2"
@@ -5482,7 +5482,7 @@ __metadata:
     react-dom: ^18.0.0
     react-is: ^18.0.0
     styled-components: ^5.3.3
-  checksum: db710e97b09a291ad5b6ff7a7a046cd3945e0403fda66ce6b33e501609ad2b712f924e84df2cba273d4ee936d274a6b7f210ff269d27d504bc81bcb712bc9da1
+  checksum: 7c97e8fe45b1cd002a0aaf7fe4670b8c668a3abbbab82fac9261ef9a8382ccaf7d4a974ee54b8f299f1e8e7b68e58dab1f3f31d7c8b3b60c58a5af8abdf4a783
   languageName: node
   linkType: hard
 

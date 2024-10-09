@@ -52,7 +52,11 @@ const SubmitListButton: React.FC = () => {
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
-  const { data: config } = useSimulateCurateFactoryDeploy({
+  const {
+    data: config,
+    isLoading: isConfigLoading,
+    isError: isConfigError,
+  } = useSimulateCurateFactoryDeploy({
     query: {
       enabled: areListParamsValid(listParams),
     },
@@ -156,8 +160,19 @@ const SubmitListButton: React.FC = () => {
       isLoadingArbCost ||
       isEstimatingCost ||
       isLoadingExtradata ||
-      !totalCostToSubmit,
-    [isSubmittingList, listParams, isLoadingArbCost, isEstimatingCost, isLoadingExtradata, totalCostToSubmit]
+      !totalCostToSubmit ||
+      isConfigLoading ||
+      isConfigError,
+    [
+      isSubmittingList,
+      listParams,
+      isLoadingArbCost,
+      isEstimatingCost,
+      isLoadingExtradata,
+      totalCostToSubmit,
+      isConfigLoading,
+      isConfigError,
+    ]
   );
 
   const handleDeploy = () => {
@@ -185,7 +200,13 @@ const SubmitListButton: React.FC = () => {
     <Button text="View List" onClick={() => navigate(`/lists/${submittedListItemId}/list/1/desc/all`)} />
   ) : (
     <EnsureChain>
-      <Button text="Create List" Icon={StyledCheckCircle} disabled={isButtonDisabled} onClick={handleDeploy} />
+      <Button
+        text="Create List"
+        isLoading={isConfigLoading || isSubmittingList || isLoadingArbCost || isEstimatingCost || isLoadingExtradata}
+        Icon={StyledCheckCircle}
+        disabled={isButtonDisabled}
+        onClick={handleDeploy}
+      />
     </EnsureChain>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
-import { usePublicClient } from "wagmi";
+import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { EnsureChain } from "components/EnsureChain";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { wrapWithToast } from "utils/wrapWithToast";
@@ -16,14 +16,27 @@ const StyledButton = styled(Button)``;
 const SubmitItemButton: React.FC = () => {
   const [isSubmittingItem, setIsSubmittingItem] = useState(false);
   const publicClient = usePublicClient();
+  const { address } = useAccount();
   const navigate = useNavigate();
 
   const { fields, submissionDeposit, resetItemData } = useSubmitItemContext();
   const { id: registryAddress } = useRegistryDetailsContext();
 
-  const { data: config } = useSimulateCurateV2AddItem({
+  const { data: balanceData } = useBalance({
+    address: address as `0x${string}` | undefined,
+  });
+
+  const insufficientBalance = useMemo(() => {
+    return balanceData?.value === BigInt(0);
+  }, [balanceData]);
+
+  const {
+    data: config,
+    isLoading: isConfigLoading,
+    isError: isConfigError,
+  } = useSimulateCurateV2AddItem({
     query: {
-      enabled: Boolean(fields && submissionDeposit && registryAddress),
+      enabled: Boolean(fields && submissionDeposit && registryAddress && !insufficientBalance),
     },
     address: registryAddress as `0x${string}`,
     args: [JSON.stringify(fields)],
@@ -32,14 +45,17 @@ const SubmitItemButton: React.FC = () => {
 
   const { writeContractAsync: submitItem, isLoading } = useWriteCurateV2AddItem();
 
-  const isButtonDisabled = useMemo(() => isSubmittingItem, [isSubmittingItem]);
+  const isButtonDisabled = useMemo(
+    () => isSubmittingItem || isConfigLoading || isConfigError || insufficientBalance,
+    [isSubmittingItem, isConfigLoading, isConfigError, insufficientBalance]
+  );
 
   return (
     <EnsureChain>
       <StyledButton
         text="Submit Item"
         disabled={isButtonDisabled}
-        isLoading={isLoading}
+        isLoading={isLoading || isConfigLoading}
         onClick={() => {
           if (submitItem && publicClient && config) {
             setIsSubmittingItem(true);

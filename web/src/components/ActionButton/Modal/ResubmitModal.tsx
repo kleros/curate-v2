@@ -36,11 +36,19 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
   const { data: itemData, isLoading: isItemDataLoading } = useItemDetailsQuery(`${itemId}@${registryAddress}`);
 
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
+  const {
+    data: arbitratorExtraData,
+    isLoading: isLoadingExtradata,
+    isError: isErrorExtradata,
+  } = useReadCurateV2GetArbitratorExtraData({
     address: registryAddress,
   });
 
-  const { data: removalDeposit, isLoading: isSubmissionDepositLoading } = useReadCurateV2SubmissionBaseDeposit({
+  const {
+    data: removalDeposit,
+    isLoading: isSubmissionDepositLoading,
+    isError: isErrorSubmissionDeposit,
+  } = useReadCurateV2SubmissionBaseDeposit({
     address: registryAddress,
   });
 
@@ -59,8 +67,8 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
 
   const isDisabled = useMemo(() => {
     if (!userBalance || !depositRequired) return true;
-    return userBalance?.value < depositRequired;
-  }, [depositRequired, userBalance]);
+    return userBalance?.value < depositRequired && isErrorExtradata && isErrorSubmissionDeposit;
+  }, [depositRequired, userBalance, isErrorExtradata, isErrorSubmissionDeposit]);
 
   const { data: config, isError } = useSimulateCurateV2AddItem({
     query: {

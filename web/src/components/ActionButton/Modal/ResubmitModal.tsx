@@ -16,6 +16,8 @@ import {
   useSimulateCurateV2AddItem,
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
+import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
+import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -65,10 +67,14 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
     [isBalanceLoading, isLoadingArbCost, isSubmissionDepositLoading, isLoadingExtradata, isResubmittingItem]
   );
 
-  const isDisabled = useMemo(() => {
+  const insufficientBalance = useMemo(() => {
     if (!userBalance || !depositRequired) return true;
-    return userBalance?.value < depositRequired && isErrorExtradata && isErrorSubmissionDeposit;
-  }, [depositRequired, userBalance, isErrorExtradata, isErrorSubmissionDeposit]);
+    return userBalance?.value < depositRequired;
+  }, [userBalance, depositRequired]);
+
+  const isDisabled = useMemo(() => {
+    return Boolean(insufficientBalance || isErrorExtradata || isErrorSubmissionDeposit);
+  }, [insufficientBalance, isErrorExtradata, isErrorSubmissionDeposit]);
 
   const { data: config, isError } = useSimulateCurateV2AddItem({
     query: {
@@ -86,23 +92,30 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
       <Header text={`Resubmit ${isItem ? "Item" : "List"}`} />
       <DepositRequired value={depositRequired ?? 0} />
       <Info alertMessage={alertMessage(isItem)} />
-      <Buttons
-        buttonText="Resubmit"
-        toggleModal={toggleModal}
-        isDisabled={isDisabled || isError || isResubmittingItem}
-        isLoading={isLoading}
-        callback={() => {
-          if (!resubmitItem || !config?.request || !publicClient) return;
-          setIsResubmittingItem(true);
-          wrapWithToast(async () => await resubmitItem(config.request), publicClient)
-            .then((res) => {
-              refetch();
-              toggleModal();
-            })
-            .catch(() => {})
-            .finally(() => setIsResubmittingItem(false));
-        }}
-      />
+      <div>
+        <Buttons
+          buttonText="Resubmit"
+          toggleModal={toggleModal}
+          isDisabled={isDisabled || isError || isResubmittingItem}
+          isLoading={isLoading}
+          callback={() => {
+            if (!resubmitItem || !config?.request || !publicClient) return;
+            setIsResubmittingItem(true);
+            wrapWithToast(async () => await resubmitItem(config.request), publicClient)
+              .then((res) => {
+                refetch();
+                toggleModal();
+              })
+              .catch(() => {})
+              .finally(() => setIsResubmittingItem(false));
+          }}
+        />
+        {insufficientBalance && (
+          <ErrorButtonMessage>
+            <ClosedCircleIcon /> Insufficient balance
+          </ErrorButtonMessage>
+        )}
+      </div>
     </ReStyledModal>
   );
 };

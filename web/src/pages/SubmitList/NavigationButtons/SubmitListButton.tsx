@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@kleros/ui-components-library";
 import { Address } from "viem";
-import { useAccount, usePublicClient } from "wagmi";
+import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import CheckCircle from "svgs/icons/check-circle-outline.svg";
+import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { isUndefined } from "utils/index";
@@ -26,6 +27,7 @@ import {
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
 import { curateV2Abi, useSimulateCurateFactoryDeploy, useWriteCurateFactoryDeploy } from "hooks/contracts/generated";
+import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -50,6 +52,10 @@ const SubmitListButton: React.FC = () => {
   const [isEstimatingCost, setIsEstimatingCost] = useState(false);
   const [submittedListItemId, setSubmittedListItemId] = useState("");
 
+  const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
+
+  const insufficientBalance = useMemo(() => Boolean(userBalance?.value === BigInt(0)), [userBalance]);
+
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
   const {
@@ -58,7 +64,7 @@ const SubmitListButton: React.FC = () => {
     isError: isConfigError,
   } = useSimulateCurateFactoryDeploy({
     query: {
-      enabled: areListParamsValid(listParams),
+      enabled: areListParamsValid(listParams) || !insufficientBalance,
     },
     args: [
       listParams.governor as `0x${string}`,
@@ -158,6 +164,8 @@ const SubmitListButton: React.FC = () => {
       isSubmittingList ||
       !areListParamsValid(listParams) ||
       isLoadingArbCost ||
+      isBalanceLoading ||
+      insufficientBalance ||
       isEstimatingCost ||
       isLoadingExtradata ||
       !totalCostToSubmit ||
@@ -167,6 +175,8 @@ const SubmitListButton: React.FC = () => {
       isSubmittingList,
       listParams,
       isLoadingArbCost,
+      isBalanceLoading,
+      insufficientBalance,
       isEstimatingCost,
       isLoadingExtradata,
       totalCostToSubmit,
@@ -200,13 +210,27 @@ const SubmitListButton: React.FC = () => {
     <Button text="View List" onClick={() => navigate(`/lists/${submittedListItemId}/list/1/desc/all`)} />
   ) : (
     <EnsureChain>
-      <Button
-        text="Create List"
-        isLoading={isConfigLoading || isSubmittingList || isLoadingArbCost || isEstimatingCost || isLoadingExtradata}
-        Icon={StyledCheckCircle}
-        disabled={isButtonDisabled}
-        onClick={handleDeploy}
-      />
+      <div>
+        <Button
+          text="Create List"
+          isLoading={
+            isBalanceLoading ||
+            isConfigLoading ||
+            isSubmittingList ||
+            isLoadingArbCost ||
+            isEstimatingCost ||
+            isLoadingExtradata
+          }
+          Icon={StyledCheckCircle}
+          disabled={isButtonDisabled}
+          onClick={handleDeploy}
+        />
+        {insufficientBalance && (
+          <ErrorButtonMessage>
+            <ClosedCircleIcon /> Insufficient balance
+          </ErrorButtonMessage>
+        )}
+      </div>
     </EnsureChain>
   );
 };

@@ -17,6 +17,8 @@ import {
   useSimulateCurateV2RemoveItem,
   useWriteCurateV2RemoveItem,
 } from "hooks/useContract";
+import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
+import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -57,12 +59,21 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
 
   const isEvidenceValid = useMemo(() => evidence?.name !== "" && evidence?.description !== "", [evidence]);
 
+  const insufficientBalance = useMemo(() => {
+    if (!userBalance || !depositRequired) return true;
+    return Boolean(userBalance?.value < depositRequired);
+  }, [userBalance, depositRequired]);
+
   const isDisabled = useMemo(() => {
     if (!userBalance || !depositRequired || isEvidenceUploading || !isEvidenceValid) return true;
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
-  const { data: config } = useSimulateCurateV2RemoveItem({
+  const {
+    data: config,
+    isLoading: isConfigLoading,
+    isError: isConfigError,
+  } = useSimulateCurateV2RemoveItem({
     query: { enabled: !isDisabled && !isUndefined(evidence) },
     address: registryAddress,
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
@@ -75,9 +86,10 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       isBalanceLoading ||
       isLoadingArbCost ||
       isRemovalDepositLoading ||
-      isLoadingArbCost ||
+      isLoadingExtradata ||
       isRemovingItem ||
-      isEvidenceUploading,
+      isEvidenceUploading ||
+      isConfigLoading,
     [
       isBalanceLoading,
       isLoadingArbCost,
@@ -85,6 +97,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       isLoadingExtradata,
       isRemovingItem,
       isEvidenceUploading,
+      isConfigLoading,
     ]
   );
 
@@ -94,23 +107,30 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <DepositRequired value={depositRequired ?? 0} />
       <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
       <Info alertMessage={alertMessage(isItem)} />
-      <Buttons
-        buttonText="Remove"
-        toggleModal={toggleModal}
-        isDisabled={isDisabled || isRemovingItem}
-        isLoading={isLoading}
-        callback={() => {
-          if (removeItem && publicClient && config) {
-            setIsRemovingItem(true);
-            wrapWithToast(async () => await removeItem(config.request), publicClient)
-              .then((res) => {
-                refetch();
-                toggleModal();
-              })
-              .finally(() => setIsRemovingItem(false));
-          }
-        }}
-      />
+      <div>
+        <Buttons
+          buttonText="Remove"
+          toggleModal={toggleModal}
+          isDisabled={isDisabled || isRemovingItem || isConfigError}
+          isLoading={isLoading}
+          callback={() => {
+            if (removeItem && publicClient && config) {
+              setIsRemovingItem(true);
+              wrapWithToast(async () => await removeItem(config.request), publicClient)
+                .then((res) => {
+                  refetch();
+                  toggleModal();
+                })
+                .finally(() => setIsRemovingItem(false));
+            }
+          }}
+        />
+        {insufficientBalance && (
+          <ErrorButtonMessage>
+            <ClosedCircleIcon /> Insufficient balance
+          </ErrorButtonMessage>
+        )}
+      </div>
     </ReStyledModal>
   );
 };

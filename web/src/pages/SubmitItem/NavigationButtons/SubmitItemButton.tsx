@@ -10,8 +10,19 @@ import { Log, decodeEventLog, parseAbi } from "viem";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useNavigate } from "react-router-dom";
 import { useSimulateCurateV2AddItem, useWriteCurateV2AddItem } from "hooks/useContract";
+import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 
 const StyledButton = styled(Button)``;
+
+export const ErrorButtonMessage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  margin: 12px;
+  color: ${({ theme }) => theme.error};
+  font-size: 14px;
+`;
 
 const SubmitItemButton: React.FC = () => {
   const [isSubmittingItem, setIsSubmittingItem] = useState(false);
@@ -52,27 +63,34 @@ const SubmitItemButton: React.FC = () => {
 
   return (
     <EnsureChain>
-      <StyledButton
-        text="Submit Item"
-        disabled={isButtonDisabled}
-        isLoading={isLoading || isConfigLoading}
-        onClick={() => {
-          if (submitItem && publicClient && config) {
-            setIsSubmittingItem(true);
-            wrapWithToast(async () => await submitItem(config?.request), publicClient)
-              .then((res) => {
-                if (res.status && !isUndefined(res.result)) {
-                  const itemId = retrieveItemId(res.result.logs[0]);
-                  resetItemData();
-                  navigate(`/lists/item/${itemId}@${registryAddress}`);
-                }
-              })
-              .finally(() => {
-                setIsSubmittingItem(false);
-              });
-          }
-        }}
-      />
+      <div>
+        <StyledButton
+          text="Submit Item"
+          disabled={isButtonDisabled}
+          isLoading={isLoading || isConfigLoading}
+          onClick={() => {
+            if (submitItem && publicClient && config) {
+              setIsSubmittingItem(true);
+              wrapWithToast(async () => await submitItem(config?.request), publicClient)
+                .then((res) => {
+                  if (res.status && !isUndefined(res.result)) {
+                    const itemId = retrieveItemId(res.result.logs[0]);
+                    resetItemData();
+                    navigate(`/lists/item/${itemId}@${registryAddress}`);
+                  }
+                })
+                .finally(() => {
+                  setIsSubmittingItem(false);
+                });
+            }
+          }}
+        />
+        {insufficientBalance && (
+          <ErrorButtonMessage>
+            <ClosedCircleIcon /> Insufficient balance
+          </ErrorButtonMessage>
+        )}
+      </div>
     </EnsureChain>
   );
 };

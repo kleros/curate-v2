@@ -27,7 +27,7 @@ import {
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
 import { curateV2Abi, useSimulateCurateFactoryDeploy, useWriteCurateFactoryDeploy } from "hooks/contracts/generated";
-import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/Buttons/ErrorButtonMessage";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -229,11 +229,11 @@ const SubmitListButton: React.FC = () => {
           disabled={isButtonDisabled}
           onClick={handleDeploy}
         />
-        {insufficientBalance && (
+        {insufficientBalance ? (
           <ErrorButtonMessage>
             <ClosedCircleIcon /> Insufficient balance
           </ErrorButtonMessage>
-        )}
+        ) : null}
       </div>
     </EnsureChain>
   );

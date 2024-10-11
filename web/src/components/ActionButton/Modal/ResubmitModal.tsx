@@ -16,20 +16,9 @@ import {
   useSimulateCurateV2AddItem,
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
-import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
-`;
-
-export const ErrorButtonMessage = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  justify-content: center;
-  margin: 12px;
-  color: ${({ theme }) => theme.error};
-  font-size: 14px;
 `;
 
 interface ISubmitModal extends IBaseModal {}
@@ -70,16 +59,28 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
     return (arbitrationCost as bigint) + removalDeposit;
   }, [arbitrationCost, removalDeposit]);
 
-  const isLoading = useMemo(
-    () =>
-      isBalanceLoading || isLoadingArbCost || isSubmissionDepositLoading || isLoadingExtradata || isResubmittingItem,
-    [isBalanceLoading, isLoadingArbCost, isSubmissionDepositLoading, isLoadingExtradata, isResubmittingItem]
-  );
-
   const insufficientBalance = useMemo(() => {
     if (!userBalance || !depositRequired) return true;
     return userBalance?.value < depositRequired;
   }, [userBalance, depositRequired]);
+
+  const isLoading = useMemo(
+    () =>
+      (isBalanceLoading ||
+        isLoadingArbCost ||
+        isSubmissionDepositLoading ||
+        isLoadingExtradata ||
+        isResubmittingItem) &&
+      !insufficientBalance,
+    [
+      isBalanceLoading,
+      isLoadingArbCost,
+      isSubmissionDepositLoading,
+      isLoadingExtradata,
+      isResubmittingItem,
+      insufficientBalance,
+    ]
+  );
 
   const isDisabled = useMemo(() => {
     return Boolean(insufficientBalance || isErrorExtradata || isErrorSubmissionDeposit);
@@ -87,7 +88,7 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
 
   const { data: config, isError } = useSimulateCurateV2AddItem({
     query: {
-      enabled: address && registryAddress && !isLoading && !isDisabled && !isItemDataLoading,
+      enabled: address && registryAddress && !isLoading && !isDisabled && !isItemDataLoading && !insufficientBalance,
     },
     address: registryAddress,
     args: [itemData?.item?.data ?? ""],
@@ -104,9 +105,7 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
       <div>
         <Buttons
           buttonText="Resubmit"
-          toggleModal={toggleModal}
           isDisabled={isDisabled || isError || isResubmittingItem}
-          isLoading={isLoading}
           callback={() => {
             if (!resubmitItem || !config?.request || !publicClient) return;
             setIsResubmittingItem(true);
@@ -118,12 +117,8 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
               .catch(() => {})
               .finally(() => setIsResubmittingItem(false));
           }}
+          {...{ toggleModal, isLoading, insufficientBalance }}
         />
-        {insufficientBalance && (
-          <ErrorButtonMessage>
-            <ClosedCircleIcon /> Insufficient balance
-          </ErrorButtonMessage>
-        )}
       </div>
     </ReStyledModal>
   );

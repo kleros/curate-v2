@@ -11,7 +11,7 @@ import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useNavigate } from "react-router-dom";
 import { useSimulateCurateV2AddItem, useWriteCurateV2AddItem } from "hooks/useContract";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
-import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/Buttons/ErrorButtonMessage";
 
 const StyledButton = styled(Button)``;
 
@@ -77,11 +77,11 @@ const SubmitItemButton: React.FC = () => {
             }
           }}
         />
-        {insufficientBalance && (
+        {insufficientBalance ? (
           <ErrorButtonMessage>
             <ClosedCircleIcon /> Insufficient balance
           </ErrorButtonMessage>
-        )}
+        ) : null}
       </div>
     </EnsureChain>
   );

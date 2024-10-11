@@ -17,8 +17,6 @@ import {
   useSimulateCurateV2RemoveItem,
   useWriteCurateV2RemoveItem,
 } from "hooks/useContract";
-import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
-import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -74,7 +72,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
     isLoading: isConfigLoading,
     isError: isConfigError,
   } = useSimulateCurateV2RemoveItem({
-    query: { enabled: !isDisabled && !isUndefined(evidence) },
+    query: { enabled: !isDisabled && !isUndefined(evidence) && !insufficientBalance },
     address: registryAddress,
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
@@ -83,13 +81,14 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
   const { writeContractAsync: removeItem } = useWriteCurateV2RemoveItem();
   const isLoading = useMemo(
     () =>
-      isBalanceLoading ||
-      isLoadingArbCost ||
-      isRemovalDepositLoading ||
-      isLoadingExtradata ||
-      isRemovingItem ||
-      isEvidenceUploading ||
-      isConfigLoading,
+      (isBalanceLoading ||
+        isLoadingArbCost ||
+        isRemovalDepositLoading ||
+        isLoadingExtradata ||
+        isRemovingItem ||
+        isEvidenceUploading ||
+        isConfigLoading) &&
+      !insufficientBalance,
     [
       isBalanceLoading,
       isLoadingArbCost,
@@ -98,6 +97,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       isRemovingItem,
       isEvidenceUploading,
       isConfigLoading,
+      insufficientBalance,
     ]
   );
 
@@ -110,9 +110,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <div>
         <Buttons
           buttonText="Remove"
-          toggleModal={toggleModal}
           isDisabled={isDisabled || isRemovingItem || isConfigError}
-          isLoading={isLoading}
           callback={() => {
             if (removeItem && publicClient && config) {
               setIsRemovingItem(true);
@@ -124,12 +122,8 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
                 .finally(() => setIsRemovingItem(false));
             }
           }}
+          {...{ toggleModal, isLoading, insufficientBalance }}
         />
-        {insufficientBalance && (
-          <ErrorButtonMessage>
-            <ClosedCircleIcon /> Insufficient balance
-          </ErrorButtonMessage>
-        )}
       </div>
     </ReStyledModal>
   );

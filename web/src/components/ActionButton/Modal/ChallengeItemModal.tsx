@@ -18,8 +18,6 @@ import {
   useSimulateCurateV2ChallengeRequest,
   useWriteCurateV2ChallengeRequest,
 } from "hooks/useContract";
-import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
-import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -95,7 +93,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
     isLoading: isConfigLoading,
     isError: isConfigError,
   } = useSimulateCurateV2ChallengeRequest({
-    query: { enabled: !isUndefined(itemId) && !isUndefined(evidence) && !isDisabled },
+    query: { enabled: !isUndefined(itemId) && !isUndefined(evidence) && !isDisabled && !insufficientBalance },
     address: registryAddress,
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
@@ -105,14 +103,15 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
 
   const isLoading = useMemo(
     () =>
-      isBalanceLoading ||
-      isLoadingArbCost ||
-      isSubmissionChallengeDepositLoading ||
-      isRemovalChallengeDepositLoading ||
-      isLoadingExtradata ||
-      isChallengingItem ||
-      isEvidenceUploading ||
-      isConfigLoading,
+      (isBalanceLoading ||
+        isLoadingArbCost ||
+        isSubmissionChallengeDepositLoading ||
+        isRemovalChallengeDepositLoading ||
+        isLoadingExtradata ||
+        isChallengingItem ||
+        isEvidenceUploading ||
+        isConfigLoading) &&
+      !insufficientBalance,
     [
       isBalanceLoading,
       isLoadingArbCost,
@@ -122,6 +121,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       isChallengingItem,
       isEvidenceUploading,
       isConfigLoading,
+      insufficientBalance,
     ]
   );
 
@@ -134,9 +134,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       <div>
         <Buttons
           buttonText="Challenge"
-          toggleModal={toggleModal}
           isDisabled={isDisabled || isChallengingItem || isConfigError}
-          isLoading={isLoading}
           callback={() => {
             if (challengeRequest && publicClient && config) {
               setIsChallengingItem(true);
@@ -148,12 +146,8 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
                 .finally(() => setIsChallengingItem(false));
             }
           }}
+          {...{ insufficientBalance, toggleModal, isLoading }}
         />
-        {insufficientBalance && (
-          <ErrorButtonMessage>
-            <ClosedCircleIcon /> Insufficient balance
-          </ErrorButtonMessage>
-        )}
       </div>
     </ReStyledModal>
   );

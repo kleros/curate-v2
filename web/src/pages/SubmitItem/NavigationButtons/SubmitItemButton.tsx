@@ -11,18 +11,9 @@ import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import { useNavigate } from "react-router-dom";
 import { useSimulateCurateV2AddItem, useWriteCurateV2AddItem } from "hooks/useContract";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
 
 const StyledButton = styled(Button)``;
-
-export const ErrorButtonMessage = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  justify-content: center;
-  margin: 12px;
-  color: ${({ theme }) => theme.error};
-  font-size: 14px;
-`;
 
 const SubmitItemButton: React.FC = () => {
   const [isSubmittingItem, setIsSubmittingItem] = useState(false);
@@ -38,8 +29,9 @@ const SubmitItemButton: React.FC = () => {
   });
 
   const insufficientBalance = useMemo(() => {
-    return balanceData?.value === BigInt(0);
-  }, [balanceData]);
+    if (!balanceData || !submissionDeposit) return true;
+    return balanceData.value < BigInt(submissionDeposit);
+  }, [balanceData, submissionDeposit]);
 
   const {
     data: config,

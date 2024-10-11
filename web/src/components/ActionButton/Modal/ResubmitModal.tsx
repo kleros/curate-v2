@@ -17,10 +17,19 @@ import {
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
-import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
+`;
+
+export const ErrorButtonMessage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  margin: 12px;
+  color: ${({ theme }) => theme.error};
+  font-size: 14px;
 `;
 
 interface ISubmitModal extends IBaseModal {}

@@ -18,7 +18,7 @@ import {
   useWriteCurateV2RemoveItem,
 } from "hooks/useContract";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
-import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;

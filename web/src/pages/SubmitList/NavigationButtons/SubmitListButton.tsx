@@ -27,7 +27,7 @@ import {
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
 import { curateV2Abi, useSimulateCurateFactoryDeploy, useWriteCurateFactoryDeploy } from "hooks/contracts/generated";
-import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {

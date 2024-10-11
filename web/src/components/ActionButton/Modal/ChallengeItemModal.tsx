@@ -19,7 +19,7 @@ import {
   useWriteCurateV2ChallengeRequest,
 } from "hooks/useContract";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
-import { ErrorButtonMessage } from "pages/SubmitItem/NavigationButtons/SubmitItemButton";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/ResubmitModal";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -82,13 +82,13 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
 
   const insufficientBalance = useMemo(() => {
     if (!userBalance || !depositRequired) return true;
-    return Boolean(userBalance?.value < depositRequired);
+    return userBalance?.value < depositRequired;
   }, [userBalance, depositRequired]);
 
   const isDisabled = useMemo(() => {
     if (!userBalance || !depositRequired || isEvidenceUploading || !isEvidenceValid) return true;
-    return userBalance?.value < depositRequired;
-  }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
+    return insufficientBalance;
+  }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid, insufficientBalance]);
 
   const {
     data: config,

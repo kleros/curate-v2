@@ -5395,7 +5395,7 @@ __metadata:
     "@sentry/react": "npm:^7.93.0"
     "@sentry/tracing": "npm:^7.93.0"
     "@supabase/supabase-js": "npm:^2.39.3"
-    "@tanstack/react-query": "npm:^4.28.0"
+    "@tanstack/react-query": "npm:^5.40.1"
     "@types/amqplib": "npm:^0.10.4"
     "@types/busboy": "npm:^1.5.3"
     "@types/react": "npm:^18.2.59"
@@ -5427,9 +5427,9 @@ __metadata:
     moment: "npm:^2.30.1"
     overlayscrollbars: "npm:^2.4.6"
     overlayscrollbars-react: "npm:^0.5.3"
-    react: "npm:^18.2.0"
+    react: "npm:^18.3.1"
     react-chartjs-2: "npm:^4.3.1"
-    react-dom: "npm:^18.2.0"
+    react-dom: "npm:^18.3.1"
     react-error-boundary: "npm:^3.1.4"
     react-identicons: "npm:^1.2.5"
     react-is: "npm:^18.2.0"
@@ -8590,29 +8590,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:4.36.1":
-  version: 4.36.1
-  resolution: "@tanstack/query-core@npm:4.36.1"
-  checksum: 7c648872cd491bcab2aa4c18e0b7ca130c072f05c277a5876977fa3bfa87634bbfde46e9d249236587d78c39866889a02e4e202b478dc6074ff96093732ae56d
+"@tanstack/query-core@npm:5.59.4":
+  version: 5.59.4
+  resolution: "@tanstack/query-core@npm:5.59.4"
+  checksum: 176a1133378241ae62ee40252e5261c2c4119c49ee84e2063ac8634fd431c10616b6055d24850c8392ff43c6d56119a915210c284970b26b63759dced7873528
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^4.28.0":
-  version: 4.36.1
-  resolution: "@tanstack/react-query@npm:4.36.1"
+"@tanstack/react-query@npm:^5.40.1":
+  version: 5.59.4
+  resolution: "@tanstack/react-query@npm:5.59.4"
   dependencies:
-    "@tanstack/query-core": "npm:4.36.1"
-    use-sync-external-store: "npm:^1.2.0"
+    "@tanstack/query-core": "npm:5.59.4"
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-native: "*"
-  peerDependenciesMeta:
-    react-dom:
-      optional: true
-    react-native:
-      optional: true
-  checksum: 764b860c3ac8d254fc6b07e01054a0f58058644d59626c724b213293fbf1e31c198cbb26e4c32c0d16dcaec0353c0ae19147d9c667675b31f8cea1d64f1ff4ac
+    react: ^18 || ^19
+  checksum: 62e36081b7e7c8d4bd7e8a8d2014570e35f78c4aa54279828f3696f5da810db7476a01a4a24ce63c24935284f514e9a4a9ae992a96c6a549f0cbe1ff37f2c451
   languageName: node
   linkType: hard
 
@@ -26349,7 +26341,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.0.0, react-dom@npm:^18.2.0":
+"react-dom@npm:^18.0.0":
   version: 18.2.0
   resolution: "react-dom@npm:18.2.0"
   dependencies:
@@ -26358,6 +26350,18 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: ca5e7762ec8c17a472a3605b6f111895c9f87ac7d43a610ab7024f68cd833d08eda0625ce02ec7178cc1f3c957cf0b9273cdc17aa2cd02da87544331c43b1d21
+  languageName: node
+  linkType: hard
+
+"react-dom@npm:^18.3.1":
+  version: 18.3.1
+  resolution: "react-dom@npm:18.3.1"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+    scheduler: "npm:^0.23.2"
+  peerDependencies:
+    react: ^18.3.1
+  checksum: 3f4b73a3aa083091173b29812b10394dd06f4ac06aff410b74702cfb3aa29d7b0ced208aab92d5272919b612e5cda21aeb1d54191848cf6e46e9e354f3541f81
   languageName: node
   linkType: hard
 
@@ -26673,12 +26677,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.0.0, react@npm:^18.2.0":
+"react@npm:^18.0.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: b9214a9bd79e99d08de55f8bef2b7fc8c39630be97c4e29d7be173d14a9a10670b5325e94485f74cd8bff4966ef3c78ee53c79a7b0b9b70cba20aa8973acc694
+  languageName: node
+  linkType: hard
+
+"react@npm:^18.3.1":
+  version: 18.3.1
+  resolution: "react@npm:18.3.1"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: 261137d3f3993eaa2368a83110466fc0e558bc2c7f7ae7ca52d94f03aac945f45146bd85e5f481044db1758a1dbb57879e2fcdd33924e2dde1bdc550ce73f7bf
   languageName: node
   linkType: hard
 
@@ -27700,6 +27713,15 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 0c4557aa37bafca44ff21dc0ea7c92e2dbcb298bc62eae92b29a39b029134f02fb23917d6ebc8b1fa536b4184934314c20d8864d156a9f6357f3398aaf7bfda8
+  languageName: node
+  linkType: hard
+
+"scheduler@npm:^0.23.2":
+  version: 0.23.2
+  resolution: "scheduler@npm:0.23.2"
+  dependencies:
+    loose-envify: "npm:^1.1.0"
+  checksum: e8d68b89d18d5b028223edf090092846868a765a591944760942b77ea1f69b17235f7e956696efbb62c8130ab90af7e0949bfb8eba7896335507317236966bc9
   languageName: node
   linkType: hard
 
@@ -30802,7 +30824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:1.2.0, use-sync-external-store@npm:^1.2.0":
+"use-sync-external-store@npm:1.2.0":
   version: 1.2.0
   resolution: "use-sync-external-store@npm:1.2.0"
   peerDependencies:

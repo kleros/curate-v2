@@ -46,7 +46,7 @@ const SubmitItemButton: React.FC = () => {
     value: BigInt(submissionDeposit ?? 0),
   });
 
-  const { writeContractAsync: submitItem, isLoading } = useWriteCurateV2AddItem();
+  const { writeContractAsync: submitItem } = useWriteCurateV2AddItem();
 
   const isButtonDisabled = useMemo(
     () => isSubmittingItem || isConfigLoading || isConfigError || insufficientBalance,
@@ -59,7 +59,7 @@ const SubmitItemButton: React.FC = () => {
         <StyledButton
           text="Submit Item"
           disabled={isButtonDisabled}
-          isLoading={isLoading || isConfigLoading}
+          isLoading={isConfigLoading && !insufficientBalance}
           onClick={() => {
             if (submitItem && publicClient && config) {
               setIsSubmittingItem(true);

@@ -61,7 +61,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
 
   const insufficientBalance = useMemo(() => {
     if (!userBalance || !depositRequired) return true;
-    return Boolean(userBalance?.value < depositRequired);
+    return userBalance?.value < depositRequired;
   }, [userBalance, depositRequired]);
 
   const isDisabled = useMemo(() => {

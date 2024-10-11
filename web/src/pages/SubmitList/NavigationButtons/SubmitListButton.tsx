@@ -54,7 +54,7 @@ const SubmitListButton: React.FC = () => {
 
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
-  const insufficientBalance = useMemo(() => Boolean(userBalance?.value === BigInt(0)), [userBalance]);
+  const insufficientBalance = useMemo(() => userBalance?.value === BigInt(0), [userBalance]);
 
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 

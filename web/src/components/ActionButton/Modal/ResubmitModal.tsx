@@ -36,11 +36,19 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
   const { data: itemData, isLoading: isItemDataLoading } = useItemDetailsQuery(`${itemId}@${registryAddress}`);
 
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
+  const {
+    data: arbitratorExtraData,
+    isLoading: isLoadingExtradata,
+    isError: isErrorExtradata,
+  } = useReadCurateV2GetArbitratorExtraData({
     address: registryAddress,
   });
 
-  const { data: removalDeposit, isLoading: isSubmissionDepositLoading } = useReadCurateV2SubmissionBaseDeposit({
+  const {
+    data: removalDeposit,
+    isLoading: isSubmissionDepositLoading,
+    isError: isErrorSubmissionDeposit,
+  } = useReadCurateV2SubmissionBaseDeposit({
     address: registryAddress,
   });
 
@@ -51,20 +59,28 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
     return (arbitrationCost as bigint) + removalDeposit;
   }, [arbitrationCost, removalDeposit]);
 
+  const insufficientBalance = useMemo(() => {
+    if (!userBalance || !depositRequired) return true;
+    return userBalance?.value < depositRequired;
+  }, [userBalance, depositRequired]);
+
   const isLoading = useMemo(
     () =>
-      isBalanceLoading || isLoadingArbCost || isSubmissionDepositLoading || isLoadingExtradata || isResubmittingItem,
-    [isBalanceLoading, isLoadingArbCost, isSubmissionDepositLoading, isLoadingExtradata, isResubmittingItem]
+      isBalanceLoading || isItemDataLoading || isSubmissionDepositLoading || isLoadingExtradata || isResubmittingItem,
+    [isBalanceLoading, isItemDataLoading, isSubmissionDepositLoading, isLoadingExtradata, isResubmittingItem]
   );
 
   const isDisabled = useMemo(() => {
-    if (!userBalance || !depositRequired) return true;
-    return userBalance?.value < depositRequired;
-  }, [depositRequired, userBalance]);
+    return Boolean(insufficientBalance || isErrorExtradata || isErrorSubmissionDeposit);
+  }, [insufficientBalance, isErrorExtradata, isErrorSubmissionDeposit]);
 
-  const { data: config, isError } = useSimulateCurateV2AddItem({
+  const {
+    data: config,
+    isLoading: isConfigLoading,
+    isError: isConfigError,
+  } = useSimulateCurateV2AddItem({
     query: {
-      enabled: address && registryAddress && !isLoading && !isDisabled && !isItemDataLoading,
+      enabled: address && registryAddress && !isLoading && !isDisabled,
     },
     address: registryAddress,
     args: [itemData?.item?.data ?? ""],
@@ -78,23 +94,25 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
       <Header text={`Resubmit ${isItem ? "Item" : "List"}`} />
       <DepositRequired value={depositRequired ?? 0} />
       <Info alertMessage={alertMessage(isItem)} />
-      <Buttons
-        buttonText="Resubmit"
-        toggleModal={toggleModal}
-        isDisabled={isDisabled || isError || isResubmittingItem}
-        isLoading={isLoading}
-        callback={() => {
-          if (!resubmitItem || !config?.request || !publicClient) return;
-          setIsResubmittingItem(true);
-          wrapWithToast(async () => await resubmitItem(config.request), publicClient)
-            .then((res) => {
-              refetch();
-              toggleModal();
-            })
-            .catch(() => {})
-            .finally(() => setIsResubmittingItem(false));
-        }}
-      />
+      <div>
+        <Buttons
+          buttonText="Resubmit"
+          isLoading={(isConfigLoading && !insufficientBalance && isLoadingArbCost) || isLoading}
+          isDisabled={isDisabled || isConfigError || isLoading}
+          callback={() => {
+            if (!resubmitItem || !config?.request || !publicClient) return;
+            setIsResubmittingItem(true);
+            wrapWithToast(async () => await resubmitItem(config.request), publicClient)
+              .then((res) => {
+                refetch();
+                toggleModal();
+              })
+              .catch(() => {})
+              .finally(() => setIsResubmittingItem(false));
+          }}
+          {...{ toggleModal, insufficientBalance }}
+        />
+      </div>
     </ReStyledModal>
   );
 };

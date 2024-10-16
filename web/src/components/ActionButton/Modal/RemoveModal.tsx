@@ -57,12 +57,21 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
 
   const isEvidenceValid = useMemo(() => evidence?.name !== "" && evidence?.description !== "", [evidence]);
 
+  const insufficientBalance = useMemo(() => {
+    if (!userBalance || !depositRequired) return true;
+    return userBalance?.value < depositRequired;
+  }, [userBalance, depositRequired]);
+
   const isDisabled = useMemo(() => {
     if (!userBalance || !depositRequired || isEvidenceUploading || !isEvidenceValid) return true;
     return userBalance?.value < depositRequired;
   }, [depositRequired, userBalance, isEvidenceUploading, isEvidenceValid]);
 
-  const { data: config } = useSimulateCurateV2RemoveItem({
+  const {
+    data: config,
+    isLoading: isConfigLoading,
+    isError: isConfigError,
+  } = useSimulateCurateV2RemoveItem({
     query: { enabled: !isDisabled && !isUndefined(evidence) },
     address: registryAddress,
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
@@ -70,23 +79,26 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
   });
 
   const { writeContractAsync: removeItem } = useWriteCurateV2RemoveItem();
-  const isLoading = useMemo(
-    () =>
+
+  const isLoading = useMemo(() => {
+    return (
       isBalanceLoading ||
-      isLoadingArbCost ||
       isRemovalDepositLoading ||
-      isLoadingArbCost ||
+      isLoadingExtradata ||
       isRemovingItem ||
-      isEvidenceUploading,
-    [
-      isBalanceLoading,
-      isLoadingArbCost,
-      isRemovalDepositLoading,
-      isLoadingExtradata,
-      isRemovingItem,
-      isEvidenceUploading,
-    ]
-  );
+      isEvidenceUploading ||
+      isConfigLoading ||
+      isLoadingArbCost
+    );
+  }, [
+    isBalanceLoading,
+    isLoadingArbCost,
+    isRemovalDepositLoading,
+    isLoadingExtradata,
+    isRemovingItem,
+    isEvidenceUploading,
+    isConfigLoading,
+  ]);
 
   return (
     <ReStyledModal {...{ toggleModal }}>
@@ -94,23 +106,25 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <DepositRequired value={depositRequired ?? 0} />
       <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
       <Info alertMessage={alertMessage(isItem)} />
-      <Buttons
-        buttonText="Remove"
-        toggleModal={toggleModal}
-        isDisabled={isDisabled || isRemovingItem}
-        isLoading={isLoading}
-        callback={() => {
-          if (removeItem && publicClient && config) {
-            setIsRemovingItem(true);
-            wrapWithToast(async () => await removeItem(config.request), publicClient)
-              .then((res) => {
-                refetch();
-                toggleModal();
-              })
-              .finally(() => setIsRemovingItem(false));
-          }
-        }}
-      />
+      <div>
+        <Buttons
+          buttonText="Remove"
+          isDisabled={isDisabled || isLoading || isRemovingItem || isConfigError}
+          isLoading={isLoading && !insufficientBalance}
+          callback={() => {
+            if (removeItem && publicClient && config) {
+              setIsRemovingItem(true);
+              wrapWithToast(async () => await removeItem(config.request), publicClient)
+                .then((res) => {
+                  refetch();
+                  toggleModal();
+                })
+                .finally(() => setIsRemovingItem(false));
+            }
+          }}
+          {...{ toggleModal, insufficientBalance }}
+        />
+      </div>
     </ReStyledModal>
   );
 };

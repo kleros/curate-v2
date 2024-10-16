@@ -217,13 +217,11 @@ const SubmitListButton: React.FC = () => {
         <Button
           text="Create List"
           isLoading={
-            (isBalanceLoading ||
-              isConfigLoading ||
-              isSubmittingList ||
-              isLoadingArbCost ||
-              isEstimatingCost ||
-              isLoadingExtradata) &&
-            !insufficientBalance
+            (isConfigLoading && !insufficientBalance && isLoadingArbCost) ||
+            isBalanceLoading ||
+            isSubmittingList ||
+            isEstimatingCost ||
+            isLoadingExtradata
           }
           Icon={StyledCheckCircle}
           disabled={isButtonDisabled}

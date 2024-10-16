@@ -72,34 +72,33 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
     isLoading: isConfigLoading,
     isError: isConfigError,
   } = useSimulateCurateV2RemoveItem({
-    query: { enabled: !isDisabled && !isUndefined(evidence) && !insufficientBalance },
+    query: { enabled: !isDisabled && !isUndefined(evidence) },
     address: registryAddress,
     args: [itemId as `0x${string}`, JSON.stringify(evidence)],
     value: depositRequired,
   });
 
   const { writeContractAsync: removeItem } = useWriteCurateV2RemoveItem();
-  const isLoading = useMemo(
-    () =>
-      (isBalanceLoading ||
-        isLoadingArbCost ||
-        isRemovalDepositLoading ||
-        isLoadingExtradata ||
-        isRemovingItem ||
-        isEvidenceUploading ||
-        isConfigLoading) &&
-      !insufficientBalance,
-    [
-      isBalanceLoading,
-      isLoadingArbCost,
-      isRemovalDepositLoading,
-      isLoadingExtradata,
-      isRemovingItem,
-      isEvidenceUploading,
-      isConfigLoading,
-      insufficientBalance,
-    ]
-  );
+
+  const isLoading = useMemo(() => {
+    return (
+      isBalanceLoading ||
+      isRemovalDepositLoading ||
+      isLoadingExtradata ||
+      isRemovingItem ||
+      isEvidenceUploading ||
+      (isConfigLoading && !insufficientBalance && isLoadingArbCost)
+    );
+  }, [
+    isBalanceLoading,
+    isLoadingArbCost,
+    isRemovalDepositLoading,
+    isLoadingExtradata,
+    isRemovingItem,
+    isEvidenceUploading,
+    isConfigLoading,
+    insufficientBalance,
+  ]);
 
   return (
     <ReStyledModal {...{ toggleModal }}>
@@ -110,7 +109,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <div>
         <Buttons
           buttonText="Remove"
-          isDisabled={isDisabled || isRemovingItem || isConfigError}
+          isDisabled={isDisabled || isLoading || isRemovingItem || isConfigError}
           callback={() => {
             if (removeItem && publicClient && config) {
               setIsRemovingItem(true);

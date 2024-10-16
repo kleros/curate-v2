@@ -24,14 +24,12 @@ const SubmitItemButton: React.FC = () => {
   const { fields, submissionDeposit, resetItemData } = useSubmitItemContext();
   const { id: registryAddress } = useRegistryDetailsContext();
 
-  const { data: balanceData } = useBalance({
-    address: address as `0x${string}` | undefined,
-  });
+  const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
   const insufficientBalance = useMemo(() => {
-    if (!balanceData || !submissionDeposit) return true;
-    return balanceData.value < BigInt(submissionDeposit);
-  }, [balanceData, submissionDeposit]);
+    if (!userBalance || !submissionDeposit) return true;
+    return userBalance.value < BigInt(submissionDeposit);
+  }, [userBalance, submissionDeposit]);
 
   const {
     data: config,
@@ -49,8 +47,8 @@ const SubmitItemButton: React.FC = () => {
   const { writeContractAsync: submitItem } = useWriteCurateV2AddItem();
 
   const isButtonDisabled = useMemo(
-    () => isSubmittingItem || isConfigLoading || isConfigError || insufficientBalance,
-    [isSubmittingItem, isConfigLoading, isConfigError, insufficientBalance]
+    () => isSubmittingItem || isConfigLoading || isConfigError || insufficientBalance || isBalanceLoading,
+    [isSubmittingItem, isConfigLoading, isConfigError, insufficientBalance, isBalanceLoading]
   );
 
   return (
@@ -59,7 +57,7 @@ const SubmitItemButton: React.FC = () => {
         <StyledButton
           text="Submit Item"
           disabled={isButtonDisabled}
-          isLoading={isConfigLoading && !insufficientBalance}
+          isLoading={(isConfigLoading && !insufficientBalance) || isSubmittingItem || isBalanceLoading}
           onClick={() => {
             if (submitItem && publicClient && config) {
               setIsSubmittingItem(true);

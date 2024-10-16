@@ -103,15 +103,13 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
 
   const isLoading = useMemo(
     () =>
-      (isBalanceLoading ||
-        isLoadingArbCost ||
-        isSubmissionChallengeDepositLoading ||
-        isRemovalChallengeDepositLoading ||
-        isLoadingExtradata ||
-        isChallengingItem ||
-        isEvidenceUploading ||
-        isConfigLoading) &&
-      !insufficientBalance,
+      isBalanceLoading ||
+      isSubmissionChallengeDepositLoading ||
+      isRemovalChallengeDepositLoading ||
+      isLoadingExtradata ||
+      isChallengingItem ||
+      isEvidenceUploading ||
+      (isConfigLoading && !insufficientBalance && isLoadingArbCost),
     [
       isBalanceLoading,
       isLoadingArbCost,

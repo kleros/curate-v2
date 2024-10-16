@@ -17,6 +17,7 @@ const Container = styled.div`
 const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 interface IButtons {

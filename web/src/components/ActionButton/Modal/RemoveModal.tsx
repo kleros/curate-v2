@@ -109,7 +109,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <div>
         <Buttons
           buttonText="Remove"
-          isDisabled={isDisabled || isLoading || isRemovingItem || isConfigError || insufficientBalance}
+          isDisabled={isDisabled || isLoading || isRemovingItem || isConfigError}
           isLoading={isLoading && !insufficientBalance}
           callback={() => {
             if (removeItem && publicClient && config) {

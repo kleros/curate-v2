@@ -87,7 +87,8 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       isLoadingExtradata ||
       isRemovingItem ||
       isEvidenceUploading ||
-      (isConfigLoading && !insufficientBalance && isLoadingArbCost)
+      isConfigLoading ||
+      isLoadingArbCost
     );
   }, [
     isBalanceLoading,
@@ -97,7 +98,6 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
     isRemovingItem,
     isEvidenceUploading,
     isConfigLoading,
-    insufficientBalance,
   ]);
 
   return (
@@ -109,7 +109,8 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
       <div>
         <Buttons
           buttonText="Remove"
-          isDisabled={isDisabled || isLoading || isRemovingItem || isConfigError}
+          isDisabled={isDisabled || isLoading || isRemovingItem || isConfigError || insufficientBalance}
+          isLoading={isLoading && !insufficientBalance}
           callback={() => {
             if (removeItem && publicClient && config) {
               setIsRemovingItem(true);
@@ -121,7 +122,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
                 .finally(() => setIsRemovingItem(false));
             }
           }}
-          {...{ toggleModal, isLoading, insufficientBalance }}
+          {...{ toggleModal, insufficientBalance }}
         />
       </div>
     </ReStyledModal>

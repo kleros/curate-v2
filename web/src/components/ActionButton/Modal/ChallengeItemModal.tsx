@@ -109,7 +109,8 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       isLoadingExtradata ||
       isChallengingItem ||
       isEvidenceUploading ||
-      (isConfigLoading && !insufficientBalance && isLoadingArbCost),
+      isConfigLoading ||
+      isLoadingArbCost,
     [
       isBalanceLoading,
       isLoadingArbCost,
@@ -119,7 +120,6 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       isChallengingItem,
       isEvidenceUploading,
       isConfigLoading,
-      insufficientBalance,
     ]
   );
 
@@ -133,6 +133,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
         <Buttons
           buttonText="Challenge"
           isDisabled={isDisabled || isChallengingItem || isConfigError}
+          isLoading={isLoading && !insufficientBalance}
           callback={() => {
             if (challengeRequest && publicClient && config) {
               setIsChallengingItem(true);
@@ -144,7 +145,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
                 .finally(() => setIsChallengingItem(false));
             }
           }}
-          {...{ insufficientBalance, toggleModal, isLoading }}
+          {...{ insufficientBalance, toggleModal }}
         />
       </div>
     </ReStyledModal>

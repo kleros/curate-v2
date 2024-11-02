@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Button } from "@kleros/ui-components-library";
 import { Address } from "viem";
-import { useAccount, usePublicClient } from "wagmi";
+import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import CheckCircle from "svgs/icons/check-circle-outline.svg";
+import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { isUndefined } from "utils/index";
@@ -26,6 +27,7 @@ import {
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
 import { curateV2Abi, useSimulateCurateFactoryDeploy, useWriteCurateFactoryDeploy } from "hooks/contracts/generated";
+import { ErrorButtonMessage } from "components/ActionButton/Modal/Buttons/ErrorButtonMessage";
 
 const StyledCheckCircle = styled(CheckCircle)`
   path {
@@ -50,11 +52,37 @@ const SubmitListButton: React.FC = () => {
   const [isEstimatingCost, setIsEstimatingCost] = useState(false);
   const [submittedListItemId, setSubmittedListItemId] = useState("");
 
+  const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
+
+  // calculate total cost to submit the list to Curate
+  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
+    address: MAIN_CURATE_ADDRESS as `0x${string}`,
+  });
+  const { data: submissionBaseDeposit } = useReadCurateV2SubmissionBaseDeposit({
+    address: MAIN_CURATE_ADDRESS as `0x${string}`,
+  });
+  const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
+
+  const totalCostToSubmit = useMemo(() => {
+    if (!arbitrationCost || !submissionBaseDeposit) return;
+
+    return (arbitrationCost as bigint) + submissionBaseDeposit;
+  }, [arbitrationCost, submissionBaseDeposit]);
+
+  const insufficientBalance = useMemo(
+    () => Boolean(totalCostToSubmit && userBalance && totalCostToSubmit > userBalance?.value),
+    [userBalance, totalCostToSubmit]
+  );
+
   const listParams = useMemo(() => constructListParams(listData, listMetadata), [listData, listMetadata]);
 
-  const { data: config } = useSimulateCurateFactoryDeploy({
+  const {
+    data: config,
+    isLoading: isConfigLoading,
+    isError: isConfigError,
+  } = useSimulateCurateFactoryDeploy({
     query: {
-      enabled: areListParamsValid(listParams),
+      enabled: areListParamsValid(listParams) && !insufficientBalance,
     },
     args: [
       listParams.governor as `0x${string}`,
@@ -73,21 +101,6 @@ const SubmitListButton: React.FC = () => {
   const { writeContractAsync: submit } = useWriteCurateFactoryDeploy();
 
   const { writeContractAsync: submitListToCurate } = useWriteCurateV2AddItem();
-
-  // calculate total cost to submit the list to Curate
-  const { data: arbitratorExtraData, isLoading: isLoadingExtradata } = useReadCurateV2GetArbitratorExtraData({
-    address: MAIN_CURATE_ADDRESS as `0x${string}`,
-  });
-  const { data: submissionBaseDeposit } = useReadCurateV2SubmissionBaseDeposit({
-    address: MAIN_CURATE_ADDRESS as `0x${string}`,
-  });
-  const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
-
-  const totalCostToSubmit = useMemo(() => {
-    if (!arbitrationCost || !submissionBaseDeposit) return;
-
-    return (arbitrationCost as bigint) + submissionBaseDeposit;
-  }, [arbitrationCost, submissionBaseDeposit]);
 
   // estimate gas cost
   useEffect(() => {
@@ -154,10 +167,25 @@ const SubmitListButton: React.FC = () => {
       isSubmittingList ||
       !areListParamsValid(listParams) ||
       isLoadingArbCost ||
+      isBalanceLoading ||
+      insufficientBalance ||
       isEstimatingCost ||
       isLoadingExtradata ||
-      !totalCostToSubmit,
-    [isSubmittingList, listParams, isLoadingArbCost, isEstimatingCost, isLoadingExtradata, totalCostToSubmit]
+      !totalCostToSubmit ||
+      isConfigLoading ||
+      isConfigError,
+    [
+      isSubmittingList,
+      listParams,
+      isLoadingArbCost,
+      isBalanceLoading,
+      insufficientBalance,
+      isEstimatingCost,
+      isLoadingExtradata,
+      totalCostToSubmit,
+      isConfigLoading,
+      isConfigError,
+    ]
   );
 
   const handleDeploy = () => {
@@ -185,7 +213,28 @@ const SubmitListButton: React.FC = () => {
     <Button text="View List" onClick={() => navigate(`/lists/${submittedListItemId}/list/1/desc/all`)} />
   ) : (
     <EnsureChain>
-      <Button text="Create List" Icon={StyledCheckCircle} disabled={isButtonDisabled} onClick={handleDeploy} />
+      <div>
+        <Button
+          text="Create List"
+          isLoading={
+            (isConfigLoading ||
+              isLoadingArbCost ||
+              isBalanceLoading ||
+              isSubmittingList ||
+              isEstimatingCost ||
+              isLoadingExtradata) &&
+            !insufficientBalance
+          }
+          Icon={StyledCheckCircle}
+          disabled={isButtonDisabled}
+          onClick={handleDeploy}
+        />
+        {insufficientBalance ? (
+          <ErrorButtonMessage>
+            <ClosedCircleIcon /> Insufficient balance
+          </ErrorButtonMessage>
+        ) : null}
+      </div>
     </EnsureChain>
   );
 };

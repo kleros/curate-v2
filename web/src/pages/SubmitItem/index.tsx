@@ -11,7 +11,7 @@ import Header from "./Header";
 import ItemField from "./ItemField";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
-import { EnsureAuth } from "components/EnsureAuth";
+import EnsureAuth from "components/EnsureAuth";
 
 const Container = styled.div`
   display: flex;

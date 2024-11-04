@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 import { EnsureChain } from "components/EnsureChain";
-import { EnsureAuth } from "components/EnsureAuth";
+import EnsureAuth from "components/EnsureAuth";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 import { ErrorButtonMessage } from "./ErrorButtonMessage";
 

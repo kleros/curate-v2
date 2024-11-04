@@ -38,7 +38,7 @@ const FormContact: React.FC<IForm> = ({
   isEditing,
 }) => {
   useEffect(() => {
-    setContactIsValid(contactInput === "" ? true : validator.test(contactInput));
+    setContactIsValid(validator.test(contactInput));
   }, [contactInput, setContactIsValid, validator]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

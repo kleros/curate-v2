@@ -17,6 +17,8 @@ import SubmitList from "./pages/SubmitList";
 import { RegistryDetailsProvider } from "context/RegistryDetailsContext";
 import { SubmitListProvider } from "./context/SubmitListContext";
 import AttachmentDisplay from "./pages/AttachmentDisplay";
+import AtlasProvider from "./context/AtlasProvider";
+import Settings from "./pages/Settings";
 
 const App: React.FC = () => {
   return (
@@ -24,29 +26,32 @@ const App: React.FC = () => {
       <Web3Provider>
         <GraphqlBatcherProvider>
           <QueryClientProvider>
-            <IsListViewProvider>
-              <SubmitListProvider>
-                <SubmitItemProvider>
-                  <SentryRoutes>
-                    <Route path="/" element={<Layout />}>
-                      <Route index element={<Home />} />
-                      <Route path="lists/*" element={<AllLists />} />
-                      <Route
-                        path="submit-item/:id/*"
-                        element={
-                          <RegistryDetailsProvider>
-                            <SubmitItem />
-                          </RegistryDetailsProvider>
-                        }
-                      />
-                      <Route path="submit-list/*" element={<SubmitList />} />
-                      <Route path="attachment/*" element={<AttachmentDisplay />} />
-                      <Route path="*" element={<h1>404 not found</h1>} />
-                    </Route>
-                  </SentryRoutes>
-                </SubmitItemProvider>
-              </SubmitListProvider>
-            </IsListViewProvider>
+            <AtlasProvider>
+              <IsListViewProvider>
+                <SubmitListProvider>
+                  <SubmitItemProvider>
+                    <SentryRoutes>
+                      <Route path="/" element={<Layout />}>
+                        <Route index element={<Home />} />
+                        <Route path="lists/*" element={<AllLists />} />
+                        <Route
+                          path="submit-item/:id/*"
+                          element={
+                            <RegistryDetailsProvider>
+                              <SubmitItem />
+                            </RegistryDetailsProvider>
+                          }
+                        />
+                        <Route path="submit-list/*" element={<SubmitList />} />
+                        <Route path="attachment/*" element={<AttachmentDisplay />} />
+                        <Route path="settings/*" element={<Settings />} />
+                        <Route path="*" element={<h1>404 not found</h1>} />
+                      </Route>
+                    </SentryRoutes>
+                  </SubmitItemProvider>
+                </SubmitListProvider>
+              </IsListViewProvider>
+            </AtlasProvider>
           </QueryClientProvider>
         </GraphqlBatcherProvider>
       </Web3Provider>

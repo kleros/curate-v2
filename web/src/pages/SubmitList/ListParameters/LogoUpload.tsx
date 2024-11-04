@@ -6,10 +6,11 @@ import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import { OPTIONS as toastOptions } from "utils/wrapWithToast";
 import { toast } from "react-toastify";
 import ListPreview from "./ListPreview";
+import { useAtlasProvider } from "context/AtlasProvider";
+import { Roles } from "utils/atlas";
 
 const Container = styled.div`
   display: flex;
@@ -36,6 +37,7 @@ const StyledFileUploader = styled(FileUploader)`
 const LogoUpload: React.FC = () => {
   const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
 
+  const { uploadFile } = useAtlasProvider();
   const handleFileUpload = (file: File) => {
     if (!["image/png", "image/jpeg", "image/jpg"].includes(file?.type)) {
       toast.error("File type not supported", toastOptions);
@@ -52,10 +54,9 @@ const LogoUpload: React.FC = () => {
 
         setIsLogoUploading(true);
 
-        uploadFileToIPFS(file)
-          .then(async (res) => {
-            const response = await res.json();
-            const logoURI = response.cids[0];
+        uploadFile(file, Roles.Logo)
+          .then(async (logoURI) => {
+            if (!logoURI) return;
             setListMetadata({ ...listMetadata, logoURI });
           })
           .catch((err) => console.log(err))

@@ -6,12 +6,10 @@ import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { toast } from "react-toastify";
-import { OPTIONS as toastOptions } from "utils/wrapWithToast";
-import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
-import { SUPPORTED_FILE_TYPES } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { Link } from "react-router-dom";
+import { useAtlasProvider } from "context/AtlasProvider";
+import { Roles } from "utils/atlas";
 
 const Container = styled.div`
   display: flex;
@@ -41,18 +39,13 @@ const StyledFileUploader = styled(FileUploader)`
 
 const Policy: React.FC = () => {
   const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
-
+  const { uploadFile } = useAtlasProvider();
   const handleFileUpload = (file: File) => {
-    if (!SUPPORTED_FILE_TYPES.includes(file?.type)) {
-      toast.error("File type not supported", toastOptions);
-      return;
-    }
     setIsPolicyUploading(true);
 
-    uploadFileToIPFS(file)
-      .then(async (res) => {
-        const response = await res.json();
-        const policyURI = response["cids"][0];
+    uploadFile(file, Roles.Policy)
+      .then(async (policyURI) => {
+        if (!policyURI) return;
         setListMetadata({ ...listMetadata, policyURI });
       })
       .catch((err) => console.log(err))

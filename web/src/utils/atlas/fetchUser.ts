@@ -5,7 +5,7 @@ import { OPTIONS } from "utils/wrapWithToast";
 
 export type User = {
   email: string;
-  isEmailVerified: string;
+  isEmailVerified: boolean;
   emailUpdateableAt: string | null;
 };
 

@@ -66,8 +66,8 @@ const TABS = [
   },
 ];
 
-const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
-  const [currentTab, setCurrentTab] = useState<number>(0);
+const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen, initialTab }) => {
+  const [currentTab, setCurrentTab] = useState<number>(initialTab || 0);
   const containerRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();

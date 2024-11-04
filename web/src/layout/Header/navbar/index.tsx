@@ -8,7 +8,6 @@ import DappList from "./DappList";
 import Explore from "./Explore";
 import ConnectWallet from "components/ConnectWallet";
 import LightButton from "components/LightButton";
-import { Overlay } from "components/Overlay";
 import KlerosSolutionsIcon from "svgs/menu-icons/kleros-solutions.svg";
 import Menu from "./Menu";
 import Help from "./Menu/Help";
@@ -54,6 +53,7 @@ const DisconnectWalletButtonContainer = styled.div`
 
 export interface ISettings {
   toggleIsSettingsOpen: () => void;
+  initialTab?: number;
 }
 
 export interface IHelp {

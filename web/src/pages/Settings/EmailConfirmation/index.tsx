@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components";
 
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { isAddress } from "viem";
 
 import { Button } from "@kleros/ui-components-library";
@@ -96,7 +96,7 @@ const messageConfigs = {
     headerMsg: "Invalid Link!",
     subtitleMsg: "Oops, seems like you followed an invalid link.",
     buttonMsg: "Contact Support",
-    buttonTo: "/",
+    buttonTo: "https://t.me/kleros",
     Icon: InvalidIcon,
     color: "primaryText",
   },
@@ -104,7 +104,7 @@ const messageConfigs = {
     headerMsg: "Something went wrong",
     subtitleMsg: "Oops, seems like something went wrong in our systems",
     buttonMsg: "Contact Support",
-    buttonTo: "/",
+    buttonTo: "https://t.me/kleros",
     Icon: WarningIcon,
     color: "error",
   },
@@ -139,8 +139,6 @@ const EmailConfirmation: React.FC = () => {
   const address = searchParams.get("address");
   const token = searchParams.get("token");
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (address && isAddress(address) && token) {
       setIsConfirming(true);
@@ -174,7 +172,9 @@ const EmailConfirmation: React.FC = () => {
             </HeaderIconContainer>
             <Header fontColor={color}>{headerMsg}</Header>
             <Subtitle>{subtitleMsg}</Subtitle>
-            <Button text={buttonMsg} onClick={() => navigate(buttonTo)} />
+            <Link to={buttonTo}>
+              <Button text={buttonMsg} />
+            </Link>
           </InfoWrapper>
           <IconContainer>
             <Icon />

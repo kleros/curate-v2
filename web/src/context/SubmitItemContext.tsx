@@ -52,7 +52,7 @@ export const SubmitItemProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   useEffect(() => {
     // Cleanup function to clear local storage when user leaves the route
-    if (location.pathname.includes("/submit-item")) return;
+    if (location.pathname.includes("/submit-item") || location.pathname.includes("/attachment")) return;
 
     resetItemData();
   }, [location.pathname]);

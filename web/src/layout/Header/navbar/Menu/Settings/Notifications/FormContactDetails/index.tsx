@@ -6,7 +6,6 @@ import { useAccount } from "wagmi";
 import { Button } from "@kleros/ui-components-library";
 
 import { EMAIL_REGEX } from "consts/index";
-import { useAtlasProvider } from "context/AtlasProvider";
 
 import { responsiveSize } from "styles/responsiveSize";
 
@@ -17,6 +16,8 @@ import FormContact from "./FormContact";
 import { isUndefined } from "src/utils";
 import InfoCard from "components/InfoCard";
 import { timeLeftUntil } from "utils/date";
+import { useAtlasProvider } from "@kleros/kleros-app";
+import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 
 const FormContainer = styled.form`
   width: 100%;
@@ -75,24 +76,34 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
       const data = {
         newEmail: emailInput,
       };
+      infoToast("Updating email ...");
       updateEmail(data)
         .then(async (res) => {
           if (res) {
+            successToast("Email updated successfully!");
             toggleIsSettingsOpen();
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          errorToast(`Updating email failed: ${err?.message}`);
+        });
     } else {
       const data = {
         email: emailInput,
       };
+      infoToast("Adding user ...");
       addUser(data)
         .then(async (res) => {
           if (res) {
+            successToast("User added successfully!");
             toggleIsSettingsOpen();
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          errorToast(`Adding user failed: ${err?.message}`);
+        });
     }
   };
 

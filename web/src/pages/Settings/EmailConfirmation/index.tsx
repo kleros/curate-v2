@@ -10,11 +10,10 @@ import CheckIcon from "svgs/icons/check-circle-outline.svg";
 import WarningIcon from "svgs/icons/warning-outline.svg";
 import InvalidIcon from "svgs/icons/minus-circle.svg";
 
-import { useAtlasProvider } from "context/AtlasProvider";
-
 import { landscapeStyle } from "styles/landscapeStyle";
 
 import Loader from "components/Loader";
+import { useAtlasProvider } from "@kleros/kleros-app";
 
 const Container = styled.div`
   display: flex;

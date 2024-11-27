@@ -8,8 +8,8 @@ import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { Link } from "react-router-dom";
-import { useAtlasProvider } from "context/AtlasProvider";
-import { Roles } from "utils/atlas";
+import { Roles, useAtlasProvider } from "@kleros/kleros-app";
+import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 
 const Container = styled.div`
   display: flex;
@@ -42,13 +42,18 @@ const Policy: React.FC = () => {
   const { uploadFile } = useAtlasProvider();
   const handleFileUpload = (file: File) => {
     setIsPolicyUploading(true);
+    infoToast("Uploading to IPFS...");
 
     uploadFile(file, Roles.Policy)
       .then(async (policyURI) => {
         if (!policyURI) return;
+        successToast("Uploaded successfully!");
         setListMetadata({ ...listMetadata, policyURI });
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        errorToast(`Upload failed: ${err?.message}`);
+      })
       .finally(() => setIsPolicyUploading(false));
   };
 

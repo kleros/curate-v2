@@ -1,12 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
-import { toast } from "react-toastify";
 import { FileUploader, Textarea } from "@kleros/ui-components-library";
 import LabeledInput from "components/LabeledInput";
 import { responsiveSize } from "styles/responsiveSize";
-import { OPTIONS as toastOptions } from "utils/wrapWithToast";
-import { useAtlasProvider } from "context/AtlasProvider";
-import { Roles } from "utils/atlas";
+import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
+import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 
 const Container = styled.div`
   width: 100%;
@@ -71,14 +69,16 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
 
   const handleFileUpload = (file: File) => {
     setIsEvidenceUploading(true);
+    infoToast("Uploading to IPFS...");
     uploadFile(file, Roles.Evidence)
       .then(async (fileURI) => {
         if (!fileURI) throw new Error("Error uploading file to IPFS");
         setFileURI(fileURI);
+        successToast("Uploaded successfully!");
       })
       .catch((err) => {
         console.log(err);
-        toast.error(err?.message, toastOptions);
+        errorToast(`Upload failed: ${err?.message}`);
       })
       .finally(() => setIsEvidenceUploading(false));
   };

@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import LabeledInput from "components/LabeledInput";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { rootCourtToItems, useCourtTree } from "hooks/queries/useCourtTree";
-import { isUndefined } from "utils/index";
+import { isEmpty, isUndefined } from "utils/index";
 import Skeleton from "react-loading-skeleton";
 import ETH from "svgs/icons/eth-round.svg";
 import LightButton from "components/LightButton";
@@ -74,7 +74,10 @@ const AbritrationParameters: React.FC = () => {
   const { data } = useCourtTree();
   const items = useMemo(() => !isUndefined(data) && [rootCourtToItems(data.court)], [data]);
 
-  const isGovernorValid = useMemo(() => listData.governor === "" || isAddress(listData.governor), [listData.governor]);
+  const isGovernorValid = useMemo(
+    () => isEmpty(listData.governor) || isAddress(listData.governor),
+    [listData.governor]
+  );
 
   const { arbitrationCost } = useArbitrationCost(
     prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors)

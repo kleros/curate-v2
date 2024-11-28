@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
+import { isEmpty } from "src/utils";
 
 const StyledButton = styled(Button)<{ prevRoute: string }>`
-  display: ${({ prevRoute }) => (prevRoute === "" ? "none" : "flex")};
+  display: ${({ prevRoute }) => (isEmpty(prevRoute) ? "none" : "flex")};
 `;
 
 interface IReturnButton {

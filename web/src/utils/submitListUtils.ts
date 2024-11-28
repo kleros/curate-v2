@@ -1,7 +1,7 @@
 import { IList, IListData, IListMetadata, ListField } from "context/SubmitListContext";
 import { prepareArbitratorExtradata } from "./prepareArbitratorExtradata";
 import { Address, Log, decodeEventLog, isAddress, parseAbi, parseEther, zeroAddress } from "viem";
-import { isUndefined } from ".";
+import { isEmpty, isUndefined } from ".";
 import { TEMPLATE_REGISTRY } from "consts/arbitration";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 import { arbitrum } from "viem/chains";
@@ -10,7 +10,7 @@ import { registrationTemplate, removalTemplate, dataMappings } from "@kleros/cur
 export const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
   const baseTemplate = { ...listData } as IList;
 
-  if (!isUndefined(listMetadata.policyURI) && listMetadata.policyURI === "") delete listMetadata.policyURI;
+  if (!isUndefined(listMetadata.policyURI) && isEmpty(listMetadata.policyURI)) delete listMetadata.policyURI;
   baseTemplate.listMetadata = JSON.stringify(listMetadata);
   baseTemplate.baseDeposits = [
     parseEther(listData.submissionBaseDeposit),

@@ -110,7 +110,7 @@ const messageConfigs = {
   confirmed: {
     headerMsg: "Congratulations! \nYour email has been verified!",
     subtitleMsg:
-      "We'll remind you when your actions are required on Court, and send you notifications on key moments to help you achieve the best of Kleros.",
+      "We'll remind you when your actions are required on Curate, and send you notifications on key moments to help you achieve the best of Kleros.",
     buttonMsg: "Let's start!",
     buttonTo: "/",
     Icon: CheckIcon,

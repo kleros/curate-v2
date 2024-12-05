@@ -1,12 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
-import { toast } from "react-toastify";
 import { FileUploader, Textarea } from "@kleros/ui-components-library";
 import LabeledInput from "components/LabeledInput";
 import { responsiveSize } from "styles/responsiveSize";
-import { OPTIONS as toastOptions } from "utils/wrapWithToast";
-import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
-import { SUPPORTED_FILE_TYPES } from "src/consts";
+import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
+import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 
 const Container = styled.div`
   width: 100%;
@@ -59,7 +57,7 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fileURI, setFileURI] = useState("");
-
+  const { uploadFile } = useAtlasProvider();
   useEffect(() => {
     setEvidence({
       name: title,
@@ -70,18 +68,18 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
   }, [title, description, fileURI]);
 
   const handleFileUpload = (file: File) => {
-    if (!SUPPORTED_FILE_TYPES.includes(file?.type)) {
-      toast.error("File type not supported", toastOptions);
-      return;
-    }
     setIsEvidenceUploading(true);
-    uploadFileToIPFS(file)
-      .then(async (res) => {
-        const response = await res.json();
-        const fileURI = response["cids"][0];
+    infoToast("Uploading to IPFS...");
+    uploadFile(file, Roles.Evidence)
+      .then(async (fileURI) => {
+        if (!fileURI) throw new Error("Error uploading file to IPFS");
         setFileURI(fileURI);
+        successToast("Uploaded successfully!");
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        errorToast(`Upload failed: ${err?.message}`);
+      })
       .finally(() => setIsEvidenceUploading(false));
   };
 

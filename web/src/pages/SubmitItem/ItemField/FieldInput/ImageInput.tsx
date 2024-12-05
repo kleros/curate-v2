@@ -1,12 +1,11 @@
 import React from "react";
 import { IFieldInput } from ".";
-import { toast } from "react-toastify";
-import { OPTIONS as toastOptions } from "utils/wrapWithToast";
-import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
 import styled, { css } from "styled-components";
 import { FileUploader } from "@kleros/ui-components-library";
 import { responsiveSize } from "styles/responsiveSize";
 import { landscapeStyle } from "styles/landscapeStyle";
+import { Roles, useAtlasProvider } from "@kleros/kleros-app";
+import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 
 const StyledFileUploader = styled(FileUploader)`
   width: 84vw;
@@ -22,19 +21,20 @@ const StyledFileUploader = styled(FileUploader)`
 `;
 
 const ImageInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
+  const { uploadFile } = useAtlasProvider();
   const handleFileUpload = (file: File) => {
-    if (!["image/png", "image/jpeg", "image/jpg"].includes(file?.type)) {
-      toast.error("File type not supported", toastOptions);
-      return;
-    }
+    infoToast("Uploading to IPFS...");
 
-    uploadFileToIPFS(file)
-      .then(async (res) => {
-        const response = await res.json();
-        const imageURI = response["cids"][0];
-        handleWrite(imageURI);
+    uploadFile(file, Roles.CurateItemImage)
+      .then(async (fileURI) => {
+        if (!fileURI) return;
+        successToast("Uploaded successfully!");
+        handleWrite(fileURI);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        errorToast(`Upload failed: ${err?.message}`);
+      })
       .finally();
   };
 

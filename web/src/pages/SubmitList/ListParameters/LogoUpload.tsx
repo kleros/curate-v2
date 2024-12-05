@@ -6,10 +6,9 @@ import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { uploadFileToIPFS } from "utils/uploadFileToIPFS";
-import { OPTIONS as toastOptions } from "utils/wrapWithToast";
-import { toast } from "react-toastify";
+import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import ListPreview from "./ListPreview";
+import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 
 const Container = styled.div`
   display: flex;
@@ -36,30 +35,35 @@ const StyledFileUploader = styled(FileUploader)`
 const LogoUpload: React.FC = () => {
   const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
 
+  const { uploadFile } = useAtlasProvider();
+
   const handleFileUpload = (file: File) => {
-    if (!["image/png", "image/jpeg", "image/jpg"].includes(file?.type)) {
-      toast.error("File type not supported", toastOptions);
-      return;
-    }
+    setIsLogoUploading(true);
+    infoToast("Uploading to IPFS...");
+
+    uploadFile(file, Roles.Logo)
+      .then(async (logoURI) => {
+        if (!logoURI) return;
+        successToast("Uploaded successfully!");
+        setListMetadata({ ...listMetadata, logoURI });
+      })
+      .catch((err) => {
+        console.log(err);
+        errorToast(`Upload failed: ${err?.message}`);
+      })
+      .finally(() => setIsLogoUploading(false));
+  };
+
+  const handleLoad = (file: File) => {
     const reader = new FileReader();
     reader.onload = (event) => {
       const image = new Image();
       image.onload = () => {
         if (image.width !== image.height) {
-          toast.error("Image aspect ratio must be 1:1", toastOptions);
+          errorToast("Image aspect ratio must be 1:1");
           return;
         }
-
-        setIsLogoUploading(true);
-
-        uploadFileToIPFS(file)
-          .then(async (res) => {
-            const response = await res.json();
-            const logoURI = response.cids[0];
-            setListMetadata({ ...listMetadata, logoURI });
-          })
-          .catch((err) => console.log(err))
-          .finally(() => setIsLogoUploading(false));
+        handleFileUpload(file);
       };
 
       image.src = event.target?.result as string;
@@ -71,7 +75,7 @@ const LogoUpload: React.FC = () => {
     <Container>
       <Header text="Logo" />
       <StyledFileUploader
-        callback={handleFileUpload}
+        callback={handleLoad}
         variant="info"
         msg="Upload a logo to represent your list. The logo should be a 1:1 aspect ratio image with transparent background, in SVG, or PNG."
       />

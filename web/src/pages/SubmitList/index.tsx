@@ -17,7 +17,7 @@ import ItemPreview from "./ItemParameters/ItemPreview";
 import CustomName from "./ItemParameters/CustomName";
 import AdvancedParameters from "./AdvancedParameters";
 import DeployList from "./DeployList";
-import { EnsureAuth } from "components/EnsureAuth";
+import EnsureAuth from "components/EnsureAuth";
 
 const Container = styled.div`
   display: flex;

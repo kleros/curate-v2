@@ -4,7 +4,7 @@ import { ISettings } from "../../../index";
 
 import FormContactDetails from "./FormContactDetails";
 import { EnsureChain } from "components/EnsureChain";
-import { EnsureAuth } from "components/EnsureAuth";
+import EnsureAuth from "components/EnsureAuth";
 
 const Container = styled.div`
   display: flex;

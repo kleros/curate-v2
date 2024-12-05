@@ -141,7 +141,7 @@ export const SubmitListProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   useEffect(() => {
     // Cleanup function to clear local storage when user leaves the route
-    if (location.pathname.includes("/submit-list")) return;
+    if (location.pathname.includes("/submit-list") || location.pathname.includes("/attachment")) return;
 
     resetListData();
   }, [location.pathname]);

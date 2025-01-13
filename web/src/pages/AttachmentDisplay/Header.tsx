@@ -27,14 +27,14 @@ const TitleContainer = styled.div`
 
 const Title = styled.h1`
   margin: 0px;
-  font-size: ${responsiveSize(16, 24)};
+  font-size: ${responsiveSize(20, 24)};
 `;
 
 const StyledPaperClip = styled(PaperClip)`
   width: ${responsiveSize(16, 24)};
   height: ${responsiveSize(16, 24)};
   path {
-    fill: ${({ theme }) => theme.primaryPurple};
+    fill: ${({ theme }) => theme.secondaryPurple}B0;
   }
 `;
 
@@ -53,11 +53,23 @@ const StyledButton = styled(Button)`
   :focus,
   :hover {
     background-color: transparent;
+    .button-svg {
+      path {
+        fill: ${({ theme }) => theme.secondaryBlue};
+      }
+    }
+    .button-text {
+      color: ${({ theme }) => theme.secondaryBlue};
+    }
   }
 `;
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+
+  const handleReturn = () => {
+    navigate(-1);
+  };
 
   return (
     <Container>
@@ -65,7 +77,7 @@ const Header: React.FC = () => {
         <StyledPaperClip />
         <Title>Attachment File</Title>{" "}
       </TitleContainer>
-      <StyledButton text="Return" Icon={Arrow} onClick={() => navigate(-1)} />
+      <StyledButton text="Return" Icon={Arrow} onClick={handleReturn} />
     </Container>
   );
 };

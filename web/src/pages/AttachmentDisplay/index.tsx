@@ -1,12 +1,14 @@
 import React, { lazy, Suspense } from "react";
 import styled from "styled-components";
 
+import { MAX_WIDTH_LANDSCAPE } from "styles/landscapeStyle";
+
 import { useSearchParams } from "react-router-dom";
 
 import NewTabIcon from "svgs/icons/new-tab.svg";
 
 import Loader from "components/Loader";
-
+import { ExternalLink } from "components/ExternalLink";
 import Header from "./Header";
 
 const FileViewer = lazy(() => import("components/FileViewer"));
@@ -17,7 +19,7 @@ const Container = styled.div`
   padding: calc(24px + (136 - 24) * (min(max(100vw, 375px), 1250px) - 375px) / 875);
   padding-top: calc(32px + (80 - 32) * (min(max(100vw, 375px), 1250px) - 375px) / 875);
   padding-bottom: calc(76px + (96 - 76) * (min(max(100vw, 375px), 1250px) - 375px) / 875);
-  max-width: 1780px;
+  max-width: ${MAX_WIDTH_LANDSCAPE};
   margin: 0 auto;
 `;
 
@@ -34,11 +36,11 @@ const LoaderContainer = styled.div`
   justify-content: center;
 `;
 
-const NewTabInfo = styled.a`
-  align-self: flex-end;
+const StyledExternalLink = styled(ExternalLink)`
   display: flex;
-  gap: 8px;
   align-items: center;
+  align-self: flex-end;
+  gap: 8px;
 `;
 
 const StyledNewTabIcon = styled(NewTabIcon)`
@@ -57,9 +59,9 @@ const AttachmentDisplay: React.FC = () => {
         <Header />
         {url ? (
           <>
-            <NewTabInfo href={url} rel="noreferrer" target="_blank">
+            <StyledExternalLink to={url} rel="noreferrer" target="_blank">
               Open in new tab <StyledNewTabIcon />
-            </NewTabInfo>
+            </StyledExternalLink>
             <Suspense
               fallback={
                 <LoaderContainer>

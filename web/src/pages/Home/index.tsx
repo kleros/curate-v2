@@ -1,7 +1,10 @@
 import React from "react";
-import styled from "styled-components";
-import HeroImage from "components/HeroImage";
+import styled, { css } from "styled-components";
+
 import { responsiveSize } from "styles/responsiveSize";
+import { MAX_WIDTH_LANDSCAPE, landscapeStyle } from "styles/landscapeStyle";
+
+import HeroImage from "components/HeroImage";
 import Header from "./Header";
 import Stats from "./Stats";
 import HighlightedLists from "./Highlights";
@@ -9,9 +12,15 @@ import HighlightedLists from "./Highlights";
 const Container = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.lightBackground};
-  padding: ${responsiveSize(32, 72)} ${responsiveSize(24, 132)} ${responsiveSize(76, 96)};
-  max-width: 1780px;
+  padding: 16px 16px 40px;
+  max-width: ${MAX_WIDTH_LANDSCAPE};
   margin: 0 auto;
+
+  ${landscapeStyle(
+    () => css`
+      padding: 16px ${responsiveSize(0, 132)} 60px;
+    `
+  )}
 `;
 
 const Home: React.FC = () => {

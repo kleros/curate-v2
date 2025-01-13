@@ -24,7 +24,7 @@ const Container = styled.div`
 `;
 
 const GridContainer = styled.div`
-  --gap: 24px;
+  --gap: 16px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, max(274px, (100% - var(--gap) * 2)/3)), 1fr));
   align-items: center;

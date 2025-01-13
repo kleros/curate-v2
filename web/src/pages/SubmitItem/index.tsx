@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
+import { MAX_WIDTH_LANDSCAPE } from "styles/landscapeStyle";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import Timeline from "./Timeline";
@@ -21,7 +22,7 @@ const Container = styled.div`
   padding: ${responsiveSize(24, 32)};
   padding-top: ${responsiveSize(24, 28)};
   padding-bottom: ${responsiveSize(76, 96)};
-  max-width: 1780px;
+  max-width: ${MAX_WIDTH_LANDSCAPE};
   margin: 0 auto;
 `;
 

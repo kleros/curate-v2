@@ -1,35 +1,28 @@
 import React from "react";
 import styled, { useTheme } from "styled-components";
 
-import DesktopHeader from "./DesktopHeader";
-import MobileHeader from "./MobileHeader";
 import { StatusBanner } from "subgraph-status";
+
 import { getGraphqlUrl } from "utils/getGraphqlUrl";
 
-const Container = styled.div`
-  position: sticky;
-  z-index: 30;
-  top: 0;
-  width: 100%;
-  background-color: ${({ theme }) => theme.primaryPurple};
+import DesktopHeader from "./DesktopHeader";
+import MobileHeader from "./MobileHeader";
 
+const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  width: 100%;
+  background-color: ${({ theme }) => (theme.name === "dark" ? `${theme.lightBlue}A6` : theme.primaryPurple)};
+  backdrop-filter: ${({ theme }) => (theme.name === "dark" ? "blur(12px)" : "none")};
+  -webkit-backdrop-filter: ${({ theme }) => (theme.name === "dark" ? "blur(12px)" : "none")}; // Safari support
 `;
 
 const HeaderContainer = styled.div`
   width: 100%;
-  padding: 4px 24px 8px;
-`;
-
-export const PopupContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 30;
-  background-color: ${({ theme }) => theme.blackLowOpacity};
+  padding: 0px 24px;
 `;
 
 const StyledBanner = styled(StatusBanner)`
@@ -49,6 +42,7 @@ const Header: React.FC = () => {
     <Container>
       <StyledBanner
         autoHide
+        watcherOptions={{ threshold: 5000, interval: 60_000 }} // 5000 blocks threshold, 60 sec interval check
         theme={{
           colors: {
             main: theme.whiteBackground,

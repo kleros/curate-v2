@@ -5,7 +5,7 @@ import { responsiveSize } from "styles/responsiveSize";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import HeroImage from "components/HeroImage";
-import { landscapeStyle } from "styles/landscapeStyle";
+import { MAX_WIDTH_LANDSCAPE, landscapeStyle } from "styles/landscapeStyle";
 import Timeline from "./Timeline";
 import Title from "./ListParameters/Title";
 import Description from "./ListParameters/Description";
@@ -27,7 +27,7 @@ const Container = styled.div`
   padding: ${responsiveSize(24, 32)};
   padding-top: ${responsiveSize(24, 28)};
   padding-bottom: ${responsiveSize(76, 96)};
-  max-width: 1780px;
+  max-width: ${MAX_WIDTH_LANDSCAPE};
   margin: 0 auto;
 `;
 

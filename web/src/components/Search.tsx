@@ -55,6 +55,14 @@ const StyledPlusIcon = styled(PlusIcon)`
   }
 `;
 
+const StyledDropdownSelect = styled(DropdownSelect)`
+  [class*="button__Container"] {
+    [class*="base-item__Item"] {
+      border-left: 1px solid transparent;
+    }
+  }
+`;
+
 const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
   const { page, order, filter, id } = useParams();
   const location = useListRootPath();
@@ -92,7 +100,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </SearchBarContainer>
-      <DropdownSelect
+      <StyledDropdownSelect
         items={[
           { text: "All Status", dot: "grey", value: JSON.stringify({}) },
           { text: "Active", dot: "orange", value: JSON.stringify(List_filters.Active) },

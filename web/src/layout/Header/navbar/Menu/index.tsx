@@ -5,21 +5,18 @@ import LightButton from "components/LightButton";
 import DarkModeIcon from "svgs/menu-icons/dark-mode.svg";
 import HelpIcon from "svgs/menu-icons/help.svg";
 import LightModeIcon from "svgs/menu-icons/light-mode.svg";
-import NotificationsIcon from "svgs/menu-icons/notifications.svg";
+// import NotificationsIcon from "svgs/menu-icons/notifications.svg";
 import SettingsIcon from "svgs/menu-icons/settings.svg";
 import { useToggleTheme } from "hooks/useToggleThemeContext";
 import { IHelp, ISettings } from "..";
 
 const Container = styled.div`
   display: flex;
-
   flex-direction: column;
-  gap: 0px;
 
   ${landscapeStyle(
     () => css`
       flex-direction: row;
-      gap: 8px;
     `
   )}
 `;
@@ -58,7 +55,7 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
   const isLightTheme = theme === "light";
 
   const buttons = [
-    { text: "Notifications", Icon: NotificationsIcon },
+    // { text: "Notifications", Icon: NotificationsIcon },
     {
       text: "Settings",
       Icon: SettingsIcon,

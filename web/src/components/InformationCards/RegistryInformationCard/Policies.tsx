@@ -1,13 +1,17 @@
 import React from "react";
 import styled, { css } from "styled-components";
+
 import { landscapeStyle } from "styles/landscapeStyle";
-import Skeleton from "react-loading-skeleton";
-import PolicyIcon from "svgs/icons/policy.svg";
+import { hoverShortTransitionTiming } from "styles/commonStyles";
 import { responsiveSize } from "styles/responsiveSize";
+
+import Skeleton from "react-loading-skeleton";
+
+import PolicyIcon from "svgs/icons/policy.svg";
 import { getIpfsUrl } from "utils/getIpfsUrl";
-import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
-import { Link } from "react-router-dom";
+import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
+import { InternalLink } from "components/InternalLink";
 
 const ShadeArea = styled.div`
   display: flex;
@@ -38,12 +42,6 @@ const StyledP = styled.p`
   )};
 `;
 
-const StyledA = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
 const StyledPolicyIcon = styled(PolicyIcon)`
   width: 16px;
   fill: ${({ theme }) => theme.primaryBlue};
@@ -53,6 +51,19 @@ const LinkContainer = styled.div`
   display: flex;
   gap: ${responsiveSize(16, 24)};
   flex-wrap: wrap;
+`;
+
+const StyledInternalLink = styled(InternalLink)`
+  ${hoverShortTransitionTiming}
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  &:hover {
+    svg {
+      fill: ${({ theme }) => theme.secondaryBlue};
+    }
+  }
 `;
 
 interface IPolicies {
@@ -70,20 +81,20 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
         {!isItem ? (
           <>
             {parentRegistryDetails ? (
-              <StyledA to={`/attachment/?url=${getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}`}>
+              <StyledInternalLink to={`/attachment/?url=${getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}`}>
                 <StyledPolicyIcon />
                 Curation Policy
-              </StyledA>
+              </StyledInternalLink>
             ) : (
               <Skeleton width={116} />
             )}
           </>
         ) : null}
         {policyURI ? (
-          <StyledA to={`/attachment/?url=${getIpfsUrl(policyURI)}`}>
+          <StyledInternalLink to={`/attachment/?url=${getIpfsUrl(policyURI)}`}>
             <StyledPolicyIcon />
             List Policy
-          </StyledA>
+          </StyledInternalLink>
         ) : (
           <Skeleton width={80} />
         )}

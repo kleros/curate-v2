@@ -4654,7 +4654,7 @@ __metadata:
     "@kleros/curate-v2-tsconfig": "workspace:^"
     "@kleros/kleros-app": "npm:^2.0.1"
     "@kleros/kleros-v2-contracts": "npm:^0.3.2"
-    "@kleros/ui-components-library": "npm:^2.15.0"
+    "@kleros/ui-components-library": "npm:^2.20.0"
     "@sentry/react": "npm:^7.93.0"
     "@sentry/tracing": "npm:^7.93.0"
     "@tanstack/react-query": "npm:^5.59.20"
@@ -4737,9 +4737,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kleros/ui-components-library@npm:^2.15.0":
-  version: 2.15.0
-  resolution: "@kleros/ui-components-library@npm:2.15.0"
+"@kleros/ui-components-library@npm:^2.20.0":
+  version: 2.20.0
+  resolution: "@kleros/ui-components-library@npm:2.20.0"
   dependencies:
     "@datepicker-react/hooks": "npm:^2.8.4"
     "@swc/helpers": "npm:^0.3.2"
@@ -4756,7 +4756,7 @@ __metadata:
     react-dom: ^18.0.0
     react-is: ^18.0.0
     styled-components: ^5.3.3
-  checksum: 7c97e8fe45b1cd002a0aaf7fe4670b8c668a3abbbab82fac9261ef9a8382ccaf7d4a974ee54b8f299f1e8e7b68e58dab1f3f31d7c8b3b60c58a5af8abdf4a783
+  checksum: c0e08f0e71e8b09ebd659477e62d4586f5159383d00c81524ae00088a2b4181c0ef5449adced094dacb8b1f830efab4ccd4088d5bfb2d4dae4ed38fc93344542
   languageName: node
   linkType: hard
 

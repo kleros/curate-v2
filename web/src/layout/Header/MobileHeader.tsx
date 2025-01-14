@@ -1,11 +1,15 @@
 import React, { useContext, useMemo, useRef } from "react";
 import styled, { css } from "styled-components";
+
 import { useClickAway, useToggle } from "react-use";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { Link } from "react-router-dom";
-import DappLogo from "svgs/header/dapp-logo.svg";
+
 import HamburgerIcon from "svgs/header/hamburger.svg";
+
+import { landscapeStyle } from "styles/landscapeStyle";
+
 import LightButton from "components/LightButton";
+
+import Logo from "./Logo";
 import NavBar from "./navbar";
 
 const Container = styled.div`
@@ -13,6 +17,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 64px;
 
   ${landscapeStyle(
     () => css`
@@ -22,19 +27,11 @@ const Container = styled.div`
 `;
 
 const StyledLightButton = styled(LightButton)`
-  padding: 0;
+  padding: 0 !important;
 
   .button-svg {
     margin-right: 0px;
-    fill: white;
   }
-  .button-text {
-    display: none;
-  }
-`;
-
-const StyledLink = styled(Link)`
-  min-height: 48px;
 `;
 
 const OpenContext = React.createContext({
@@ -56,9 +53,7 @@ const MobileHeader = () => {
   return (
     <Container ref={containerRef}>
       <OpenContext.Provider value={memoizedContext}>
-        <StyledLink to={"/"}>
-          <DappLogo />
-        </StyledLink>
+        <Logo />
         <NavBar />
         <StyledLightButton text="" Icon={HamburgerIcon} onClick={toggleIsOpen} />
       </OpenContext.Provider>

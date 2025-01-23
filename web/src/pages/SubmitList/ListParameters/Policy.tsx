@@ -10,6 +10,8 @@ import { getIpfsUrl } from "utils/getIpfsUrl";
 import { Link } from "react-router-dom";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
+import { getFileUploaderMsg } from "src/utils";
+import useIsDesktop from "hooks/useIsDesktop";
 
 const Container = styled.div`
   display: flex;
@@ -31,15 +33,21 @@ const StyledLabel = styled.label`
 
 const StyledFileUploader = styled(FileUploader)`
   width: 100%;
-  margin-bottom: ${responsiveSize(52, 32)};
+  margin-bottom: ${responsiveSize(150, 72)};
   path {
     fill: ${({ theme }) => theme.primaryBlue};
+  }
+  small {
+    white-space: pre-line;
+    text-align: start;
   }
 `;
 
 const Policy: React.FC = () => {
   const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
-  const { uploadFile } = useAtlasProvider();
+  const { uploadFile, roleRestrictions } = useAtlasProvider();
+  const isDesktop = useIsDesktop();
+
   const handleFileUpload = (file: File) => {
     setIsPolicyUploading(true);
     infoToast("Uploading to IPFS...");
@@ -73,7 +81,11 @@ const Policy: React.FC = () => {
         </Link>{" "}
         .
       </StyledLabel>
-      <StyledFileUploader callback={handleFileUpload} variant="info" msg="You can add the List Policy file in PDF." />
+      <StyledFileUploader
+        callback={handleFileUpload}
+        variant={isDesktop ? "info" : undefined}
+        msg={"You can add the List Policy file in PDF." + (getFileUploaderMsg(Roles.Policy, roleRestrictions) ?? "")}
+      />
 
       <NavigationButtons prevRoute="/submit-list/logo" nextRoute="/submit-list/deposit" />
     </Container>

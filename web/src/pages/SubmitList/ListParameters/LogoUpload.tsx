@@ -9,6 +9,8 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import ListPreview from "./ListPreview";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
+import { getFileUploaderMsg } from "src/utils";
+import useIsDesktop from "hooks/useIsDesktop";
 
 const Container = styled.div`
   display: flex;
@@ -26,16 +28,21 @@ const Container = styled.div`
 
 const StyledFileUploader = styled(FileUploader)`
   width: 100%;
-  margin-bottom: ${responsiveSize(52, 32)};
+  margin-bottom: ${responsiveSize(150, 72)};
   path {
     fill: ${({ theme }) => theme.primaryBlue};
+  }
+  small {
+    white-space: pre-line;
+    text-align: start;
   }
 `;
 
 const LogoUpload: React.FC = () => {
   const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
 
-  const { uploadFile } = useAtlasProvider();
+  const { uploadFile, roleRestrictions } = useAtlasProvider();
+  const isDesktop = useIsDesktop();
 
   const handleFileUpload = (file: File) => {
     setIsLogoUploading(true);
@@ -76,8 +83,11 @@ const LogoUpload: React.FC = () => {
       <Header text="Logo" />
       <StyledFileUploader
         callback={handleLoad}
-        variant="info"
-        msg="Upload a logo to represent your list. The logo should be a 1:1 aspect ratio image with transparent background, in SVG, or PNG."
+        variant={isDesktop ? "info" : undefined}
+        msg={
+          "Upload a logo to represent your list. The logo should be a 1:1 aspect ratio image with transparent background, in SVG, or PNG.\n" +
+          (getFileUploaderMsg(Roles.Logo, roleRestrictions) ?? "")
+        }
       />
       <ListPreview />
       <NavigationButtons prevRoute="/submit-list/description" nextRoute="/submit-list/policy" />

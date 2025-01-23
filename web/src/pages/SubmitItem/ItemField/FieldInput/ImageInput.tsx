@@ -6,12 +6,18 @@ import { responsiveSize } from "styles/responsiveSize";
 import { landscapeStyle } from "styles/landscapeStyle";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
+import { getFileUploaderMsg } from "src/utils";
+import useIsDesktop from "hooks/useIsDesktop";
 
 const StyledFileUploader = styled(FileUploader)`
   width: 84vw;
-  margin-bottom: ${responsiveSize(52, 32)};
+  margin-bottom: ${responsiveSize(150, 72)};
   path {
     fill: ${({ theme }) => theme.primaryBlue};
+  }
+  small {
+    white-space: pre-line;
+    text-align: start;
   }
   ${landscapeStyle(
     () => css`
@@ -21,7 +27,9 @@ const StyledFileUploader = styled(FileUploader)`
 `;
 
 const ImageInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
-  const { uploadFile } = useAtlasProvider();
+  const { uploadFile, roleRestrictions } = useAtlasProvider();
+  const isDesktop = useIsDesktop();
+
   const handleFileUpload = (file: File) => {
     infoToast("Uploading to IPFS...");
 
@@ -38,7 +46,13 @@ const ImageInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
       .finally();
   };
 
-  return <StyledFileUploader callback={handleFileUpload} variant="info" msg={fieldProp.description} />;
+  return (
+    <StyledFileUploader
+      callback={handleFileUpload}
+      variant={isDesktop ? "info" : undefined}
+      msg={`${fieldProp.description}\n${getFileUploaderMsg(Roles.CurateItemImage, roleRestrictions)}`}
+    />
+  );
 };
 
 export default ImageInput;

@@ -70,7 +70,7 @@
   "dependencies": {
     "@cyntler/react-doc-viewer": "^1.17.0",
     "@kleros/curate-v2-templates": "workspace:^",
-    "@kleros/kleros-app": "^2.0.1",
+    "@kleros/kleros-app": "^2.0.2",
     "@kleros/ui-components-library": "^2.20.0",
     "@sentry/react": "^7.93.0",
     "@sentry/tracing": "^7.93.0",

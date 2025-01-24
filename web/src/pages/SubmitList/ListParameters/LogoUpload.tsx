@@ -85,7 +85,7 @@ const LogoUpload: React.FC = () => {
         callback={handleLoad}
         variant={isDesktop ? "info" : undefined}
         msg={
-          "Upload a logo to represent your list. The logo should be a 1:1 aspect ratio image with transparent background, in SVG, or PNG.\n" +
+          "Upload a logo to represent your list. The logo should be a 1:1 aspect ratio image with transparent background.\n" +
           (getFileUploaderMsg(Roles.Logo, roleRestrictions) ?? "")
         }
       />

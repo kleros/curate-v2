@@ -84,7 +84,7 @@ const Policy: React.FC = () => {
       <StyledFileUploader
         callback={handleFileUpload}
         variant={isDesktop ? "info" : undefined}
-        msg={"You can add the List Policy file in PDF." + (getFileUploaderMsg(Roles.Policy, roleRestrictions) ?? "")}
+        msg={"You can add the List Policy file." + (getFileUploaderMsg(Roles.Policy, roleRestrictions) ?? "")}
       />
 
       <NavigationButtons prevRoute="/submit-list/logo" nextRoute="/submit-list/deposit" />

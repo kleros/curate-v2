@@ -111,8 +111,7 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
         callback={handleFileUpload}
         variant={isDesktop ? "info" : undefined}
         msg={
-          "Additionally, you can add an external file in PDF.\n" +
-          (getFileUploaderMsg(Roles.Evidence, roleRestrictions) ?? "")
+          "Additionally, you can add an external file.\n" + (getFileUploaderMsg(Roles.Evidence, roleRestrictions) ?? "")
         }
       />
     </Container>

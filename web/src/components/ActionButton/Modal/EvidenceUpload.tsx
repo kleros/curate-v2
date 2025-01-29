@@ -5,6 +5,8 @@ import LabeledInput from "components/LabeledInput";
 import { responsiveSize } from "styles/responsiveSize";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
+import { getFileUploaderMsg } from "src/utils";
+import useIsDesktop from "hooks/useIsDesktop";
 
 const Container = styled.div`
   width: 100%;
@@ -35,9 +37,13 @@ const StyledLabel = styled.label`
 
 const StyledFileUploader = styled(FileUploader)`
   width: 100%;
-  margin-bottom: ${responsiveSize(52, 32)};
+  margin-bottom: ${responsiveSize(150, 72)};
   path {
     fill: ${({ theme }) => theme.primaryBlue};
+  }
+  small {
+    white-space: pre-line;
+    text-align: start;
   }
 `;
 
@@ -57,7 +63,9 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [fileURI, setFileURI] = useState("");
-  const { uploadFile } = useAtlasProvider();
+  const { uploadFile, roleRestrictions } = useAtlasProvider();
+  const isDesktop = useIsDesktop();
+
   useEffect(() => {
     setEvidence({
       name: title,
@@ -101,8 +109,10 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
       </DescriptionContainer>
       <StyledFileUploader
         callback={handleFileUpload}
-        variant="info"
-        msg="Additionally, you can add an external file in PDF."
+        variant={isDesktop ? "info" : undefined}
+        msg={
+          "Additionally, you can add an external file.\n" + (getFileUploaderMsg(Roles.Evidence, roleRestrictions) ?? "")
+        }
       />
     </Container>
   );

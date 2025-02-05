@@ -5,7 +5,7 @@ import { registrationTemplate, removalTemplate, dataMappings } from "@kleros/cur
 // WARNING: The Devnet values are hardcoded!
 // It needs to be refactored like in the Escrow: https://github.com/kleros/escrow-v2/blob/master/contracts/scripts/setDisputeTemplate.ts
 
-task("setDisputeTemplate", "Sets the dispute template").setAction(async (args, hre) => {
+task("set-dispute-template", "Sets the dispute template").setAction(async (args, hre) => {
   const { ethers } = hre;
   const deployer = await ethers.getSigners().then((signers) => signers[0].getAddress());
 

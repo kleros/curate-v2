@@ -1,3 +1,6 @@
+// WARNING: The Devnet values are hardcoded,
+// It needs to be refactored like in the Escrow: https://github.com/kleros/escrow-v2/blob/master/contracts/scripts/setDisputeTemplate.ts
+
 const sharedTemplateProperties = `
   "policyURI": "{{{policyURI}}}",
   "frontendUrl": "https://curate-v2.kleros.builders/#/lists/item/{{itemID}}",

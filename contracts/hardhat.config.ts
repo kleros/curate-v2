@@ -10,6 +10,7 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import "hardhat-watcher";
 import "hardhat-docgen";
+require("./scripts/setDisputeTemplate");
 // import "hardhat-contract-sizer"; // prevents hardhat-deploy from finding chalk...
 // import "hardhat-tracer"; // prevents hardhat-deploy from finding chalk...
 

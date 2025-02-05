@@ -21,10 +21,12 @@ export const registrationTemplate = `{
   "question": "Does the {{itemName}} comply with the required criteria?",
   "answers": [
     {
+      "id":"0x1",
       "title": "Yes, Add It",
       "description": "Select this if you think that the {{itemName}} does comply with the required criteria and should be added."
     },
     {
+      "id":"0x2",
       "title": "No, Don't Add It",
       "description": "Select this if you think that the {{itemName}} does not comply with the required criteria and should not be added."
     }
@@ -39,10 +41,12 @@ export const removalTemplate = `{
   "question": "Does the {{itemName}} comply with the required criteria?",
   "answers": [
     {
+      "id":"0x1",
       "title": "Yes, Remove It",
       "description": "Select this if you think that the {{itemName}} does not comply with the required criteria and should be removed."
     },
     {
+      "id":"0x2",
       "title": "No, Don't Remove It",
       "description": "Select this if you think that the {{itemName}} does comply with the required criteria and should not be removed."
     }

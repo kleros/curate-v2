@@ -116,4 +116,9 @@ export const GlobalStyle = createGlobalStyle`
     --os-handle-bg-hover: ${({ theme }) => theme.secondaryPurple};
     --os-handle-bg-active: ${({ theme }) => theme.lavenderPurple};
   }
+
+  [class*="Toastify__toast-container"] {
+    top: unset;
+    padding-top: 20px !important;
+  }
 `;

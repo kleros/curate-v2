@@ -28,7 +28,7 @@ export const listMetadataSchema = z.object({
   itemNamePlural: z.string(),
   logoURI: z.string().optional(),
   policyURI: z.string().optional(),
-  isListsOfLists: z.string().optional(),
+  isListsOfLists: z.boolean().optional(),
   columns: curateItemSchema.shape.columns,
 });
 

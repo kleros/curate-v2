@@ -1,6 +1,6 @@
 {
   "name": "@kleros/curate-v2-subgraph",
-  "version": "2.0.0",
+  "version": "0.1.4",
   "license": "MIT",
   "scripts": {
     "update:arbitrum-sepolia-devnet": "./scripts/update.sh arbitrumSepoliaDevnet arbitrum-sepolia",
@@ -10,24 +10,26 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "test": "graph test",
-    "clean": "graph clean  && rm subgraph.yaml.bak.*",
+    "clean": "graph clean  && rm subgraph.yaml.bak.* && rm -rf build && rm -rf generated",
     "  ": "----------------------------------------------------------------------------------------",
     "create-local": "graph create --node http://localhost:8020/ kleros/curate-v2-local",
     "remove-local": "graph remove --node http://localhost:8020/ kleros/curate-v2-local",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 kleros/curate-v2-local --version-label v$(date +%s)",
     "rebuild-deploy-local": "yarn clean && yarn codegen && yarn build && yarn create-local && yarn deploy-local",
     "start-local-indexer": "docker compose -f ../services/graph-node/docker-compose.yml up -d && docker compose -f ../services/graph-node/docker-compose.yml logs -f",
-    "stop-local-indexer": "docker compose -f ../services/graph-node/docker-compose.yml down && rm -rf ../services/graph-node/data"
+    "stop-local-indexer": "docker compose -f ../services/graph-node/docker-compose.yml down && rm -rf ../services/graph-node/data",
+    "deploy:arbitrum-sepolia-devnet": "graph deploy curate-v2-devnet -l v$npm_package_version",
+    "deploy:arbitrum-sepolia": "graph deploy curate-v2-testnet -l v$npm_package_version"
   },
   "packageManager": "yarn@4.0.2+sha256.825003a0f561ad09a3b1ac4a3b3ea6207af2796d54f62a9420520915721f5186",
   "volta": {
-    "node": "20.11.0"
+    "node": "20.18.1"
   },
   "dependencies": {
     "@graphprotocol/graph-ts": "^0.33.0"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "0.68.5",
+    "@graphprotocol/graph-cli": "^0.95.0",
     "@kleros/curate-v2-eslint-config": "workspace:^",
     "@kleros/curate-v2-prettier-config": "workspace:^",
     "gluegun": "^5.1.2",

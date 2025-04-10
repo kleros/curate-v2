@@ -63,6 +63,7 @@ const RegistryDetails: React.FC = () => {
           latestRequestSubmissionTime,
         }}
         parentRegistryAddress={registryAddress}
+        metadata={registryDetails?.registry.metadata}
       />
       <Tabs />
       <Routes>

@@ -18,3 +18,13 @@ export const curateItemSchema = z.object({
 });
 
 export type CurateItem = z.infer<typeof curateItemSchema>;
+
+export const validateItem = (data: string) => {
+  try {
+    const parsedData = JSON.parse(data);
+
+    return curateItemSchema.safeParse(parsedData);
+  } catch {
+    return { success: false };
+  }
+};

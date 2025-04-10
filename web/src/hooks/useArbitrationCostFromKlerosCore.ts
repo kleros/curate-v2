@@ -32,8 +32,12 @@ export const useArbitrationCost = (arbitratorExtraData) => {
   });
 
   return {
-    arbitrationCost: data ?? null,
+    arbitrationCost: data ?? undefined,
     isLoading,
     isError,
+  } as {
+    arbitrationCost: bigint | undefined;
+    isLoading: boolean;
+    isError: boolean;
   };
 };

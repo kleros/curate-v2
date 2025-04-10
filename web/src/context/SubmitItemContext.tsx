@@ -46,7 +46,7 @@ export const SubmitItemProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const resetItemData = () => {
     setFields({ columns: [] });
-    setIsPolicyRead(initialSubmitItemContext.isPolicyRead);
+    setIsPolicyRead(false);
     setSubmissionDeposit(null);
   };
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { curateItemSchema } from "./CurateItem";
 
 /**
- * @description Curate Regisrty's metadata
+ * @description Curate Registry's metadata
  * @example 
  * {
   "title": "Random list",
@@ -33,3 +33,13 @@ export const listMetadataSchema = z.object({
 });
 
 export type ListMetadata = z.infer<typeof listMetadataSchema>;
+
+export const validateList = (data: string) => {
+  try {
+    const parsedData = JSON.parse(data);
+
+    return listMetadataSchema.safeParse(parsedData);
+  } catch {
+    return { success: false };
+  }
+};

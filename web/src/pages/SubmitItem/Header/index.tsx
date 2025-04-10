@@ -11,6 +11,7 @@ import { useSubmitItemContext } from "context/SubmitItemContext";
 import { formatUnitsWei, formatValue } from "utils/format";
 import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { useReadCurateV2GetArbitratorExtraData, useReadCurateV2SubmissionBaseDeposit } from "hooks/useContract";
+import { isUndefined } from "src/utils";
 
 const Container = styled.div`
   display: flex;
@@ -99,7 +100,7 @@ const Header: React.FC<IHeader> = ({}) => {
   const { arbitrationCost } = useArbitrationCost(arbitratorExtraData);
 
   useEffect(() => {
-    if (!deposit || !arbitrationCost) return;
+    if (isUndefined(deposit) || isUndefined(arbitrationCost)) return;
     setSubmissionDeposit(((arbitrationCost as bigint) + deposit).toString());
   }, [deposit, arbitrationCost]);
 

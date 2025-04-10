@@ -12,6 +12,8 @@ import FieldsDisplay from "./FieldsDisplay";
 import StatusDisplay from "../StatusDisplay";
 import { ItemDetailsQuery } from "src/graphql/graphql";
 import { Address } from "viem";
+import { validateItem } from "src/types/CurateItem";
+import { isUndefined } from "src/utils";
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -84,11 +86,23 @@ const AliasContainer = styled.div`
   align-items: center;
 `;
 
+const WarningContainer = styled.p`
+  width: 100%;
+  padding: 8px 32px;
+  margin: 0;
+  background-color: ${({ theme }) => theme.warningLight};
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.warning};
+  text-align: center;
+`;
+
 type ItemDetails = NonNullable<ItemDetailsQuery["item"]>;
 interface IItemInformationCard extends ItemDetails {
   className?: string;
   policyURI: string;
   registryAddress: Address;
+  isPreview?: boolean;
 }
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
@@ -101,11 +115,20 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   props,
   registryAddress,
   latestRequestSubmissionTime,
+  data,
+  isPreview = false,
 }) => {
+  const showWarning = isPreview || isUndefined(data) ? false : !validateItem(data).success;
+
   return (
     <StyledCard {...{ className }}>
+      {showWarning ? (
+        <WarningContainer>This item does not pass the validation checks. Please review carefully.</WarningContainer>
+      ) : null}
       <TopInfo>
-        <TopLeftInfo>{props ? <FieldsDisplay {...{ props }} /> : <Skeleton height={80} width={160} />}</TopLeftInfo>
+        <TopLeftInfo>
+          {props ? <FieldsDisplay {...{ props, registryAddress }} /> : <Skeleton height={80} width={160} />}
+        </TopLeftInfo>
         <TopRightInfo>
           <Copiable copiableContent={itemID ?? ""} info="Copy Item Id" iconPlacement="left">
             <StyledLabel>Item Id</StyledLabel>

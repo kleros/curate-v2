@@ -48,29 +48,29 @@ const FieldsDisplay: React.FC<IFieldsDisplay> = ({ props, registryAddress }) => 
       {imageFields.length || textFields.length ? (
         <FieldsContainer>
           {imageFields.map((field) => (
-            <ItemField {...field} detailed isUnrecognized={isUnrecognized(field)} />
+            <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
           {textFields.map((field) => (
-            <ItemField {...field} detailed isUnrecognized={isUnrecognized(field)} />
+            <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
         </FieldsContainer>
       ) : null}
       {displayField ? (
         <FieldsContainer>
           {addressFields.map((field) => (
-            <ItemField {...field} detailed isUnrecognized={isUnrecognized(field)} />
+            <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
           {linkFields.map((field) => (
-            <ItemField {...field} detailed isUnrecognized={isUnrecognized(field)} />
+            <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
           {fileFields.map((field) => (
-            <ItemField {...field} detailed isUnrecognized={isUnrecognized(field)} />
+            <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
         </FieldsContainer>
       ) : null}
       <FieldsContainer>
         {restOfFields.map((field) => (
-          <ItemField {...field} detailed isUnrecognized={isUnrecognized(field)} />
+          <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
         ))}
       </FieldsContainer>
     </>

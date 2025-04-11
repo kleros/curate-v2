@@ -27,7 +27,7 @@ const SubmitItemButton: React.FC = () => {
   const { data: userBalance, isLoading: isBalanceLoading } = useBalance({ address });
 
   const insufficientBalance = useMemo(() => {
-    if (!userBalance || !submissionDeposit) return true;
+    if (isUndefined(userBalance) || !submissionDeposit) return true;
     return userBalance.value < BigInt(submissionDeposit);
   }, [userBalance, submissionDeposit]);
 

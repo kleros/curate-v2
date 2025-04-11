@@ -1,4 +1,4 @@
-import { json, log } from "@graphprotocol/graph-ts";
+import { json, JSONValueKind, log } from "@graphprotocol/graph-ts";
 import { Item, ItemProp, MainCurate, Registry, User } from "../../generated/schema";
 import { Curate, NewItem } from "../../generated/templates/Curate/Curate";
 import { JSONValueToBool, JSONValueToMaybeString, ONE, ZERO, getStatus } from "../utils";
@@ -54,8 +54,16 @@ export function createItemFromEvent(event: NewItem): void {
   item.keywords = event.address.toHexString();
 
   let jsonObjValueAndSuccess = json.try_fromString(event.params._data);
-  if (!jsonObjValueAndSuccess.isOk) {
+
+  if (!jsonObjValueAndSuccess.isOk || jsonObjValueAndSuccess.isError) {
     log.error(`Error getting json object value for graphItemID {}`, [graphItemID]);
+    item.save();
+    registry.save();
+    return;
+  }
+
+  if (jsonObjValueAndSuccess.value.isNull() || jsonObjValueAndSuccess.value.kind !== JSONValueKind.OBJECT) {
+    log.error(`Encountered invalid parsed value for item data, graphItemID: {}`, [graphItemID]);
     item.save();
     registry.save();
     return;

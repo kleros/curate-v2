@@ -28,7 +28,7 @@ const ItemDisplay: React.FC<IItemDisplay> = ({}) => {
   return (
     <Container>
       <StyledP>Check how the item is displayed on the Item page:</StyledP>
-      <StyledItemInformationCard {...item} policyURI={listMetadata.policyURI ?? ""} />
+      <StyledItemInformationCard {...item} policyURI={listMetadata.policyURI ?? ""} isPreview />
     </Container>
   );
 };

@@ -39,6 +39,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
         status={Status.RegistrationRequested}
         id="1"
         disputed={false}
+        isPreview
       />
     </Container>
   );

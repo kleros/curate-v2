@@ -64,7 +64,7 @@ const SubmitListButton: React.FC = () => {
   const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
 
   const totalCostToSubmit = useMemo(() => {
-    if (!arbitrationCost || !submissionBaseDeposit) return;
+    if (isUndefined(arbitrationCost) || isUndefined(submissionBaseDeposit)) return;
 
     return (arbitrationCost as bigint) + submissionBaseDeposit;
   }, [arbitrationCost, submissionBaseDeposit]);
@@ -105,7 +105,7 @@ const SubmitListButton: React.FC = () => {
   // estimate gas cost
   useEffect(() => {
     const estimateTotalCost = async () => {
-      if (!config?.request || !totalCostToSubmit || !address || !publicClient) return;
+      if (!config?.request || isUndefined(totalCostToSubmit) || !address || isUndefined(publicClient)) return;
       setIsEstimatingCost(true);
       const price = await publicClient.getGasPrice();
       const gasRequiredToDeploy = await publicClient.estimateContractGas(config.request);
@@ -128,7 +128,7 @@ const SubmitListButton: React.FC = () => {
 
   // submit deployed list to Curate
   const submitList = (deployedAddress: Address) => {
-    if (!deployedAddress || !submitListToCurate || !totalCostToSubmit || !publicClient) {
+    if (!deployedAddress || !submitListToCurate || isUndefined(totalCostToSubmit) || !publicClient) {
       setProgress(ListProgress.Failed);
       return;
     }
@@ -171,7 +171,7 @@ const SubmitListButton: React.FC = () => {
       insufficientBalance ||
       isEstimatingCost ||
       isLoadingExtradata ||
-      !totalCostToSubmit ||
+      isUndefined(totalCostToSubmit) ||
       isConfigLoading ||
       isConfigError,
     [

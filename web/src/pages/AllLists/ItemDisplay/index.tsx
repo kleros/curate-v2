@@ -8,7 +8,7 @@ import { MAIN_CURATE_ADDRESS } from "src/consts";
 
 const ItemDisplay: React.FC = () => {
   const { itemId } = useParams();
-  const [, listAddress] = itemId?.split("@");
+  const [, listAddress] = itemId ? itemId?.split("@") : [undefined, undefined];
   const navigate = useNavigate();
 
   const { data: itemDetails } = useItemDetailsQuery(itemId);

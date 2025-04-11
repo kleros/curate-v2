@@ -41,6 +41,7 @@ const ListPageDisplay: React.FC = () => {
         disputed={false}
         logoURI={previewData.logoURI ?? DEFAULT_LIST_LOGO}
         policyURI="https://cdn.kleros.link/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
+        isPreview
       />
     </Container>
   );

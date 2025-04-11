@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { BigInt, json, log } from "@graphprotocol/graph-ts";
+import { BigInt, json, JSONValueKind, log } from "@graphprotocol/graph-ts";
 import { Item, Request, Registry, FieldProp } from "../generated/schema";
 
 import {
@@ -176,8 +176,15 @@ export function handleListMetadataSet(event: ListMetadataSet): void {
   registry.metadata = event.params._listMetadata;
 
   let jsonObjValueAndSuccess = json.try_fromString(event.params._listMetadata);
-  if (!jsonObjValueAndSuccess.isOk) {
+
+  if (!jsonObjValueAndSuccess.isOk || jsonObjValueAndSuccess.isError) {
     log.error(`Error getting json object value for registry metadata {}`, [registry.id]);
+    registry.save();
+    return;
+  }
+
+  if (jsonObjValueAndSuccess.value.isNull() || jsonObjValueAndSuccess.value.kind !== JSONValueKind.OBJECT) {
+    log.error(`Encountered invalid parsed value for registry metadata {}`, [registry.id]);
     registry.save();
     return;
   }
@@ -206,18 +213,21 @@ export function handleListMetadataSet(event: ListMetadataSet): void {
   let columns = columnsValue.toArray();
 
   for (let i = 0; i < columns.length; i++) {
+    let fieldPropId = registry.id + "-" + i.toString();
+
+    let fieldProp = FieldProp.load(fieldPropId);
+    if (!fieldProp) {
+      fieldProp = new FieldProp(fieldPropId);
+    }
+
     let col = columns[i];
     let colObj = col.toObject();
 
     let label = colObj.get("label");
 
-    let checkedLabel = label ? label.toString() : "missing-label".concat(i.toString());
-
     let description = colObj.get("description");
     let _type = colObj.get("type");
     let isIdentifier = colObj.get("isIdentifier");
-    let fieldPropId = registry.id + "@" + checkedLabel;
-    let fieldProp = new FieldProp(fieldPropId);
 
     fieldProp.position = BigInt.fromI32(i);
     fieldProp.type = JSONValueToMaybeString(_type);

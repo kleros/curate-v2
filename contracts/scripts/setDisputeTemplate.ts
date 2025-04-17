@@ -27,7 +27,7 @@ task("set-dispute-template", "Sets the dispute template").setAction(async (args,
   console.log(`Found ${events.length} NewList events:`);
   for (let i = 55; i < events.length; i++) {
     const event = events[i];
-    const curate = await ethers.getContractAt("CurateV2", event.args._address);
+    const curate = await ethers.getContractAtWithSignerAddress<CurateV2>("CurateV2", event.args._address, deployer);
     const governor = await curate.governor();
     console.log(
       `${i + 1}. List address: ${

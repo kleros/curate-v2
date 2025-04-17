@@ -105,7 +105,7 @@
     "react-use": "^17.4.3",
     "styled-components": "^5.3.11",
     "subgraph-status": "^1.2.4",
-    "viem": "^2.22.22",
+    "viem": "^2.27.2",
     "wagmi": "^2.14.10",
     "zod": "^3.24.2"
   }

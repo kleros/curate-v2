@@ -32,7 +32,7 @@
     "@graphprotocol/graph-cli": "^0.95.0",
     "@kleros/curate-v2-eslint-config": "workspace:^",
     "@kleros/curate-v2-prettier-config": "workspace:^",
-    "gluegun": "^5.1.2",
+    "gluegun": "^5.2.0",
     "matchstick-as": "0.6.0"
   },
   "dependenciesComments": {

@@ -266,7 +266,7 @@ export function handleRuling(event: Ruling): void {
 
 export function handleRequestChallenged(event: DisputeRequest): void {
   let curate = Curate.bind(event.address);
-  let itemID = curate.arbitratorDisputeIDToItemID(event.params._arbitrator, event.params._arbitrableDisputeID);
+  let itemID = curate.arbitratorDisputeIDToItemID(event.params._arbitrator, event.params._arbitratorDisputeID);
   let graphItemID = itemID.toHexString() + "@" + event.address.toHexString();
   let item = Item.load(graphItemID);
   if (!item) {
@@ -294,7 +294,7 @@ export function handleRequestChallenged(event: DisputeRequest): void {
   request.disputed = true;
   request.challenger = ensureUser(event.transaction.from.toHexString()).id;
   request.challengeTime = event.block.timestamp;
-  request.disputeID = event.params._arbitrableDisputeID;
+  request.disputeID = event.params._arbitratorDisputeID;
 
   request.save();
   item.save();

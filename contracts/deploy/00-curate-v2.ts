@@ -1,9 +1,9 @@
-import { ethers } from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HomeChains, isSkipped } from "./utils";
 import { CurateFactory, CurateV2 } from "../typechain-types";
 import { registrationTemplate, removalTemplate, dataMappings } from "@kleros/curate-v2-templates";
+import { DeploymentName, getContractsEthers } from "@kleros/kleros-v2-contracts";
 
 const listMetadata = `{
   "title": "Kleros Curate",
@@ -27,8 +27,14 @@ const listMetadata = `{
 const extraData =
   "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
 
+const NETWORK_TO_DEPLOYMENT: Record<string, DeploymentName> = {
+  arbitrumSepoliaDevnet: "devnet",
+  arbitrumSepolia: "testnet",
+  arbitrum: "mainnetNeo",
+} as const;
+
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
-  const { deployments, getNamedAccounts, getChainId } = hre;
+  const { deployments, getNamedAccounts, getChainId, ethers } = hre;
   const { deploy } = deployments;
 
   // fallback to hardhat node signers on local network
@@ -36,9 +42,15 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const chainId = Number(await getChainId());
   console.log("deploying to %s with deployer %s", HomeChains[chainId], deployer);
 
-  const klerosCore = await deployments.get("KlerosCore");
-  const evidenceModule = await deployments.get("EvidenceModule");
-  const disputeTemplateRegistry = await deployments.get("DisputeTemplateRegistry");
+  const networkName = deployments.getNetworkName();
+  const deploymentName = NETWORK_TO_DEPLOYMENT[networkName];
+
+  if (!deploymentName)
+    throw new Error(
+      `Unsupported network: ${networkName}. Supported networks: ${Object.keys(NETWORK_TO_DEPLOYMENT).join(", ")}`
+    );
+
+  const { klerosCore, evidence, disputeTemplateRegistry } = await getContractsEthers(ethers.provider, deploymentName);
   const fee = ethers.parseEther("0.00001");
   const timeout = 600; // 10 minutes
 
@@ -52,12 +64,12 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const curate = (await ethers.getContract("CurateV2")) as CurateV2;
   await curate.initialize(
     deployer,
-    klerosCore.address,
+    klerosCore.target,
     extraData,
-    evidenceModule.address,
+    evidence.target,
     ethers.ZeroAddress, // _connectedTCR
     {
-      templateRegistry: disputeTemplateRegistry.address,
+      templateRegistry: disputeTemplateRegistry.target,
       registrationTemplateParameters: [registrationTemplate, dataMappings],
       removalTemplateParameters: [removalTemplate, dataMappings],
     },
@@ -76,12 +88,12 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const curateFactory = (await ethers.getContract("CurateFactory")) as CurateFactory;
   await curateFactory.deploy(
     deployer,
-    klerosCore.address,
+    klerosCore.target,
     extraData,
-    evidenceModule.address,
+    evidence.target,
     ethers.ZeroAddress, // _connectedTCR
     {
-      templateRegistry: disputeTemplateRegistry.address,
+      templateRegistry: disputeTemplateRegistry.target,
       registrationTemplateParameters: [registrationTemplate, ""],
       removalTemplateParameters: [removalTemplate, ""],
     },

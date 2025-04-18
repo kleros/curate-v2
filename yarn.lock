@@ -5477,7 +5477,7 @@ __metadata:
     "@kleros/curate-v2-templates": "workspace:^"
     "@kleros/curate-v2-tsconfig": "workspace:^"
     "@kleros/kleros-app": "npm:^2.0.2"
-    "@kleros/kleros-v2-contracts": "npm:^0.3.2"
+    "@kleros/kleros-v2-contracts": "npm:^0.9.2"
     "@kleros/ui-components-library": "npm:^2.20.0"
     "@reown/appkit": "npm:^1.6.6"
     "@reown/appkit-adapter-wagmi": "npm:^1.6.6"
@@ -5553,15 +5553,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@kleros/kleros-v2-contracts@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "@kleros/kleros-v2-contracts@npm:0.3.2"
-  dependencies:
-    "@kleros/vea-contracts": "npm:^0.3.2"
-  checksum: b97f3f3daca05b598217790d596b9cdbeace246f4dd1ee21b2b4d50a12624824859d8195eadc4e4514509667ea65da3723cb20bfed7ba6037d22fac6a4e306b2
-  languageName: node
-  linkType: hard
-
 "@kleros/kleros-v2-contracts@npm:^0.9.2":
   version: 0.9.2
   resolution: "@kleros/kleros-v2-contracts@npm:0.9.2"
@@ -5594,15 +5585,6 @@ __metadata:
     react-is: ^18.0.0
     styled-components: ^5.3.3
   checksum: c0e08f0e71e8b09ebd659477e62d4586f5159383d00c81524ae00088a2b4181c0ef5449adced094dacb8b1f830efab4ccd4088d5bfb2d4dae4ed38fc93344542
-  languageName: node
-  linkType: hard
-
-"@kleros/vea-contracts@npm:^0.3.2":
-  version: 0.3.2
-  resolution: "@kleros/vea-contracts@npm:0.3.2"
-  dependencies:
-    "@openzeppelin/contracts": "npm:^4.8.3"
-  checksum: c91655c100f6623e230e5b7c1cb4308e9e382edfac5a63d2147a4a4ca83569418ca5f3e32a237a97c9668363cc2ce5e8a7d7133c9db7007e459a44e72ca37a2d
   languageName: node
   linkType: hard
 
@@ -6776,13 +6758,6 @@ __metadata:
   version: 4.9.3
   resolution: "@openzeppelin/contracts@npm:4.9.3"
   checksum: ce0a16a56a39b62d72370ac702bce1917096492442ff05de88521beda2c3f3935b93ee2b9a184614dd543a6181f2f0be10243f5a629be87aab284ade68c18320
-  languageName: node
-  linkType: hard
-
-"@openzeppelin/contracts@npm:^4.8.3":
-  version: 4.9.5
-  resolution: "@openzeppelin/contracts@npm:4.9.5"
-  checksum: f221d91a7dd96f9187aa832f8a160d673feb2904711bd210fab56ccfd8b8351b8150b4f0bd247701f7d4adddceba83943c049c6da11d126e07164b9abff767e0
   languageName: node
   linkType: hard
 

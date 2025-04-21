@@ -8,7 +8,6 @@ import styled from "styled-components";
 import CheckCircle from "svgs/icons/check-circle-outline.svg";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
-import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { isUndefined } from "utils/index";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { formatUnitsWei } from "utils/format";
@@ -26,7 +25,12 @@ import {
   useReadCurateV2SubmissionBaseDeposit,
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
-import { curateV2Abi, useSimulateCurateFactoryDeploy, useWriteCurateFactoryDeploy } from "hooks/contracts/generated";
+import {
+  curateV2Abi,
+  useReadKlerosCoreArbitrationCost,
+  useSimulateCurateFactoryDeploy,
+  useWriteCurateFactoryDeploy,
+} from "hooks/contracts/generated";
 import { ErrorButtonMessage } from "components/ActionButton/Modal/Buttons/ErrorButtonMessage";
 
 const StyledCheckCircle = styled(CheckCircle)`
@@ -61,7 +65,13 @@ const SubmitListButton: React.FC = () => {
   const { data: submissionBaseDeposit } = useReadCurateV2SubmissionBaseDeposit({
     address: MAIN_CURATE_ADDRESS as `0x${string}`,
   });
-  const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
+
+  const { data: arbitrationCost, isLoading: isLoadingArbCost } = useReadKlerosCoreArbitrationCost({
+    query: {
+      enabled: !isUndefined(arbitratorExtraData),
+    },
+    args: [arbitratorExtraData!],
+  });
 
   const totalCostToSubmit = useMemo(() => {
     if (isUndefined(arbitrationCost) || isUndefined(submissionBaseDeposit)) return;

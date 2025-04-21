@@ -4,7 +4,6 @@ import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
 import Info from "./Info";
-import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { IBaseModal } from ".";
@@ -18,6 +17,7 @@ import {
   useSimulateCurateV2ChallengeRequest,
   useWriteCurateV2ChallengeRequest,
 } from "hooks/useContract";
+import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -66,7 +66,12 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
       address: registryAddress,
     });
 
-  const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
+  const { data: arbitrationCost, isLoading: isLoadingArbCost } = useReadKlerosCoreArbitrationCost({
+    query: {
+      enabled: !isUndefined(arbitratorExtraData),
+    },
+    args: [arbitratorExtraData!],
+  });
 
   const depositRequired = useMemo(() => {
     if (!arbitrationCost || !submissionChallengeDeposit || !removalChallengeDeposit) return 0n;

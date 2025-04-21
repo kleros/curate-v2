@@ -6,7 +6,7 @@ import DepositRequired from "./DepositRequired";
 import Info from "./Info";
 import { IBaseModal } from ".";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
-import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
+
 import { wrapWithToast } from "utils/wrapWithToast";
 import { useItemDetailsQuery } from "hooks/queries/useItemDetailsQuery";
 import Modal from "components/Modal";
@@ -16,6 +16,8 @@ import {
   useSimulateCurateV2AddItem,
   useWriteCurateV2AddItem,
 } from "hooks/useContract";
+import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
+import { isUndefined } from "src/utils";
 
 const ReStyledModal = styled(Modal)`
   gap: 32px;
@@ -52,7 +54,12 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
     address: registryAddress,
   });
 
-  const { arbitrationCost, isLoading: isLoadingArbCost } = useArbitrationCost(arbitratorExtraData);
+  const { data: arbitrationCost, isLoading: isLoadingArbCost } = useReadKlerosCoreArbitrationCost({
+    query: {
+      enabled: !isUndefined(arbitratorExtraData),
+    },
+    args: [arbitratorExtraData!],
+  });
 
   const depositRequired = useMemo(() => {
     if (!arbitrationCost || !removalDeposit) return 0n;

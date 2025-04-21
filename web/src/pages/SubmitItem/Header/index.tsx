@@ -9,9 +9,10 @@ import Skeleton from "react-loading-skeleton";
 import { useParams } from "react-router-dom";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { formatUnitsWei, formatValue } from "utils/format";
-import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
+
 import { useReadCurateV2GetArbitratorExtraData, useReadCurateV2SubmissionBaseDeposit } from "hooks/useContract";
 import { isUndefined } from "src/utils";
+import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
 
 const Container = styled.div`
   display: flex;
@@ -97,7 +98,12 @@ const Header: React.FC<IHeader> = ({}) => {
     address: listAddress as `0x${string}`,
   });
 
-  const { arbitrationCost } = useArbitrationCost(arbitratorExtraData);
+  const { data: arbitrationCost } = useReadKlerosCoreArbitrationCost({
+    query: {
+      enabled: !isUndefined(arbitratorExtraData),
+    },
+    args: [arbitratorExtraData!],
+  });
 
   useEffect(() => {
     if (isUndefined(deposit) || isUndefined(arbitrationCost)) return;

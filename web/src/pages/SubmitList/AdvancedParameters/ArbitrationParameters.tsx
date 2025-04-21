@@ -9,10 +9,11 @@ import Skeleton from "react-loading-skeleton";
 import ETH from "svgs/icons/eth-round.svg";
 import LightButton from "components/LightButton";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { useArbitrationCost } from "hooks/useArbitrationCostFromKlerosCore";
+
 import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
 import { formatEther, isAddress } from "viem";
 import { KLEROS_ARBITRATOR, KLEROS_GOVERNOR } from "consts/arbitration";
+import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
 
 const Container = styled.div`
   display: flex;
@@ -79,9 +80,9 @@ const AbritrationParameters: React.FC = () => {
     [listData.governor]
   );
 
-  const { arbitrationCost } = useArbitrationCost(
-    prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors)
-  );
+  const { data: arbitrationCost } = useReadKlerosCoreArbitrationCost({
+    args: [prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors)],
+  });
 
   useEffect(
     () => setListData({ ...listData, arbitrationCost: formatEther((arbitrationCost as bigint) ?? "") }),

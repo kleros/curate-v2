@@ -85,7 +85,7 @@ export const constructItemWithMockValues = (data: IListMetadata): ItemDetailsFra
     status: Status.RegistrationRequested,
     disputed: false,
     registerer: {
-      id: address as string,
+      id: address ?? (getMockValueForType("address") as string),
     },
     props,
   };

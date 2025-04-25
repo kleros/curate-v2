@@ -6,6 +6,7 @@ import { TEMPLATE_REGISTRY } from "consts/arbitration";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
 import { arbitrum } from "viem/chains";
 import { registrationTemplate, removalTemplate, dataMappings } from "@kleros/curate-v2-templates";
+import { useAccount } from "wagmi";
 
 export const constructListParams = (listData: IListData, listMetadata: IListMetadata) => {
   const baseTemplate = { ...listData } as IList;
@@ -73,6 +74,7 @@ export const retrieveSubmittedListId = (eventLog: Log) =>
   }).args._itemID;
 
 export const constructItemWithMockValues = (data: IListMetadata): ItemDetailsFragment => {
+  const { address } = useAccount();
   const props: ListField & { value: ReturnType<typeof getMockValueForType> }[] = [];
   for (const column of data.columns) {
     props.push({ ...column, value: getMockValueForType(column.type) });
@@ -83,7 +85,7 @@ export const constructItemWithMockValues = (data: IListMetadata): ItemDetailsFra
     status: Status.RegistrationRequested,
     disputed: false,
     registerer: {
-      id: getMockValueForType("address") as string,
+      id: address ?? (getMockValueForType("address") as string),
     },
     props,
   };

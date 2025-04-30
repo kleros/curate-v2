@@ -12,28 +12,25 @@ import {
 
 dotenv.config();
 
+type ContractConfigWithoutChainId = {
+  address: `0x${string}`;
+  abi: any[];
+};
+
 type ArbitratorContracts = {
   default: {
     contracts: {
-      KlerosCore: {
-        address: `0x${string}`;
-        abi: any[];
-      };
-      SortitionModule: {
-        address: `0x${string}`;
-        abi: any[];
-      };
-      EvidenceModule: {
-        address: `0x${string}`;
-        abi: any[];
-      };
-      DisputeTemplateRegistry: {
-        address: `0x${string}`;
-        abi: any[];
-      };
+      KlerosCore: ContractConfigWithoutChainId;
+      KlerosCoreNeo: ContractConfigWithoutChainId;
+      SortitionModule: ContractConfigWithoutChainId;
+      SortitionModuleNeo: ContractConfigWithoutChainId;
+      EvidenceModule: ContractConfigWithoutChainId;
+      DisputeTemplateRegistry: ContractConfigWithoutChainId;
     };
   };
 };
+
+type ContractNameSuffix = "" | "Neo";
 
 const addArbitratorContract = ({
   results,
@@ -44,7 +41,7 @@ const addArbitratorContract = ({
   results: ContractConfig[];
   chain: Chain;
   name: string;
-  contract: { address: `0x${string}`; abi: any[] };
+  contract: ContractConfigWithoutChainId;
 }) => {
   results.push({
     name,
@@ -58,6 +55,7 @@ const addArbitratorContract = ({
 const readArtifacts = async (
   viemChainName: string,
   hardhatChainName: string,
+  contractNameSuffix: ContractNameSuffix,
   arbitratorContracts: ArbitratorContracts
 ) => {
   const chains = await import("wagmi/chains");
@@ -86,8 +84,14 @@ const readArtifacts = async (
     }
   }
 
-  const { KlerosCore, SortitionModule, EvidenceModule, DisputeTemplateRegistry } =
-    arbitratorContracts.default.contracts;
+  const coreContractName = `KlerosCore${contractNameSuffix}` as keyof typeof arbitratorContracts.default.contracts;
+  const { [coreContractName]: KlerosCore } = arbitratorContracts.default.contracts;
+
+  const sortitionModuleContractName =
+    `SortitionModule${contractNameSuffix}` as keyof typeof arbitratorContracts.default.contracts;
+  const { [sortitionModuleContractName]: SortitionModule } = arbitratorContracts.default.contracts;
+
+  const { EvidenceModule, DisputeTemplateRegistry } = arbitratorContracts.default.contracts;
 
   const arbitratorContractConfigs = [
     { name: "KlerosCore", contract: KlerosCore },
@@ -105,28 +109,32 @@ const getConfig = async (): Promise<Config> => {
   const deployment = process.env.REACT_APP_DEPLOYMENT ?? "devnet";
   let viemNetwork: string;
   let hardhatNetwork: string;
+  let contractNameSuffix: ContractNameSuffix;
   let arbitratorContracts;
   switch (deployment) {
     case "devnet":
       viemNetwork = "arbitrumSepolia";
       hardhatNetwork = "arbitrumSepoliaDevnet";
+      contractNameSuffix = "";
       arbitratorContracts = arbitratorDevnet;
       break;
     case "testnet":
       viemNetwork = "arbitrumSepolia";
       hardhatNetwork = "arbitrumSepolia";
+      contractNameSuffix = "";
       arbitratorContracts = arbitratorTestnet;
       break;
     case "mainnet":
       viemNetwork = "arbitrum";
       hardhatNetwork = "arbitrum";
+      contractNameSuffix = "Neo";
       arbitratorContracts = arbitratorMainnet;
       break;
     default:
       throw new Error(`Unknown deployment ${deployment}`);
   }
 
-  const deploymentContracts = await readArtifacts(viemNetwork, hardhatNetwork, arbitratorContracts);
+  const deploymentContracts = await readArtifacts(viemNetwork, hardhatNetwork, contractNameSuffix, arbitratorContracts);
 
   return {
     out: "src/hooks/contracts/generated.ts",

@@ -86,6 +86,6 @@
   },
   "dependencies": {
     "@kleros/curate-v2-templates": "workspace:^",
-    "@kleros/kleros-v2-contracts": "^0.9.3"
+    "@kleros/kleros-v2-contracts": "^0.10.0"
   }
 }

@@ -1,26 +1,36 @@
 import { task } from "hardhat/config";
 import { CurateFactory, CurateV2 } from "../typechain-types";
-import { registrationTemplate, removalTemplate, dataMappings } from "@kleros/curate-v2-templates";
+import { DeploymentName, getContractsEthers } from "@kleros/kleros-v2-contracts";
 
-// WARNING: The Devnet values are hardcoded!
-// It needs to be refactored like in the Escrow: https://github.com/kleros/escrow-v2/blob/master/contracts/scripts/setDisputeTemplate.ts
+const NETWORK_TO_DEPLOYMENT: Record<string, DeploymentName> = {
+  arbitrumSepoliaDevnet: "devnet",
+  arbitrumSepolia: "testnet",
+  arbitrum: "mainnetNeo",
+} as const;
 
-task("set-dispute-template", "Sets the dispute template").setAction(async (args, hre) => {
-  const { ethers } = hre;
+task("change-arbitrator", "Changes the arbitrator").setAction(async (args, hre) => {
+  const { ethers, deployments } = hre;
   const deployer = await ethers.getSigners().then((signers) => signers[0].getAddress());
+  const networkName = deployments.getNetworkName();
+  const deploymentName = NETWORK_TO_DEPLOYMENT[networkName];
+  const { klerosCore, evidence } = await getContractsEthers(ethers.provider, deploymentName);
 
-  const changeTemplates = async (curate: CurateV2) => {
-    console.log("Changing registration template for", curate.target);
-    await curate.changeRegistrationDisputeTemplate(registrationTemplate, dataMappings).then((tx) => tx.wait());
-
-    console.log("Changing removal template for", curate.target);
-    await curate.changeRemovalDisputeTemplate(removalTemplate, dataMappings).then((tx) => tx.wait());
+  const changeArbitrator = async (curate: CurateV2) => {
+    const extraData = await curate.getArbitratorExtraData();
+    console.log("Changing the arbitrator for", curate.target);
+    console.log("klerosCore.target", klerosCore.target);
+    console.log("extraData", extraData);
+    console.log("evidence.target", evidence.target);
+    const tx = await curate
+      .changeArbitrationParams(klerosCore.target, extraData, evidence.target)
+      .then((tx) => tx.wait());
+    console.log("Arbitration params changed", tx?.hash);
   };
 
   // Update the master copy of CurateV2
   console.log("Updating the CurateV2 master copy...");
   const curateMaster = await ethers.getContract<CurateV2>("CurateV2");
-  await changeTemplates(curateMaster);
+  await changeArbitrator(curateMaster);
 
   // Update every curated lists created by the factory
   const factory = await ethers.getContract<CurateFactory>("CurateFactory");
@@ -41,6 +51,8 @@ task("set-dispute-template", "Sets the dispute template").setAction(async (args,
       continue;
     }
 
-    await changeTemplates(curate);
+    await changeArbitrator(curate);
   }
+
+  hre.run("set-dispute-template");
 });

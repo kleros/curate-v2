@@ -7,7 +7,7 @@ const sharedTemplateProperties = `
   "arbitrableChainID": "421614",
   "arbitrableAddress": "{{arbitrableAddress}}",
   "arbitratorChainID": "421614",
-  "arbitratorAddress": "0x4838e31E0ea315232c431598110FE677cAF2D6E6",
+  "arbitratorAddress": "0x1Bd44c4a4511DbFa7DC1d5BC201635596E7200f9",
   "metadata": {
     "itemName": "{{itemName}}",
     "itemDescription": "{{itemDescription}}",

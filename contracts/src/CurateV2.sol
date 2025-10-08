@@ -69,7 +69,6 @@ contract CurateV2 is IArbitrableV2 {
     struct ArbitrationParams {
         IArbitratorV2 arbitrator; // The arbitrator trusted to solve disputes for this request.
         bytes arbitratorExtraData; // The extra data for the trusted arbitrator of this request.
-        EvidenceModule evidenceModule; // The evidence module for the arbitrator.
     }
 
     struct TemplateRegistryParams {
@@ -132,7 +131,14 @@ contract CurateV2 is IArbitrableV2 {
     /// @dev Emitted when someone submits a request.
     /// @param _itemID The ID of the affected item.
     /// @param _requestID Unique dispute identifier within this contract.
-    event RequestSubmitted(bytes32 indexed _itemID, uint256 _requestID);
+    /// @param _evidence Stringified evidence object, example: '{"name" : "Justification", "description" : "Description", "fileURI" : "/ipfs/QmWQV5ZFFhEJiW8Lm7ay2zLxC2XS4wx1b2W7FfdrLMyQQc"}'.
+    event RequestSubmitted(bytes32 indexed _itemID, uint256 _requestID, string _evidence);
+
+    /// @dev Emitted when someone challenges a request.
+    /// @param _itemID The ID of the affected item.
+    /// @param _requestID Unique dispute identifier within this contract.
+    /// @param _evidence Stringified evidence object, example: '{"name" : "Justification", "description" : "Description", "fileURI" : "/ipfs/QmWQV5ZFFhEJiW8Lm7ay2zLxC2XS4wx1b2W7FfdrLMyQQc"}'.
+    event RequestChallenged(bytes32 indexed _itemID, uint256 _requestID, string _evidence);
 
     /// @dev Emitted when the address of the connected Curate contract is set. The Curate is an instance of the Curate contract where each item is the address of a Curate contract related to this one.
     /// @param _connectedList The address of the connected Curate.
@@ -200,11 +206,7 @@ contract CurateV2 is IArbitrableV2 {
         );
 
         arbitrationParamsChanges.push(
-            ArbitrationParams({
-                arbitrator: _arbitrator,
-                arbitratorExtraData: _arbitratorExtraData,
-                evidenceModule: _evidenceModule
-            })
+            ArbitrationParams({arbitrator: _arbitrator, arbitratorExtraData: _arbitratorExtraData})
         );
 
         if (_connectedList != address(0)) {
@@ -313,11 +315,7 @@ contract CurateV2 is IArbitrableV2 {
         EvidenceModule _evidenceModule
     ) external onlyGovernor {
         arbitrationParamsChanges.push(
-            ArbitrationParams({
-                arbitrator: _arbitrator,
-                arbitratorExtraData: _arbitratorExtraData,
-                evidenceModule: _evidenceModule
-            })
+            ArbitrationParams({arbitrator: _arbitrator, arbitratorExtraData: _arbitratorExtraData})
         );
     }
 
@@ -383,7 +381,7 @@ contract CurateV2 is IArbitrableV2 {
         request.arbitrationParamsIndex = uint24(arbitrationParamsIndex);
         request.requester = payable(msg.sender);
 
-        emit RequestSubmitted(itemID, getRequestID(itemID, item.requestCount - 1));
+        emit RequestSubmitted(itemID, getRequestID(itemID, item.requestCount - 1), "");
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);
@@ -416,12 +414,7 @@ contract CurateV2 is IArbitrableV2 {
         request.requestType = RequestType.Clearing;
 
         uint256 requestID = getRequestID(_itemID, item.requestCount - 1);
-        emit RequestSubmitted(_itemID, requestID);
-
-        // Emit evidence if it was provided.
-        if (bytes(_evidence).length > 0) {
-            arbitrationParams.evidenceModule.submitEvidence(requestID, _evidence); // TODO: add a msg.sender parameter to submitEvidence.
-        }
+        emit RequestSubmitted(_itemID, requestID, _evidence);
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);
@@ -472,15 +465,12 @@ contract CurateV2 is IArbitrableV2 {
         arbitratorDisputeIDToItemID[address(arbitrator)][disputeData.disputeID] = _itemID;
 
         uint256 requestID = getRequestID(_itemID, lastRequestIndex);
+        emit RequestChallenged(_itemID, requestID, _evidence);
+
         uint256 templateId = request.requestType == RequestType.Registration
             ? templateIdRegistration
             : templateIdRemoval;
         emit DisputeRequest(arbitrator, disputeData.disputeID, requestID, templateId, "");
-
-        // Emit evidence if it was provided.
-        if (bytes(_evidence).length > 0) {
-            arbitrationParams.evidenceModule.submitEvidence(requestID, _evidence); // TODO: add a msg.sender parameter to submitEvidence.
-        }
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);

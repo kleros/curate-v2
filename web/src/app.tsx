@@ -1,12 +1,13 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import { SentryRoutes } from "./utils/sentry";
+import "./global.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
+import ThemeProvider from "context/ThemeProvider";
 import Web3Provider from "context/Web3Provider";
 import IsListViewProvider from "context/IsListViewProvider";
 import QueryClientProvider from "context/QueryClientProvider";
-import StyledComponentsProvider from "context/StyledComponentsProvider";
 import Layout from "layout/index";
 import Home from "./pages/Home";
 import AllLists from "./pages/AllLists";
@@ -22,7 +23,7 @@ import Settings from "./pages/Settings";
 
 const App: React.FC = () => {
   return (
-    <StyledComponentsProvider>
+    <ThemeProvider>
       <Web3Provider>
         <GraphqlBatcherProvider>
           <QueryClientProvider>
@@ -55,7 +56,7 @@ const App: React.FC = () => {
           </QueryClientProvider>
         </GraphqlBatcherProvider>
       </Web3Provider>
-    </StyledComponentsProvider>
+    </ThemeProvider>
   );
 };
 

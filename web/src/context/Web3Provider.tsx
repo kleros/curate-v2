@@ -7,8 +7,6 @@ import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { ALL_CHAINS, DEFAULT_CHAIN } from "consts/chains";
 import { isProductionDeployment } from "consts/index";
 
-import { lightTheme } from "styles/themes";
-
 const alchemyApiKey = import.meta.env.ALCHEMY_API_KEY ?? "";
 const isProduction = isProductionDeployment();
 
@@ -61,7 +59,7 @@ createAppKit({
   defaultNetwork: isProduction ? arbitrum : arbitrumSepolia,
   projectId,
   themeVariables: {
-    "--w3m-color-mix": lightTheme.primaryPurple,
+    "--w3m-color-mix": "#4D00B4",
     "--w3m-color-mix-strength": 20,
     // overlay portal is at 9999
     "--w3m-z-index": 10000,

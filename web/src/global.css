@@ -3,7 +3,10 @@
 
 @theme {
   --color-white: #ffffff;
+  --color-white-75: #ffffffbf;
+  --color-white-73: #ffffffba;
   --color-black: #000000;
+  --color-light-blue-65: #2a1260a6;
   --color-light-grey: #f0f0f0;
   --color-dark-purple: #220050;
   --color-violet-purple: #6a1dcd;
@@ -13,6 +16,7 @@
   --color-white-low-opacity-subtle: #ffffff0d;
   --color-white-low-opacity-strong: #ffffff26;
   --color-black-low-opacity: #00000080;
+  --color-primary-text-73: color-mix(in srgb, var(--klerosUIComponentsPrimaryText) 73%, transparent);
   --color-skeleton-bg: #ebebeb;
   --color-skeleton-highlight: #f5f5f5;
   --breakpoint-landscape-900: 900px;

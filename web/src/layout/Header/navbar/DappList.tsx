@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import styled, { css } from "styled-components";
 
 import { useClickAway } from "react-use";
 
@@ -11,65 +10,9 @@ import Court from "svgs/icons/kleros.svg";
 import POH from "svgs/icons/poh-image.png";
 import Vea from "svgs/icons/vea.svg";
 
-import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 
 import Product from "./Product";
-
-const Container = styled.div`
-  display: flex;
-  position: absolute;
-  max-height: 340px;
-  top: 5%;
-  left: 50%;
-  transform: translate(-50%);
-  z-index: 1;
-  flex-direction: column;
-  align-items: center;
-
-  width: 86vw;
-  max-width: 480px;
-  border-radius: 3px;
-  border: 1px solid ${({ theme }) => theme.stroke};
-  background-color: ${({ theme }) => theme.whiteBackground};
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.06);
-
-  svg {
-    visibility: visible;
-  }
-
-  ${landscapeStyle(
-    () => css`
-      margin-top: 64px;
-      top: 0;
-      left: 0;
-      right: auto;
-      transform: none;
-      width: ${responsiveSize(300, 480)};
-      max-height: 80vh;
-    `
-  )}
-`;
-
-const Header = styled.h1`
-  padding-top: 24px;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 32.68px;
-`;
-
-const ItemsDiv = styled.div`
-  display: grid;
-  overflow-y: auto;
-  padding: 4px ${responsiveSize(8, 24)} 16px;
-  row-gap: 8px;
-  column-gap: 2px;
-  justify-items: center;
-  max-width: 480px;
-  min-width: 300px;
-  width: ${responsiveSize(300, 480)};
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-`;
 
 const ITEMS = [
   {
@@ -143,14 +86,30 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
   useClickAway(containerRef, () => toggleIsDappListOpen());
 
   return (
-    <Container ref={containerRef}>
-      <Header>Kleros Solutions</Header>
-      <ItemsDiv>
+    <div
+      ref={containerRef}
+      className={
+        "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 w-[86vw] max-w-[480px] border border-klerosUIComponentsStroke rounded-[3px] bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]" +
+        "[&_svg]:visible" +
+        "landscape-900:mt-16 landscape-900:top-0 landscape-900:left-0 landscape-900:right-auto landscape-900:transform-none landscape-900:max-h-[80vh]" +
+        `landscape-900:w-[${responsiveSize(300, 480)}]`
+      }
+    >
+      <h1 className="pt-6 text-2xl font-semibold leading-8">Kleros Solutions</h1>
+      <div
+        className={`grid overflow-y-auto p-[4px_${responsiveSize(
+          8,
+          24
+        )}_16px] gap-y-2 gap-x-0.5 justify-items-center max-w-[480px] min-w-[300px] w-[${responsiveSize(
+          300,
+          480
+        )}] grid-cols-[repeat(auto-fit,minmax(100px,1fr))]`}
+      >
         {ITEMS.map((item) => {
           return <Product {...item} key={item.text} />;
         })}
-      </ItemsDiv>
-    </Container>
+      </div>
+    </div>
   );
 };
 export default DappList;

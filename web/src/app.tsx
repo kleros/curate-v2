@@ -1,9 +1,9 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import { SentryRoutes } from "./utils/sentry";
-import "./global.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "react-toastify/dist/ReactToastify.css";
+import "./global.css";
 import ThemeProvider from "context/ThemeProvider";
 import Web3Provider from "context/Web3Provider";
 import IsListViewProvider from "context/IsListViewProvider";

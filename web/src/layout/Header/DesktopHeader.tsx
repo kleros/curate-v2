@@ -1,5 +1,4 @@
 import React from "react";
-import styled, { css } from "styled-components";
 
 import { useToggle } from "react-use";
 import { useAccount } from "wagmi";
@@ -9,7 +8,6 @@ import KlerosSolutionsIcon from "svgs/menu-icons/kleros-solutions.svg";
 import { DEFAULT_CHAIN } from "consts/chains";
 import { useLockOverlayScroll } from "hooks/useLockOverlayScroll";
 
-import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 
 import ConnectWallet from "components/ConnectWallet";
@@ -24,61 +22,6 @@ import Menu from "./navbar/Menu";
 import Help from "./navbar/Menu/Help";
 import Settings from "./navbar/Menu/Settings";
 
-const Container = styled.div`
-  display: none;
-  position: absolute;
-  height: 64px;
-
-  ${landscapeStyle(
-    () => css`
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      position: relative;
-    `
-  )};
-`;
-
-const LeftSide = styled.div`
-  display: flex;
-  gap: 8px;
-`;
-
-const MiddleSide = styled.div`
-  display: flex;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const RightSide = styled.div`
-  display: flex;
-  gap: ${responsiveSize(4, 8)};
-
-  margin-left: 8px;
-  canvas {
-    width: 20px;
-  }
-`;
-
-const LightButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledKlerosSolutionsIcon = styled(KlerosSolutionsIcon)`
-  fill: ${({ theme }) => theme.white} !important;
-`;
-
-const ConnectWalletContainer = styled.div<{ isConnected: boolean; isDefaultChain: boolean }>`
-  label {
-    color: ${({ theme }) => theme.white};
-    cursor: pointer;
-  }
-`;
-
 const DesktopHeader: React.FC = () => {
   const [isDappListOpen, toggleIsDappListOpen] = useToggle(false);
   const [isHelpOpen, toggleIsHelpOpen] = useToggle(false);
@@ -89,34 +32,34 @@ const DesktopHeader: React.FC = () => {
 
   return (
     <>
-      <Container>
-        <LeftSide>
-          <LightButtonContainer>
+      <div className="hidden absolute h-16 landscape-900:flex landscape-900:items-center landscape-900:justify-between landscape-900:w-full landscape-900:relative">
+        <div className="flex gap-2">
+          <div className="flex items-center">
             <LightButton
               text=""
               onClick={() => {
                 toggleIsDappListOpen();
               }}
-              Icon={StyledKlerosSolutionsIcon}
+              Icon={() => <KlerosSolutionsIcon className="fill-white!" />}
             />
-          </LightButtonContainer>
+          </div>
           <Logo />
-        </LeftSide>
+        </div>
 
-        <MiddleSide>
+        <div className="flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <Explore />
-        </MiddleSide>
+        </div>
 
-        <RightSide>
-          <ConnectWalletContainer
-            {...{ isConnected, isDefaultChain }}
+        <div className={`flex ml-2 [&_canvas]:w-5 gap-[${responsiveSize(4, 8)}]`}>
+          <div
+            className="[&_label]:cursor-pointer [&_label]:text-white"
             onClick={isConnected && isDefaultChain ? toggleIsSettingsOpen : undefined}
           >
             <ConnectWallet />
-          </ConnectWalletContainer>
+          </div>
           <Menu {...{ toggleIsHelpOpen, toggleIsSettingsOpen }} />
-        </RightSide>
-      </Container>
+        </div>
+      </div>
       {(isDappListOpen || isHelpOpen || isSettingsOpen) && (
         <OverlayPortal>
           <Overlay>

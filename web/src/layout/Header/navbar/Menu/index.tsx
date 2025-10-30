@@ -1,6 +1,4 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
 import LightButton from "components/LightButton";
 import DarkModeIcon from "svgs/menu-icons/dark-mode.svg";
 import HelpIcon from "svgs/menu-icons/help.svg";
@@ -9,46 +7,6 @@ import LightModeIcon from "svgs/menu-icons/light-mode.svg";
 import SettingsIcon from "svgs/menu-icons/settings.svg";
 import { useToggleTheme } from "hooks/useToggleThemeContext";
 import { IHelp, ISettings } from "..";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ${landscapeStyle(
-    () => css`
-      flex-direction: row;
-    `
-  )}
-`;
-
-const ButtonContainer = styled.div`
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-
-  button {
-    padding: 0px;
-  }
-
-  .button-text {
-    display: block;
-  }
-
-  .button-svg {
-    fill: ${({ theme }) => theme.secondaryPurple};
-  }
-
-  ${landscapeStyle(
-    () => css`
-      .button-svg {
-        fill: ${({ theme }) => theme.white};
-      }
-      .button-text {
-        display: none;
-      }
-    `
-  )}
-`;
 
 const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsOpen }) => {
   const [theme, toggleTheme] = useToggleTheme();
@@ -76,13 +34,20 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
   ];
 
   return (
-    <Container>
+    <div className="flex flex-col landscape-900:flex-row">
       {buttons.map(({ text, Icon, onClick }) => (
-        <ButtonContainer key={Icon}>
+        <div
+          key={Icon}
+          className={
+            "flex items-center min-h-8" +
+            "[&_button]:p-0 [&_button-text]:block [&_button-svg]:fill-klerosUIComponentsSecondaryPurple" +
+            "landscape-900:[&_button-text]:hidden landscape-900:[&_button-svg]:fill-white"
+          }
+        >
           <LightButton {...{ text, onClick, Icon }} />
-        </ButtonContainer>
+        </div>
       ))}
-    </Container>
+    </div>
   );
 };
 

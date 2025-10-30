@@ -1,21 +1,7 @@
 import React, { Dispatch, SetStateAction, useMemo, useEffect } from "react";
-import styled from "styled-components";
 
 import { Field } from "@kleros/ui-components-library";
 import { isEmpty } from "src/utils";
-
-const StyledLabel = styled.label`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`;
-
-const StyledField = styled(Field)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
 
 interface IForm {
   contactLabel: string;
@@ -56,8 +42,9 @@ const FormContact: React.FC<IForm> = ({
 
   return (
     <>
-      <StyledLabel>{contactLabel}</StyledLabel>
-      <StyledField
+      <label className="flex justify-between mb-[10px]">{contactLabel}</label>
+      <Field
+        className="flex flex-col items-center w-full"
         variant={fieldVariant}
         value={contactInput}
         onChange={handleInputChange}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 
 import { useAccount } from "wagmi";
 
@@ -18,33 +17,6 @@ import InfoCard from "components/InfoCard";
 import { timeLeftUntil } from "utils/date";
 import { useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
-
-const FormContainer = styled.form`
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 0 ${responsiveSize(12, 32, 300)};
-  padding-bottom: 16px;
-  gap: 16px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: end;
-`;
-
-const FormContactContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledInfoCard = styled(InfoCard)`
-  width: fit-content;
-  font-size: 14px;
-  margin-bottom: 8px;
-  word-wrap: break-word;
-`;
 
 const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   const [emailInput, setEmailInput] = useState<string>("");
@@ -100,7 +72,10 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit}>
+    <div
+      className={`w-full relative flex flex-col py-0 px-${responsiveSize(12, 32, 300)} pb-4 gap-4`}
+      onSubmit={handleSubmit}
+    >
       {/* <FormContactContainer>
         <FormContact
           contactLabel="Telegram"
@@ -113,7 +88,7 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
           isEditing={isEditingTelegram}
         />
       </FormContactContainer> */}
-      <FormContactContainer>
+      <div className="flex flex-col">
         <FormContact
           contactLabel="Email"
           contactPlaceholder="your.email@email.com"
@@ -124,20 +99,23 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
           validator={EMAIL_REGEX}
           isEditing={isEditingEmail}
         />
-      </FormContactContainer>
+      </div>
       {!isEmailUpdateable ? (
-        <StyledInfoCard msg={`You can update email again ${timeLeftUntil(user?.emailUpdateableAt!)}`} />
+        <InfoCard
+          className="w-fit text-sm mb-2 wrap-break-word"
+          msg={`You can update email again ${timeLeftUntil(user?.emailUpdateableAt!)}`}
+        />
       ) : null}
-      <ButtonContainer>
+      <div className="flex justify-end">
         <Button
           text="Save"
           disabled={
             !isEditingEmail || !emailIsValid || isAddingUser || isFetchingUser || isUpdatingUser || !isEmailUpdateable
           }
         />
-      </ButtonContainer>
+      </div>
       <EmailVerificationInfo toggleIsSettingsOpen={toggleIsSettingsOpen} />
-    </FormContainer>
+    </div>
   );
 };
 

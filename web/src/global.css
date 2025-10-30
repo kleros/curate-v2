@@ -15,7 +15,7 @@
   --color-black-low-opacity: #00000080;
   --color-skeleton-bg: #ebebeb;
   --color-skeleton-highlight: #f5f5f5;
-  --breakpoint-landscape: 900px;
+  --breakpoint-landscape-900: 900px;
   --max-width-landscape: 1400px;
 }
 
@@ -55,10 +55,6 @@ html {
 
 *:focus {
   outline: none;
-}
-
-.ReactModal__Overlay {
-  background-color: #1b003fcc !important;
 }
 
 h1 {

@@ -53,8 +53,13 @@ html {
   box-sizing: inherit;
 }
 
-*:focus {
+:focus:not(:focus-visible) {
   outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--klerosUIComponentsPrimaryBlue);
+  outline-offset: 2px;
 }
 
 h1 {
@@ -138,9 +143,9 @@ ul {
   --os-handle-bg-active: var(--color-lavender-purple);
 }
 
-[class*="Toastify__toast-container"] {
+.Toastify__toast-container.Toastify__toast-container {
   top: unset;
-  padding-top: 20px !important;
+  padding-top: 20px;
 }
 
 /* Custom Scrollbar */

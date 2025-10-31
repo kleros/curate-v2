@@ -39,8 +39,8 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
         <div
           key={Icon}
           className={
-            "flex items-center min-h-8 [&_button]:p-0 [&_button-text]:block [&_button-svg]:fill-klerosUIComponentsSecondaryPurple " +
-            "landscape-900:[&_button-text]:hidden landscape-900:[&_button-svg]:fill-white"
+            "flex items-center min-h-8 [&_button]:p-0 [&_.button-text]:block [&_.button-svg]:fill-klerosUIComponentsSecondaryPurple " +
+            "landscape-900:[&_.button-text]:hidden landscape-900:[&_.button-svg]:fill-white"
           }
         >
           <LightButton {...{ text, onClick, Icon }} />

@@ -109,6 +109,7 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
       ) : null}
       <div className="flex justify-end">
         <Button
+          type="submit"
           text="Save"
           disabled={
             !isEditingEmail || !emailIsValid || isAddingUser || isFetchingUser || isUpdatingUser || !isEmailUpdateable

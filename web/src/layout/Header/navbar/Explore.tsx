@@ -35,16 +35,13 @@ const Explore: React.FC<IExplore> = ({ isMobileNavbar }) => {
       {links.map(({ to, text, identifier }) => (
         <Link
           key={text}
-          className={
-            "flex items-center no-underline text-base p-2 pl-0 rounded-[7px] landscape-900:py-4 landscape-900:px-2 " +
-            `${
-              isActive(to)
-                ? "text-klerosUIComponentsPrimaryText landscape-900:text-white "
-                : "text-primary-text-73 landscape-900:text-white-73 "
-            }` +
-            `${isMobileNavbar && isActive(to) ? "font-semibold " : "font-normal "}` +
-            `hover:${isMobileNavbar ? "text-klerosUIComponentsPrimaryText" : "text-white"}`
-          }
+          className={`flex items-center no-underline text-base p-2 pl-0 rounded-[7px] landscape-900:py-4 landscape-900:px-2 ${
+            isActive(to)
+              ? "text-klerosUIComponentsPrimaryText landscape-900:text-white"
+              : "text-primary-text-73 landscape-900:text-white-73"
+          } ${isMobileNavbar && isActive(to) ? "font-semibold" : "font-normal"} ${
+            isMobileNavbar ? "hover:text-klerosUIComponentsPrimaryText" : "hover:text-white"
+          }`}
           onClick={toggleIsOpen}
           {...{ to }}
         >

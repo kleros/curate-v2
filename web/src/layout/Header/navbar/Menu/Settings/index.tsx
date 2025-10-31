@@ -30,7 +30,7 @@ const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen, initialTab }) => 
     <div
       ref={containerRef}
       className={
-        "flex flex-col absolute max-h-[80vh] overflow-y-auto bg-klerosUIComponentsWhiteBackground top-[5%] left-1/2 transform translate-x-1/2 z-1 border border-solid border-klerosUIComponentsStroke rounded-[3px] " +
+        "flex flex-col absolute max-h-[80vh] overflow-y-auto bg-klerosUIComponentsWhiteBackground top-[5%] left-1/2 transform -translate-x-1/2 z-1 border border-solid border-klerosUIComponentsStroke rounded-[3px] " +
         "landscape-900:mt-16 landscape-900:top-0 landscape-900:right-0 landscape-900:left-auto landscape-900:transform-none"
       }
     >

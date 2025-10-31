@@ -17,18 +17,16 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
       href={url}
       target="_blank"
       className={
-        "flex flex-col items-center cursor-pointer pt-4 pb-7 px-2 max-w-[100px] rounded-[3px] gap-2 bg-klerosUIComponentsLightBackground" +
-        `w-[${responsiveSize(
-          100,
-          130
-        )}] hover:transition-[transform_0.15s,background-color_0.3s] hover:scale-[1.02] hover:bg-klerosUIComponentsLightGrey`
+        "flex flex-col items-center cursor-pointer pt-4 pb-7 px-2 max-w-[100px] rounded-[3px] gap-2 bg-klerosUIComponentsLightBackground " +
+        "hover:transition-[transform_0.15s,background-color_0.3s] hover:scale-[1.02] hover:bg-klerosUIComponentsLightGrey"
       }
+      style={{ width: responsiveSize(100, 130) }}
     >
       {typeof Icon === "string" ? (
         <>
           {!isImgLoaded ? <Skeleton width={48} height={46} circle /> : null}
           <img
-            className={`w-12 h-12 ${isImgLoaded ? "block" : "none"}`}
+            className={`w-12 h-12 ${isImgLoaded ? "block" : "hidden"}`}
             alt={Icon}
             src={Icon}
             onLoad={() => setIsImgLoaded(true)}

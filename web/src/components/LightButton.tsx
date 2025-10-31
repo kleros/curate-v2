@@ -15,12 +15,12 @@ const LightButton: React.FC<ILightButton> = ({ text, Icon, onClick, disabled, cl
     variant="primary"
     small
     className={
-      "transition duration-100 bg-transparent p-2 rounded-[7px] landscape-900:[&_button-svg]:mr-0" +
-      "[&_button-text]:text-KlerosUIComponentsPrimaryText [&_button-text]:font-normal" +
-      `[&_button-svg]:${isMobileNavbar ? "fill-KlerosUIComponentsSecondaryText" : "fill-white-75"}` +
+      "transition duration-100 bg-transparent p-2 rounded-[7px] landscape-900:[&_button-svg]:mr-0 " +
+      "[&_button-text]:text-klerosUIComponentsPrimaryText [&_button-text]:font-normal " +
+      `[&_button-svg]:${isMobileNavbar ? "fill-klerosUIComponentsSecondaryText" : "fill-white/75"} ` +
       `hover:[&_button-svg]:${
-        isMobileNavbar ? "fill-KlerosUIComponentsPrimaryText" : "fill-white"
-      } hover:bg-white-low-opacity-strong` +
+        isMobileNavbar ? "fill-klerosUIComponentsPrimaryText" : "fill-white"
+      } hover:bg-white-low-opacity-strong ` +
       `${className}`
     }
     {...{ text, Icon, onClick, disabled }}

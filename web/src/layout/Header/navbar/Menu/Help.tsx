@@ -48,7 +48,7 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
       <div
         ref={containerRef}
         className={
-          "flex flex-col absolute max-h-[80vh] overflow-y-auto width-[86vw] max-width-[444px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 p-3 pb-6 border border-klerosUIComponentsStroke rounded-[3px] bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]" +
+          "flex flex-col absolute max-h-[80vh] overflow-y-auto w-[86vw] max-w-[444px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 p-3 pb-6 border border-klerosUIComponentsStroke rounded-[3px] bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)] " +
           "landscape-900:mt-16 landscape-900:top-0 landscape-900:right-0 landscape-900:left-auto landscape-900:transform-none landscape-900:max-w-[260px]"
         }
       >

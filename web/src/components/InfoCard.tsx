@@ -10,11 +10,8 @@ interface IInfoCard {
 const InfoCard: React.FC<IInfoCard> = ({ msg, className }) => {
   return (
     <div
-      className={`grid grid-cols-[16px_auto] gap-${responsiveSize(
-        6,
-        8,
-        300
-      )} items-center justify-start text-start text-klerosUIComponentsSecondaryText ${className}`}
+      className={`grid grid-cols-[16px_auto] items-center justify-start text-start text-klerosUIComponentsSecondaryText ${className}`}
+      style={{ gap: responsiveSize(6, 8, 300) }}
     >
       <InfoCircle />
       {msg}

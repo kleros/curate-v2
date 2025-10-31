@@ -72,8 +72,9 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   };
 
   return (
-    <div
-      className={`w-full relative flex flex-col py-0 px-${responsiveSize(12, 32, 300)} pb-4 gap-4`}
+    <form
+      className="w-full relative flex flex-col py-0 pb-4 gap-4"
+      style={{ paddingInline: responsiveSize(12, 32, 300) }}
       onSubmit={handleSubmit}
     >
       {/* <FormContactContainer>
@@ -115,7 +116,7 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
         />
       </div>
       <EmailVerificationInfo toggleIsSettingsOpen={toggleIsSettingsOpen} />
-    </div>
+    </form>
   );
 };
 

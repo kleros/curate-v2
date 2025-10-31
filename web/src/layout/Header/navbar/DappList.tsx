@@ -89,21 +89,15 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
     <div
       ref={containerRef}
       className={
-        "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 w-[86vw] max-w-[480px] border border-klerosUIComponentsStroke rounded-[3px] bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]" +
-        "[&_svg]:visible" +
-        "landscape-900:mt-16 landscape-900:top-0 landscape-900:left-0 landscape-900:right-auto landscape-900:transform-none landscape-900:max-h-[80vh]" +
-        `landscape-900:w-[${responsiveSize(300, 480)}]`
+        "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 w-[86vw] max-w-[480px] border border-klerosUIComponentsStroke rounded-[3px] bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)] " +
+        "[&_svg]:visible landscape-900:mt-16 landscape-900:top-0 landscape-900:left-0 landscape-900:right-auto landscape-900:transform-none landscape-900:max-h-[80vh]"
       }
+      style={{ width: responsiveSize(300, 480, 900) }}
     >
       <h1 className="pt-6 text-2xl font-semibold leading-8">Kleros Solutions</h1>
       <div
-        className={`grid overflow-y-auto p-[4px_${responsiveSize(
-          8,
-          24
-        )}_16px] gap-y-2 gap-x-0.5 justify-items-center max-w-[480px] min-w-[300px] w-[${responsiveSize(
-          300,
-          480
-        )}] grid-cols-[repeat(auto-fit,minmax(100px,1fr))]`}
+        className="grid overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center max-w-[480px] min-w-[300px] grid-cols-[repeat(auto-fit,minmax(100px,1fr))]"
+        style={{ padding: `4px_${responsiveSize(8, 24)}_16px`, width: responsiveSize(300, 480) }}
       >
         {ITEMS.map((item) => {
           return <Product {...item} key={item.text} />;

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useMemo, useEffect } from "react";
 
-import { Field } from "@kleros/ui-components-library";
+import { TextField } from "@kleros/ui-components-library";
 import { isEmpty } from "src/utils";
 
 interface IForm {
@@ -28,11 +28,6 @@ const FormContact: React.FC<IForm> = ({
     setContactIsValid(validator.test(contactInput));
   }, [contactInput, setContactIsValid, validator]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setContactInput(event.target.value);
-  };
-
   const fieldVariant = useMemo(() => {
     if (isEmpty(contactInput) || !isEditing) {
       return undefined;
@@ -43,11 +38,11 @@ const FormContact: React.FC<IForm> = ({
   return (
     <>
       <label className="flex justify-between mb-[10px]">{contactLabel}</label>
-      <Field
+      <TextField
         className="flex flex-col items-center w-full"
         variant={fieldVariant}
         value={contactInput}
-        onChange={handleInputChange}
+        onChange={(value) => setContactInput(value)}
         placeholder={contactPlaceholder}
       />
     </>

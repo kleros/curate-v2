@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { useToggle } from "react-use";
 import { useAccount } from "wagmi";
 import { useLockOverlayScroll } from "hooks/useLockOverlayScroll";
@@ -39,12 +38,9 @@ const NavBar: React.FC = () => {
   return (
     <>
       <div
-        className={
-          "absolute top-16 left-0 right-0 max-h-[calc(100vh-64px)] overflow-y-auto z-1 bg-klerosUIComponentsWhiteBackground shadow-default p-6 [&_hr]:my-6 " +
-          `origin-top transform-${isOpen ? "scaleY(1)" : "scaleY(0)"} visibility-${
-            isOpen ? "visible" : "hidden"
-          } transition-[transform,visibility] duration-[klerosUIComponentsTransitionSpeed] ease-in-out`
-        }
+        className={`absolute top-16 left-0 right-0 max-h-[calc(100vh-64px)] overflow-y-auto z-10 bg-klerosUIComponentsWhiteBackground shadow-default p-6 [&_hr]:my-6 origin-top transition-[transform,visibility] duration-[klerosUIComponentsTransitionSpeed] ease-in-out ${
+          isOpen ? "scale-y-100 visible" : "scale-y-0 invisible"
+        }`}
       >
         <LightButton
           text="Kleros Solutions"

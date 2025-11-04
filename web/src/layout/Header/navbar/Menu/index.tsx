@@ -34,13 +34,13 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
   ];
 
   return (
-    <div className="flex flex-col landscape-900:flex-row">
+    <div className="flex flex-col lg:flex-row">
       {buttons.map(({ text, Icon, onClick }) => (
         <div
           key={Icon}
           className={
             "flex items-center min-h-8 [&_button]:p-0 [&_.button-text]:block [&_.button-svg]:fill-klerosUIComponentsSecondaryPurple " +
-            "landscape-900:[&_.button-text]:hidden landscape-900:[&_.button-svg]:fill-white"
+            "lg:[&_.button-text]:hidden lg:[&_.button-svg]:fill-white"
           }
         >
           <LightButton {...{ text, onClick, Icon }} />

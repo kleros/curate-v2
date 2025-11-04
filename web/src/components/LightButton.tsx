@@ -15,7 +15,7 @@ const LightButton: React.FC<ILightButton> = ({ text, Icon, onClick, disabled, cl
     variant="primary"
     small
     className={
-      "transition duration-100 bg-transparent p-2 rounded-[7px] landscape-900:[&_.button-svg]:mr-0 " +
+      "transition duration-100 bg-transparent p-2 rounded-[7px] lg:[&_.button-svg]:mr-0 " +
       "[&_.button-text]:text-klerosUIComponentsPrimaryText [&_.button-text]:font-normal " +
       `[&_button-svg]:${isMobileNavbar ? "fill-klerosUIComponentsSecondaryText" : "fill-white/75"} ` +
       `hover:[&_.button-svg]:${

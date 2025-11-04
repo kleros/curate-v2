@@ -32,7 +32,7 @@ const DesktopHeader: React.FC = () => {
 
   return (
     <>
-      <div className="hidden absolute h-16 landscape-900:flex landscape-900:items-center landscape-900:justify-between landscape-900:w-full landscape-900:relative">
+      <div className="hidden h-16 lg:flex lg:items-center lg:justify-between lg:w-full lg:relative">
         <div className="flex gap-2">
           <div className="flex items-center">
             <LightButton

@@ -30,15 +30,13 @@ const Explore: React.FC<IExplore> = ({ isMobileNavbar }) => {
   );
 
   return (
-    <div className="flex flex-col landscape-900:flex-row">
-      <h1 className="block mb-2 landscape-900:hidden">Explore</h1>
+    <div className="flex flex-col lg:flex-row">
+      <h1 className="block mb-2 lg:hidden">Explore</h1>
       {links.map(({ to, text, identifier }) => (
         <Link
           key={text}
-          className={`flex items-center no-underline text-base p-2 pl-0 rounded-[7px] landscape-900:py-4 landscape-900:px-2 ${
-            isActive(to)
-              ? "text-klerosUIComponentsPrimaryText landscape-900:text-white"
-              : "text-primary-text-73 landscape-900:text-white-73"
+          className={`flex items-center no-underline text-base p-2 pl-0 rounded-[7px] lg:py-4 lg:px-2 ${
+            isActive(to) ? "text-klerosUIComponentsPrimaryText lg:text-white" : "text-primary-text-73 lg:text-white-73"
           } ${isMobileNavbar && isActive(to) ? "font-semibold" : "font-normal"} ${
             isMobileNavbar ? "hover:text-klerosUIComponentsPrimaryText" : "hover:text-white"
           }`}

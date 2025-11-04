@@ -27,9 +27,9 @@ export const IdenticonOrAvatar: React.FC<IIdenticonOrAvatar> = ({ size = "16", a
   });
 
   return avatar ? (
-    <img className="items-center object-cover rounded-[50%]" src={avatar} alt="avatar" width={size} height={size} />
+    <img className="object-cover rounded-[50%]" src={avatar} alt="avatar" width={size} height={size} />
   ) : (
-    <Identicon className="items-center" size={size} string={address} />
+    <Identicon size={size} string={address} />
   );
 };
 

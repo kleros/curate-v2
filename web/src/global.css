@@ -1,5 +1,4 @@
 @import "../../node_modules/@kleros/ui-components-library/dist/assets/theme.css";
-@plugin "tailwindcss-react-aria-components";
 @source "../../node_modules/@kleros/ui-components-library";
 @tailwind utilities;
 

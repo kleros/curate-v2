@@ -1,5 +1,7 @@
-@import "@kleros/ui-components-library/theme.css";
-@import "tailwindcss";
+@tailwind utilities;
+@import "../../node_modules/@kleros/ui-components-library/dist/assets/theme.css";
+@plugin "tailwindcss-react-aria-components";
+@source "../../node_modules/@kleros/ui-components-library";
 
 @theme {
   --color-white: #ffffff;

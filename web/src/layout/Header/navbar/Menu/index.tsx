@@ -7,7 +7,6 @@ import LightModeIcon from "svgs/menu-icons/light-mode.svg";
 import SettingsIcon from "svgs/menu-icons/settings.svg";
 import { useToggleTheme } from "hooks/useToggleThemeContext";
 import { IHelp, ISettings } from "..";
-import clsx from "clsx";
 
 const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsOpen }) => {
   const [theme, toggleTheme] = useToggleTheme();
@@ -37,15 +36,7 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
   return (
     <div className="flex flex-col lg:flex-row">
       {buttons.map(({ text, Icon, onClick }) => (
-        <div
-          key={Icon}
-          className={clsx(
-            "flex items-center min-h-8",
-            "[&_button]:p-0",
-            "[&_.button-text]:block lg:[&_.button-text]:hidden",
-            "[&_.button-svg]:fill-klerosUIComponentsSecondaryPurple lg:[&_.button-svg]:fill-white"
-          )}
-        >
+        <div key={Icon} className="flex items-center min-h-8 [&_.button-text]:block lg:[&_.button-text]:hidden">
           <LightButton {...{ text, onClick, Icon }} />
         </div>
       ))}

@@ -40,7 +40,7 @@ const DesktopHeader: React.FC = () => {
               onClick={() => {
                 toggleIsDappListOpen();
               }}
-              Icon={() => <KlerosSolutionsIcon className="fill-white!" />}
+              Icon={KlerosSolutionsIcon}
             />
           </div>
           <Logo />

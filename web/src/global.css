@@ -1,6 +1,6 @@
 @import "../../node_modules/@kleros/ui-components-library/dist/assets/theme.css";
-@source "../../node_modules/@kleros/ui-components-library";
 @tailwind utilities;
+@import "tailwindcss" source("../../node_modules/@kleros/ui-components-library");
 
 @theme {
   --color-white: #ffffff;

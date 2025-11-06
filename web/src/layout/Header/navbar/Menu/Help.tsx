@@ -60,6 +60,7 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
             href={item.url}
             key={item.text}
             target="_blank"
+            rel="noopener noreferrer"
             className="flex gap-2 py-3 px-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
           >
             <item.Icon className="inline-block w-4 h-4 fill-klerosUIComponentsSecondaryPurple" />

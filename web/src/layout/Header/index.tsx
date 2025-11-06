@@ -11,7 +11,7 @@ const Header: React.FC = () => {
   return (
     <div className="flex flex-wrap sticky z-10 top-0 w-full bg-klerosUIComponentsPrimaryPurple dark:bg-light-blue-65 backdrop-blur-none dark:backdrop-blur-md">
       <StatusBanner
-        className="sticky! [&_.status-text_h2]:m-0 [&_.status-text_h2]:leading-6"
+        className="sticky! [&_.status-text_h2]:m-[0] [&_.status-text_h2]:leading-[24px]"
         autoHide
         watcherOptions={{ threshold: 5000, interval: 60_000 }} // 5000 blocks threshold, 60 sec interval check
         theme={{

@@ -14,6 +14,7 @@ import Menu from "./Menu";
 import Help from "./Menu/Help";
 import Settings from "./Menu/Settings";
 import { DisconnectWalletButton } from "./Menu/Settings/General";
+import { cn } from "~src/utils";
 
 export interface ISettings {
   toggleIsSettingsOpen: () => void;
@@ -38,9 +39,12 @@ const NavBar: React.FC = () => {
   return (
     <>
       <div
-        className={`absolute top-16 left-0 right-0 max-h-[calc(100vh-64px)] overflow-y-auto z-10 bg-klerosUIComponentsWhiteBackground shadow-default p-6 [&_hr]:my-6 origin-top transition-[transform,visibility] duration-[klerosUIComponentsTransitionSpeed] ease-in-out ${
+        className={cn(
+          "absolute top-16 left-0 right-0 max-h-[calc(100vh-64px)] p-6 overflow-y-auto z-10",
+          "bg-klerosUIComponentsWhiteBackground shadow-default origin-top transition-[transform,visibility] duration-[klerosUIComponentsTransitionSpeed] ease-in-out",
+          "[&_hr]:my-6",
           isOpen ? "scale-y-100 visible" : "scale-y-0 invisible"
-        }`}
+        )}
       >
         <LightButton
           text="Kleros Solutions"

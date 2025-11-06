@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useOpenContext } from "../MobileHeader";
 import { MAIN_CURATE_ADDRESS } from "consts/index";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
-import { isUndefined } from "utils/index";
+import { cn, isUndefined } from "utils/index";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 
 interface IExplore {
@@ -35,11 +35,13 @@ const Explore: React.FC<IExplore> = ({ isMobileNavbar }) => {
       {links.map(({ to, text, identifier }) => (
         <Link
           key={text}
-          className={`flex items-center no-underline text-base p-2 pl-0 rounded-[7px] lg:py-4 lg:px-2 ${
-            isActive(to) ? "text-klerosUIComponentsPrimaryText lg:text-white" : "text-primary-text-73 lg:text-white-73"
-          } ${isMobileNavbar && isActive(to) ? "font-semibold" : "font-normal"} ${
-            isMobileNavbar ? "hover:text-klerosUIComponentsPrimaryText" : "hover:text-white"
-          }`}
+          className={cn(
+            "flex items-center p-2 pl-0 rounded-[7px] lg:py-4 lg:px-2",
+            "no-underline text-base",
+            isActive(to) ? "text-klerosUIComponentsPrimaryText lg:text-white" : "text-primary-text-73 lg:text-white-73",
+            isMobileNavbar ? "hover:text-klerosUIComponentsPrimaryText" : "hover:text-white",
+            isMobileNavbar && isActive(to) ? "font-semibold" : "font-normal"
+          )}
           onClick={toggleIsOpen}
           {...{ to }}
         >

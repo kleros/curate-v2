@@ -5,6 +5,7 @@ import General from "./General";
 import NotificationSettings from "./Notifications";
 import { ISettings } from "../../index";
 import { useLocation, useNavigate } from "react-router-dom";
+import clsx from "clsx";
 
 const TABS = [
   {
@@ -29,10 +30,11 @@ const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen, initialTab }) => 
   return (
     <div
       ref={containerRef}
-      className={
-        "flex flex-col absolute max-h-[80vh] overflow-y-auto bg-klerosUIComponentsWhiteBackground top-[5%] left-1/2 transform -translate-x-1/2 z-1 border border-solid border-klerosUIComponentsStroke rounded-[3px] " +
+      className={clsx(
+        "flex flex-col absolute max-h-[80vh] overflow-y-auto top-[5%] left-1/2 transform -translate-x-1/2 z-1",
+        "bg-klerosUIComponentsWhiteBackground border border-solid border-klerosUIComponentsStroke rounded-[3px]",
         "lg:mt-16 lg:top-0 lg:right-0 lg:left-auto lg:transform-none"
-      }
+      )}
     >
       <div className="flex justify-center text-2xl mt-6 text-klerosUIComponentsPrimaryText">Settings</div>
       <Tabs

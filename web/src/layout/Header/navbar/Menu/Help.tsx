@@ -10,6 +10,7 @@ import Telegram from "svgs/socialmedia/telegram.svg";
 
 import Debug from "../Debug";
 import { IHelp } from "../index";
+import clsx from "clsx";
 
 const ITEMS = [
   {
@@ -47,10 +48,12 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
     <>
       <div
         ref={containerRef}
-        className={
-          "flex flex-col absolute max-h-[80vh] overflow-y-auto w-[86vw] max-w-[444px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 p-3 pb-6 border border-klerosUIComponentsStroke rounded-[3px] bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)] " +
+        className={clsx(
+          "flex flex-col absolute max-h-[80vh] overflow-y-auto w-[86vw] max-w-[444px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 p-3 pb-6",
+          "border border-klerosUIComponentsStroke rounded-[3px]",
+          "bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]",
           "lg:mt-16 lg:top-0 lg:right-0 lg:left-auto lg:transform-none lg:max-w-[260px]"
-        }
+        )}
       >
         {ITEMS.map((item, index) => (
           <a

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
@@ -17,10 +18,11 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={
-        "flex flex-col items-center cursor-pointer pt-4 pb-7 px-2 max-w-[100px] rounded-[3px] gap-2 bg-klerosUIComponentsLightBackground " +
-        "hover:transition-[transform_0.15s,background-color_0.3s] hover:scale-[1.02] hover:bg-klerosUIComponentsLightGrey"
-      }
+      className={clsx(
+        "flex flex-col items-center pt-4 pb-7 px-2 max-w-[100px] rounded-[3px] gap-2",
+        "cursor-pointer bg-klerosUIComponentsLightBackground hover:bg-klerosUIComponentsLightGrey",
+        "hover:transition-[transform_0.15s,background-color_0.3s] hover:scale-[1.02]"
+      )}
       style={{ width: responsiveSize(100, 130) }}
     >
       {typeof Icon === "string" ? (

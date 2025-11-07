@@ -52,7 +52,7 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
           "flex flex-col absolute max-h-[80vh] overflow-y-auto w-[86vw] max-w-[444px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 p-3 pb-6",
           "border border-klerosUIComponentsStroke rounded-[3px]",
           "bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]",
-          "lg:mt-16 lg:top-0 lg:right-0 lg:left-auto lg:transform-none lg:max-w-[260px]"
+          "lg:mt-16 lg:top-0 lg:right-0 lg:left-auto lg:transform-none lg:translate-x-0 lg:max-w-[260px]"
         )}
       >
         {ITEMS.map((item, index) => (
@@ -64,7 +64,7 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
             className="flex gap-2 py-3 px-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
           >
             <item.Icon className="inline-block w-4 h-4 fill-klerosUIComponentsSecondaryPurple" />
-            <small className="text-base font-normal transition-colors duration-100 hover:text-klerosUIComponentsSecondaryPurple">
+            <small className="text-base leading-[18px] font-normal transition-colors duration-100 hover:text-klerosUIComponentsSecondaryPurple">
               {item.text}
             </small>
           </a>

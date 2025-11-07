@@ -52,7 +52,7 @@ const DesktopHeader: React.FC = () => {
 
         <div className="flex ml-2 [&_canvas]:w-5" style={{ gap: responsiveSize(4, 8) }}>
           <div
-            className="[&_label]:cursor-pointer [&_label]:text-white"
+            className="[&_label]:cursor-pointer [&_label]:text-white/80"
             onClick={isConnected && isDefaultChain ? toggleIsSettingsOpen : undefined}
           >
             <ConnectWallet />

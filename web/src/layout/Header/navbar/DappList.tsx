@@ -90,13 +90,12 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
     <div
       ref={containerRef}
       className={clsx(
-        "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 max-w-[480px]",
+        "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 w-[86vw] max-w-[480px]",
         "border border-klerosUIComponentsStroke rounded-[3px]",
         "bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]",
         "[&_svg]:visible",
-        "lg:mt-16 lg:top-0 lg:left-0 lg:right-auto lg:transform-none lg:max-h-[80vh]"
+        "lg:mt-16 lg:top-0 lg:left-0 lg:right-auto lg:transform-none lg:translate-x-0 lg:max-h-[80vh]"
       )}
-      style={{ width: responsiveSize(300, 480, 900) }}
     >
       <h1 className="pt-6 text-2xl font-semibold leading-8">Kleros Solutions</h1>
       <div

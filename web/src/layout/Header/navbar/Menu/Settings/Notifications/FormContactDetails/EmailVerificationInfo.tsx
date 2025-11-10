@@ -5,6 +5,7 @@ import { Button } from "@kleros/ui-components-library";
 import HourglassIcon from "svgs/icons/hourglass.svg";
 import { useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
+import clsx from "clsx";
 
 interface IEmailInfo {
   toggleIsSettingsOpen: () => void;
@@ -40,7 +41,15 @@ const EmailVerificationInfo: React.FC<IEmailInfo> = ({ toggleIsSettingsOpen }) =
         <h3 className="m-0">Email Verification Pending</h3>
         <label>
           We sent you a verification email. Please, verify it.
-          <br /> Didn’t receive the email? <Button text="Resend it" onClick={resendVerificationEmail} />
+          <br /> Didn’t receive the email?{" "}
+          <Button
+            className={clsx(
+              "inline-block bg-transparent p-0 focus:bg-transparent hover:bg-transparent",
+              "[&_.button-text]:text-sm [&_.button-text]:font-normal [&_.button-text]:text-klerosUIComponentsPrimaryBlue"
+            )}
+            text="Resend it"
+            onClick={resendVerificationEmail}
+          />
         </label>
       </div>
     </div>

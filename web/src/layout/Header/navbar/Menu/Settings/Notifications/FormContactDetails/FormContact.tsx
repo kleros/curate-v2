@@ -39,7 +39,7 @@ const FormContact: React.FC<IForm> = ({
     <>
       <label className="flex justify-between mb-[10px]">{contactLabel}</label>
       <TextField
-        className="flex flex-col items-center w-full"
+        className="flex flex-col items-center w-full [&_input]:text-sm"
         variant={fieldVariant}
         value={contactInput}
         onChange={(value) => setContactInput(value)}

@@ -20,7 +20,7 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
       rel="noopener noreferrer"
       className={clsx(
         "flex flex-col items-center pt-4 pb-7 px-2 max-w-[100px] rounded-[3px] gap-2",
-        "cursor-pointer bg-klerosUIComponentsLightBackground hover:bg-klerosUIComponentsLightGrey",
+        "cursor-pointer bg-klerosUIComponentsLightBackground hover:bg-light-grey dark:hover:bg-klerosUIComponentsLightGrey",
         "hover:transition-[transform_0.15s,background-color_0.3s] hover:scale-[1.02]"
       )}
       style={{ width: responsiveSize(100, 130) }}
@@ -38,7 +38,7 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
       ) : (
         <Icon className="w-12 h-12" />
       )}
-      <small className="flex font-normal text-center leading-[19px]">{text}</small>
+      <small className="flex font-normal text-center leading-snug">{text}</small>
     </a>
   );
 };

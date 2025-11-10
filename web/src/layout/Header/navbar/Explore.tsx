@@ -37,7 +37,7 @@ const Explore: React.FC<IExplore> = ({ isMobileNavbar }) => {
           key={text}
           className={cn(
             "flex items-center p-2 pl-0 rounded-[7px] lg:py-4 lg:px-2",
-            "no-underline text-base",
+            "no-underline text-base leading-tight",
             isActive(to) ? "text-klerosUIComponentsPrimaryText lg:text-white" : "text-primary-text-73 lg:text-white-73",
             isMobileNavbar ? "hover:text-klerosUIComponentsPrimaryText" : "hover:text-white",
             isMobileNavbar && isActive(to) ? "font-semibold" : "font-normal"

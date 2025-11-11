@@ -35,9 +35,9 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
 
   return (
     <div className="flex flex-col lg:flex-row">
-      {buttons.map(({ text, Icon, onClick }) => (
+      {buttons.map(({ text, Icon, onClick }, index) => (
         <div
-          key={text}
+          key={index}
           className="flex items-center min-h-8 [&_.button-text]:block lg:[&_.button-text]:hidden not-dark:not-lg:[&_.button-svg]:fill-black/75 not-dark:not-lg:hover:[&_.button-svg]:fill-black"
         >
           <LightButton {...{ text, onClick, Icon }} />

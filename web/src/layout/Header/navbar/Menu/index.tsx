@@ -5,11 +5,11 @@ import HelpIcon from "svgs/menu-icons/help.svg";
 import LightModeIcon from "svgs/menu-icons/light-mode.svg";
 // import NotificationsIcon from "svgs/menu-icons/notifications.svg";
 import SettingsIcon from "svgs/menu-icons/settings.svg";
-import { useToggleTheme } from "hooks/useToggleThemeContext";
+import { useTheme } from "hooks/useToggleThemeContext";
 import { IHelp, ISettings } from "..";
 
 const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsOpen }) => {
-  const [theme, toggleTheme] = useToggleTheme();
+  const [theme, toggleTheme] = useTheme();
   const isLightTheme = theme === "light";
 
   const buttons = [

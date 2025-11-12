@@ -14,7 +14,7 @@ interface ITruncatedText {
  */
 const TruncatedText: React.FC<ITruncatedText> = ({ text, maxLength, className }) => {
   const truncatedText = text?.length <= maxLength ? text : text?.slice(0, maxLength) + "…";
-  return <h3 className={cn("font-normal m-0", className)}>{truncatedText}</h3>;
+  return <div className={cn("text-klerosUIComponentsPrimaryText font-normal m-0", className)}>{truncatedText}</div>;
 };
 
 export default TruncatedText;

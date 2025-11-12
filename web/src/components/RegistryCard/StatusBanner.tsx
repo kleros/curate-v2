@@ -38,6 +38,20 @@ export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
       return Status.ClearingPending;
   }
 };
+
+const statusStyles: Record<Status, string> = {
+  [Status.RegistrationPending]:
+    "border-t-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue [&_.front-color]:text-klerosUIComponentsPrimaryBlue [&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
+  [Status.ClearingPending]:
+    "border-t-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue [&_.front-color]:text-klerosUIComponentsPrimaryBlue [&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
+  [Status.Disputed]:
+    "border-t-klerosUIComponentsSecondaryPurple bg-klerosUIComponentsMediumPurple [&_.front-color]:text-klerosUIComponentsSecondaryPurple [&_.dot::before]:bg-klerosUIComponentsSecondaryPurple",
+  [Status.Included]:
+    "border-t-klerosUIComponentsSuccess bg-klerosUIComponentsSuccessLight [&_.front-color]:text-klerosUIComponentsSuccess [&_.dot::before]:bg-klerosUIComponentsSuccess",
+  [Status.Removed]:
+    "border-t-klerosUIComponentsError bg-klerosUIComponentsErrorLight [&_.front-color]:text-klerosUIComponentsError [&_.dot::before]:bg-klerosUIComponentsError",
+};
+
 const StatusBanner: React.FC<IStatusBanner> = ({ status, isListView = false }) => (
   <div
     className={cn(
@@ -45,17 +59,7 @@ const StatusBanner: React.FC<IStatusBanner> = ({ status, isListView = false }) =
       isListView ? "h-min" : "h-11",
       isListView && "p-0",
       "[&_.dot::before]:content-[''] [&_.dot::before]:inline-block [&_.dot::before]:h-2 [&_.dot::before]:w-2 [&_.dot::before]:rounded-[50%] [&_.dot::before]:mr-2",
-      !isListView && [
-        "border-t-[5px]",
-        (status === Status.RegistrationPending || status === Status.ClearingPending) &&
-          "border-t-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue [&_.front-color]:text-klerosUIComponentsPrimaryBlue [&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
-        status === Status.Disputed &&
-          "border-t-klerosUIComponentsSecondaryPurple bg-klerosUIComponentsMediumPurple [&_.front-color]:text-klerosUIComponentsSecondaryPurple [&_.dot::before]:bg-klerosUIComponentsSecondaryPurple",
-        status === Status.Included &&
-          "border-t-klerosUIComponentsSuccess bg-klerosUIComponentsSuccessLight [&_.front-color]:text-klerosUIComponentsSuccess [&_.dot::before]:bg-klerosUIComponentsSuccess",
-        status === Status.Removed &&
-          "border-t-klerosUIComponentsError bg-klerosUIComponentsErrorLight [&_.front-color]:text-klerosUIComponentsError [&_.dot::before]:bg-klerosUIComponentsError",
-      ]
+      !isListView && ["border-t-[5px]", statusStyles[status]]
     )}
   >
     <label className="front-color dot">{getStatusLabel(status)}</label>

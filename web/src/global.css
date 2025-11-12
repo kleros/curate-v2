@@ -1,6 +1,7 @@
 @import "../../node_modules/@kleros/ui-components-library/dist/assets/theme.css";
 @tailwind utilities;
-@import "tailwindcss" source("../../node_modules/@kleros/ui-components-library");
+@source "../../node_modules/@kleros/ui-components-library";
+@import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {

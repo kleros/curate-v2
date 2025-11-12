@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 import Header from "./Header";
 import RegistryCard from "components/RegistryCard";
@@ -14,26 +13,6 @@ import { Status } from "src/graphql/graphql";
 import { List_filters } from "consts/filters";
 import { encodeListURIFilter } from "utils/uri";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 32px;
-`;
-
-const GridContainer = styled.div`
-  --gap: 16px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, max(274px, (100% - var(--gap) * 2)/3)), 1fr));
-  align-items: center;
-  gap: var(--gap);
-`;
-
-const StyledButton = styled(Button)`
-  margin: 0 auto;
-`;
 
 const HighlightedLists = () => {
   const navigateAndScrollTop = useNavigateAndScrollTop();
@@ -76,9 +55,9 @@ const HighlightedLists = () => {
   const registriesLoading = isUndefined(combinedListsData) || isItemsDataLoading || isRegistriesDataLoading;
 
   return (
-    <Container>
+    <div className="flex flex-col w-full justify-center gap-8">
       <Header />
-      <GridContainer>
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,max(274px,(100%-16px*2)/3)),1fr))] items-center gap-4">
         {registriesLoading
           ? [...Array(6)].map((_, i) => <SkeletonRegistryCard key={i} />)
           : combinedListsData?.map((registry, i) => (
@@ -93,13 +72,14 @@ const HighlightedLists = () => {
                 overrideIsListView
               />
             ))}
-      </GridContainer>
-      <StyledButton
+      </div>
+      <Button
+        className="mx-auto"
         onClick={() => navigateAndScrollTop(`/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}`)}
         text="Show All"
         variant="secondary"
       />
-    </Container>
+    </div>
   );
 };
 

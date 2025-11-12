@@ -1,64 +1,12 @@
 import React from "react";
-import styled, { Theme } from "styled-components";
 import { Status } from "consts/status";
 import { Status as SubgraphStatus } from "src/graphql/graphql";
-
-const Container = styled.div<{ status: Status; isListView: boolean }>`
-  height: ${({ isListView }) => (isListView ? "min-content" : "45px")};
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  .dot {
-    ::before {
-      content: "";
-      display: inline-block;
-      height: 8px;
-      width: 8px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
-  }
-  ${({ theme, status, isListView }) => {
-    const [frontColor, backgroundColor] = getStatusColor(status, theme);
-    return `
-      ${!isListView && `border-top: 5px solid ${frontColor}`};
-      ${!isListView && `background-color: ${backgroundColor}`};
-      ${isListView && `padding: 0px`};
-      .front-color {
-        color: ${frontColor};
-      }
-      .dot {
-        ::before {
-          background-color: ${frontColor};
-        }
-      }
-    `;
-  }};
-`;
+import { cn } from "~src/utils";
 
 interface IStatusBanner {
   status: Status;
   isListView?: boolean;
 }
-
-export const getStatusColor = (status: Status, theme: Theme): [string, string] => {
-  switch (status) {
-    case Status.RegistrationPending:
-    case Status.ClearingPending:
-      return [theme.primaryBlue, theme.mediumBlue];
-    case Status.Disputed:
-      return [theme.secondaryPurple, theme.mediumPurple];
-    case Status.Included:
-      return [theme.success, theme.successLight];
-    case Status.Removed:
-      return [theme.error, theme.errorLight];
-    default:
-      return [theme.lightGrey, theme.lightGrey];
-  }
-};
 
 export const getStatusLabel = (status: Status): string => {
   switch (status) {
@@ -91,9 +39,27 @@ export const mapFromSubgraphStatus = (status: string, isDisputed: boolean) => {
   }
 };
 const StatusBanner: React.FC<IStatusBanner> = ({ status, isListView = false }) => (
-  <Container {...{ status, isListView }}>
+  <div
+    className={cn(
+      "flex items-center justify-between px-6 rounded-t-[3px]",
+      isListView ? "h-min" : "h-11",
+      isListView && "p-0",
+      "[&_.dot::before]:content-[''] [&_.dot::before]:inline-block [&_.dot::before]:h-2 [&_.dot::before]:w-2 [&_.dot::before]:rounded-[50%] [&_.dot::before]:mr-2",
+      !isListView && [
+        "border-t-[5px]",
+        (status === Status.RegistrationPending || status === Status.ClearingPending) &&
+          "border-t-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue [&_.front-color]:text-klerosUIComponentsPrimaryBlue [&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
+        status === Status.Disputed &&
+          "border-t-klerosUIComponentsSecondaryPurple bg-klerosUIComponentsMediumPurple [&_.front-color]:text-klerosUIComponentsSecondaryPurple [&_.dot::before]:bg-klerosUIComponentsSecondaryPurple",
+        status === Status.Included &&
+          "border-t-klerosUIComponentsSuccess bg-klerosUIComponentsSuccessLight [&_.front-color]:text-klerosUIComponentsSuccess [&_.dot::before]:bg-klerosUIComponentsSuccess",
+        status === Status.Removed &&
+          "border-t-klerosUIComponentsError bg-klerosUIComponentsErrorLight [&_.front-color]:text-klerosUIComponentsError [&_.dot::before]:bg-klerosUIComponentsError",
+      ]
+    )}
+  >
     <label className="front-color dot">{getStatusLabel(status)}</label>
-  </Container>
+  </div>
 );
 
 export default StatusBanner;

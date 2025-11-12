@@ -6,7 +6,7 @@ import { EnsureChain } from "components/EnsureChain";
 
 export const DisconnectWalletButton: React.FC = () => {
   const { disconnect } = useDisconnect();
-  return <Button className="text-klerosUIComponentsWhiteBackground" text={`Disconnect`} onClick={() => disconnect()} />;
+  return <Button text={`Disconnect`} onClick={() => disconnect()} />;
 };
 
 const General: React.FC = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme } from "styled-components";
+import { useTheme } from "~src/hooks/useToggleThemeContext";
 import HeroLightMobile from "svgs/hero/hero-lightmode-mobile.svg";
 import HeroDarkMobile from "svgs/hero/hero-darkmode-mobile.svg";
 import HeroLightDesktop from "svgs/hero/hero-lightmode-desktop.svg";
@@ -7,8 +7,8 @@ import HeroDarkDesktop from "svgs/hero/hero-darkmode-desktop.svg";
 import useIsDesktop from "hooks/useIsDesktop";
 
 const HeroImage = () => {
-  const theme = useTheme();
-  const themeIsLight = theme.name === "light";
+  const [theme] = useTheme();
+  const themeIsLight = theme === "light";
   const isDesktop = useIsDesktop();
   return <div>{isDesktop ? <HeroDesktop {...{ themeIsLight }} /> : <HeroMobile {...{ themeIsLight }} />}</div>;
 };

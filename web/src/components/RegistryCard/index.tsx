@@ -1,30 +1,11 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import { Card } from "@kleros/ui-components-library";
 import { useIsListView } from "context/IsListViewProvider";
-import { landscapeStyle } from "styles/landscapeStyle";
 import StatusBanner from "./StatusBanner";
 import RegistryInfo from "./RegistryInfo";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 import { GetRegistriesByIdsQuery } from "src/graphql/graphql";
 import { Status } from "src/consts/status";
-
-const StyledCard = styled(Card)`
-  width: 100%;
-  height: 274px;
-`;
-
-const StyledListItem = styled(Card)`
-  display: flex;
-  flex-grow: 1;
-  width: 100%;
-  height: max-content;
-  ${landscapeStyle(
-    () => css`
-      height: 64px;
-    `
-  )}
-`;
 
 type List = GetRegistriesByIdsQuery["registries"][number];
 interface IListCard extends List {
@@ -43,17 +24,22 @@ const RegistryCard: React.FC<IListCard> = ({ id, itemId, title, logoURI, totalIt
   return (
     <>
       {!isListView || overrideIsListView ? (
-        <StyledCard hover onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/1/desc/all`)}>
+        <Card
+          className="w-full h-[274px]"
+          hover
+          onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/1/desc/all`)}
+        >
           <StatusBanner {...{ status }} />
           <RegistryInfo {...{ title, logoURI, totalItems, status }} />
-        </StyledCard>
+        </Card>
       ) : (
-        <StyledListItem
+        <Card
+          className="flex grow w-full h-max lg:h-16"
           hover
           onClick={() => navigateAndScrollTop(`/lists/${registryAddressAndItemId}/display/desc/all`)}
         >
           <RegistryInfo {...{ title, logoURI, totalItems, status }} isListView />
-        </StyledListItem>
+        </Card>
       )}
     </>
   );

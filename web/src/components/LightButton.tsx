@@ -16,7 +16,7 @@ const LightButton: React.FC<ILightButton> = ({ text, Icon, onClick, disabled, cl
     variant="primary"
     small
     className={cn(
-      "p-2 rounded-[7px]",
+      "p-2 rounded-[7px]!",
       "bg-transparent hover:bg-white-low-opacity-strong transition duration-100",
       "[&_.button-text]:text-klerosUIComponentsPrimaryText [&_.button-text]:font-normal",
       "lg:[&_.button-svg]:mr-0",

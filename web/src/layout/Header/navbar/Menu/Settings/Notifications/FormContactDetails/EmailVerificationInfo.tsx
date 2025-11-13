@@ -43,9 +43,10 @@ const EmailVerificationInfo: React.FC<IEmailInfo> = ({ toggleIsSettingsOpen }) =
           We sent you a verification email. Please, verify it.
           <br /> Didn’t receive the email?{" "}
           <Button
+            variant="secondary"
             className={clsx(
-              "inline-block bg-transparent p-0 focus:bg-transparent hover:bg-transparent",
-              "[&_.button-text]:text-sm [&_.button-text]:font-normal [&_.button-text]:text-klerosUIComponentsPrimaryBlue"
+              "inline-block bg-transparent p-0 border-none focus:bg-transparent hover:bg-transparent",
+              "[&_.button-text]:text-sm [&_.button-text]:font-normal"
             )}
             text="Resend it"
             onClick={resendVerificationEmail}

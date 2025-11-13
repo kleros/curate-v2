@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import "overlayscrollbars/styles/overlayscrollbars.css";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";

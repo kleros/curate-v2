@@ -12,7 +12,7 @@ const Layout: React.FC = () => {
   return (
     <OverlayScrollContext.Provider value={containerRef}>
       <OverlayScrollbarsComponent
-        className="h-screen w-screen"
+        className="h-screen w-full"
         ref={containerRef}
         options={{ showNativeOverlaidScrollbars: true }}
       >

@@ -18,6 +18,9 @@ interface IListInfo {
   isListView?: boolean;
 }
 
+const firstColWidthCalc = "calc(80px+(100-80)*(min(max(100vw,900px),1250px)-900px)/(1250-900))";
+const secondColWidthCalc = "calc(100px+(150-100)*(min(max(100vw,900px),1250px)-900px)/(1250-900))";
+
 const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isListView = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? DEFAULT_LIST_LOGO));
@@ -36,7 +39,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isL
           "w-full h-max lg:h-16 p-4",
           "[&_h3]:col-span-4 [&_img]:col-span-4",
           "lg:justify-between lg:grid-rows-[1fr] lg:px-8",
-          "lg:grid-cols-[auto_1fr_calc(80px+(100-80)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_calc(100px+(150-100)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_max-content]",
+          `lg:grid-cols-[auto_1fr_${firstColWidthCalc}_${secondColWidthCalc}_max-content]`,
           "lg:[&_img]:col-span-1 lg:[&_h3]:col-span-2",
         ]
       )}

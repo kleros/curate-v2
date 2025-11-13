@@ -18,6 +18,9 @@ const TABS = [
   },
 ];
 
+const inlinePaddingCalc = "calc(8px+(32-8)*((100vw-300px)/(1250-300)))";
+const widthCalc = "calc(300px+(424-300)*((100vw-300px)/(1250-300)))";
+
 const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen, initialTab }) => {
   const [currentTab, setCurrentTab] = useState<number>(initialTab || 0);
   const containerRef = useRef(null);
@@ -38,7 +41,7 @@ const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen, initialTab }) => 
     >
       <div className="flex justify-center text-2xl mt-6 text-klerosUIComponentsPrimaryText">Settings</div>
       <Tabs
-        className="py-0 px-[calc(8px+(32-8)*((100vw-300px)/(1250-300)))] max-w-[660px] w-[86vw] lg:w-[calc(300px+(424-300)*((100vw-300px)/(1250-300)))]"
+        className={clsx(`py-0 px-[${inlinePaddingCalc}]`, `max-w-[660px] w-[86vw] lg:w-[${widthCalc}]`)}
         currentValue={currentTab}
         items={TABS}
         callback={(n: number) => {

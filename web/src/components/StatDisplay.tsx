@@ -11,15 +11,11 @@ interface IStatDisplay {
   color: IColors;
 }
 
+const marginBottomCalc = "calc(16px+(30-16)*(min(max(100vw,375px),1250px)-375px)/(1250-375))";
+
 const StatDisplay: React.FC<IStatDisplay> = ({ title, text, subtext, icon: Icon, color, ...props }) => {
   return (
-    <div
-      className={clsx(
-        "flex items-center gap-2 max-w-[192px]",
-        "lg:mb-[calc(16px+(30-16)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]"
-      )}
-      {...props}
-    >
+    <div className={clsx("flex items-center gap-2 max-w-[192px]", `lg:mb-[${marginBottomCalc}]`)} {...props}>
       <div
         className={cn(
           "flex items-center justify-center h-12 w-12 rounded-[50%]",

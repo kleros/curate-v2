@@ -82,6 +82,8 @@ interface IDappList {
   toggleIsDappListOpen: () => void;
 }
 
+const widthCalc = "calc(300px+(480-300)*(min(max(100vw,375px),1250px)-375px)/(1250-375))";
+
 const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
   const containerRef = useRef(null);
   useClickAway(containerRef, () => toggleIsDappListOpen());
@@ -95,7 +97,7 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
         "bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]",
         "[&_svg]:visible",
         "lg:mt-16 lg:top-0 lg:left-0 lg:right-auto lg:transform-none lg:translate-x-0 lg:max-h-[80vh]",
-        "lg:w-[calc(300px+(480-300)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]"
+        `lg:w-[${widthCalc}]`
       )}
     >
       <h1 className="pt-6 text-2xl font-semibold leading-8">Kleros Solutions</h1>

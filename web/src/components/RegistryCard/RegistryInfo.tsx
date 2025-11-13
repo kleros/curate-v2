@@ -35,7 +35,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isL
       className={cn(
         "flex flex-col justify-center items-center gap-2 h-[calc(100%-45px)]",
         isListView && [
-          "grid grid-cols-[21px_max.content_1fr_max-content] grid-rows-[repeat(3,min-content)] gap-y-4",
+          "grid grid-cols-[21px_max-content_1fr_max-content] grid-rows-[repeat(3,min-content)] gap-y-4",
           "w-full h-max lg:h-16 p-4",
           "[&_h3]:col-span-4 [&_img]:col-span-4",
           "lg:justify-between lg:grid-rows-[1fr] lg:px-8",

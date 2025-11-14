@@ -94,7 +94,7 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
       className={clsx(
         "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 w-[86vw] max-w-[480px]",
         "border border-klerosUIComponentsStroke rounded-[3px]",
-        "bg-klerosUIComponentsWhiteBackground shadow-[0px_2px_3px_rgba(0,0,0,0.06)]",
+        "bg-klerosUIComponentsWhiteBackground shadow-custom",
         "[&_svg]:visible",
         "lg:mt-16 lg:top-0 lg:left-0 lg:right-auto lg:transform-none lg:translate-x-0 lg:max-h-[80vh]",
         landscapeWidthCalc

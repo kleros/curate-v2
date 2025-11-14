@@ -22,7 +22,7 @@ export const SwitchChainButton: React.FC = () => {
   return (
     <Button
       isLoading={isLoading}
-      disabled={isLoading}
+      isDisabled={isLoading}
       text={`Switch to ${SUPPORTED_CHAINS[DEFAULT_CHAIN].name}`}
       onClick={handleSwitch}
     />
@@ -35,7 +35,7 @@ const ConnectButton: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <Button
       {...{ className }}
-      disabled={isOpen}
+      isDisabled={isOpen}
       small
       text={"Connect"}
       onClick={async () => open({ view: "Connect" })}

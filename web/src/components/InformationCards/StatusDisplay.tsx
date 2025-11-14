@@ -1,38 +1,28 @@
 import React, { useMemo } from "react";
-import { getStatusColor, getStatusLabel, mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
-import styled, { css, useTheme } from "styled-components";
+import { getStatusLabel, mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 import { Status } from "consts/status";
 import { Status as SubgraphStatus } from "src/graphql/graphql";
 import { useCountdown } from "hooks/useCountdown";
 import { secondsToDayHourMinute } from "utils/date";
 import { useReadCurateV2ChallengePeriodDuration } from "hooks/useContract";
+import { cn } from "~src/utils";
 
-const StatusContainer = styled.div`
-  display: flex;
-  gap: 4px 8px;
-  flex-wrap: wrap;
-`;
+const colorStyles: Record<Status, string> = {
+  [Status.RegistrationPending]: "text-klerosUIComponentsPrimaryBlue",
+  [Status.ClearingPending]: "text-klerosUIComponentsPrimaryBlue",
+  [Status.Disputed]: "text-klerosUIComponentsSecondaryPurple",
+  [Status.Included]: "text-klerosUIComponentsSuccess",
+  [Status.Removed]: "text-klerosUIComponentsError",
+};
 
-const StyledLabel = styled.label<{ frontColor: string; withDot?: boolean }>`
-  display: flex;
-  align-items: center;
-  color: ${({ frontColor }) => frontColor};
-  ${({ withDot, frontColor }) =>
-    withDot
-      ? css`
-          ::before {
-            content: "";
-            display: inline-block;
-            height: 8px;
-            width: 8px;
-            border-radius: 50%;
-            margin-right: 8px;
-            background-color: ${frontColor};
-            flex-shrink: 0;
-          }
-        `
-      : null}
-`;
+const dotStyles: Record<Status, string> = {
+  [Status.RegistrationPending]: "[&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
+  [Status.ClearingPending]: "[&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
+  [Status.Disputed]: "[&_.dot::before]:bg-klerosUIComponentsSecondaryPurple",
+  [Status.Included]: "[&_.dot::before]:bg-klerosUIComponentsSuccess",
+  [Status.Removed]: "[&_.dot::before]:bg-klerosUIComponentsError",
+};
+
 interface IStatusDisplay {
   status: SubgraphStatus;
   disputed: boolean;
@@ -45,10 +35,7 @@ const StatusDisplay: React.FC<IStatusDisplay> = ({
   registryAddress,
   latestRequestSubmissionTime,
 }) => {
-  const theme = useTheme();
-
   const processedStatus = mapFromSubgraphStatus(status, disputed);
-  const [frontColor] = getStatusColor(processedStatus, theme);
 
   const { data: challengePeriodDuration } = useReadCurateV2ChallengePeriodDuration({
     address: registryAddress as `0x${string}`,
@@ -69,12 +56,21 @@ const StatusDisplay: React.FC<IStatusDisplay> = ({
     countdown && countdown > 0 && [Status.ClearingPending, Status.RegistrationPending].includes(processedStatus);
 
   return (
-    <StatusContainer>
-      <StyledLabel frontColor={frontColor} withDot>
+    <div className="flex flex-wrap gap-y-1 gap-x-2">
+      <label
+        className={cn(
+          "flex items-center",
+          "[&_.dot::before]:content-[''] [&_.dot::before]:inline-block [&_.dot::before]:h-2 [&_.dot::before]:w-2 [&_.dot::before]:rounded-[50%] [&_.dot::before]:mr-2 [&_.dot::before]:shrink-0",
+          colorStyles[processedStatus],
+          dotStyles[processedStatus]
+        )}
+      >
         {getStatusLabel(processedStatus)}
-      </StyledLabel>
-      <StyledLabel {...{ frontColor }}>{showCountdown ? secondsToDayHourMinute(countdown) : ""}</StyledLabel>
-    </StatusContainer>
+      </label>
+      <label className={cn("flex items-center", colorStyles[processedStatus])}>
+        {showCountdown ? secondsToDayHourMinute(countdown) : ""}
+      </label>
+    </div>
   );
 };
 

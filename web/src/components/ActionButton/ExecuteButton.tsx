@@ -26,7 +26,7 @@ const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refe
     <EnsureChain>
       <Button
         text="Execute"
-        disabled={isLoading || isError || isExecuting || isPreparingConfig || disabled}
+        isDisabled={isLoading || isError || isExecuting || isPreparingConfig || disabled}
         isLoading={isLoading || isExecuting}
         onClick={() => {
           if (!executeRequest || !config || !publicClient) return;

@@ -1,40 +1,13 @@
 import React from "react";
 import { Card } from "@kleros/ui-components-library";
-import styled from "styled-components";
 import { formatETH } from "utils/format";
-
-const StyledCard = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.mediumBlue};
-  height: 87px;
-  width: 100%;
-  border: none;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  gap: 5px;
-`;
-
-const StyledHeader = styled.p`
-  font-size: 14px;
-  margin: 0;
-  color: ${({ theme }) => theme.primaryBlue};
-`;
-
-const StyledQuantity = styled.p`
-  font-size: 24px;
-  margin: 0;
-  color: ${({ theme }) => theme.primaryBlue};
-  font-weight: 600;
-`;
 
 const FeeRequired: React.FC<{ value: bigint }> = ({ value }) => {
   return (
-    <StyledCard>
-      <StyledHeader>Deposit required</StyledHeader>
-      <StyledQuantity>{formatETH(value ?? 1, 5)} ETH</StyledQuantity>
-    </StyledCard>
+    <Card className="flex flex-col bg-klerosUIComponentsMediumBlue h-22 w-full border-none justify-center items-center p-4 gap-1.5">
+      <p className="text-sm text-klerosUIComponentsPrimaryBlue m-0">Deposit required</p>
+      <p className="text-2xl font-semibold text-klerosUIComponentsPrimaryBlue m-0">{formatETH(value ?? 1, 5)} ETH</p>
+    </Card>
   );
 };
 

@@ -1,24 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { AddressOrName, IdenticonOrAvatar } from "../ConnectWallet/AccountDisplay";
 import { useEnsAddress } from "wagmi";
 import { isAddress } from "viem";
 import Skeleton from "react-loading-skeleton";
-
-const AliasContainer = styled.div`
-  min-height: 32px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  > label {
-    color: ${({ theme }) => theme.primaryText};
-    font-size: 14px;
-  }
-`;
+import { cn } from "~src/utils";
 
 interface IAlias {
   address: string;
@@ -35,12 +20,12 @@ const AliasDisplay: React.FC<IAlias> = ({ address, className }) => {
   const finalAddress = addressFromENS ?? address;
 
   return (
-    <AliasContainer {...{ className }}>
+    <div className={cn("flex items-center gap-2 min-h-8", className)}>
       {isLoading ? <Skeleton width={30} height={24} /> : <IdenticonOrAvatar address={finalAddress} size="24" />}
-      <TextContainer>
+      <div className="flex [&>label]:text-sm [&>label]:text-klerosUIComponentsPrimaryText">
         {isLoading ? <Skeleton width={30} height={24} /> : <AddressOrName address={finalAddress} />}&nbsp;
-      </TextContainer>
-    </AliasContainer>
+      </div>
+    </div>
   );
 };
 

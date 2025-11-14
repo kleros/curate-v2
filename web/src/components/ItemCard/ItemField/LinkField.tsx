@@ -1,11 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 import Globe from "svgs/icons/globe.svg";
-
-const Container = styled.a`
-  display: flex;
-  gap: 8px;
-`;
 
 export interface ILinkField {
   value: string;
@@ -14,10 +8,16 @@ export interface ILinkField {
 
 const LinkField: React.FC<ILinkField> = ({ value }) => {
   return (
-    <Container href={value} onClick={(event) => event.stopPropagation()} target="blank" rel="noreferrer">
+    <a
+      className="flex gap-2"
+      href={value}
+      onClick={(event) => event.stopPropagation()}
+      target="blank"
+      rel="noopener noreferrer"
+    >
       <Globe />
       {value}
-    </Container>
+    </a>
   );
 };
 

@@ -1,13 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 import WithHelpTooltip from "components/WithHelpTooltip";
-
-const Container = styled.p`
-  margin: 0px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
 
 export interface INumberField {
   value: string;
@@ -17,7 +9,7 @@ export interface INumberField {
 }
 const NumberField: React.FC<INumberField> = ({ value, detailed, label, description }) => {
   return (
-    <Container>
+    <p className="flex gap-2 items-center m-0">
       {detailed ? (
         <>
           {label}: <WithHelpTooltip tooltipMsg={description ?? ""}>{value}</WithHelpTooltip>
@@ -25,7 +17,7 @@ const NumberField: React.FC<INumberField> = ({ value, detailed, label, descripti
       ) : (
         <WithHelpTooltip tooltipMsg={label ?? ""}>{value}</WithHelpTooltip>
       )}
-    </Container>
+    </p>
   );
 };
 

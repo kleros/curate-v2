@@ -1,35 +1,16 @@
 import React from "react";
-import styled from "styled-components";
 import WithHelpTooltip from "components/WithHelpTooltip";
 import TruncatedText from "components/TruncatedText";
 import { Overlay } from "components/Overlay";
-import { Textarea } from "@kleros/ui-components-library";
+import { TextArea } from "@kleros/ui-components-library";
 import { useToggle } from "react-use";
 import Modal from "components/Modal";
 
-const Container = styled.p`
-  margin: 0px;
-`;
-
-const StyledModal = styled(Modal)`
-  padding: 0;
-`;
-
-const TextDisplay = styled(Textarea)`
-  width: 100%;
-  height: 80vh;
-`;
-
-const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryBlue};
-  cursor: pointer;
-`;
-
 const LongTextFullDisplay: React.FC<{ text: string; toggleModal: () => void }> = ({ text, toggleModal }) => (
   <Overlay>
-    <StyledModal {...{ toggleModal }}>
-      <TextDisplay value={text} disabled />
-    </StyledModal>
+    <Modal className="p-0" {...{ toggleModal }}>
+      <TextArea className="w-full h-[80vh]" value={text} isDisabled />
+    </Modal>
   </Overlay>
 );
 
@@ -43,16 +24,19 @@ const LongTextField: React.FC<ILongTextField> = ({ value, detailed, label }) => 
   const [isModalOpen, toggleModal] = useToggle(false);
   return (
     <>
-      <Container>
+      <p className="m-0">
         {detailed ? (
           <WithHelpTooltip tooltipMsg={label ?? ""}>
             <TruncatedText text={value} maxLength={40} />
-            &nbsp; <StyledLabel onClick={toggleModal}>[Read More]</StyledLabel>
+            &nbsp;{" "}
+            <label className="cursor-pointer text-klerosUIComponentsPrimaryBlue" onClick={toggleModal}>
+              [Read More]
+            </label>
           </WithHelpTooltip>
         ) : (
           <TruncatedText text={value} maxLength={30} />
         )}
-      </Container>
+      </p>
       {isModalOpen && <LongTextFullDisplay text={value} toggleModal={toggleModal} />}
     </>
   );

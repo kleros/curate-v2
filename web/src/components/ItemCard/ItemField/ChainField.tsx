@@ -1,17 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import { getChainById } from "utils/getChainById";
 import ChainIcon, { getChainName } from "components/ChainIcon";
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const StyledP = styled.p`
-  margin: 0px;
-`;
 
 export interface IChainField {
   value: string;
@@ -23,10 +12,10 @@ const ChainField: React.FC<IChainField> = ({ value }) => {
   const chainName = getChainName(chain.id);
 
   return (
-    <Container>
+    <div className="flex gap-2 items-center">
       <ChainIcon chainId={chain.id} />
-      <StyledP>{chainName}</StyledP>
-    </Container>
+      <p className="m-0">{chainName}</p>
+    </div>
   );
 };
 

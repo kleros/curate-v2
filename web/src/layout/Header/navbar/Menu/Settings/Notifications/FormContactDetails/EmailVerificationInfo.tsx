@@ -36,7 +36,7 @@ const EmailVerificationInfo: React.FC<IEmailInfo> = ({ toggleIsSettingsOpen }) =
 
   return userExists && !user?.isEmailVerified ? (
     <div className="flex flex-row items-center gap-4 w-full pt-4 mt-8 border-t border-klerosUIComponentsStroke">
-      <HourglassIcon className="w-8 h-8 fill-klerosUIComponentsPrimaryBlue" />
+      <HourglassIcon width={32} height={32} className="fill-klerosUIComponentsPrimaryBlue" />
       <div className="flex flex-col items-start gap-2">
         <h3 className="m-0">Email Verification Pending</h3>
         <label>

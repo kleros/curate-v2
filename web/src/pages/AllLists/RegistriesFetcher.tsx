@@ -11,6 +11,7 @@ import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { List_filters } from "consts/filters";
 import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
+import { LG_BREAKPOINT } from "~src/styles/breakpoints";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();
@@ -20,7 +21,7 @@ const RegistriesFetcher: React.FC = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const location = useListRootPath();
-  const registriesPerPage = width > 900 ? 9 : 3;
+  const registriesPerPage = width > LG_BREAKPOINT ? 9 : 3;
   const pageNumber = parseInt(page ?? "1", 10);
   const registrySkip = registriesPerPage * (pageNumber - 1);
 

@@ -9,6 +9,7 @@ import { decodeListURIFilter } from "utils/uri";
 // import { RegistryDetailsFragment } from "queries/useCasesQuery";
 import RegistryCard from "components/RegistryCard";
 import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
+import { LG_BREAKPOINT } from "~src/styles/breakpoints";
 
 export interface IRegistriesGrid {
   registries?: [];
@@ -34,7 +35,7 @@ const RegistriesGrid: React.FC<IRegistriesGrid> = ({
   const { id: searchValue } = decodedFilter;
   const { isListView } = useIsListView();
   const { width } = useWindowSize();
-  const screenIsBig = useMemo(() => width > 900, [width]);
+  const screenIsBig = useMemo(() => width > LG_BREAKPOINT, [width]);
 
   return (
     <>

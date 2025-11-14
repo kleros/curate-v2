@@ -64,7 +64,7 @@ const Breadcrumb: React.FC = () => {
 
   return (
     <BreadcrumbBase
-      className="mb-8 items-center [&_small]:text-sm [&_small]:font-normal"
+      className="mb-8 [&_small]:text-sm [&_small]:font-normal"
       items={breadcrumbItems}
       clickable
       callback={(val: string) => navigate(val)}

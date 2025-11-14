@@ -3,7 +3,6 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useWindowSize } from "react-use";
 import { useListRootPath, decodeListURIFilter } from "utils/uri";
 import RegistriesDisplay from "components/RegistriesDisplay";
-import { BREAKPOINT_LANDSCAPE } from "styles/landscapeStyle";
 import { useItemsQuery } from "queries/useItemsQuery";
 import { useRegistriesByIdsQuery } from "queries/useRegistriesByIdsQuery";
 import { isUndefined } from "utils/index";
@@ -21,8 +20,7 @@ const RegistriesFetcher: React.FC = () => {
   const navigate = useNavigate();
   const { width } = useWindowSize();
   const location = useListRootPath();
-  const screenIsBig = width > BREAKPOINT_LANDSCAPE;
-  const registriesPerPage = screenIsBig ? 9 : 3;
+  const registriesPerPage = width > 900 ? 9 : 3;
   const pageNumber = parseInt(page ?? "1", 10);
   const registrySkip = registriesPerPage * (pageNumber - 1);
 

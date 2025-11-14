@@ -1,8 +1,4 @@
 import React from "react";
-import styled, { css } from "styled-components";
-
-import { MAX_WIDTH_LANDSCAPE, landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -12,35 +8,21 @@ import RegistriesFetcher from "./RegistriesFetcher";
 import RegistryDetails from "./RegistryDetails";
 import ItemDisplay from "./ItemDisplay";
 import Breadcrumb from "./StyledBreadcrumb";
+import clsx from "clsx";
 
-const Container = styled.div`
-  width: 100%;
-  background-color: ${({ theme }) => theme.lightBackground};
-  padding: 32px 16px 40px;
-  max-width: ${MAX_WIDTH_LANDSCAPE};
-  margin: 0 auto;
-
-  ${landscapeStyle(
-    () => css`
-      padding: 48px ${responsiveSize(0, 132)} 60px;
-    `
-  )}
-`;
-
-export const ConnectWalletContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: ${({ theme }) => theme.primaryText};
-`;
+const landscapePaddingCalc = "lg:p-[48px_calc(0px+(132-0)*(min(max(100vw,375px),1250px)-375px)/(1250-375))_60px]";
 
 const AllLists: React.FC = () => (
-  <Container>
+  <div
+    className={clsx(
+      "w-full bg-klerosUIComponentsLightBackground px-4 pt-8 pb-10 mx-auto max-w-landscape",
+      landscapePaddingCalc
+    )}
+  >
     <Breadcrumb />
     <Routes>
       <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
-      <Route path="/item/:itemId" element={<ItemDisplay />} />
+      {/* <Route path="/item/:itemId" element={<ItemDisplay />} />
       <Route
         path="/:id/*"
         element={
@@ -48,9 +30,9 @@ const AllLists: React.FC = () => (
             <RegistryDetails />
           </RegistryDetailsProvider>
         }
-      />
+      /> */}
     </Routes>
-  </Container>
+  </div>
 );
 
 export default AllLists;

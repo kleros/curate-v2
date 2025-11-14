@@ -1,8 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-
-import { hoverShortTransitionTiming } from "styles/commonStyles";
 
 import { DropdownSelect } from "@kleros/ui-components-library";
 
@@ -11,41 +8,6 @@ import ListIcon from "svgs/icons/list.svg";
 import GridIcon from "svgs/icons/grid.svg";
 import { useItemRootPath, useListRootPath } from "utils/uri";
 import useIsDesktop from "hooks/useIsDesktop";
-
-const Container = styled.div`
-  display: flex;
-  justify-content: end;
-  gap: 12px;
-  width: fit-content;
-`;
-
-const IconsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-`;
-
-const BaseIconStyles = css`
-  ${hoverShortTransitionTiming}
-  cursor: pointer;
-  fill: ${({ theme }) => theme.primaryBlue};
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
-
-  :hover {
-    fill: ${({ theme }) => theme.secondaryBlue};
-  }
-`;
-
-const StyledGridIcon = styled(GridIcon)`
-  ${BaseIconStyles}
-`;
-
-const StyledListIcon = styled(ListIcon)`
-  ${BaseIconStyles}
-`;
 
 export interface IFilters {
   isListFilter?: boolean;
@@ -69,23 +31,27 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   const isDesktop = useIsDesktop();
 
   return (
-    <Container>
+    <div className="flex justify-end gap-3 w-fit **:focus:shadow-none">
       <DropdownSelect
         smallButton
         simpleButton
         items={[
-          { value: "desc", text: "Newest" },
-          { value: "asc", text: "Oldest" },
+          { id: "desc", itemValue: "desc", text: "Newest" },
+          { id: "asc", itemValue: "asc", text: "Oldest" },
         ]}
-        defaultValue={order}
-        callback={handleOrderChange}
+        defaultSelectedKey={order}
+        callback={(item) => handleOrderChange(item.itemValue)}
       />
       {isDesktop && isListFilter ? (
-        <IconsContainer>
+        <div className="flex justify-center items-center gap-1">
           {isListView ? (
-            <StyledGridIcon onClick={() => setIsListView(false)} />
+            <GridIcon
+              className="w-4 h-4 overflow-hidden cursor-pointer fill-klerosUIComponentsPrimaryBlue hover:fill-klerosUIComponentsSecondaryBlue transition duration-100"
+              onClick={() => setIsListView(false)}
+            />
           ) : (
-            <StyledListIcon
+            <ListIcon
+              className="w-4 h-4 overflow-hidden cursor-pointer fill-klerosUIComponentsPrimaryBlue hover:fill-klerosUIComponentsSecondaryBlue transition duration-100"
               onClick={() => {
                 if (isDesktop) {
                   setIsListView(true);
@@ -93,9 +59,9 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
               }}
             />
           )}
-        </IconsContainer>
+        </div>
       ) : null}
-    </Container>
+    </div>
   );
 };
 

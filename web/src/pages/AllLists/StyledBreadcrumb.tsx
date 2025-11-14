@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import styled from "styled-components";
 import { Breadcrumb as BreadcrumbBase } from "@kleros/ui-components-library";
 import { useLocation, useNavigate } from "react-router-dom";
 import HomeIcon from "svgs/icons/home.svg";
@@ -7,18 +6,6 @@ import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { encodeListURIFilter } from "utils/uri";
 import { List_filters } from "consts/filters";
-
-const StyledBreadcrumb = styled(BreadcrumbBase)`
-  margin-bottom: 32px;
-  align-items: center;
-`;
-
-const StyledHomeIcon = styled(HomeIcon)`
-  path {
-    fill: ${({ theme }) => theme.secondaryText};
-  }
-  margin-bottom: 3.5px;
-`;
 
 const Breadcrumb: React.FC = () => {
   const location = useLocation();
@@ -47,7 +34,7 @@ const Breadcrumb: React.FC = () => {
 
   const breadcrumbItems = useMemo(() => {
     const baseItems = [
-      { text: <StyledHomeIcon />, value: "/" },
+      { text: <HomeIcon className="fill-klerosUIComponentsSecondaryText mb-[3.5px]" />, value: "/" },
       { text: "All Lists", value: `/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}` },
     ];
     switch (page) {
@@ -75,7 +62,14 @@ const Breadcrumb: React.FC = () => {
     return baseItems;
   }, [page, listAddress, registryDetails, location]);
 
-  return <StyledBreadcrumb items={breadcrumbItems} clickable callback={(val: string) => navigate(val)} />;
+  return (
+    <BreadcrumbBase
+      className="mb-8 items-center [&_small]:text-sm [&_small]:font-normal"
+      items={breadcrumbItems}
+      clickable
+      callback={(val: string) => navigate(val)}
+    />
+  );
 };
 
 export default Breadcrumb;

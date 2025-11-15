@@ -16,7 +16,7 @@ const ImageField: React.FC<IImageField> = ({ value, detailed }) => {
         width={detailed ? 125 : 40}
         height={detailed ? 125 : 40}
         src={imgUrl}
-        {...{ detailed }}
+        alt="Item image"
       />
     </Link>
   );

@@ -12,7 +12,7 @@ const LinkField: React.FC<ILinkField> = ({ value }) => {
       className="flex gap-2"
       href={value}
       onClick={(event) => event.stopPropagation()}
-      target="blank"
+      target="_blank"
       rel="noopener noreferrer"
     >
       <Globe />

@@ -60,7 +60,7 @@ const StatusDisplay: React.FC<IStatusDisplay> = ({
       <label
         className={cn(
           "flex items-center",
-          "[&_.dot::before]:content-[''] [&_.dot::before]:inline-block [&_.dot::before]:h-2 [&_.dot::before]:w-2 [&_.dot::before]:rounded-[50%] [&_.dot::before]:mr-2 [&_.dot::before]:shrink-0",
+          "before:content-[''] before:inline-block before:h-2 before:w-2 before:rounded-[50%] before:mr-2 before:shrink-0",
           colorStyles[processedStatus],
           dotStyles[processedStatus]
         )}

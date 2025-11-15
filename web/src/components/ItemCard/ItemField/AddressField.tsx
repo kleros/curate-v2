@@ -16,7 +16,7 @@ const AddressField: React.FC<IAddressField> = ({ value, chainId }) => {
       className="flex gap-2"
       href={`${explorerUrl}/address/${value}`}
       onClick={(event) => event.stopPropagation()}
-      target="blank"
+      target="_blank"
       rel="noopener noreferrer"
     >
       <Etherscan width={16} height={16} />

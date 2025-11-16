@@ -1,8 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
 
-import { landscapeStyle } from "styles/landscapeStyle";
-import { hoverShortTransitionTiming } from "styles/commonStyles";
 import { responsiveSize } from "styles/responsiveSize";
 
 import Skeleton from "react-loading-skeleton";
@@ -11,60 +8,10 @@ import PolicyIcon from "svgs/icons/policy.svg";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
-import { InternalLink } from "components/InternalLink";
+import { Link } from "react-router-dom";
 
-const ShadeArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  padding: 24px ${responsiveSize(24, 32)};
-  margin-top: 16px;
-  background-color: ${({ theme }) => theme.mediumBlue};
-
-  ${landscapeStyle(
-    () => css`
-      flex-direction: row;
-      justify-content: space-between;
-    `
-  )};
-`;
-
-const StyledP = styled.p`
-  font-size: 14px;
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: ${({ theme }) => theme.primaryBlue};
-  ${landscapeStyle(
-    () => css`
-      margin-bottom: 0;
-    `
-  )};
-`;
-
-const StyledPolicyIcon = styled(PolicyIcon)`
-  width: 16px;
-  fill: ${({ theme }) => theme.primaryBlue};
-`;
-
-const LinkContainer = styled.div`
-  display: flex;
-  gap: ${responsiveSize(16, 24)};
-  flex-wrap: wrap;
-`;
-
-const StyledInternalLink = styled(InternalLink)`
-  ${hoverShortTransitionTiming}
-  display: flex;
-  gap: 4px;
-  align-items: center;
-
-  &:hover {
-    svg {
-      fill: ${({ theme }) => theme.secondaryBlue};
-    }
-  }
-`;
+const internalLinkStyle =
+  "flex gap-1 items-center transition duration-100 hover:[&_svg]:fill-klerosUIComponentsSecondaryBlue";
 
 interface IPolicies {
   policyURI: string;
@@ -75,30 +22,38 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
   const { data: parentRegistryDetails } = useRegistryDetailsQuery(MAIN_CURATE_ADDRESS);
 
   return (
-    <ShadeArea>
-      <StyledP>Make sure you read and understand the Policies</StyledP>
-      <LinkContainer>
+    <div
+      className="flex flex-col justify-center w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue lg:flex-row lg:justify-between"
+      style={{ paddingInline: responsiveSize(24, 32) }}
+    >
+      <p className="text-sm mt-0 mb-4 text-klerosUIComponentsPrimaryBlue lg:mb-0">
+        Make sure you read and understand the Policies
+      </p>
+      <div className="flex flex-wrap" style={{ gap: responsiveSize(16, 24) }}>
         {!isItem ? (
           <>
             {parentRegistryDetails ? (
-              <StyledInternalLink to={`/attachment/?url=${getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}`}>
-                <StyledPolicyIcon />
+              <Link
+                className={internalLinkStyle}
+                to={`/attachment/?url=${getIpfsUrl(parentRegistryDetails.registry.policyURI ?? "")}`}
+              >
+                <PolicyIcon width={16} className="fill-klerosUIComponentsPrimaryBlue" />
                 Curation Policy
-              </StyledInternalLink>
+              </Link>
             ) : (
               <Skeleton width={116} />
             )}
           </>
         ) : null}
         {policyURI ? (
-          <StyledInternalLink to={`/attachment/?url=${getIpfsUrl(policyURI)}`}>
-            <StyledPolicyIcon />
+          <Link className={internalLinkStyle} to={`/attachment/?url=${getIpfsUrl(policyURI)}`}>
+            <PolicyIcon width={16} className="fill-klerosUIComponentsPrimaryBlue" />
             List Policy
-          </StyledInternalLink>
+          </Link>
         ) : (
           <Skeleton width={80} />
         )}
-      </LinkContainer>
-    </ShadeArea>
+      </div>
+    </div>
   );
 };

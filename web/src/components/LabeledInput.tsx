@@ -18,7 +18,6 @@ const Label: React.FC<{
       {tooltipMsg ? (
         <WithHelpTooltip tooltipMsg={tooltipMsg} place="top">
           <label
-            id={label}
             className={cn(
               alignRight ? "text-end float-right" : "text-start float-left",
               top ? "text-klerosUIComponentsPrimaryText" : "text-klerosUIComponentsSecondaryText"
@@ -29,7 +28,6 @@ const Label: React.FC<{
         </WithHelpTooltip>
       ) : (
         <label
-          id={label}
           className={cn(
             alignRight ? "text-end float-right" : "text-start float-left",
             top ? "text-klerosUIComponentsPrimaryText" : "text-klerosUIComponentsSecondaryText"

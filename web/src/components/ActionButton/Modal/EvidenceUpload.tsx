@@ -62,8 +62,11 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
         onChange={(event) => setTitle(event.target.value)}
       />
       <div className="flex flex-col gap-3">
-        <label className="text-klerosUIComponentsPrimaryText">Description</label>
+        <label htmlFor="evidence-description" className="text-klerosUIComponentsPrimaryText">
+          Description
+        </label>
         <TextArea
+          id="evidence-description"
           className="w-full h-[180px]"
           placeholder="Explain what motivates you to challenge it. Why do you think the item is not compliant with the Policy?"
           value={description}

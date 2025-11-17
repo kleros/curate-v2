@@ -22,7 +22,7 @@ const AllLists: React.FC = () => (
     <Breadcrumb />
     <Routes>
       <Route path="/display/:page/:order/:filter" element={<RegistriesFetcher />} />
-      {/* <Route path="/item/:itemId" element={<ItemDisplay />} />
+      <Route path="/item/:itemId" element={<ItemDisplay />} />
       <Route
         path="/:id/*"
         element={
@@ -30,7 +30,7 @@ const AllLists: React.FC = () => (
             <RegistryDetails />
           </RegistryDetailsProvider>
         }
-      /> */}
+      />
     </Routes>
   </div>
 );

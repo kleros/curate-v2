@@ -30,7 +30,7 @@ const History: React.FC<IHistory> = ({ itemId, isItem }) => {
         acc.push(...history);
         return acc;
       }, []),
-    [data, isLightTheme]
+    [data, isLightTheme, isItem]
   );
 
   const Component = useMemo(() => {

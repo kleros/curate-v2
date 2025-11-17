@@ -57,7 +57,7 @@ const TopInfo: React.FC<ITopInfo> = ({
         {isUndefined(description) ? (
           <Skeleton width="90%" height={21} />
         ) : (
-          <p className="m-0 text-klerosUIComponentsSecondaryText no-underline hover:underline">{description}</p>
+          <p className="m-0 text-klerosUIComponentsSecondaryText">{description}</p>
         )}
       </div>
       <div
@@ -67,7 +67,7 @@ const TopInfo: React.FC<ITopInfo> = ({
         {id !== "" ? (
           <Copiable copiableContent={id} info="Copy Registry Address" iconPlacement="left">
             <a
-              className="text-klerosUIComponentsPrimaryBlue"
+              className="text-klerosUIComponentsPrimaryBlue no-underline hover:underline"
               href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
               target="_blank"
               rel="noreferrer"

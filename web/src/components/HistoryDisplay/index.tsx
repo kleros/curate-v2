@@ -1,6 +1,5 @@
-import { Card, CustomTimeline, _TimelineItem1 } from "@kleros/ui-components-library";
+import { Card, CustomTimeline } from "@kleros/ui-components-library";
 import React, { useMemo } from "react";
-import styled, { css, Theme, useTheme } from "styled-components";
 import Header from "./Header";
 import { useItemRequests } from "queries/useRequestsQuery";
 import { RequestDetailsFragment, Ruling, Status } from "src/graphql/graphql";
@@ -9,81 +8,62 @@ import CheckIcon from "assets/svgs/icons/check-circle-outline.svg";
 import ClosedIcon from "assets/svgs/icons/close-circle.svg";
 import { HistorySkeletonCard } from "../StyledSkeleton";
 import Party from "./Party";
-import { landscapeStyle } from "styles/landscapeStyle";
-
-const Container = styled(Card)`
-  display: flex;
-  width: 100%;
-  height: auto;
-  flex-direction: column;
-  align-items: start;
-  padding: 22px 32px;
-  gap: 54px;
-`;
-
-const StyledTimeline = styled(CustomTimeline)`
-  width: 100%;
-  margin-bottom: 30px;
-  .party-wrapper {
-    max-height: none;
-    ${landscapeStyle(
-      () => css`
-        max-height: 32px;
-      `
-    )}
-  }
-`;
-
-const StyledLabel = styled.label`
-  align-self: center;
-  padding-bottom: 32px;
-`;
+import clsx from "clsx";
+import { useTheme } from "~src/hooks/useToggleThemeContext";
 
 interface IHistory {
   itemId: string;
   isItem?: boolean;
 }
 
+type TimelineItems = React.ComponentProps<typeof CustomTimeline>["items"];
+
 const History: React.FC<IHistory> = ({ itemId, isItem }) => {
-  const theme = useTheme();
   const { data, isLoading } = useItemRequests(itemId);
+  const [theme] = useTheme();
+  const isLightTheme = theme === "light";
 
   const items = useMemo(
     () =>
-      data?.requests.reduce<_TimelineItem1[]>((acc, request) => {
-        const history = constructItemsFromRequest(request, theme, isItem);
+      data?.requests.reduce<TimelineItems>((acc, request) => {
+        const history = constructItemsFromRequest(request, isLightTheme, isItem);
         acc.push(...history);
         return acc;
       }, []),
-    [data]
+    [data, isLightTheme]
   );
 
   const Component = useMemo(() => {
     if (!items || isLoading) return <HistorySkeletonCard />;
-    else if (items.length === 0) return <StyledLabel>No requests yet.</StyledLabel>;
+    else if (items.length === 0) return <label className="self-center pb-8">No requests yet.</label>;
 
-    return <StyledTimeline {...{ items }} />;
+    return (
+      <CustomTimeline
+        className={clsx("w-full mb-8", "[&_.party-wrapper]:max-h-none [&_.party-wrapper]:lg:max-h-8")}
+        {...{ items }}
+      />
+    );
   }, [items, isLoading]);
 
   return (
-    <Container>
+    <Card className="flex flex-col w-full h-auto items-start gap-14 py-6 px-8">
       <Header />
       {Component}
-    </Container>
+    </Card>
   );
 };
 
 const constructItemsFromRequest = (
   request: RequestDetailsFragment,
-  theme: Theme,
+  isLightTheme: boolean,
   isItem?: boolean
-): _TimelineItem1[] => {
-  const historyItems: _TimelineItem1[] = [];
+): TimelineItems => {
+  const historyItems: TimelineItems = [];
 
   if (request.requestType === Status.RegistrationRequested) {
     historyItems.push({
       title: `${isItem ? "Item" : "List"} Submitted`,
-      variant: theme.primaryBlue,
+      variant: isLightTheme ? "#009aff" : "#6cc5ff",
       subtitle: formatDate(request.submissionTime),
       rightSided: true,
       party: "",
@@ -92,7 +72,7 @@ const constructItemsFromRequest = (
     if (request.disputed && request.challenger) {
       historyItems.push({
         title: `${isItem ? "Submission" : "Registration"} Challenged - Case ${request.disputeID}`,
-        variant: theme.secondaryPurple,
+        variant: isLightTheme ? "#9013fe" : "#b45fff",
         party: <Party {...{ request }} />,
         subtitle: formatDate(request.challengeTime),
         rightSided: true,
@@ -104,7 +84,7 @@ const constructItemsFromRequest = (
 
       historyItems.push({
         title: `${isItem ? "Item" : "List"} ${included ? "Included" : "Rejected"}`,
-        variant: included ? theme.primaryBlue : theme.error,
+        variant: included ? (isLightTheme ? "#009aff" : "#6cc5ff") : isLightTheme ? "#f60c36" : "#ff5a78",
         subtitle: formatDate(request.resolutionTime),
         rightSided: true,
         party: "",
@@ -114,7 +94,7 @@ const constructItemsFromRequest = (
   } else if (request.requestType === Status.ClearingRequested) {
     historyItems.push({
       title: "Removal Requested",
-      variant: theme.primaryBlue,
+      variant: isLightTheme ? "#009aff" : "#6cc5ff",
       subtitle: formatDate(request.submissionTime),
       rightSided: true,
       party: <Party {...{ request }} isRemoval />,
@@ -123,7 +103,7 @@ const constructItemsFromRequest = (
     if (request.disputed && request.challenger) {
       historyItems.push({
         title: `Removal Challenged - Case ${request.disputeID}`,
-        variant: theme.secondaryPurple,
+        variant: isLightTheme ? "#9013fe" : "#b45fff",
         party: <Party {...{ request }} />,
         subtitle: formatDate(request.submissionTime),
         rightSided: true,
@@ -133,7 +113,7 @@ const constructItemsFromRequest = (
       const removed = request.disputed ? request.finalRuling === Ruling.Accept : request.finalRuling === null;
       historyItems.push({
         title: `${isItem ? "Item" : "List"} ${removed ? "Removed" : "Included"}`,
-        variant: removed ? theme.error : theme.success,
+        variant: removed ? (isLightTheme ? "#f60c36" : "#ff5a78") : isLightTheme ? "#00c42b" : "#65dc7f",
         subtitle: formatDate(request.resolutionTime),
         rightSided: true,
         party: "",

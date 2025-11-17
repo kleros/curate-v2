@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 
 import Modal from "components/Modal";
@@ -13,30 +12,6 @@ import { useEvidences } from "queries/useEvidences";
 
 import Header from "./Header";
 import JustificationDetails, { Justification } from "./JustificationDetails";
-
-const StyledModal = styled(Modal)`
-  gap: 30px;
-`;
-
-const ButtonsContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-top: 38px;
-  row-gap: 8px;
-`;
-
-const StyledLabel = styled.label`
-  width: 100%;
-`;
-
-const JustificationText = styled.h3`
-  width: 100%;
-  margin: 0px;
-  margin-bottom: 4px;
-  text-align: center;
-`;
 
 interface IJustificationModal {
   request: RequestDetailsFragment;
@@ -59,17 +34,17 @@ const JustificationModal: React.FC<IJustificationModal> = ({ request, toggleModa
   }, [evidenceData, isRemoval, request]);
 
   return (
-    <StyledModal {...{ toggleModal }}>
+    <Modal className="gap-8" {...{ toggleModal }}>
       <Header text={isRemoval ? "Removal Requested" : "Request Challenged"} />
-      <JustificationText>Justification</JustificationText>
+      <h3 className="w-full m-0 mb-1 text-center">Justification</h3>
       {isLoadingEvidences ? (
         <SkeletonJustificationCard />
       ) : justification ? (
         <JustificationDetails {...{ justification }} />
       ) : (
-        <StyledLabel>No Justification provided</StyledLabel>
+        <label className="w-full">No Justification provided</label>
       )}
-      <ButtonsContainer>
+      <div className="flex flex-wrap justify-between w-full mt-9 gap-y-2">
         <Button variant="secondary" text="Return" onClick={toggleModal} />
         {!request.resolved && (
           <ActionButton
@@ -79,8 +54,8 @@ const JustificationModal: React.FC<IJustificationModal> = ({ request, toggleModa
             registryAddress={request.item.registryAddress}
           />
         )}
-      </ButtonsContainer>
-    </StyledModal>
+      </div>
+    </Modal>
   );
 };
 

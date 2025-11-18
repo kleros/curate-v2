@@ -16,7 +16,7 @@ interface IHistory {
   isItem?: boolean;
 }
 
-type TimelineItems = React.ComponentProps<typeof CustomTimeline>["items"];
+type TimelineItem = React.ComponentProps<typeof CustomTimeline>["items"][number];
 
 const History: React.FC<IHistory> = ({ itemId, isItem }) => {
   const { data, isLoading } = useItemRequests(itemId);
@@ -25,7 +25,7 @@ const History: React.FC<IHistory> = ({ itemId, isItem }) => {
 
   const items = useMemo(
     () =>
-      data?.requests.reduce<TimelineItems>((acc, request) => {
+      data?.requests.reduce<TimelineItem[]>((acc, request) => {
         const history = constructItemsFromRequest(request, isLightTheme, isItem);
         acc.push(...history);
         return acc;
@@ -57,8 +57,8 @@ const constructItemsFromRequest = (
   request: RequestDetailsFragment,
   isLightTheme: boolean,
   isItem?: boolean
-): TimelineItems => {
-  const historyItems: TimelineItems = [];
+): TimelineItem => {
+  const historyItems: TimelineItem[] = [];
 
   if (request.requestType === Status.RegistrationRequested) {
     historyItems.push({
@@ -121,6 +121,7 @@ const constructItemsFromRequest = (
       });
     }
   }
+
   return historyItems;
 };
 

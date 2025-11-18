@@ -1,80 +1,18 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import { Button, Card } from "@kleros/ui-components-library";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
 import { responsiveSize } from "styles/responsiveSize";
 import StatusBanner, { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import ItemField from "./ItemField";
+import { cn } from "~src/utils";
+import clsx from "clsx";
 
-const StyledListItem = styled(Card)`
-  display: flex;
-  flex-grow: 1;
-  width: 100%;
-  height: max-content;
-  ${landscapeStyle(
-    () => css`
-      height: 64px;
-    `
-  )}
-`;
+const landscapeGridColsCalc =
+  "lg:grid-cols-[1fr_calc(150px+(180-150)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_max-content]";
+const landscapeGapCalc = "lg:gap-[calc(16px+(36-16)*(min(max(100vw,900px),1250px)-900px)/(1250-900))]";
 
-const Container = styled.div`
-  width: 100%;
-  height: max-content;
-  align-items: center;
-  display: grid;
-  grid-template-rows: repeat(3, min-content);
-  grid-template-columns: 1fr min-content;
-  column-gap: ${responsiveSize(12, 32, 900)};
-  row-gap: 8px;
-  padding: 16px;
-  ${landscapeStyle(
-    () => css`
-      height: 64px;
-      justify-content: space-between;
-      grid-template-rows: 1fr;
-      grid-template-columns: 1fr ${responsiveSize(150, 180, 900)} max-content;
-      padding: 0 32px;
-    `
-  )}
-`;
-
-const StyledButton = styled(Button)`
-  background-color: transparent;
-  padding: 0;
-  flex-direction: row-reverse;
-  gap: 8px;
-  .button-text {
-    color: ${({ theme }) => theme.primaryBlue};
-    font-weight: 400;
-  }
-
-  :focus,
-  :hover {
-    background-color: transparent;
-  }
-`;
-
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: start;
-  width: fit-content;
-  gap: 16px;
-  grid-column: span 2;
-  ${landscapeStyle(
-    () => css`
-      flex-direction: row;
-      align-items: center;
-      grid-column: span 1;
-      gap: ${responsiveSize(16, 36, 900)};
-    `
-  )}
-`;
 interface IItemCard extends ItemDetailsFragment {}
 
 const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
@@ -84,13 +22,41 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
   const sortedProps = sortItemProps(props);
 
   return (
-    <StyledListItem hover onClick={() => navigateAndScrollTop(`/lists/item/${id?.toString()}`)}>
-      <Container>
-        <FieldsContainer>{sortedProps.map((prop) => prop.isIdentifier && <ItemField {...prop} />)}</FieldsContainer>
+    <Card
+      className="flex grow w-full h-max lg:h-16"
+      hover
+      onClick={() => navigateAndScrollTop(`/lists/item/${id?.toString()}`)}
+    >
+      <div
+        className={cn(
+          "grid grid-rows-[repeat(3,)min-content] grid-cols-[1fr_min-content]",
+          "w-full h-max p-4 gap-y-2 items-center",
+          "lg:h-16 lg:justify-between lg:grid-rows-[1fr] lg:py-0 lg:px-8",
+          landscapeGridColsCalc
+        )}
+        style={{ columnGap: responsiveSize(12, 32, 900) }}
+      >
+        <div
+          className={cn(
+            "flex flex-col justify-between items-start gap-4 w-fit col-span-2",
+            "lg:flex-row lg:items-center lg:col-span-1",
+            landscapeGapCalc
+          )}
+        >
+          {sortedProps.map((prop) => prop.isIdentifier && <ItemField {...prop} />)}
+        </div>
         <StatusBanner {...{ status: mapFromSubgraphStatus(status, disputed) }} isListView />
-        <StyledButton text="Open" Icon={ArrowIcon} />
-      </Container>
-    </StyledListItem>
+        <Button
+          className={clsx(
+            "bg-transparent p-0 flex-row-reverse gap-2",
+            "[&_.button-text]:text-klerosUIComponentsPrimaryBlue [&_.button-text]:font-normal",
+            "focus:bg-transparent hover:bg-transparent"
+          )}
+          text="Open"
+          Icon={ArrowIcon}
+        />
+      </div>
+    </Card>
   );
 };
 

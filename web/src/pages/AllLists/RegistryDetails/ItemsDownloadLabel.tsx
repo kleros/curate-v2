@@ -1,26 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { useRegistryItemsQuery } from "queries/useRegistryAllItemsQuery";
 import { json2csv } from "json-2-csv";
 import ExportIcon from "svgs/icons/export.svg";
-
-const StyledLink = styled.a`
-  display: flex;
-  flex-direction: row;
-  align-items: end;
-  gap: 8px;
-  text-decoration: none;
-  color: ${({ theme }) => theme.primaryBlue};
-  margin-top: 48px;
-  align-self: flex-end;
-  cursor: pointer;
-`;
-
-const StyledExportIcon = styled(ExportIcon)`
-  path {
-    stroke: ${({ theme }) => theme.primaryBlue};
-  }
-`;
+import clsx from "clsx";
 
 const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAddress }) => {
   const [isPreparing, setIsPreparing] = useState(false);
@@ -60,15 +42,23 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
   }, [items]);
 
   return (
-    <StyledLink onClick={() => refetch()} aria-disabled={isRefetching} ref={ref}>
+    <a
+      className={clsx(
+        "flex flex-row items-end self-end gap-2 mt-12",
+        "no-underline text-klerosUIComponentsPrimaryBlue cursor-pointer"
+      )}
+      onClick={() => refetch()}
+      aria-disabled={isRefetching}
+      ref={ref}
+    >
       {isRefetching || isPreparing ? (
         <>Exporting list...</>
       ) : (
         <>
-          Export as csv <StyledExportIcon />
+          Export as csv <ExportIcon className="stroke-klerosUIComponentsPrimaryBlue" />
         </>
       )}
-    </StyledLink>
+    </a>
   );
 };
 

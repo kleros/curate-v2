@@ -29,7 +29,7 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
     >
       <div
         className={cn(
-          "grid grid-rows-[repeat(3,)min-content] grid-cols-[1fr_min-content]",
+          "grid grid-rows-[repeat(3,min-content)] grid-cols-[1fr_min-content]",
           "w-full h-max p-4 gap-y-2 items-center",
           "lg:h-16 lg:justify-between lg:grid-rows-[1fr] lg:py-0 lg:px-8",
           landscapeGridColsCalc
@@ -43,7 +43,7 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
             landscapeGapCalc
           )}
         >
-          {sortedProps.map((prop) => prop.isIdentifier && <ItemField {...prop} />)}
+          {sortedProps.map((prop) => prop.isIdentifier && <ItemField key={prop.label} {...prop} />)}
         </div>
         <StatusBanner {...{ status: mapFromSubgraphStatus(status, disputed) }} isListView />
         <Button

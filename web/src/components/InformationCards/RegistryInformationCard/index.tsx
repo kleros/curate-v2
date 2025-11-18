@@ -70,10 +70,13 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
         className="border-none h-px bg-klerosUIComponentsStroke"
         style={{ marginBlock: responsiveSize(20, 28), marginInline: responsiveSize(24, 32) }}
       />
-      <div className="flex flex-wrap justify-between gap-5" style={{ paddingInline: responsiveSize(24, 32) }}>
-        <div className="flex flex-wrap gap-2 items-center">
+      <div className="flex flex-wrap justify-between gap-5 pb-3" style={{ paddingInline: responsiveSize(24, 32) }}>
+        <div className="flex flex-wrap gap-2 items-center leading-18px">
           <small>Submitted by:</small>
-          <Copiable copiableContent={registerer?.id ?? ""}>
+          <Copiable
+            copiableContent={registerer?.id ?? ""}
+            tooltipProps={{ className: "[&_small]:text-sm", small: true }}
+          >
             <AliasDisplay address={registerer?.id} />
           </Copiable>
         </div>

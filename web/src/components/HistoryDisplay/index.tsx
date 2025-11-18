@@ -37,12 +37,7 @@ const History: React.FC<IHistory> = ({ itemId, isItem }) => {
     if (!items || isLoading) return <HistorySkeletonCard />;
     else if (items.length === 0) return <label className="self-center pb-8">No requests yet.</label>;
 
-    return (
-      <CustomTimeline
-        className={clsx("w-full mb-8", "[&_.party-wrapper]:max-h-none [&_.party-wrapper]:lg:max-h-8")}
-        {...{ items }}
-      />
-    );
+    return <CustomTimeline className={clsx("w-full mb-8", "[&_h2]:m-0 [&_div]:max-h-none")} {...{ items }} />;
   }, [items, isLoading]);
 
   return (

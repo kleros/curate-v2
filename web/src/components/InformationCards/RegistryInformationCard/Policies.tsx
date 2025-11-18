@@ -23,7 +23,7 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
 
   return (
     <div
-      className="flex flex-col justify-center w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue lg:flex-row lg:justify-between"
+      className="flex flex-col justify-center w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue leading-6 lg:flex-row lg:justify-between"
       style={{ paddingInline: responsiveSize(24, 32) }}
     >
       <p className="text-sm mt-0 mb-4 text-klerosUIComponentsPrimaryBlue lg:mb-0">

@@ -44,8 +44,8 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
   return (
     <a
       className={clsx(
-        "flex flex-row items-end self-end gap-2 mt-12",
-        "no-underline text-klerosUIComponentsPrimaryBlue cursor-pointer"
+        "flex flex-row items-center self-end gap-2 mt-12",
+        "leading-18px no-underline text-klerosUIComponentsPrimaryBlue cursor-pointer"
       )}
       onClick={() => refetch()}
       aria-disabled={isRefetching}
@@ -55,7 +55,7 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
         <>Exporting list...</>
       ) : (
         <>
-          Export as csv <ExportIcon className="stroke-klerosUIComponentsPrimaryBlue" />
+          Export as csv <ExportIcon className="[&_path]:stroke-klerosUIComponentsPrimaryBlue" />
         </>
       )}
     </a>

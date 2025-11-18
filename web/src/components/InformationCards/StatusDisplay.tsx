@@ -16,11 +16,11 @@ const colorStyles: Record<Status, string> = {
 };
 
 const dotStyles: Record<Status, string> = {
-  [Status.RegistrationPending]: "[&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
-  [Status.ClearingPending]: "[&_.dot::before]:bg-klerosUIComponentsPrimaryBlue",
-  [Status.Disputed]: "[&_.dot::before]:bg-klerosUIComponentsSecondaryPurple",
-  [Status.Included]: "[&_.dot::before]:bg-klerosUIComponentsSuccess",
-  [Status.Removed]: "[&_.dot::before]:bg-klerosUIComponentsError",
+  [Status.RegistrationPending]: "before:bg-klerosUIComponentsPrimaryBlue",
+  [Status.ClearingPending]: "before:bg-klerosUIComponentsPrimaryBlue",
+  [Status.Disputed]: "before:bg-klerosUIComponentsSecondaryPurple",
+  [Status.Included]: "before:bg-klerosUIComponentsSuccess",
+  [Status.Removed]: "before:bg-klerosUIComponentsError",
 };
 
 interface IStatusDisplay {

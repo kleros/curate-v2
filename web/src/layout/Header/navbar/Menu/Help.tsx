@@ -64,7 +64,7 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
             className="flex gap-2 py-3 px-2 cursor-pointer transition-transform duration-200 hover:scale-[1.02]"
           >
             <item.Icon className="inline-block w-4 h-4 fill-klerosUIComponentsSecondaryPurple" />
-            <small className="text-base leading-[18px] font-normal transition-colors duration-100 hover:text-klerosUIComponentsSecondaryPurple">
+            <small className="text-base leading-18px font-normal transition-colors duration-100 hover:text-klerosUIComponentsSecondaryPurple">
               {item.text}
             </small>
           </a>

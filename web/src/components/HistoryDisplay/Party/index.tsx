@@ -17,7 +17,7 @@ const Party: React.FC<IParty> = ({ request, isRemoval = false }) => {
   return (
     <div className="flex flex-row flex-wrap items-center gap-2">
       <label>by</label>
-      <AliasDisplay address={aliasAddress ?? ""} />
+      <AliasDisplay className="leading-18px" address={aliasAddress ?? ""} />
       <label>-</label>
       <label
         className="flex items-center gap-1 cursor-pointer text-klerosUIComponentsPrimaryBlue"

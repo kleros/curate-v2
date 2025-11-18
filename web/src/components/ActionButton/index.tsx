@@ -46,7 +46,13 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
     if (status === Status.Disputed)
       return (
         <a href={`${COURT_SITE}/cases/${disputeId}/overview`} target="_blank" rel="noreferrer">
-          <Button isDisabled={disabled} Icon={KlerosIcon} text={`View Case #${disputeId ?? 0}`} />
+          <Button
+            isDisabled={disabled}
+            icon={
+              <KlerosIcon width={16} height={16} className="mr-2 [&_path]:fill-klerosUIComponentsWhiteBackground" />
+            }
+            text={`View Case #${disputeId ?? 0}`}
+          />
         </a>
       );
 

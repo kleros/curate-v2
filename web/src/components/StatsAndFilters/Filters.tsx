@@ -33,6 +33,7 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   return (
     <div className="flex justify-end gap-3 w-fit **:focus:shadow-none">
       <DropdownSelect
+        className="self-center [&_button]:p-0"
         smallButton
         simpleButton
         items={[

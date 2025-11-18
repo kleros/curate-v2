@@ -5,12 +5,13 @@ import { RegistryDetails } from "context/RegistryDetailsContext";
 import StatusDisplay from "../StatusDisplay";
 import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "src/consts/chains";
 import { responsiveSize } from "src/styles/responsiveSize";
-import { isUndefined } from "src/utils";
+import { cn, isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { shortenAddress } from "utils/shortenAddress";
 import { Link } from "react-router-dom";
 
+const landscapeColumnGapCalc = "lg:gap-x-[calc(24px+(32-24)*(min(max(100vw,900px),1250px)-900px)/(1250-900))]";
 interface ITopInfo
   extends Pick<
     RegistryDetails,
@@ -61,11 +62,22 @@ const TopInfo: React.FC<ITopInfo> = ({
         )}
       </div>
       <div
-        className="flex flex-row flex-wrap shrink gap-8 items-start pt-5 lg:shrink-0"
-        style={{ columnGap: responsiveSize(24, 32, 900) }}
+        className={cn(
+          "flex flex-row flex-wrap shrink gap-8 items-start pt-5",
+          "lg:shrink-0 lg:gap-y-0",
+          landscapeColumnGapCalc
+        )}
       >
         {id !== "" ? (
-          <Copiable copiableContent={id} info="Copy Registry Address" iconPlacement="left">
+          <Copiable
+            copiableContent={id}
+            info="Copy Registry Address"
+            iconPlacement="left"
+            tooltipProps={{
+              className: "[&_small]:text-sm",
+              small: true,
+            }}
+          >
             <a
               className="text-klerosUIComponentsPrimaryBlue no-underline hover:underline"
               href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}

@@ -52,7 +52,7 @@ const constructItemsFromRequest = (
   request: RequestDetailsFragment,
   isLightTheme: boolean,
   isItem?: boolean
-): TimelineItem => {
+): TimelineItem[] => {
   const historyItems: TimelineItem[] = [];
 
   if (request.requestType === Status.RegistrationRequested) {
@@ -112,7 +112,7 @@ const constructItemsFromRequest = (
         subtitle: formatDate(request.resolutionTime),
         rightSided: true,
         party: "",
-        Icon: removed ? CheckIcon : ClosedIcon,
+        Icon: removed ? ClosedIcon : CheckIcon,
       });
     }
   }

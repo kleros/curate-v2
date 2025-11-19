@@ -3,8 +3,7 @@ import { IFieldInput } from ".";
 import { NumberField } from "@kleros/ui-components-library";
 import { responsiveSize } from "~src/styles/responsiveSize";
 import { cn } from "~src/utils";
-
-const landscapeWitdhCalc = "lg:w-[calc(200px+(720-200)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
+import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const NumberInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const handleChange = (value: number) => {
@@ -12,9 +11,9 @@ const NumberInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   };
   return (
     <NumberField
-      className={cn("w-[80vw]", landscapeWitdhCalc)}
+      className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
-      value={Number(fieldProp.value)}
+      value={Number(fieldProp.value) ?? 0}
       onChange={handleChange}
       variant="info"
       message={fieldProp.description}

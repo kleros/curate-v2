@@ -5,9 +5,7 @@ import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-
-const landscapeWitdhCalc = "lg:w-[calc(200px+(720-200)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
-const marginBottomCalc = "mb-[calc(150px+(72-150)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
+import { LANDSCAPE_WIDTH_CALC, MARGIN_BOTTOM_CALC } from "./constants";
 
 const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const { uploadFile, roleRestrictions } = useAtlasProvider();
@@ -32,8 +30,8 @@ const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
       className={cn(
         "w-[84vw]",
         "[&_small]:whitespace-pre-line [&_small]:text-start",
-        marginBottomCalc,
-        landscapeWitdhCalc
+        MARGIN_BOTTOM_CALC,
+        LANDSCAPE_WIDTH_CALC
       )}
       callback={handleFileUpload}
       variant={isDesktop ? "info" : undefined}

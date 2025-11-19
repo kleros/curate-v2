@@ -10,7 +10,7 @@ const ConfirmationBox: React.FC<IConfirmationBox> = ({}) => {
   return (
     <div className="mb-8">
       <Checkbox
-        label="I certify that I read and understand the Policy "
+        label="I certify that I read and understand the Policy"
         isSelected={isPolicyRead}
         small
         onChange={() => setIsPolicyRead(!isPolicyRead)}

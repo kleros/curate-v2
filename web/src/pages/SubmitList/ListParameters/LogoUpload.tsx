@@ -1,42 +1,18 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import NavigationButtons from "../NavigationButtons";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import ListPreview from "./ListPreview";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
-import { getFileUploaderMsg } from "src/utils";
+import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  width: 84vw;
-
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(442, 700, 900)};
-    `
-  )}
-`;
-
-const StyledFileUploader = styled(FileUploader)`
-  width: 100%;
-  margin-bottom: ${responsiveSize(150, 72)};
-  path {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  small {
-    white-space: pre-line;
-    text-align: start;
-  }
-`;
+import {
+  BASE_CONTAINER_LANDSCAPE_WIDTH_CALC,
+  BASE_CONTAINER_STYLE,
+  FILE_UPLOADER_MARGIN_BOTTOM_CALC,
+} from "../constants";
 
 const LogoUpload: React.FC = () => {
   const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
@@ -79,9 +55,10 @@ const LogoUpload: React.FC = () => {
     reader.readAsDataURL(file);
   };
   return (
-    <Container>
+    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
       <Header text="Logo" />
-      <StyledFileUploader
+      <FileUploader
+        className={cn("w-full", "[&_small]:whitespace-pre-line [&_small]:text-start", FILE_UPLOADER_MARGIN_BOTTOM_CALC)}
         callback={handleLoad}
         variant={isDesktop ? "info" : undefined}
         msg={
@@ -91,7 +68,7 @@ const LogoUpload: React.FC = () => {
       />
       <ListPreview />
       <NavigationButtons prevRoute="/submit-list/description" nextRoute="/submit-list/policy" />
-    </Container>
+    </div>
   );
 };
 export default LogoUpload;

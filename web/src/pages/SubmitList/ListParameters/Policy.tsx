@@ -1,8 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import NavigationButtons from "../NavigationButtons";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 import { FileUploader } from "@kleros/ui-components-library";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
@@ -10,38 +7,13 @@ import { getIpfsUrl } from "utils/getIpfsUrl";
 import { Link } from "react-router-dom";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
-import { getFileUploaderMsg } from "src/utils";
+import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  width: 84vw;
-
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(442, 700, 900)};
-    `
-  )}
-`;
-
-const StyledLabel = styled.label`
-  width: 100%;
-`;
-
-const StyledFileUploader = styled(FileUploader)`
-  width: 100%;
-  margin-bottom: ${responsiveSize(150, 72)};
-  path {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  small {
-    white-space: pre-line;
-    text-align: start;
-  }
-`;
+import {
+  BASE_CONTAINER_LANDSCAPE_WIDTH_CALC,
+  BASE_CONTAINER_STYLE,
+  FILE_UPLOADER_MARGIN_BOTTOM_CALC,
+} from "../constants";
 
 const Policy: React.FC = () => {
   const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
@@ -66,9 +38,9 @@ const Policy: React.FC = () => {
   };
 
   return (
-    <Container>
+    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
       <Header text="Submit the List Policy File" />
-      <StyledLabel>
+      <label className="w-full">
         Fundamental to any list, the List Policy provides users with a set of rules that define what is allowed, and
         what isn’t allowed to be included in the list. Make sure to write it clearly, avoiding double interpretations.
         <br />
@@ -80,15 +52,16 @@ const Policy: React.FC = () => {
           Check a Policy example
         </Link>{" "}
         .
-      </StyledLabel>
-      <StyledFileUploader
+      </label>
+      <FileUploader
+        className={cn("w-full", "[&_small]:whitespace-pre-line [&_small]:text-start", FILE_UPLOADER_MARGIN_BOTTOM_CALC)}
         callback={handleFileUpload}
         variant={isDesktop ? "info" : undefined}
         msg={"You can add the List Policy file." + (getFileUploaderMsg(Roles.Policy, roleRestrictions) ?? "")}
       />
 
       <NavigationButtons prevRoute="/submit-list/logo" nextRoute="/submit-list/deposit" />
-    </Container>
+    </div>
   );
 };
 export default Policy;

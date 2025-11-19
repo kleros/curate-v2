@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { responsiveSize } from "styles/responsiveSize";
 import { Card } from "@kleros/ui-components-library";
 import PileCoinsIcon from "svgs/icons/pile-coins.svg";
@@ -13,76 +11,7 @@ import { formatUnitsWei, formatValue } from "utils/format";
 import { useReadCurateV2GetArbitratorExtraData, useReadCurateV2SubmissionBaseDeposit } from "hooks/useContract";
 import { isUndefined } from "src/utils";
 import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledCard = styled(Card)`
-  display: flex;
-  margin-top: 60px;
-  margin-bottom: ${responsiveSize(36, 36)};
-  padding: 24px ${responsiveSize(24, 32)};
-  width: 80vw;
-  height: auto;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-
-  ${landscapeStyle(
-    () => css`
-      width: 91vw;
-    `
-  )}
-`;
-
-const LeftContent = styled.div`
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-`;
-
-const Title = styled.p`
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0;
-  color: ${({ theme }) => theme.primaryText};
-`;
-
-const ListName = styled.p`
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0;
-  color: ${({ theme }) => theme.secondaryPurple};
-`;
-
-const RightContent = styled.div`
-  display: flex;
-  gap: 16px 48px;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
-const DepositRequired = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-
-  svg {
-    fill: ${({ theme }) => theme.secondaryPurple};
-    margin-right: 8px;
-    width: 16px;
-  }
-`;
-
-const StyledP = styled.p`
-  margin: 0;
-  color: ${({ theme }) => theme.primaryText};
-`;
-
-const Amount = styled.p`
-  margin: 0;
-`;
+import clsx from "clsx";
 
 interface IHeader {}
 
@@ -111,25 +40,32 @@ const Header: React.FC<IHeader> = ({}) => {
   }, [deposit, arbitrationCost]);
 
   return (
-    <Container>
-      <StyledCard>
-        <LeftContent>
-          <Title>Submit Item to</Title>
-          {title ? <ListName>{title}</ListName> : <Skeleton width={100} height={26} />}
-        </LeftContent>
-        <RightContent>
-          <DepositRequired>
-            <PileCoinsIcon />
-            <StyledP>Deposit required:&nbsp;</StyledP>
+    <div className="flex justify-center">
+      <Card
+        className={clsx("flex flex-wrap justify-between gap-6", "h-auto w-[80vw] lg:w-[91vw]", "mt-[60px] py-6")}
+        style={{ marginBottom: responsiveSize(36, 36), paddingInline: responsiveSize(24, 32) }}
+      >
+        <div className="flex flex-wrap gap-2">
+          <p className="m-0 text-2xl font-semibold text-klerosUIComponentsPrimaryText">Submit Item to</p>
+          {title ? (
+            <p className="m-0 text-2xl font-semibold text-klerosUIComponentsSecondaryPurple">{title}</p>
+          ) : (
+            <Skeleton width={100} height={26} />
+          )}
+        </div>
+        <div className="flex flex-wrap items-center gap-y-4 gap-x-12">
+          <div className="flex flex-wrap">
+            <PileCoinsIcon width={16} className="mr-2 fill-klerosUIComponentsSecondaryPurple" />
+            <p className="m-0">Deposit required:&nbsp;</p>
             {submissionDeposit ? (
-              <Amount>{formatValue(formatUnitsWei(BigInt(submissionDeposit)), 5, false)} ETH</Amount>
+              <p className="m-0">{formatValue(formatUnitsWei(BigInt(submissionDeposit)), 5, false)} ETH</p>
             ) : (
               <Skeleton width={60} height={24} />
             )}
-          </DepositRequired>
-        </RightContent>
-      </StyledCard>
-    </Container>
+          </div>
+        </div>
+      </Card>
+    </div>
   );
 };
 

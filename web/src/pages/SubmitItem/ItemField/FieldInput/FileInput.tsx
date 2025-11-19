@@ -1,30 +1,14 @@
 import React from "react";
 import { IFieldInput } from ".";
-import styled, { css } from "styled-components";
 import { FileUploader } from "@kleros/ui-components-library";
-import { responsiveSize } from "styles/responsiveSize";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
-import { getFileUploaderMsg } from "src/utils";
+import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
 
-const StyledFileUploader = styled(FileUploader)`
-  width: 84vw;
-  margin-bottom: ${responsiveSize(150, 72)};
-  path {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  small {
-    white-space: pre-line;
-    text-align: start;
-  }
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(200, 720)};
-    `
-  )};
-`;
+const landscapeWitdhCalc = "lg:w-[calc(200px+(720-200)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
+const marginBottomCalc = "mb-[calc(150px+(72-150)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
+
 const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const { uploadFile, roleRestrictions } = useAtlasProvider();
   const isDesktop = useIsDesktop();
@@ -44,7 +28,13 @@ const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   };
 
   return (
-    <StyledFileUploader
+    <FileUploader
+      className={cn(
+        "w-[84vw]",
+        "[&_small]:whitespace-pre-line [&_small]:text-start",
+        marginBottomCalc,
+        landscapeWitdhCalc
+      )}
       callback={handleFileUpload}
       variant={isDesktop ? "info" : undefined}
       msg={`${fieldProp.description}\n${getFileUploaderMsg(Roles.CurateItemFile, roleRestrictions)}`}

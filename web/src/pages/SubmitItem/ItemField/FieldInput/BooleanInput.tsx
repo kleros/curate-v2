@@ -7,7 +7,7 @@ const BooleanInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const handleChange = () => {
     handleWrite(valueAsBool ? "false" : "true");
   };
-  return <Switch name={fieldProp.description} checked={valueAsBool} onChange={handleChange} />;
+  return <Switch name={fieldProp.description} isSelected={valueAsBool} onChange={handleChange} />;
 };
 
 export default BooleanInput;

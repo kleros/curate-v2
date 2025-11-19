@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import NavigationButtons from "../NavigationButtons";
 import Title from "../Title";
 import Info from "./Info";
@@ -7,16 +6,11 @@ import ConfirmationBox from "./ConfirmationBox";
 import ReadPolicy from "./ReadPolicy";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Policy: React.FC = () => {
   const { fieldProps } = useRegistryDetailsContext();
 
   return (
-    <Container>
+    <div className="flex flex-col">
       <Title text="Policy Review" />
       <ReadPolicy />
       <Info />
@@ -25,7 +19,7 @@ const Policy: React.FC = () => {
         prevRoute={`../item-field/${fieldProps?.length ? fieldProps.length - 1 : 0}`}
         nextRoute="../preview"
       />
-    </Container>
+    </div>
   );
 };
 

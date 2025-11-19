@@ -73,10 +73,7 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
       <div className="flex flex-wrap justify-between gap-5 pb-3" style={{ paddingInline: responsiveSize(24, 32) }}>
         <div className="flex flex-wrap gap-2 items-center leading-18px">
           <small>Submitted by:</small>
-          <Copiable
-            copiableContent={registerer?.id ?? ""}
-            tooltipProps={{ className: "[&_small]:text-sm", small: true }}
-          >
+          <Copiable copiableContent={registerer?.id ?? ""} tooltipProps={{ small: true }}>
             <AliasDisplay address={registerer?.id} />
           </Copiable>
         </div>

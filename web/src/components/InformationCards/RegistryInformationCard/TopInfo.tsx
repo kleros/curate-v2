@@ -74,7 +74,6 @@ const TopInfo: React.FC<ITopInfo> = ({
             info="Copy Registry Address"
             iconPlacement="left"
             tooltipProps={{
-              className: "[&_small]:text-sm",
               small: true,
             }}
           >

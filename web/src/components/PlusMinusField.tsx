@@ -19,11 +19,11 @@ const PlusMinusField: React.FC<IPlusMinusField> = ({ currentValue, updateValue, 
 
   return (
     <div className={cn("flex gap-2 mx-0 mt-8 mb-12", className)}>
-      <button type="button" className={iconContainerStyle} onClick={incrementValue}>
+      <button type="button" aria-label="Increment value" className={iconContainerStyle} onClick={incrementValue}>
         <Ellipse />
         <Plus className={iconStyle} />
       </button>
-      <button type="button" className={iconContainerStyle} onClick={decrementValue}>
+      <button type="button" aria-label="Decrement value" className={iconContainerStyle} onClick={decrementValue}>
         <Ellipse className={cn(currentValue === minValue && "[&_circle]:opacity-12")} />
         <Minus className={iconStyle} />
       </button>

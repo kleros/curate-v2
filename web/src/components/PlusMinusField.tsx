@@ -14,8 +14,9 @@ interface IPlusMinusField {
   className?: string;
 }
 const PlusMinusField: React.FC<IPlusMinusField> = ({ currentValue, updateValue, minValue = 0, className }) => {
-  const incrementValue = () => updateValue(++currentValue);
-  const decrementValue = () => currentValue > minValue && updateValue(--currentValue);
+  const incrementValue = () => updateValue(currentValue + 1);
+  const decrementValue = () => currentValue > minValue && updateValue(currentValue - 1);
+
   return (
     <div className={cn("flex gap-2 mx-0 mt-8 mb-12", className)}>
       <button type="button" className={iconContainerStyle} onClick={incrementValue}>

@@ -6,6 +6,7 @@ import { formatValue } from "utils/format";
 import Skeleton from "react-loading-skeleton";
 import { cn } from "~src/utils";
 import clsx from "clsx";
+import { DEFAULT_CHAIN } from "~src/consts/chains";
 
 const paddingCalc = "p-[calc(24px+(32-24)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 
@@ -48,8 +49,8 @@ const ListDetails: React.FC = () => {
           </div>
         )}
         <div className="flex gap-2 items-center justify-center">
-          <p>{getChainIcon(421614)}</p>
-          <p>{getChainName(421614)}</p>
+          <p>{getChainIcon(DEFAULT_CHAIN)}</p>
+          <p>{getChainName(DEFAULT_CHAIN)}</p>
         </div>
       </div>
     </div>

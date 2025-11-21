@@ -44,9 +44,7 @@ const TopInfo: React.FC<ITopInfo> = ({
           ) : (
             <Link to={`/attachment/?url=${imageSrc}`}>
               <img
-                width={125}
-                height={125}
-                className="object-contain mb-2"
+                className="object-contain mb-2 w-[125px] h-[125px]"
                 src={imageSrc}
                 onError={() => setImageSrc(getIpfsUrl(DEFAULT_LIST_LOGO))}
                 alt="List Img"
@@ -78,7 +76,7 @@ const TopInfo: React.FC<ITopInfo> = ({
             }}
           >
             <a
-              className="text-klerosUIComponentsPrimaryBlue no-underline hover:underline"
+              className="text-klerosUIComponentsPrimaryBlue no-underline hover:underline leading-4"
               href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
               target="_blank"
               rel="noreferrer"

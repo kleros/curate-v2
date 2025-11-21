@@ -1,8 +1,5 @@
-import { AlertMessage, DropdownCascader } from "@kleros/ui-components-library";
+import { AlertMessage, DropdownCascader, NumberField, TextField } from "@kleros/ui-components-library";
 import React, { useEffect, useMemo } from "react";
-import styled, { css } from "styled-components";
-import LabeledInput from "components/LabeledInput";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { rootCourtToItems, useCourtTree } from "hooks/queries/useCourtTree";
 import { isEmpty, isUndefined } from "utils/index";
 import Skeleton from "react-loading-skeleton";
@@ -14,62 +11,8 @@ import { prepareArbitratorExtradata } from "utils/prepareArbitratorExtradata";
 import { formatEther, isAddress } from "viem";
 import { KLEROS_ARBITRATOR, KLEROS_GOVERNOR } from "consts/arbitration";
 import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
+import clsx from "clsx";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  height: max-content;
-  ${landscapeStyle(
-    () => css`
-      min-height: 255px;
-    `
-  )}
-`;
-const TopContainer = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const MiddleContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  ${landscapeStyle(
-    () => css`
-      grid-template-columns: 1fr 1fr 1fr;
-      align-items: end;
-    `
-  )}
-`;
-const DropdownContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  div > button {
-    width: 100%;
-  }
-`;
-
-const AlertMessageContainer = styled.div`
-  svg {
-    flex-shrink: 0;
-  }
-`;
-
-const StyledButton = styled(LightButton)`
-  border: none;
-  padding: 0px;
-  .button-text {
-    color: ${({ theme }) => theme.primaryBlue};
-    font-size: 14px;
-    line-height: 18px;
-  }
-`;
-
-const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryText};
-`;
 const AbritrationParameters: React.FC = () => {
   const { listData, setListData } = useSubmitListContext();
   const { data } = useCourtTree();
@@ -93,68 +36,80 @@ const AbritrationParameters: React.FC = () => {
     setListData({ ...listData, courtId });
   };
 
-  const handleJurorsWrite = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setListData({ ...listData, numberOfJurors: parseInt(event.target.value.replace(/\D/g, ""), 10) });
+  const handleJurorsWrite = (value: number) => {
+    setListData({ ...listData, numberOfJurors: value });
   };
 
   const noOfVotes = Number.isNaN(listData.numberOfJurors) ? "" : listData.numberOfJurors;
   return (
-    <Container>
-      <TopContainer>
-        <LabeledInput
-          topLeftLabel={{ text: "Governor" }}
-          topRightLabel={{
-            text: (
-              <StyledButton
-                text="Select Kleros Governor"
-                onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR, arbitrator: KLEROS_ARBITRATOR })}
-              />
-            ),
-          }}
+    <div className="flex flex-col h-max gap-6 lg:min-h-64">
+      <div className="flex flex-col gap-1 w-full">
+        <div className="flex w-full justify-between">
+          <label>Governor</label>
+          <LightButton
+            className={clsx(
+              "border-none p-0",
+              "[&_.button-text]:text-klerosUIComponentsPrimaryBlue [&_.button-text]:text-sm"
+            )}
+            text="Select Kleros Governor"
+            onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR, arbitrator: KLEROS_ARBITRATOR })}
+          />
+        </div>
+        <TextField
+          className="w-full"
           placeholder="Governor address"
           value={listData.governor}
-          onChange={(event) => setListData({ ...listData, governor: event.target.value as `0x${string}` })}
-          variant={isGovernorValid ? "" : "error"}
+          onChange={(value) => setListData({ ...listData, governor: value as `0x${string}` })}
+          variant={isGovernorValid ? undefined : "error"}
           message={!isGovernorValid ? "Invalid Address" : ""}
         />
-      </TopContainer>
+      </div>
 
-      <MiddleContainer>
+      <div className="grid grid-cols-[1fr] gap-4 lg:grid-cols-[1fr_1fr_1fr] lg:items-end">
         {items ? (
-          <DropdownContainer>
-            <StyledLabel>Select a court</StyledLabel>
-            <DropdownCascader
-              items={items}
-              onSelect={(path: string | number) => typeof path === "string" && handleCourtWrite(path.split("/").pop()!)}
-              placeholder="Select Court"
-              value={`/courts/${listData.courtId}`}
-            />
-          </DropdownContainer>
+          <DropdownCascader
+            className="[&_button]:w-full [&_span]:text-klerosUIComponentsSecondaryText"
+            label="Select a court"
+            items={items}
+            callback={(item) =>
+              typeof item.itemValue === "string" && handleCourtWrite(item.itemValue.split("/").pop()!)
+            }
+            placeholder="Select Court"
+            defaultSelectedKey={`/courts/${listData.courtId}`}
+            value={`/courts/${listData.courtId}`}
+          />
         ) : (
           <Skeleton width={240} height={42} />
         )}
-        <LabeledInput
-          topLeftLabel={{ text: "Select the number of jurors" }}
+
+        <NumberField
+          className="w-full"
+          label="Select the number of jurors"
           placeholder="Number of Jurors"
-          value={noOfVotes}
+          value={Number(noOfVotes)}
           onChange={handleJurorsWrite}
         />
-        <LabeledInput
-          value={formatEther((arbitrationCost as bigint) ?? "")}
+        <NumberField
+          className="w-full"
+          label="Arbitration Cost"
+          value={Number(formatEther((arbitrationCost as bigint) ?? ""))}
           Icon={ETH}
-          topLeftLabel={{ text: "Arbitration Cost" }}
-          disabled
+          isDisabled
+          formatOptions={{
+            //Prevent automatic rounding of very small amounts
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 18,
+          }}
         />
-      </MiddleContainer>
+      </div>
 
-      <AlertMessageContainer>
-        <AlertMessage
-          variant="info"
-          title="Check the courts available beforehand."
-          msg="Select a court to arbitrate disputes on this list. Kleros has different courts arbitrating disputes in several areas. Each court has its own purpose and policy. Take some time to choose the best court for your list."
-        />
-      </AlertMessageContainer>
-    </Container>
+      <AlertMessage
+        className="text-sm [&_h2]:m-0 [&_svg]:shrink-0"
+        variant="info"
+        title="Check the courts available beforehand."
+        msg="Select a court to arbitrate disputes on this list. Kleros has different courts arbitrating disputes in several areas. Each court has its own purpose and policy. Take some time to choose the best court for your list."
+      />
+    </div>
   );
 };
 

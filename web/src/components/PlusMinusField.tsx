@@ -1,41 +1,11 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import Ellipse from "assets/svgs/icons/ellipse.svg";
 import Plus from "assets/svgs/icons/plus.svg";
 import Minus from "assets/svgs/icons/minus.svg";
+import { cn } from "~src/utils";
 
-const Container = styled.div`
-  display: flex;
-  gap: 8px;
-  margin: 32px 0px 48px;
-`;
-
-const IconContainer = styled.button`
-  position: relative;
-  padding: 0;
-  border-radius: 50%;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const StyledEllipseIcon = styled(Ellipse)<{ isDisabled?: boolean }>`
-  circle {
-    ${({ isDisabled }) =>
-      isDisabled &&
-      css`
-        fill-opacity: 0.12;
-      `};
-  }
-`;
-
-const Icon = styled.svg`
-  fill: ${({ theme }) => theme.white};
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
+const iconContainerStyle = "relative p-0 rounded-[50%] border-none bg-transparent cursor-pointer";
+const iconStyle = "absolute fill-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2";
 
 interface IPlusMinusField {
   currentValue: number;
@@ -47,16 +17,16 @@ const PlusMinusField: React.FC<IPlusMinusField> = ({ currentValue, updateValue, 
   const incrementValue = () => updateValue(++currentValue);
   const decrementValue = () => currentValue > minValue && updateValue(--currentValue);
   return (
-    <Container className={className}>
-      <IconContainer onClick={incrementValue}>
-        <StyledEllipseIcon />
-        <Icon as={Plus} />
-      </IconContainer>
-      <IconContainer onClick={decrementValue}>
-        <StyledEllipseIcon isDisabled={currentValue === minValue} />
-        <Icon as={Minus} />
-      </IconContainer>
-    </Container>
+    <div className={cn("flex gap-2 mx-0 mt-8 mb-12", className)}>
+      <button className={iconContainerStyle} onClick={incrementValue}>
+        <Ellipse />
+        <Plus className={iconStyle} />
+      </button>
+      <button className={iconContainerStyle} onClick={decrementValue}>
+        <Ellipse className={cn(currentValue === minValue && "[&_circle]:opacity-12")} />
+        <Minus className={iconStyle} />
+      </button>
+    </div>
   );
 };
 

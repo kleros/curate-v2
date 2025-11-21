@@ -1,30 +1,7 @@
 import { Steps } from "@kleros/ui-components-library";
 import React, { useMemo } from "react";
-import styled, { css } from "styled-components";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import useIsDesktop from "hooks/useIsDesktop";
-import { landscapeStyle } from "styles/landscapeStyle";
-
-const Container = styled.div`
-  width: 100%;
-  padding: 31px;
-  > div {
-    width: 100%;
-  }
-  .rc-slider-disabled {
-    background-color: transparent;
-  }
-`;
-
-const StyledSteps = styled(Steps)`
-  height: auto;
-  ${landscapeStyle(
-    () => css`
-      padding-top: 16px;
-      padding-bottom: 16px;
-    `
-  )}
-`;
 
 const Progress: React.FC = () => {
   const { progress } = useSubmitListContext();
@@ -53,9 +30,14 @@ const Progress: React.FC = () => {
   ];
 
   return (
-    <Container>
-      <StyledSteps items={steps} currentItemIndex={progressValue} horizontal={isDesktop} />
-    </Container>
+    <div className="w-full p-8">
+      <Steps
+        className="w-full h-auto pt-4 pb-4"
+        items={steps}
+        currentItemIndex={progressValue}
+        horizontal={isDesktop}
+      />
+    </div>
   );
 };
 export default Progress;

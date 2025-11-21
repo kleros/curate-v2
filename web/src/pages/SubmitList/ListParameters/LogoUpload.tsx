@@ -8,11 +8,7 @@ import ListPreview from "./ListPreview";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-import {
-  BASE_CONTAINER_LANDSCAPE_WIDTH_CALC,
-  BASE_CONTAINER_STYLE,
-  FILE_UPLOADER_MARGIN_BOTTOM_CALC,
-} from "../constants";
+import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
 
 const LogoUpload: React.FC = () => {
   const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
@@ -58,7 +54,7 @@ const LogoUpload: React.FC = () => {
     <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
       <Header text="Logo" />
       <FileUploader
-        className={cn("w-full", "[&_small]:whitespace-pre-line [&_small]:text-start", FILE_UPLOADER_MARGIN_BOTTOM_CALC)}
+        className="w-full [&_small]:whitespace-pre-line [&_small]:text-sm"
         callback={handleLoad}
         variant={isDesktop ? "info" : undefined}
         msg={

@@ -228,7 +228,7 @@ const SubmitListButton: React.FC = () => {
               isLoadingExtradata) &&
             !insufficientBalance
           }
-          Icon={CheckCircle}
+          icon={<CheckCircle className="size-4 mr-2 [&_path]:fill-klerosUIComponentsWhiteBackground" />}
           isDisabled={isButtonDisabled}
           onClick={handleDeploy}
         />

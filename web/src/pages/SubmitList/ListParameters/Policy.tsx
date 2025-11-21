@@ -9,11 +9,7 @@ import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-import {
-  BASE_CONTAINER_LANDSCAPE_WIDTH_CALC,
-  BASE_CONTAINER_STYLE,
-  FILE_UPLOADER_MARGIN_BOTTOM_CALC,
-} from "../constants";
+import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
 
 const Policy: React.FC = () => {
   const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
@@ -54,7 +50,7 @@ const Policy: React.FC = () => {
         .
       </label>
       <FileUploader
-        className={cn("w-full", "[&_small]:whitespace-pre-line [&_small]:text-start", FILE_UPLOADER_MARGIN_BOTTOM_CALC)}
+        className="w-full [&_small]:whitespace-pre-line [&_small]:text-sm"
         callback={handleFileUpload}
         variant={isDesktop ? "info" : undefined}
         msg={"You can add the List Policy file." + (getFileUploaderMsg(Roles.Policy, roleRestrictions) ?? "")}

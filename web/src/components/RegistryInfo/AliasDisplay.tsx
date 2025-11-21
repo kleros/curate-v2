@@ -22,7 +22,7 @@ const AliasDisplay: React.FC<IAlias> = ({ address, className }) => {
   return (
     <div className={cn("flex items-center gap-2 min-h-8", className)}>
       {isLoading ? <Skeleton width={30} height={24} /> : <IdenticonOrAvatar address={finalAddress} size="24" />}
-      <div className="flex [&>label]:text-sm [&>label]:text-klerosUIComponentsPrimaryText">
+      <div className="flex [&>label]:text-sm [&>label]:text-klerosUIComponentsPrimaryText [&>label]:leading-18px [&>label]:self-center">
         {isLoading ? <Skeleton width={30} height={24} /> : <AddressOrName address={finalAddress} />}&nbsp;
       </div>
     </div>

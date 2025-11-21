@@ -26,7 +26,7 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
       className="flex flex-col justify-center w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue leading-6 lg:flex-row lg:justify-between"
       style={{ paddingInline: responsiveSize(24, 32) }}
     >
-      <p className="text-sm mt-0 mb-4 text-klerosUIComponentsPrimaryBlue lg:mb-0">
+      <p className="text-sm leading-6 mt-0 mb-4 text-klerosUIComponentsPrimaryBlue lg:mb-0">
         Make sure you read and understand the Policies
       </p>
       <div className="flex flex-wrap" style={{ gap: responsiveSize(16, 24) }}>

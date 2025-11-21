@@ -1,143 +1,98 @@
 import React, { useMemo } from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
-import LabeledInput from "components/LabeledInput";
-import { Switch, _IItem1 } from "@kleros/ui-components-library";
-import LabeledDropdown from "../../LabeledDropdown";
+import { DropdownSelect, Switch, TextField } from "@kleros/ui-components-library";
 import WithHelpTooltip from "components/WithHelpTooltip";
 import { FieldTypes, useSubmitListContext } from "context/SubmitListContext";
 import { toast } from "react-toastify";
 import { OPTIONS } from "utils/wrapWithToast";
 import { capitalize } from "utils/index";
 import useIsDesktop from "hooks/useIsDesktop";
+import clsx from "clsx";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  width: 100%;
-`;
-
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 100%;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-  ${landscapeStyle(
-    () => css`
-      display: grid;
-      grid-template-columns: min-content minmax(200px, 274px) auto;
-    `
-  )}
-`;
-
-const Title = styled.h3`
-  width: 100%;
-  margin: 0px;
-`;
-
-const IndexedContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  ${landscapeStyle(
-    () => css`
-      height: 100%;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: end;
-    `
-  )}
-`;
-
-const StyledLabel = styled.div`
-  color: ${({ theme }) => theme.primaryText};
-`;
+type IItem = React.ComponentProps<typeof DropdownSelect>["items"][number];
 
 const ItemFields: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
   const isDesktop = useIsDesktop();
-  const items: _IItem1[] = FieldTypes.map((item) => ({ text: capitalize(item), value: item }));
+  const items: IItem[] = FieldTypes.map((item) => ({ id: item, text: capitalize(item), itemValue: item }));
 
   const canIndexMoreFields = useMemo(() => {
     const indexedFields = listMetadata.columns.filter((field) => field.isIdentifier);
     return indexedFields.length < 4;
   }, [listMetadata]);
 
-  const handleFieldWrite = (event: React.ChangeEvent<HTMLInputElement>, key: number) => {
+  const handleFieldDataWrite = (key: number, fieldLabel: string, fieldDescription: string) => {
     let columns = listMetadata.columns ?? [];
-
-    if (event.target.name === "isIdentifier") {
-      // check if we can index more fields
-      if (!columns[key].isIdentifier && !canIndexMoreFields) {
-        toast.info("Can only index 4 fields.", OPTIONS);
-        return;
-      }
-      columns[key] = { ...columns[key], [event.target.name]: !columns[key].isIdentifier };
-    } else {
-      columns[key] = { ...columns[key], [event.target.name]: event.target.value };
-    }
+    columns[key] = { ...columns[key], [fieldLabel]: fieldDescription };
     setListMetadata({ ...listMetadata, columns });
   };
 
-  const handleFieldTypeWrite = (val: string, key: number) => {
+  const handleFieldTypeWrite = (val: (typeof FieldTypes)[number], key: number) => {
     let columns = listMetadata.columns ?? [];
-
     columns[key] = { ...columns[key], type: val };
     setListMetadata({ ...listMetadata, columns });
   };
 
+  const handleFieldIndexedWrite = (val: boolean, key: number) => {
+    let columns = listMetadata.columns ?? [];
+
+    // check if we can index more fields
+    if (!columns[key].isIdentifier && !canIndexMoreFields) {
+      toast.info("Can only index 4 fields.", OPTIONS);
+      return;
+    }
+
+    columns[key] = { ...columns[key], isIdentifier: val };
+    setListMetadata({ ...listMetadata, columns });
+  };
+
   return (
-    <Container>
+    <div className="flex flex-col gap-8 w-full">
       {listMetadata.columns?.map((field, index) => (
-        <FieldsContainer key={field?.id}>
-          <Title>{`Field ${index + 1} :`}</Title>
-          <InnerContainer>
-            <LabeledDropdown
+        <div className="flex flex-col gap-6 w-full" key={field?.id}>
+          <h3 className="w-full m-0">{`Field ${index + 1} :`}</h3>
+          <div
+            className={clsx(
+              "flex flex-col gap-6 w-full",
+              "lg:grid lg:grid-cols-[min-content_minmax(200px,274px)_auto]"
+            )}
+          >
+            <DropdownSelect
+              className="[&_span]:text-klerosUIComponentsSecondaryText"
               label="Type"
               items={items}
-              callback={(val) => handleFieldTypeWrite(val.toString(), index)}
-              defaultValue={field.type}
+              callback={(item) => handleFieldTypeWrite(item.itemValue, index)}
+              defaultSelectedKey={field.type}
             />
-            <LabeledInput
-              name="label"
-              topLeftLabel={{ text: `Name` }}
+            <TextField
+              label="Name"
               placeholder="Item Name"
               value={field.label}
-              onChange={(event) => handleFieldWrite(event, index)}
+              onChange={(value) => handleFieldDataWrite(index, "label", value)}
             />
-            <IndexedContainer>
+            <div className={clsx("flex flex-row gap-4", "lg:flex-col lg:justify-between lg:items-end lg:h-full")}>
               <WithHelpTooltip
                 tooltipMsg="Indexed fields are searchable. Toggle (On) fields are displayed on both the item card and internally on the item page. Toggle (Off) fields are displayed just internally on the item page."
                 place={isDesktop ? "left" : "right"}
               >
-                <StyledLabel>Indexed</StyledLabel>
+                <label className="text-klerosUIComponentsPrimaryText">Indexed</label>
               </WithHelpTooltip>
               <Switch
                 name="isIdentifier"
-                checked={field.isIdentifier}
-                onChange={(event) => handleFieldWrite(event, index)}
+                isSelected={field.isIdentifier}
+                onChange={(isSelected) => handleFieldIndexedWrite(isSelected, index)}
               />
-            </IndexedContainer>
-          </InnerContainer>
-          <LabeledInput
-            name="description"
-            topLeftLabel={{ text: `Description` }}
+            </div>
+          </div>
+          <TextField
+            className="w-full"
+            label="Description"
             placeholder="Item description"
             value={field.description}
-            onChange={(event) => handleFieldWrite(event, index)}
+            onChange={(value) => handleFieldDataWrite(index, "description", value)}
           />
-        </FieldsContainer>
+        </div>
       ))}
-    </Container>
+    </div>
   );
 };
 export default ItemFields;

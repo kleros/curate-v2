@@ -1,34 +1,23 @@
 import React from "react";
-import styled, { css } from "styled-components";
-
 import { Route, Routes } from "react-router-dom";
-
-import { responsiveSize } from "styles/responsiveSize";
-
 import EmailConfirmation from "./EmailConfirmation";
-import { MAX_WIDTH_LANDSCAPE, landscapeStyle } from "styles/landscapeStyle";
+import { cn } from "~src/utils";
 
-const Container = styled.div`
-  width: 100%;
-  background-color: ${({ theme }) => theme.lightBackground};
-  padding: 32px 16px 40px;
-  max-width: ${MAX_WIDTH_LANDSCAPE};
-  margin: 0 auto;
-
-  ${landscapeStyle(
-    () => css`
-      padding: 48px ${responsiveSize(0, 132)} 60px;
-    `
-  )}
-`;
+const landscapePaddingInlineCalc = "lg:px-[calc(0px+(132-0)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 
 const Settings: React.FC = () => {
   return (
-    <Container>
+    <div
+      className={cn(
+        "w-full max-w-landscape my-0 mx-auto pt-8 pb-10 px-4 bg-klerosUIComponentsLightBackground",
+        "lg:pt-12 lg:pb-16",
+        landscapePaddingInlineCalc
+      )}
+    >
       <Routes>
         <Route path="email-confirmation" element={<EmailConfirmation />} />
       </Routes>
-    </Container>
+    </div>
   );
 };
 

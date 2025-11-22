@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 
 import { useNavigate } from "react-router-dom";
 
@@ -9,60 +8,7 @@ import Arrow from "svgs/icons/arrow-left.svg";
 import PaperClip from "svgs/icons/paperclip.svg";
 
 import { responsiveSize } from "styles/responsiveSize";
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 38px;
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-`;
-
-const Title = styled.h1`
-  margin: 0px;
-  font-size: ${responsiveSize(20, 24)};
-`;
-
-const StyledPaperClip = styled(PaperClip)`
-  width: ${responsiveSize(16, 24)};
-  height: ${responsiveSize(16, 24)};
-  path {
-    fill: ${({ theme }) => theme.secondaryPurple}B0;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  background-color: transparent;
-  padding: 0;
-  .button-text {
-    color: ${({ theme }) => theme.primaryBlue};
-    font-weight: 400;
-  }
-  .button-svg {
-    path {
-      fill: ${({ theme }) => theme.primaryBlue};
-    }
-  }
-  :focus,
-  :hover {
-    background-color: transparent;
-    .button-svg {
-      path {
-        fill: ${({ theme }) => theme.secondaryBlue};
-      }
-    }
-    .button-text {
-      color: ${({ theme }) => theme.secondaryBlue};
-    }
-  }
-`;
+import clsx from "clsx";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -72,13 +18,31 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Container>
-      <TitleContainer>
-        <StyledPaperClip />
-        <Title>Attachment File</Title>{" "}
-      </TitleContainer>
-      <StyledButton text="Return" Icon={Arrow} onClick={handleReturn} />
-    </Container>
+    <div className="flex justify-between items-center w-full mb-9">
+      <div className="flex flex-row items-center gap-2">
+        <PaperClip
+          width={responsiveSize(16, 24)}
+          height={responsiveSize(16, 24)}
+          className="fill-klerosUIComponentsSecondaryPurple/69"
+        />
+        <h1 className="m-0" style={{ fontSize: responsiveSize(20, 24) }}>
+          Attachment File
+        </h1>{" "}
+      </div>
+      <Button
+        className={clsx(
+          "bg-transparent p-0",
+          "[&_.button-text]:text-klerosUIComponentsPrimaryBlue [&_.button-text]:font-normal",
+          "[&_.button-svg_path]:fill-klerosUIComponentsPrimaryBlue",
+          "focus:bg-transparent hover:bg-transparent",
+          "focus:[&_.button-svg_path]:fill-klerosUIComponentsSecondaryBlue hover:[&_.button-svg_path]:fill-klerosUIComponentsSecondaryBlue",
+          "focus:[&_.button-text]:text-klerosUIComponentsSecondaryBlue hover:[&_.button-text]:text-klerosUIComponentsSecondaryBlue"
+        )}
+        text="Return"
+        Icon={Arrow}
+        onClick={handleReturn}
+      />
+    </div>
   );
 };
 

@@ -36,6 +36,7 @@ const AttachmentDisplay: React.FC = () => {
               to={url}
               rel="noreferrer"
               target="_blank"
+              aria-label="Open in new tab"
             >
               Open in new tab <NewTabIcon className="fill-klerosUIComponentsPrimaryBlue" />
             </Link>

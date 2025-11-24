@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 import { cn } from "src/utils";
 
 export type IColors = "green" | "blue" | "purple" | "orange";
@@ -15,7 +14,7 @@ const landscapeMarginBottomCalc = "lg:mb-[calc(16px+(30-16)*(min(max(100vw,375px
 
 const StatDisplay: React.FC<IStatDisplay> = ({ title, text, subtext, icon: Icon, color, ...props }) => {
   return (
-    <div className={clsx("flex items-center gap-2 max-w-[192px]", landscapeMarginBottomCalc)} {...props}>
+    <div className={cn("flex items-center gap-2 max-w-[192px]", landscapeMarginBottomCalc)} {...props}>
       <div
         className={cn(
           "flex items-center justify-center h-12 w-12 rounded-[50%]",

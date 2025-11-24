@@ -16,7 +16,7 @@ import CustomName from "./ItemParameters/CustomName";
 import AdvancedParameters from "./AdvancedParameters";
 import DeployList from "./DeployList";
 import EnsureAuth from "components/EnsureAuth";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const landscapePaddingLeftCalc = "lg:px-[calc(25px+(65-25)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 

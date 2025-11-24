@@ -11,7 +11,7 @@ import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { List_filters } from "consts/filters";
 import { sortRegistriesByIds } from "utils/sortRegistriesByIds";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
-import { LG_BREAKPOINT } from "~src/styles/breakpoints";
+import { LG_BREAKPOINT } from "src/styles/breakpoints";
 
 const RegistriesFetcher: React.FC = () => {
   const { page, order, filter } = useParams();

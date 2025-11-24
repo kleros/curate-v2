@@ -9,7 +9,7 @@ import { decodeListURIFilter } from "utils/uri";
 // import { RegistryDetailsFragment } from "queries/useCasesQuery";
 import RegistryCard from "components/RegistryCard";
 import { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
-import { LG_BREAKPOINT } from "~src/styles/breakpoints";
+import { LG_BREAKPOINT } from "src/styles/breakpoints";
 
 export interface IRegistriesGrid {
   registries?: [];

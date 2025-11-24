@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface ITruncatedText {
   text: string;

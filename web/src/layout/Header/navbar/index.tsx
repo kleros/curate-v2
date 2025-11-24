@@ -14,7 +14,7 @@ import Menu from "./Menu";
 import Help from "./Menu/Help";
 import Settings from "./Menu/Settings";
 import { DisconnectWalletButton } from "./Menu/Settings/General";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 export interface ISettings {
   toggleIsSettingsOpen: () => void;

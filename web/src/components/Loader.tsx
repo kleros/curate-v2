@@ -1,7 +1,7 @@
 import React, { CSSProperties } from "react";
 
 import KlerosIcon from "svgs/icons/kleros.svg";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 type Width = CSSProperties["width"];
 type Height = CSSProperties["height"];

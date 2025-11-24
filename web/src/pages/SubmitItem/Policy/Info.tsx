@@ -1,6 +1,6 @@
 import React from "react";
 import { AlertMessage } from "@kleros/ui-components-library";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const landscapeWitdhCalc = "lg:w-[calc(342px+(618-342)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 

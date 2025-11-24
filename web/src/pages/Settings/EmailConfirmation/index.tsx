@@ -12,7 +12,7 @@ import InvalidIcon from "svgs/icons/minus-circle.svg";
 import Loader from "components/Loader";
 import { useAtlasProvider } from "@kleros/kleros-app";
 import clsx from "clsx";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 enum TextColor {
   Primary,

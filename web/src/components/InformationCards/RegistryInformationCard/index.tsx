@@ -8,7 +8,7 @@ import ActionButton from "../../ActionButton";
 import TopInfo from "./TopInfo";
 import { RegistryDetails } from "context/RegistryDetailsContext";
 import { validateList } from "src/types/ListMetadata";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface IInformationCard
   extends Pick<

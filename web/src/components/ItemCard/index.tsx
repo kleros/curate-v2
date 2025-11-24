@@ -6,7 +6,7 @@ import StatusBanner, { mapFromSubgraphStatus } from "../RegistryCard/StatusBanne
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import ItemField from "./ItemField";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 import clsx from "clsx";
 
 const landscapeGridColsCalc =

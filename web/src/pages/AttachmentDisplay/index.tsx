@@ -6,7 +6,7 @@ import NewTabIcon from "svgs/icons/new-tab.svg";
 
 import Loader from "components/Loader";
 import Header from "./Header";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const FileViewer = lazy(() => import("components/FileViewer"));
 

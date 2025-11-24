@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme } from "~src/hooks/useToggleThemeContext";
+import { useTheme } from "src/hooks/useToggleThemeContext";
 import HeroLightMobile from "svgs/hero/hero-lightmode-mobile.svg";
 import HeroDarkMobile from "svgs/hero/hero-darkmode-mobile.svg";
 import HeroLightDesktop from "svgs/hero/hero-lightmode-desktop.svg";

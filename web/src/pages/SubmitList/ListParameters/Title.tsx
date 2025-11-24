@@ -3,7 +3,7 @@ import { TextField } from "@kleros/ui-components-library";
 import NavigationButtons from "../NavigationButtons";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
 
 const Title: React.FC = () => {

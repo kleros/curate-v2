@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { IFieldInput } from ".";
 import { isAddress } from "viem";
 import { TextField } from "@kleros/ui-components-library";
-import { responsiveSize } from "~src/styles/responsiveSize";
-import { cn } from "~src/utils";
+import { responsiveSize } from "src/styles/responsiveSize";
+import { cn } from "src/utils";
 import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const AddressInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {

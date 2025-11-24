@@ -1,7 +1,7 @@
 import { graphql } from "src/graphql";
 import { useQuery } from "@tanstack/react-query";
 import { useGraphqlBatcher } from "context/GraphqlBatcher";
-import { CounterQuery } from "~src/graphql/graphql";
+import { CounterQuery } from "src/graphql/graphql";
 
 const counterQuery = graphql(`
   query Counter {

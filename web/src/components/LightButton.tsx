@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@kleros/ui-components-library";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface ILightButton {
   text: string;

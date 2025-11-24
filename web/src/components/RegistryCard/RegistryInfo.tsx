@@ -8,7 +8,7 @@ import { getIpfsUrl } from "utils/getIpfsUrl";
 import StatusBanner from "./StatusBanner";
 import { DEFAULT_LIST_LOGO } from "consts/index";
 import TruncatedText from "../TruncatedText";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface IListInfo {
   title?: string;

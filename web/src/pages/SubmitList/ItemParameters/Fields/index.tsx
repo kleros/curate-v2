@@ -6,7 +6,7 @@ import PlusMinusField from "components/PlusMinusField";
 import LightButton from "components/LightButton";
 import HistoryIcon from "svgs/icons/history.svg";
 import { ListField, useSubmitListContext } from "context/SubmitListContext";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../../constants";
 
 const Fields: React.FC = () => {

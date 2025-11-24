@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Overlay } from "./Overlay";
 import { useClickAway } from "react-use";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const Modal: React.FC<{ children: React.ReactNode; toggleModal: () => void; className?: string }> = ({
   children,

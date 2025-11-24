@@ -3,7 +3,7 @@ import { AddressOrName, IdenticonOrAvatar } from "../ConnectWallet/AccountDispla
 import { useEnsAddress } from "wagmi";
 import { isAddress } from "viem";
 import Skeleton from "react-loading-skeleton";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface IAlias {
   address: string;

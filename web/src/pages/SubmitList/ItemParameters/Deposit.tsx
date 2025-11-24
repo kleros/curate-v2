@@ -5,7 +5,7 @@ import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { parseEther } from "viem";
 import { formatETH } from "utils/format";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
 
 const depositContainerStyle = "flex flex-col gap-8 w-full";

@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 export type IColors = "green" | "blue" | "purple" | "orange";
 interface IStatDisplay {

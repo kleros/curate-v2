@@ -1,7 +1,7 @@
 import React from "react";
 import { responsiveSize } from "styles/responsiveSize";
 import InfoCircle from "svgs/icons/info-circle.svg";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface IInfoCard {
   msg: string;

@@ -4,7 +4,7 @@ import { roundSumToPrecision } from "utils/format";
 import EthIcon from "svgs/icons/eth-round.svg";
 import clsx from "clsx";
 import { NumberField } from "@kleros/ui-components-library";
-import WithHelpTooltip from "~src/components/WithHelpTooltip";
+import WithHelpTooltip from "src/components/WithHelpTooltip";
 
 const ChallengeParameters: React.FC = () => {
   const { listData, setListData } = useSubmitListContext();

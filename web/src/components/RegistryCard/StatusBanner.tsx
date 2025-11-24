@@ -1,7 +1,7 @@
 import React from "react";
 import { Status } from "consts/status";
 import { Status as SubgraphStatus } from "src/graphql/graphql";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 interface IStatusBanner {
   status: Status;

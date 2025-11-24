@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { IFieldInput } from ".";
 import { TextField } from "@kleros/ui-components-library";
-import { cn } from "~src/utils";
-import { responsiveSize } from "~src/styles/responsiveSize";
+import { cn } from "src/utils";
+import { responsiveSize } from "src/styles/responsiveSize";
 import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {

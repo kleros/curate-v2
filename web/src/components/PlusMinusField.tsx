@@ -2,7 +2,7 @@ import React from "react";
 import Ellipse from "assets/svgs/icons/ellipse.svg";
 import Plus from "assets/svgs/icons/plus.svg";
 import Minus from "assets/svgs/icons/minus.svg";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const iconContainerStyle = "relative p-0 rounded-[50%] border-none bg-transparent cursor-pointer";
 const iconStyle = "absolute fill-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2";

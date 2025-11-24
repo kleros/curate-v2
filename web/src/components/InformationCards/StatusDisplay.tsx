@@ -5,7 +5,7 @@ import { Status as SubgraphStatus } from "src/graphql/graphql";
 import { useCountdown } from "hooks/useCountdown";
 import { secondsToDayHourMinute } from "utils/date";
 import { useReadCurateV2ChallengePeriodDuration } from "hooks/useContract";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const colorStyles: Record<Status, string> = {
   [Status.RegistrationPending]: "text-klerosUIComponentsPrimaryBlue",

@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import EmailConfirmation from "./EmailConfirmation";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 
 const landscapePaddingInlineCalc = "lg:px-[calc(0px+(132-0)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 

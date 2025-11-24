@@ -9,7 +9,7 @@ import ClosedIcon from "assets/svgs/icons/close-circle.svg";
 import { HistorySkeletonCard } from "../StyledSkeleton";
 import Party from "./Party";
 import clsx from "clsx";
-import { useTheme } from "~src/hooks/useToggleThemeContext";
+import { useTheme } from "src/hooks/useToggleThemeContext";
 
 interface IHistory {
   itemId: string;

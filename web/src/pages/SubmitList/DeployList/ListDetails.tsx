@@ -4,9 +4,9 @@ import { getChainIcon, getChainName } from "components/ChainIcon";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { formatValue } from "utils/format";
 import Skeleton from "react-loading-skeleton";
-import { cn } from "~src/utils";
+import { cn } from "src/utils";
 import clsx from "clsx";
-import { DEFAULT_CHAIN } from "~src/consts/chains";
+import { DEFAULT_CHAIN } from "src/consts/chains";
 
 const paddingCalc = "p-[calc(24px+(32-24)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 

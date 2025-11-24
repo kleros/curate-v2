@@ -72,9 +72,13 @@ const AbritrationParameters: React.FC = () => {
             className="[&_button]:w-full [&_span]:text-klerosUIComponentsSecondaryText"
             label="Select a court"
             items={items}
-            callback={(item) =>
-              typeof item.itemValue === "string" && handleCourtWrite(item.itemValue.split("/").pop()!)
-            }
+            callback={(item) => {
+              if (typeof item.itemValue === "string") {
+                const segments = item.itemValue.split("/");
+                const courtId = segments[segments.length - 1];
+                if (courtId) handleCourtWrite(courtId);
+              }
+            }}
             placeholder="Select Court"
             defaultSelectedKey={`/courts/${listData.courtId}`}
             value={`/courts/${listData.courtId}`}
@@ -94,7 +98,7 @@ const AbritrationParameters: React.FC = () => {
         <NumberField
           className="w-full"
           label="Arbitration Cost"
-          value={Number(formatEther((arbitrationCost as bigint) ?? ""))}
+          value={arbitrationCost ? Number(formatEther(arbitrationCost as bigint)) : 0}
           Icon={ETH}
           isDisabled
           formatOptions={{

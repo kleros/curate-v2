@@ -11,7 +11,7 @@ const LongTextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   };
   return (
     <TextArea
-      className={cn("w-[80vw] h-fit", LANDSCAPE_WIDTH_CALC)}
+      className={cn("[&_textarea]:w-full custom-scrollbar", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
       resizeY
       value={fieldProp.value}

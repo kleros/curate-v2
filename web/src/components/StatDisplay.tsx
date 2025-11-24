@@ -29,7 +29,7 @@ const StatDisplay: React.FC<IStatDisplay> = ({ title, text, subtext, icon: Icon,
       </div>
       <div className="leading-5">
         <label>{title}</label>
-        <h1 className="m-0">{text}</h1>
+        <h1>{text}</h1>
         <label className="text-xs">{subtext}</label>
       </div>
     </div>

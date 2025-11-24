@@ -12,6 +12,7 @@ import { useEvidences } from "queries/useEvidences";
 
 import Header from "./Header";
 import JustificationDetails, { Justification } from "./JustificationDetails";
+import clsx from "clsx";
 
 interface IJustificationModal {
   request: RequestDetailsFragment;
@@ -36,7 +37,9 @@ const JustificationModal: React.FC<IJustificationModal> = ({ request, toggleModa
   return (
     <Modal className="gap-8" {...{ toggleModal }}>
       <Header text={isRemoval ? "Removal Requested" : "Request Challenged"} />
-      <h3 className="w-full m-0 mb-1 text-center">Justification</h3>
+      <h3 className={clsx("w-full mb-1", "text-center text-base text-klerosUIComponentsPrimaryText font-semibold")}>
+        Justification
+      </h3>
       {isLoadingEvidences ? (
         <SkeletonJustificationCard />
       ) : justification ? (

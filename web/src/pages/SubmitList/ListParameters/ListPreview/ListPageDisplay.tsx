@@ -13,7 +13,7 @@ const ListPageDisplay: React.FC = () => {
 
   return (
     <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
-      <p className="m-0 text-klerosUIComponentsPrimaryBlue">Check how the list is displayed on the List page:</p>
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the list is displayed on the List page:</p>
       <RegistryInformationCard
         className="m-0"
         id={MAIN_CURATE_ADDRESS}

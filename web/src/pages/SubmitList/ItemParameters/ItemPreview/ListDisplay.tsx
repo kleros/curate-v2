@@ -12,7 +12,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
 
   return (
     <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
-      <p className="m-0 text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the List page:</p>
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the List page:</p>
       <ItemCard {...item} />
     </div>
   );

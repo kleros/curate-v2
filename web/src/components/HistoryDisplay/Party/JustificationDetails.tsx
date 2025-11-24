@@ -10,7 +10,9 @@ export type Justification = Pick<Evidence, "name" | "description" | "evidence" |
 const JustificationDetails: React.FC<{ justification: Justification }> = ({ justification }) => {
   return (
     <div className="flex flex-col w-full">
-      <h3 className="m-0 font-semibold">{justification.name ?? "Unable to determine title"}</h3>
+      <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">
+        {justification.name ?? "Unable to determine title"}
+      </h3>
       <div className="max-h-[400px] w-full overflow-y-scroll custom-scrollbar">
         <ReactMarkdown>{justification.description ?? "Unable to determine description"}</ReactMarkdown>
       </div>

@@ -67,7 +67,13 @@ const Help: React.FC<IHelp> = ({ toggleIsHelpOpen }) => {
             )}
           >
             <item.Icon className="inline-block w-4 h-4 fill-klerosUIComponentsSecondaryPurple" />
-            <small className="text-base leading-18px font-normal transition-colors duration-100 group-hover:text-klerosUIComponentsSecondaryPurple">
+            <small
+              className={clsx(
+                "text-base leading-18px text-klerosUIComponentsPrimaryText",
+                "transition-colors duration-100",
+                "group-hover:text-klerosUIComponentsSecondaryPurple"
+              )}
+            >
               {item.text}
             </small>
           </a>

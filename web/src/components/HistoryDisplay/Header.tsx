@@ -7,7 +7,7 @@ const Header: React.FC = () => {
       <div className="flex items-center justify-center">
         <HistoryIcon width={17} height={16} className="fill-klerosUIComponentsPrimaryText" />
       </div>
-      <p className="m-0">History</p>
+      <p>History</p>
     </div>
   );
 };

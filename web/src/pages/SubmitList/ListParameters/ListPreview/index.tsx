@@ -8,7 +8,7 @@ import clsx from "clsx";
 const ListPreview: React.FC = () => {
   return (
     <div className="flex flex-col items-center w-full gap-8 mt-6">
-      <h2 className="mb-0 w-full text-center text-klerosUIComponentsSecondaryPurple">Preview</h2>
+      <h2 className={clsx("w-full", "text-2xl text-center text-klerosUIComponentsSecondaryPurple")}>Preview</h2>
       <Card
         className={clsx(
           "relative flex flex-col gap-8 w-full h-auto min-h-[100px]",

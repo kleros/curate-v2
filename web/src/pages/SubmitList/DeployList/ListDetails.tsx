@@ -24,7 +24,7 @@ const ListDetails: React.FC = () => {
     >
       <h1
         className={clsx(
-          "m-0 text-klerosUIComponentsSecondaryPurple",
+          "text-klerosUIComponentsSecondaryPurple",
           "after:content-['list'] after:ml-2 after:text-klerosUIComponentsPrimaryText"
         )}
       >
@@ -37,9 +37,9 @@ const ListDetails: React.FC = () => {
               <Coin width={16} height={16} className="fill-klerosUIComponentsSecondaryPurple" />
             </div>
             <>
-              <p className="m-0">Total :</p>
+              <p>Total :</p>
               {listData.deployCost ? (
-                <p className="text-klerosUIComponentsSecondaryPurple m-0">
+                <p className="text-klerosUIComponentsSecondaryPurple">
                   ~{formatValue(listData.deployCost, 5, false)} ETH
                 </p>
               ) : (

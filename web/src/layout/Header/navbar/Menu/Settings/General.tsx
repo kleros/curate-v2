@@ -30,7 +30,7 @@ const General: React.FC = () => {
                   href={addressExplorerLink}
                   rel="noreferrer"
                   target="_blank"
-                  className="no-underline hover:underline [&_label]:cursor-pointer [&_label]:text-klerosUIComponentsPrimaryBlue"
+                  className="hover:underline [&_label]:cursor-pointer [&_label]:text-klerosUIComponentsPrimaryBlue"
                 >
                   <AddressOrName />
                 </a>

@@ -38,7 +38,7 @@ const EmailVerificationInfo: React.FC<IEmailInfo> = ({ toggleIsSettingsOpen }) =
     <div className="flex flex-row items-center gap-4 w-full pt-4 mt-8 border-t border-klerosUIComponentsStroke">
       <HourglassIcon width={32} height={32} className="fill-klerosUIComponentsPrimaryBlue" />
       <div className="flex flex-col items-start gap-2">
-        <h3 className="m-0">Email Verification Pending</h3>
+        <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">Email Verification Pending</h3>
         <label>
           We sent you a verification email. Please, verify it.
           <br /> Didn’t receive the email?{" "}

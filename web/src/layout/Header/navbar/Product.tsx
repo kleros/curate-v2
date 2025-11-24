@@ -38,7 +38,7 @@ const Product: React.FC<IProduct> = ({ text, url, Icon }) => {
       ) : (
         <Icon className="w-12 h-12" />
       )}
-      <small className="flex font-normal text-center leading-snug">{text}</small>
+      <small className="flex text-center text-sm text-klerosUIComponentsPrimaryText leading-snug">{text}</small>
     </a>
   );
 };

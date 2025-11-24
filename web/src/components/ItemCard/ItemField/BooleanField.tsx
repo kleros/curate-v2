@@ -10,7 +10,7 @@ export interface IBooleanField {
 const BooleanField: React.FC<IBooleanField> = ({ value, label, detailed, description }) => {
   const text = value ? `true` : `false`;
   return (
-    <p className="flex gap-2 items-center m-0">
+    <p className="flex gap-2 items-center">
       {detailed ? (
         <>
           {label}: <WithHelpTooltip tooltipMsg={description ?? ""}>{text}</WithHelpTooltip>

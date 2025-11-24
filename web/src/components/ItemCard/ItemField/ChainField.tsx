@@ -14,7 +14,7 @@ const ChainField: React.FC<IChainField> = ({ value }) => {
   return (
     <div className="flex gap-2 items-center">
       <ChainIcon chainId={chain.id} />
-      <p className="m-0">{chainName}</p>
+      <p>{chainName}</p>
     </div>
   );
 };

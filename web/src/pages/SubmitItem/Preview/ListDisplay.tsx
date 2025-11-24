@@ -20,7 +20,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
 
   return (
     <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
-      <p className="m-0 text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the Item page:</p>
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the Item page:</p>
       <ItemInformationCard
         props={props}
         policyURI="/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"

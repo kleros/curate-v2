@@ -21,7 +21,7 @@ enum TextColor {
   Warning,
 }
 
-const textStyle = "m-0 text-center whitespace-pre-line lg:text-left";
+const textStyle = "text-center whitespace-pre-line lg:text-left";
 
 const textColorStyles: Record<TextColor, string> = {
   [TextColor.Primary]: "text-klerosUIComponentsPrimaryText",
@@ -121,7 +121,9 @@ const EmailConfirmation: React.FC = () => {
           <div className={clsx("flex flex-col grow gap-8", "items-center lg:items-start")}>
             <Icon width={64} height={64} className={cn(iconColorStyles[color])} />
             <h1 className={cn(textStyle, textColorStyles[color])}>{headerMsg}</h1>
-            <h3 className={cn("max-w-[735px]", textStyle)}>{subtitleMsg}</h3>
+            <h3 className={cn("max-w-[735px] text-base text-klerosUIComponentsPrimaryText font-semibold", textStyle)}>
+              {subtitleMsg}
+            </h3>
             <Link to={buttonTo}>
               <Button text={buttonMsg} />
             </Link>

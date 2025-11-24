@@ -2,7 +2,7 @@ import React from "react";
 
 const Field: React.FC<{ label: string; value: string }> = ({ label, value }) => (
   <div className="inline-flex gap-1">
-    <small>{value}</small>
+    <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">{value}</small>
     <label className="text-klerosUIComponentsPrimaryText">{label}</label>
   </div>
 );

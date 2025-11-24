@@ -85,7 +85,7 @@ const ItemField: React.FC<IItemField> = ({ detailed, type, isUnrecognized = fals
       {FieldComponent}
       {isUnrecognized ? (
         <Tooltip
-          className="flex items-center cursor-pointer h-3.5"
+          className="flex items-center cursor-pointer"
           text="This field is not defined in list's metadata."
           small
         >

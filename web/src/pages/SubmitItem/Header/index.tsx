@@ -46,9 +46,9 @@ const Header: React.FC<IHeader> = ({}) => {
         style={{ marginBottom: responsiveSize(36, 36), paddingInline: responsiveSize(24, 32) }}
       >
         <div className="flex flex-wrap gap-2">
-          <p className="m-0 text-2xl font-semibold text-klerosUIComponentsPrimaryText">Submit Item to</p>
+          <p className="text-2xl font-semibold">Submit Item to</p>
           {title ? (
-            <p className="m-0 text-2xl font-semibold text-klerosUIComponentsSecondaryPurple">{title}</p>
+            <p className="text-2xl font-semibold text-klerosUIComponentsSecondaryPurple">{title}</p>
           ) : (
             <Skeleton width={100} height={26} />
           )}
@@ -56,9 +56,9 @@ const Header: React.FC<IHeader> = ({}) => {
         <div className="flex flex-wrap items-center gap-y-4 gap-x-12">
           <div className="flex flex-wrap">
             <PileCoinsIcon width={16} className="mr-2 fill-klerosUIComponentsSecondaryPurple" />
-            <p className="m-0">Deposit required:&nbsp;</p>
+            <p>Deposit required:&nbsp;</p>
             {submissionDeposit ? (
-              <p className="m-0">{formatValue(formatUnitsWei(BigInt(submissionDeposit)), 5, false)} ETH</p>
+              <p>{formatValue(formatUnitsWei(BigInt(submissionDeposit)), 5, false)} ETH</p>
             ) : (
               <Skeleton width={60} height={24} />
             )}

@@ -50,7 +50,7 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
   return (
     <Card className={cn("flex flex-col w-full h-auto mb-16", className)}>
       {showWarning ? (
-        <p className="w-full py-2 px-8 m-0 text-sm font-medium text-center bg-klerosUIComponentsWarningLight text-klerosUIComponentsWarning">
+        <p className="w-full py-2 px-8 text-sm font-medium text-center bg-klerosUIComponentsWarningLight text-klerosUIComponentsWarning">
           This list does not pass the validation checks. Please review carefully.
         </p>
       ) : null}
@@ -72,7 +72,7 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
       />
       <div className="flex flex-wrap justify-between gap-5 pb-3" style={{ paddingInline: responsiveSize(24, 32) }}>
         <div className="flex flex-wrap gap-2 items-center leading-18px">
-          <small>Submitted by:</small>
+          <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">Submitted by:</small>
           <Copiable copiableContent={registerer?.id ?? ""} tooltipProps={{ small: true }}>
             <AliasDisplay address={registerer?.id} />
           </Copiable>

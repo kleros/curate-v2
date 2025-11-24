@@ -9,7 +9,7 @@ import Modal from "components/Modal";
 const LongTextFullDisplay: React.FC<{ text: string; toggleModal: () => void }> = ({ text, toggleModal }) => (
   <Overlay>
     <Modal className="p-0" {...{ toggleModal }}>
-      <TextArea className="w-full h-[80vh]" value={text} isDisabled />
+      <TextArea className="w-full h-[80vh] [&_textarea]:w-full [&_textarea]:h-full" value={text} isDisabled />
     </Modal>
   </Overlay>
 );
@@ -24,7 +24,7 @@ const LongTextField: React.FC<ILongTextField> = ({ value, detailed, label }) => 
   const [isModalOpen, toggleModal] = useToggle(false);
   return (
     <>
-      <p className="m-0">
+      <p>
         {detailed ? (
           <WithHelpTooltip tooltipMsg={label ?? ""}>
             <TruncatedText text={value} maxLength={40} />

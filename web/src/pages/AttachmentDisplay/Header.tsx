@@ -25,9 +25,7 @@ const Header: React.FC = () => {
           height={responsiveSize(16, 24)}
           className="fill-klerosUIComponentsSecondaryPurple/69"
         />
-        <h1 className="m-0" style={{ fontSize: responsiveSize(20, 24) }}>
-          Attachment File
-        </h1>{" "}
+        <h1 style={{ fontSize: responsiveSize(20, 24) }}>Attachment File</h1>{" "}
       </div>
       <Button
         className={clsx(

@@ -11,7 +11,7 @@ const HomePageDisplay: React.FC = () => {
   const previewData = useMemo(() => listMetadata, [listMetadata]);
   return (
     <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
-      <p className="m-0 text-klerosUIComponentsPrimaryBlue">Check how the list is displayed on the home page:</p>
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the list is displayed on the home page:</p>
       <RegistryCard
         id={"1"}
         title={previewData.title}

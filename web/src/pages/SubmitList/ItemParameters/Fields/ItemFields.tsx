@@ -49,7 +49,7 @@ const ItemFields: React.FC = () => {
     <div className="flex flex-col gap-8 w-full">
       {listMetadata.columns?.map((field, index) => (
         <div className="flex flex-col gap-6 w-full" key={field?.id}>
-          <h3 className="w-full m-0">{`Field ${index + 1} :`}</h3>
+          <h3 className="w-full text-base text-klerosUIComponentsPrimaryText font-semibold">{`Field ${index + 1}:`}</h3>
           <div
             className={clsx(
               "flex flex-col gap-6 w-full",

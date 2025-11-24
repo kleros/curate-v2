@@ -11,7 +11,7 @@ const ItemDisplay: React.FC<IItemDisplay> = ({}) => {
   const item = constructItemWithMockValues(listMetadata);
   return (
     <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
-      <p className="m-0 text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the Item page:</p>
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the Item page:</p>
       <ItemInformationCard className="m-0" {...item} policyURI={listMetadata.policyURI ?? ""} isPreview />
     </div>
   );

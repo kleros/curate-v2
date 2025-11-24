@@ -9,7 +9,7 @@ export interface ITextField {
 }
 const TextField: React.FC<ITextField> = ({ value, detailed, label }) => {
   return (
-    <p className="m-0">
+    <p>
       {detailed ? (
         <WithHelpTooltip tooltipMsg={label ?? ""}>{value}</WithHelpTooltip>
       ) : (

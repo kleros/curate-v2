@@ -51,12 +51,12 @@ const TopInfo: React.FC<ITopInfo> = ({
               />
             </Link>
           )}
-          {isUndefined(title) ? <Skeleton width={180} height={30} /> : <h1 className="m-0">{title}</h1>}
+          {isUndefined(title) ? <Skeleton width={180} height={30} /> : <h1>{title}</h1>}
         </div>
         {isUndefined(description) ? (
           <Skeleton width="90%" height={21} />
         ) : (
-          <p className="m-0 text-klerosUIComponentsSecondaryText">{description}</p>
+          <p className="text-klerosUIComponentsSecondaryText">{description}</p>
         )}
       </div>
       <div
@@ -76,7 +76,7 @@ const TopInfo: React.FC<ITopInfo> = ({
             }}
           >
             <a
-              className="text-klerosUIComponentsPrimaryBlue no-underline hover:underline leading-4"
+              className="hover:underline leading-4"
               href={`${SUPPORTED_CHAINS[DEFAULT_CHAIN].blockExplorers?.default.url}/address/${id}`}
               target="_blank"
               rel="noreferrer"

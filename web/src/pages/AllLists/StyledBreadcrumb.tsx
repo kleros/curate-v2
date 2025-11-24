@@ -63,12 +63,7 @@ const Breadcrumb: React.FC = () => {
   }, [page, listAddress, registryDetails, location]);
 
   return (
-    <BreadcrumbBase
-      className="mb-8 [&_small]:text-sm [&_small]:font-normal"
-      items={breadcrumbItems}
-      clickable
-      callback={(val: string) => navigate(val)}
-    />
+    <BreadcrumbBase className="mb-8" items={breadcrumbItems} clickable callback={(val: string) => navigate(val)} />
   );
 };
 

@@ -110,7 +110,7 @@ const AbritrationParameters: React.FC = () => {
       </div>
 
       <AlertMessage
-        className="text-sm [&_h2]:m-0 [&_svg]:shrink-0"
+        className="text-sm [&_svg]:shrink-0"
         variant="info"
         title="Check the courts available beforehand."
         msg="Select a court to arbitrate disputes on this list. Kleros has different courts arbitrating disputes in several areas. Each court has its own purpose and policy. Take some time to choose the best court for your list."

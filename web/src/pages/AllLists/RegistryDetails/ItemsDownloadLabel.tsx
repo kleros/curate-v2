@@ -45,7 +45,7 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
     <a
       className={clsx(
         "flex flex-row items-center self-end gap-2 mt-12",
-        "leading-18px no-underline text-klerosUIComponentsPrimaryBlue cursor-pointer"
+        "leading-18px hover:underline text-klerosUIComponentsPrimaryBlue cursor-pointer"
       )}
       onClick={() => refetch()}
       aria-disabled={isRefetching}

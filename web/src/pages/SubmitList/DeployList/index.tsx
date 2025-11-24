@@ -18,7 +18,7 @@ const DeployList: React.FC = () => {
         <Progress />
       </Card>
       <AlertMessage
-        className="w-full [&_svg]:shrink-0 [&_h2]:m-0"
+        className="w-full [&_svg]:shrink-0"
         variant={isSuccess ? "success" : "warning"}
         title={isSuccess ? "Well done!" : "Almost Ready!"}
         msg={

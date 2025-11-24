@@ -9,7 +9,7 @@ import clsx from "clsx";
 const Preview: React.FC = () => {
   return (
     <div className="flex flex-col items-center w-full py-0" style={{ paddingInline: responsiveSize(10, 130) }}>
-      <h2 className="text-center font-semibold mb-8 w-[84vw] lg:w-auto">Preview</h2>
+      <h2 className="text-2xl text-center font-semibold mb-8 w-[84vw] lg:w-auto">Preview</h2>
       <Card
         className={clsx(
           "relative flex flex-col gap-8 w-full h-auto min-h-[100px]",

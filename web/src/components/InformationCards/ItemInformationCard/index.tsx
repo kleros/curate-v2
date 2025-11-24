@@ -63,7 +63,9 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
       <div className="flex px-8 pb-3 flex-wrap gap-3 justify-between">
         {registerer?.id ? (
           <div className={aliasContainerStyle}>
-            <small>Submitted by:</small>
+            <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">
+              Submitted by:
+            </small>
             <Copiable copiableContent={registerer.id}>
               <div className={aliasContainerStyle}>
                 <AliasDisplay address={registerer.id} />

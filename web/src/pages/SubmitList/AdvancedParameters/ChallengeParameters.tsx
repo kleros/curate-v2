@@ -28,6 +28,7 @@ const ChallengeParameters: React.FC = () => {
           className="w-full"
           placeholder="hours"
           name="challengePeriodDuration"
+          minValue={0}
           value={listData.challengePeriodDuration}
           onChange={(value) => handleDurationChange(value)}
         />
@@ -41,6 +42,7 @@ const ChallengeParameters: React.FC = () => {
           className="w-full"
           placeholder="84"
           name="submissionChallengeBaseDeposit"
+          minValue={0}
           value={Number(listData.submissionChallengeBaseDeposit)}
           onChange={(value) => handleDepositChange("submissionChallengeBaseDeposit", value.toString())}
           Icon={EthIcon}
@@ -69,6 +71,7 @@ const ChallengeParameters: React.FC = () => {
           value={Number(listData.removalChallengeBaseDeposit)}
           onChange={(value) => handleDepositChange("removalChallengeBaseDeposit", value.toString())}
           Icon={EthIcon}
+          minValue={0}
           formatOptions={{
             //Prevent automatic rounding of very small amounts
             minimumFractionDigits: 0,

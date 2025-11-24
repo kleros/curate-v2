@@ -49,7 +49,8 @@ const AbritrationParameters: React.FC = () => {
           <LightButton
             className={clsx(
               "border-none p-0",
-              "[&_.button-text]:text-klerosUIComponentsPrimaryBlue [&_.button-text]:text-sm"
+              "[&_.button-text]:text-klerosUIComponentsPrimaryBlue [&_.button-text]:text-sm",
+              "hover:[&_.button-text]:text-klerosUIComponentsPrimaryText hover:bg-transparent"
             )}
             text="Select Kleros Governor"
             onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR, arbitrator: KLEROS_ARBITRATOR })}
@@ -86,6 +87,7 @@ const AbritrationParameters: React.FC = () => {
           className="w-full"
           label="Select the number of jurors"
           placeholder="Number of Jurors"
+          minValue={0}
           value={Number(noOfVotes)}
           onChange={handleJurorsWrite}
         />

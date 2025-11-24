@@ -28,7 +28,7 @@ const General: React.FC = () => {
               <div className="flex justify-center [&>label]:text-base [&>label]:font-semibold [&>label]:text-klerosUIComponentsPrimaryText">
                 <a
                   href={addressExplorerLink}
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                   className="hover:underline [&_label]:cursor-pointer [&_label]:text-klerosUIComponentsPrimaryBlue"
                 >

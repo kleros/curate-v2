@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import Title from "../Title";
 import NavigationButtons from "../NavigationButtons";
@@ -8,16 +7,6 @@ import { useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import FieldInput from "./FieldInput";
 import { isUndefined } from "src/utils";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const StyledSkeleton = styled(Skeleton)`
-  margin-bottom: 30px;
-`;
 
 const ItemField: React.FC = () => {
   const { fields, setFields } = useSubmitItemContext();
@@ -39,12 +28,12 @@ const ItemField: React.FC = () => {
   };
 
   return (
-    <Container>
-      {itemField ? <Title text={itemField?.label} /> : <StyledSkeleton width={100} height={40} />}
+    <div className="flex flex-col items-center">
+      {itemField ? <Title text={itemField?.label} /> : <Skeleton width={100} height={40} className="mb-8" />}
       {itemField ? (
         <FieldInput key={id} fieldProp={{ ...itemField, value }} handleWrite={handleWrite} />
       ) : (
-        <StyledSkeleton width={200} height={100} />
+        <Skeleton width={200} height={100} className="mb-8" />
       )}
       <NavigationButtons
         prevRoute={fieldNumber > 0 ? `../item-field/${fieldNumber - 1}` : undefined}
@@ -52,7 +41,7 @@ const ItemField: React.FC = () => {
           fieldProps && fieldProps?.length - 1 > fieldNumber ? `../item-field/${fieldNumber + 1}` : "../policy"
         }
       />
-    </Container>
+    </div>
   );
 };
 

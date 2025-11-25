@@ -1,30 +1,12 @@
 import React from "react";
 import { IFieldInput } from ".";
-import styled, { css } from "styled-components";
 import { FileUploader } from "@kleros/ui-components-library";
-import { responsiveSize } from "styles/responsiveSize";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
-import { getFileUploaderMsg } from "src/utils";
+import { cn, getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
+import { LANDSCAPE_WIDTH_CALC, MARGIN_BOTTOM_CALC } from "./constants";
 
-const StyledFileUploader = styled(FileUploader)`
-  width: 84vw;
-  margin-bottom: ${responsiveSize(150, 72)};
-  path {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  small {
-    white-space: pre-line;
-    text-align: start;
-  }
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(200, 720)};
-    `
-  )};
-`;
 const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const { uploadFile, roleRestrictions } = useAtlasProvider();
   const isDesktop = useIsDesktop();
@@ -44,7 +26,13 @@ const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   };
 
   return (
-    <StyledFileUploader
+    <FileUploader
+      className={cn(
+        "w-[84vw]",
+        "[&_small]:whitespace-pre-line [&_small]:text-start",
+        MARGIN_BOTTOM_CALC,
+        LANDSCAPE_WIDTH_CALC
+      )}
       callback={handleFileUpload}
       variant={isDesktop ? "info" : undefined}
       msg={`${fieldProp.description}\n${getFileUploaderMsg(Roles.CurateItemFile, roleRestrictions)}`}

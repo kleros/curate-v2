@@ -1,55 +1,28 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import styled from "styled-components";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import AttachmentIcon from "svgs/icons/attachment.svg";
-import { customScrollbar } from "styles/customScrollbar";
 import { Evidence } from "src/graphql/graphql";
 import { Link } from "react-router-dom";
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const JustificationTitle = styled.h3`
-  margin: 0px;
-  font-weight: 600;
-`;
-
-const DescriptionContainer = styled.div`
-  max-height: 400px;
-  width: 100%;
-  overflow-y: scroll;
-  ${customScrollbar}
-`;
-
-const StyledA = styled(Link)`
-  display: flex;
-  gap: 6px;
-  > svg {
-    width: 16px;
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-`;
 
 export type Justification = Pick<Evidence, "name" | "description" | "evidence" | "fileURI">;
 
 const JustificationDetails: React.FC<{ justification: Justification }> = ({ justification }) => {
   return (
-    <Container>
-      <JustificationTitle>{justification.name ?? "Unable to determine title"}</JustificationTitle>
-      <DescriptionContainer>
+    <div className="flex flex-col w-full">
+      <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">
+        {justification.name ?? "Unable to determine title"}
+      </h3>
+      <div className="max-h-[400px] w-full overflow-y-scroll custom-scrollbar">
         <ReactMarkdown>{justification.description ?? "Unable to determine description"}</ReactMarkdown>
-      </DescriptionContainer>
+      </div>
       {justification?.fileURI && (
-        <StyledA to={`/attachment/?url=${getIpfsUrl(justification.fileURI)}`}>
-          <AttachmentIcon />
+        <Link className="flex gap-1.5" to={`/attachment/?url=${getIpfsUrl(justification.fileURI)}`}>
+          <AttachmentIcon width={16} className="fill-klerosUIComponentsPrimaryBlue" />
           View attached file
-        </StyledA>
+        </Link>
       )}
-    </Container>
+    </div>
   );
 };
 

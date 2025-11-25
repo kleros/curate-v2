@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
 import StatsAndFilters from "components/StatsAndFilters";
 import ItemCard from "components/ItemCard";
@@ -10,17 +9,6 @@ import { decodeItemURIFilter } from "utils/uri";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { List_filters } from "consts/filters";
 import { Address } from "viem";
-
-const ListContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-`;
-
-const SkeletonItemCard = styled(Skeleton)`
-  height: 64px;
-`;
 
 interface IList {
   registryAddress: Address;
@@ -68,11 +56,11 @@ const List: React.FC<IList> = ({ registryAddress }) => {
     <>
       <Search />
       <StatsAndFilters fields={[{ label: "Items", value: totalItems?.toString() }]} />
-      <ListContainer>
+      <div className="flex flex-col gap-2 justify-center">
         {registryDetails?.registry?.items
           ? registryDetails?.registry.items.map((item) => <ItemCard key={item.id} {...(item as ItemDetailsFragment)} />)
-          : Array.from({ length: 3 }).map((_, index) => <SkeletonItemCard key={index} />)}
-      </ListContainer>
+          : Array.from({ length: 3 }).map((_, index) => <Skeleton height={64} key={index} />)}
+      </div>
     </>
   );
 };

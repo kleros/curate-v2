@@ -1,32 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { RequestDetailsFragment } from "src/graphql/graphql";
 import DocIcon from "svgs/icons/doc.svg";
 import { useToggle } from "react-use";
 import JustificationModal from "./JustificationModal";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-`;
-
-const StyledLabel = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: ${({ theme }) => theme.primaryBlue};
-  cursor: pointer;
-`;
-
-const StyledDoc = styled(DocIcon)`
-  width: 16px;
-  height: 16px;
-  fill: ${({ theme }) => theme.primaryBlue};
-`;
 
 interface IParty {
   request: RequestDetailsFragment;
@@ -38,15 +15,18 @@ const Party: React.FC<IParty> = ({ request, isRemoval = false }) => {
   const aliasAddress = isRemoval ? request.requester.id : request?.challenger?.id;
 
   return (
-    <Container>
+    <div className="flex flex-row flex-wrap items-center gap-2">
       <label>by</label>
-      <AliasDisplay address={aliasAddress ?? ""} />
+      <AliasDisplay className="leading-18px" address={aliasAddress ?? ""} />
       <label>-</label>
-      <StyledLabel onClick={toggleModal}>
-        <StyledDoc /> Justification
-      </StyledLabel>
+      <label
+        className="flex items-center gap-1 cursor-pointer text-klerosUIComponentsPrimaryBlue"
+        onClick={toggleModal}
+      >
+        <DocIcon width={16} height={16} className="fill-klerosUIComponentsPrimaryBlue" /> Justification
+      </label>
       {isOpen && <JustificationModal {...{ request, toggleModal, isRemoval }} />}
-    </Container>
+    </div>
   );
 };
 

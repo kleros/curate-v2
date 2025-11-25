@@ -1,13 +1,23 @@
 import React from "react";
 import { IFieldInput } from ".";
-import StyledField from "./StyledField";
+import { TextField } from "@kleros/ui-components-library";
+import { responsiveSize } from "src/styles/responsiveSize";
+import { cn } from "src/utils";
+import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const TextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleWrite(event.target.value);
+  const handleChange = (value: string) => {
+    handleWrite(value);
   };
   return (
-    <StyledField value={fieldProp.value} onChange={handleChange} variant={"info"} message={fieldProp.description} />
+    <TextField
+      value={fieldProp.value}
+      className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
+      style={{ marginBottom: responsiveSize(68, 40) }}
+      onChange={handleChange}
+      variant="info"
+      message={fieldProp.description}
+    />
   );
 };
 

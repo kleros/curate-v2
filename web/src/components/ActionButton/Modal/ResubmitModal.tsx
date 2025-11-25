@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import styled from "styled-components";
 import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
@@ -18,10 +17,6 @@ import {
 } from "hooks/useContract";
 import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
 import { isUndefined } from "src/utils";
-
-const ReStyledModal = styled(Modal)`
-  gap: 32px;
-`;
 
 interface ISubmitModal extends IBaseModal {}
 
@@ -97,7 +92,7 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
   const { writeContractAsync: resubmitItem } = useWriteCurateV2AddItem();
 
   return (
-    <ReStyledModal {...{ toggleModal }}>
+    <Modal className="gap-8" {...{ toggleModal }}>
       <Header text={`Resubmit ${isItem ? "Item" : "List"}`} />
       <DepositRequired value={depositRequired ?? 0} />
       <Info alertMessage={alertMessage(isItem)} />
@@ -120,7 +115,7 @@ const ResubmitModal: React.FC<ISubmitModal> = ({ toggleModal, isItem, registryAd
           {...{ toggleModal, insufficientBalance }}
         />
       </div>
-    </ReStyledModal>
+    </Modal>
   );
 };
 

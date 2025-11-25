@@ -5,19 +5,12 @@ import { COURT_SITE } from "consts/index";
 import { Status } from "consts/status";
 import { useItemRequests } from "queries/useRequestsQuery";
 import KlerosIcon from "assets/svgs/icons/kleros.svg";
-import styled from "styled-components";
 import { useToggle } from "react-use";
 import Modal, { getModalButtonText } from "./Modal";
 import ExecuteButton from "./ExecuteButton";
 import { useQueryClient } from "@tanstack/react-query";
 import { isUndefined } from "src/utils";
 import { useReadCurateV2ChallengePeriodDuration } from "hooks/useContract";
-
-const StyledKlerosIcon = styled(KlerosIcon)`
-  path {
-    fill: ${({ theme }) => theme.whiteBackground};
-  }
-`;
 
 interface IActionButton {
   status: Status;
@@ -53,7 +46,13 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
     if (status === Status.Disputed)
       return (
         <a href={`${COURT_SITE}/cases/${disputeId}/overview`} target="_blank" rel="noreferrer">
-          <Button disabled={disabled} Icon={StyledKlerosIcon} text={`View Case #${disputeId ?? 0}`} />
+          <Button
+            isDisabled={disabled}
+            icon={
+              <KlerosIcon width={16} height={16} className="mr-2 [&_path]:fill-klerosUIComponentsWhiteBackground" />
+            }
+            text={`View Case #${disputeId ?? 0}`}
+          />
         </a>
       );
 
@@ -63,7 +62,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
     return (
       <Button
         variant="secondary"
-        disabled={disabled}
+        isDisabled={disabled}
         text={getModalButtonText(status ?? 0, isItem)}
         onClick={toggleModal}
       />

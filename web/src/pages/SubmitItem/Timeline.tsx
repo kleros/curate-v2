@@ -1,22 +1,7 @@
 import React, { useMemo } from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { useLocation } from "react-router-dom";
 import { Steps } from "@kleros/ui-components-library";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
-
-const StyledSteps = styled(Steps)`
-  display: none;
-
-  ${landscapeStyle(
-    () => css`
-      display: flex;
-      position: absolute;
-      left: 2%;
-      height: 220px;
-    `
-  )}
-`;
 
 const Timeline: React.FC = () => {
   const location = useLocation();
@@ -45,7 +30,7 @@ const Timeline: React.FC = () => {
     0
   );
 
-  return <StyledSteps {...{ items, currentItemIndex }} />;
+  return <Steps className="hidden lg:absolute lg:flex lg:left-[2%] lg:h-[220px]" {...{ items, currentItemIndex }} />;
 };
 
 export default Timeline;

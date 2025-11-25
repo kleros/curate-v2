@@ -3,7 +3,6 @@ import { Button } from "@kleros/ui-components-library";
 import { Address } from "viem";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
 import CheckCircle from "svgs/icons/check-circle-outline.svg";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
@@ -32,12 +31,6 @@ import {
   useWriteCurateFactoryDeploy,
 } from "hooks/contracts/generated";
 import { ErrorButtonMessage } from "components/ActionButton/Modal/Buttons/ErrorButtonMessage";
-
-const StyledCheckCircle = styled(CheckCircle)`
-  path {
-    fill: ${({ theme }) => theme.whiteBackground};
-  }
-`;
 
 const SubmitListButton: React.FC = () => {
   const navigate = useNavigate();
@@ -235,8 +228,8 @@ const SubmitListButton: React.FC = () => {
               isLoadingExtradata) &&
             !insufficientBalance
           }
-          Icon={StyledCheckCircle}
-          disabled={isButtonDisabled}
+          icon={<CheckCircle className="size-4 mr-2 [&_path]:fill-klerosUIComponentsWhiteBackground" />}
+          isDisabled={isButtonDisabled}
           onClick={handleDeploy}
         />
         {insufficientBalance ? (

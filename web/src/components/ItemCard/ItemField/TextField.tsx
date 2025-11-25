@@ -1,11 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import WithHelpTooltip from "components/WithHelpTooltip";
 import TruncatedText from "components/TruncatedText";
-
-const Container = styled.p`
-  margin: 0px;
-`;
 
 export interface ITextField {
   value: string;
@@ -14,13 +9,13 @@ export interface ITextField {
 }
 const TextField: React.FC<ITextField> = ({ value, detailed, label }) => {
   return (
-    <Container>
+    <p>
       {detailed ? (
         <WithHelpTooltip tooltipMsg={label ?? ""}>{value}</WithHelpTooltip>
       ) : (
         <TruncatedText text={value} maxLength={100} />
       )}
-    </Container>
+    </p>
   );
 };
 

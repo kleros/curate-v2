@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import { Card, Copiable } from "@kleros/ui-components-library";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
@@ -9,47 +8,7 @@ import ActionButton from "../../ActionButton";
 import TopInfo from "./TopInfo";
 import { RegistryDetails } from "context/RegistryDetailsContext";
 import { validateList } from "src/types/ListMetadata";
-
-const StyledCard = styled(Card)`
-  display: flex;
-  width: 100%;
-  height: auto;
-  flex-direction: column;
-  margin-bottom: 64px;
-`;
-
-const Divider = styled.hr`
-  border: none;
-  height: 1px;
-  background-color: ${({ theme }) => theme.stroke};
-  margin: ${responsiveSize(20, 28)} ${responsiveSize(24, 32)};
-`;
-
-const BottomInfo = styled.div`
-  display: flex;
-  padding: 0 ${responsiveSize(24, 32)} 12px ${responsiveSize(24, 32)};
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-between;
-`;
-
-const AliasContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-`;
-
-const WarningContainer = styled.p`
-  width: 100%;
-  padding: 8px 32px;
-  margin: 0;
-  background-color: ${({ theme }) => theme.warningLight};
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.warning};
-  text-align: center;
-`;
+import { cn } from "src/utils";
 
 interface IInformationCard
   extends Pick<
@@ -89,9 +48,16 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
 }) => {
   const showWarning = isPreview || !metadata ? false : !validateList(metadata).success;
   return (
-    <StyledCard {...{ className }}>
+    <Card className={cn("flex flex-col w-full h-auto mb-16", className)}>
       {showWarning ? (
-        <WarningContainer>This list does not pass the validation checks. Please review carefully.</WarningContainer>
+        <p
+          className={cn(
+            "w-full py-2 px-8 bg-klerosUIComponentsWarningLight",
+            "text-sm font-medium text-center text-klerosUIComponentsWarning"
+          )}
+        >
+          This list does not pass the validation checks. Please review carefully.
+        </p>
       ) : null}
       <TopInfo
         {...{
@@ -105,14 +71,17 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
           registryAddress: parentRegistryAddress,
         }}
       />
-      <Divider />
-      <BottomInfo>
-        <AliasContainer>
-          <small>Submitted by:</small>
-          <Copiable copiableContent={registerer?.id ?? ""}>
+      <hr
+        className="border-none h-px bg-klerosUIComponentsStroke"
+        style={{ marginBlock: responsiveSize(20, 28), marginInline: responsiveSize(24, 32) }}
+      />
+      <div className="flex flex-wrap justify-between gap-5 pb-3" style={{ paddingInline: responsiveSize(24, 32) }}>
+        <div className="flex flex-wrap gap-2 items-center leading-18px">
+          <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">Submitted by:</small>
+          <Copiable copiableContent={registerer?.id ?? ""} tooltipProps={{ small: true }}>
             <AliasDisplay address={registerer?.id} />
           </Copiable>
-        </AliasContainer>
+        </div>
         <ActionButton
           {...{
             status: mapFromSubgraphStatus(status, disputed),
@@ -121,9 +90,9 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
             isItem: false,
           }}
         />
-      </BottomInfo>
+      </div>
       <Policies policyURI={policyURI ?? ""} />
-    </StyledCard>
+    </Card>
   );
 };
 

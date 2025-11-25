@@ -1,21 +1,7 @@
 import React, { Dispatch, SetStateAction, useMemo, useEffect } from "react";
-import styled from "styled-components";
 
-import { Field } from "@kleros/ui-components-library";
+import { TextField } from "@kleros/ui-components-library";
 import { isEmpty } from "src/utils";
-
-const StyledLabel = styled.label`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-`;
-
-const StyledField = styled(Field)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
 
 interface IForm {
   contactLabel: string;
@@ -42,11 +28,6 @@ const FormContact: React.FC<IForm> = ({
     setContactIsValid(validator.test(contactInput));
   }, [contactInput, setContactIsValid, validator]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setContactInput(event.target.value);
-  };
-
   const fieldVariant = useMemo(() => {
     if (isEmpty(contactInput) || !isEditing) {
       return undefined;
@@ -56,11 +37,15 @@ const FormContact: React.FC<IForm> = ({
 
   return (
     <>
-      <StyledLabel>{contactLabel}</StyledLabel>
-      <StyledField
+      <label htmlFor="contact-input" className="flex mb-[10px]">
+        {contactLabel}
+      </label>
+      <TextField
+        className="items-center w-full [&_input]:text-sm"
+        id="contact-input"
         variant={fieldVariant}
         value={contactInput}
-        onChange={handleInputChange}
+        onChange={(value) => setContactInput(value)}
         placeholder={contactPlaceholder}
       />
     </>

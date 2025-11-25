@@ -1,37 +1,27 @@
 import React from "react";
-import styled, { css } from "styled-components";
-
-import { responsiveSize } from "styles/responsiveSize";
-import { MAX_WIDTH_LANDSCAPE, landscapeStyle } from "styles/landscapeStyle";
+import clsx from "clsx";
 
 import HeroImage from "components/HeroImage";
 import Header from "./Header";
 import Stats from "./Stats";
 import HighlightedLists from "./Highlights";
 
-const Container = styled.div`
-  width: 100%;
-  background-color: ${({ theme }) => theme.lightBackground};
-  padding: 16px 16px 40px;
-  max-width: ${MAX_WIDTH_LANDSCAPE};
-  margin: 0 auto;
-
-  ${landscapeStyle(
-    () => css`
-      padding: 16px ${responsiveSize(0, 132)} 60px;
-    `
-  )}
-`;
+const landscapeInlinePaddingCalc = "lg:px-[calc(0px+(132-0)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 
 const Home: React.FC = () => {
   return (
     <>
       <HeroImage />
-      <Container>
+      <div
+        className={clsx(
+          "w-full max-w-landscape mx-auto bg-klerosUIComponentsLightBackground px-4 pt-4 pb-10",
+          `${landscapeInlinePaddingCalc} lg:pb-[60px]`
+        )}
+      >
         <Header />
         <Stats />
         <HighlightedLists />
-      </Container>
+      </div>
     </>
   );
 };

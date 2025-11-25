@@ -1,17 +1,21 @@
 import React from "react";
 import { IFieldInput } from ".";
-import StyledField from "./StyledField";
+import { NumberField } from "@kleros/ui-components-library";
+import { responsiveSize } from "src/styles/responsiveSize";
+import { cn } from "src/utils";
+import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const NumberInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleWrite(event.target.value);
+  const handleChange = (value: number) => {
+    handleWrite(value.toString());
   };
   return (
-    <StyledField
-      type="number"
-      value={fieldProp.value}
+    <NumberField
+      className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
+      style={{ marginBottom: responsiveSize(68, 40) }}
+      value={Number(fieldProp.value) ?? 0}
       onChange={handleChange}
-      variant={"info"}
+      variant="info"
       message={fieldProp.description}
     />
   );

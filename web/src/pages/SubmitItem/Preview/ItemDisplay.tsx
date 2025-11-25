@@ -1,20 +1,8 @@
 import React, { useMemo } from "react";
-import styled from "styled-components";
 import { responsiveSize } from "styles/responsiveSize";
 import ItemCard from "components/ItemCard";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSize(32, 24)};
-`;
-
-const StyledP = styled.p`
-  color: ${({ theme }) => theme.primaryBlue};
-  margin: 0;
-`;
 
 interface IItemDisplay {}
 
@@ -31,10 +19,10 @@ const ItemDisplay: React.FC<IItemDisplay> = ({}) => {
   );
 
   return (
-    <Container>
-      <StyledP>Check how the item is displayed on the List page:</StyledP>
+    <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the List page:</p>
       <ItemCard props={props} status={Status.RegistrationRequested} />
-    </Container>
+    </div>
   );
 };
 export default ItemDisplay;

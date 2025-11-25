@@ -4,7 +4,7 @@ import EthIcon from "svgs/chains/ethereum.svg";
 import PolygonIcon from "svgs/chains/polygon.svg";
 import GnosisIcon from "svgs/chains/gnosis.svg";
 import ArbitrumIcon from "svgs/chains/arbitrum.svg";
-import styled from "styled-components";
+import clsx from "clsx";
 
 export const getChainIcon = (chainId: number) => {
   switch (chainId) {
@@ -44,17 +44,15 @@ export const getChainName = (chainId: number) => {
   }
 };
 
-const SVGContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    fill: ${({ theme }) => theme.secondaryPurple};
-    height: 24px;
-    width: 24px;
-  }
-`;
-
-const ChainIcon: React.FC<{ chainId: number }> = ({ chainId }) => <SVGContainer>{getChainIcon(chainId)}</SVGContainer>;
+const ChainIcon: React.FC<{ chainId: number }> = ({ chainId }) => (
+  <div
+    className={clsx(
+      "flex items-center justify-center",
+      "[&_svg]:fill-klerosUIComponentsSecondaryPurple [&_svg]:h-6 [&_svg]:w-6"
+    )}
+  >
+    {getChainIcon(chainId)}
+  </div>
+);
 
 export default ChainIcon;

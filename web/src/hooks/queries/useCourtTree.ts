@@ -44,8 +44,9 @@ export const useCourtTree = () => {
 };
 
 interface IItem {
+  id: string;
   label: string;
-  value: string;
+  itemValue: string;
   children?: IItem[];
 }
 
@@ -53,7 +54,8 @@ export const rootCourtToItems = (
   court: NonNullable<CourtTreeQuery["court"]>,
   value: "id" | "path" = "path"
 ): IItem => ({
+  id: value === "id" ? court.id : `/courts/${court.id}`,
   label: court.name ? court.name : "Unnamed Court",
-  value: value === "id" ? court.id : `/courts/${court.id}`,
+  itemValue: value === "id" ? court.id : `/courts/${court.id}`,
   children: court.children.length > 0 ? court.children.map((child) => rootCourtToItems(child, value)) : undefined,
 });

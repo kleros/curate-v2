@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import { IFieldInput } from ".";
-import StyledField from "./StyledField";
+import { TextField } from "@kleros/ui-components-library";
+import { cn } from "src/utils";
+import { responsiveSize } from "src/styles/responsiveSize";
+import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const [isError, setIsError] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isValidUrl(event.target.value)) {
+  const handleChange = (value: string) => {
+    if (!isValidUrl(value)) {
       setIsError(true);
       return;
     }
-    handleWrite(event.target.value);
+    handleWrite(value);
   };
 
   return (
-    <StyledField
+    <TextField
       value={fieldProp.value}
+      className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
+      style={{ marginBottom: responsiveSize(68, 40) }}
       onChange={handleChange}
       variant={isError ? "error" : "info"}
       message={fieldProp.description}

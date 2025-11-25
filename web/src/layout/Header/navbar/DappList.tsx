@@ -92,7 +92,8 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
     <div
       ref={containerRef}
       className={clsx(
-        "flex flex-col items-center absolute max-h-[340px] top-[5%] left-1/2 transform -translate-x-1/2 z-1 w-[86vw] max-w-[480px]",
+        "flex flex-col items-center absolute max-h-[340px] w-[86vw] max-w-[480px]",
+        "top-[5%] left-1/2 transform -translate-x-1/2 z-1",
         "border border-klerosUIComponentsStroke rounded-[3px]",
         "bg-klerosUIComponentsWhiteBackground shadow-custom",
         "[&_svg]:visible",
@@ -102,7 +103,10 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
     >
       <h1 className="pt-6 mb-4">Kleros Solutions</h1>
       <div
-        className="grid overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center max-w-[480px] min-w-[300px] grid-cols-[repeat(auto-fit,minmax(100px,1fr))]"
+        className={clsx(
+          "grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))]",
+          "overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center max-w-[480px] min-w-[300px]"
+        )}
         style={{ padding: `4px ${responsiveSize(8, 24)} 16px`, width: responsiveSize(300, 480) }}
       >
         {ITEMS.map((item) => {

@@ -12,7 +12,8 @@ const InfoCard: React.FC<IInfoCard> = ({ msg, className }) => {
   return (
     <div
       className={cn(
-        "grid grid-cols-[16px_auto] items-center justify-start text-start text-klerosUIComponentsSecondaryText",
+        "grid grid-cols-[16px_auto] items-center justify-start",
+        "text-start text-klerosUIComponentsSecondaryText",
         className
       )}
       style={{ gap: responsiveSize(6, 8, 300) }}

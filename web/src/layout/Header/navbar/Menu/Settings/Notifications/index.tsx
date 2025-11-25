@@ -7,7 +7,7 @@ import EnsureAuth from "components/EnsureAuth";
 
 const HeaderNotifs: React.FC = () => {
   return (
-    <div className="flex justify-center text-base font-semibold mt-4 mb-3 text-klerosUIComponentsPrimaryText">
+    <div className="flex justify-center mt-4 mb-3 text-base font-semibold text-klerosUIComponentsPrimaryText">
       Contact Details
     </div>
   );

@@ -13,6 +13,9 @@ export interface IFilters {
   isListFilter?: boolean;
 }
 
+const iconStyles =
+  "w-4 h-4 overflow-hidden cursor-pointer fill-klerosUIComponentsPrimaryBlue hover:fill-klerosUIComponentsSecondaryBlue transition duration-100";
+
 const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
   const { order, filter } = useParams();
   const navigate = useNavigate();
@@ -46,13 +49,10 @@ const Filters: React.FC<IFilters> = ({ isListFilter = false }) => {
       {isDesktop && isListFilter ? (
         <div className="flex justify-center items-center gap-1">
           {isListView ? (
-            <GridIcon
-              className="w-4 h-4 overflow-hidden cursor-pointer fill-klerosUIComponentsPrimaryBlue hover:fill-klerosUIComponentsSecondaryBlue transition duration-100"
-              onClick={() => setIsListView(false)}
-            />
+            <GridIcon className={iconStyles} onClick={() => setIsListView(false)} />
           ) : (
             <ListIcon
-              className="w-4 h-4 overflow-hidden cursor-pointer fill-klerosUIComponentsPrimaryBlue hover:fill-klerosUIComponentsSecondaryBlue transition duration-100"
+              className={iconStyles}
               onClick={() => {
                 if (isDesktop) {
                   setIsListView(true);

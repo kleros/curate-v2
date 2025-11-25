@@ -41,7 +41,12 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   return (
     <Card className={cn("flex flex-col w-full h-auto mb-16", className)}>
       {showWarning ? (
-        <p className="w-full py-1 px-8 bg-klerosUIComponentsWarningLight text-sm font-medium text-center text-klerosUIComponentsWarning">
+        <p
+          className={cn(
+            "w-full py-1 px-8 bg-klerosUIComponentsWarningLight",
+            "text-sm font-medium text-center text-klerosUIComponentsWarning"
+          )}
+        >
           This item does not pass the validation checks. Please review carefully.
         </p>
       ) : null}

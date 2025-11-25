@@ -50,7 +50,12 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
   return (
     <Card className={cn("flex flex-col w-full h-auto mb-16", className)}>
       {showWarning ? (
-        <p className="w-full py-2 px-8 text-sm font-medium text-center bg-klerosUIComponentsWarningLight text-klerosUIComponentsWarning">
+        <p
+          className={cn(
+            "w-full py-2 px-8 bg-klerosUIComponentsWarningLight",
+            "text-sm font-medium text-center text-klerosUIComponentsWarning"
+          )}
+        >
           This list does not pass the validation checks. Please review carefully.
         </p>
       ) : null}

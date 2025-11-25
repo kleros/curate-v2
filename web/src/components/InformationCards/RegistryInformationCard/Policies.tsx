@@ -9,6 +9,7 @@ import { getIpfsUrl } from "utils/getIpfsUrl";
 import { MAIN_CURATE_ADDRESS } from "src/consts";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
 
 const internalLinkStyle =
   "flex gap-1 items-center transition duration-100 hover:[&_svg]:fill-klerosUIComponentsSecondaryBlue";
@@ -23,10 +24,13 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
 
   return (
     <div
-      className="flex flex-col justify-center w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue leading-6 lg:flex-row lg:justify-between"
+      className={clsx(
+        "flex flex-col justify-center lg:flex-row lg:justify-between",
+        "w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue leading-6"
+      )}
       style={{ paddingInline: responsiveSize(24, 32) }}
     >
-      <p className="text-sm leading-6 mb-4 text-klerosUIComponentsPrimaryBlue lg:mb-0">
+      <p className="text-sm leading-6 text-klerosUIComponentsPrimaryBlue mb-4 lg:mb-0">
         Make sure you read and understand the Policies
       </p>
       <div className="flex flex-wrap" style={{ gap: responsiveSize(16, 24) }}>

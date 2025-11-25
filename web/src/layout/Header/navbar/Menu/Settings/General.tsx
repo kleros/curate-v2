@@ -3,6 +3,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import { Button } from "@kleros/ui-components-library";
 import { AddressOrName, ChainDisplay, IdenticonOrAvatar } from "components/ConnectWallet/AccountDisplay";
 import { EnsureChain } from "components/EnsureChain";
+import clsx from "clsx";
 
 export const DisconnectWalletButton: React.FC = () => {
   const { disconnect } = useDisconnect();
@@ -25,7 +26,12 @@ const General: React.FC = () => {
               <div className="flex justify-center mt-3">
                 <IdenticonOrAvatar size="48" />
               </div>
-              <div className="flex justify-center [&>label]:text-base [&>label]:font-semibold [&>label]:text-klerosUIComponentsPrimaryText">
+              <div
+                className={clsx(
+                  "flex justify-center",
+                  "[&>label]:text-base [&>label]:font-semibold [&>label]:text-klerosUIComponentsPrimaryText"
+                )}
+              >
                 <a
                   href={addressExplorerLink}
                   rel="noopener noreferrer"
@@ -35,7 +41,13 @@ const General: React.FC = () => {
                   <AddressOrName />
                 </a>
               </div>
-              <div className="flex h-[34px] gap-2 justify-center items-center before:content-[''] before:w-2 before:h-2 before:rounded-[50%] before:bg-klerosUIComponentsSuccess [&>label]:text-klerosUIComponentsSuccess">
+              <div
+                className={clsx(
+                  "flex h-[34px] gap-2 justify-center items-center",
+                  "before:content-[''] before:w-2 before:h-2 before:rounded-[50%] before:bg-klerosUIComponentsSuccess",
+                  "[&>label]:text-klerosUIComponentsSuccess"
+                )}
+              >
                 <ChainDisplay />
               </div>
               <div className="flex justify-center mt-4">

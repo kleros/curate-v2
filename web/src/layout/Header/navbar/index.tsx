@@ -41,7 +41,8 @@ const NavBar: React.FC = () => {
       <div
         className={cn(
           "absolute top-16 left-0 right-0 max-h-[calc(100vh-64px)] p-6 overflow-y-auto z-10",
-          "bg-klerosUIComponentsWhiteBackground shadow-default origin-top transition-[transform,visibility] duration-[klerosUIComponentsTransitionSpeed] ease-in-out",
+          "bg-klerosUIComponentsWhiteBackground shadow-default origin-top",
+          "transition-[transform,visibility] duration-[klerosUIComponentsTransitionSpeed] ease-in-out",
           "[&_hr]:my-6",
           isOpen ? "scale-y-100 visible" : "scale-y-0 invisible"
         )}

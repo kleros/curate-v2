@@ -6,10 +6,16 @@ import { getGraphqlUrl } from "utils/getGraphqlUrl";
 
 import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
+import clsx from "clsx";
 
 const Header: React.FC = () => {
   return (
-    <div className="flex flex-wrap sticky z-10 top-0 w-full bg-klerosUIComponentsPrimaryPurple dark:bg-light-blue-65 backdrop-blur-none dark:backdrop-blur-md">
+    <div
+      className={clsx(
+        "flex flex-wrap sticky z-10 top-0 w-full",
+        "bg-klerosUIComponentsPrimaryPurple dark:bg-light-blue-65 backdrop-blur-none dark:backdrop-blur-md"
+      )}
+    >
       <StatusBanner
         className="sticky! [&_.status-text_h2]:m-0 [&_.status-text_h2]:leading-6"
         autoHide

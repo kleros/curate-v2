@@ -8,7 +8,6 @@ import CheckIcon from "assets/svgs/icons/check-circle-outline.svg";
 import ClosedIcon from "assets/svgs/icons/close-circle.svg";
 import { HistorySkeletonCard } from "../StyledSkeleton";
 import Party from "./Party";
-import clsx from "clsx";
 import { useTheme } from "src/hooks/useToggleThemeContext";
 
 interface IHistory {
@@ -37,7 +36,7 @@ const History: React.FC<IHistory> = ({ itemId, isItem }) => {
     if (!items || isLoading) return <HistorySkeletonCard />;
     else if (items.length === 0) return <label className="self-center pb-8">No requests yet.</label>;
 
-    return <CustomTimeline className={clsx("w-full mb-8", "[&_div]:max-h-none")} {...{ items }} />;
+    return <CustomTimeline className="w-full mb-8 [&_div]:max-h-none" {...{ items }} />;
   }, [items, isLoading]);
 
   return (

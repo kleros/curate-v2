@@ -13,7 +13,7 @@ const AddressInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const handleChange = (value: string) => {
     setAddress(value);
 
-    if (isAddress(value)) {
+    if (value === "" || isAddress(value)) {
       setIsError(false);
       handleWrite(value);
     } else {

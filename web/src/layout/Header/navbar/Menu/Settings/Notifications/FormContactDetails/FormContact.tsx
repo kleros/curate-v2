@@ -36,19 +36,15 @@ const FormContact: React.FC<IForm> = ({
   }, [contactInput, contactIsValid, isEditing]);
 
   return (
-    <>
-      <label htmlFor="contact-input" className="flex mb-[10px]">
-        {contactLabel}
-      </label>
-      <TextField
-        className="items-center w-full [&_input]:text-sm"
-        id="contact-input"
-        variant={fieldVariant}
-        value={contactInput}
-        onChange={(value) => setContactInput(value)}
-        placeholder={contactPlaceholder}
-      />
-    </>
+    <TextField
+      className="items-center w-full [&_input]:text-sm [&_label]:self-start"
+      variant={fieldVariant}
+      label={contactLabel}
+      placeholder={contactPlaceholder}
+      value={contactInput}
+      onChange={(value) => setContactInput(value)}
+      validate={(value) => (validator.test(value) ? true : undefined)}
+    />
   );
 };
 

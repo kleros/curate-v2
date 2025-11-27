@@ -54,7 +54,7 @@ const Fields: React.FC = () => {
             className="flex gap-1 [&_.button-text]:text-klerosUIComponentsPrimaryBlue"
             text="Reset"
             Icon={() => <HistoryIcon className="fill-klerosUIComponentsPrimaryBlue" />}
-            onClick={resetFields}
+            onPress={resetFields}
           />
         </div>
       </div>

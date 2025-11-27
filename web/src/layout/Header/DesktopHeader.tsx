@@ -35,13 +35,7 @@ const DesktopHeader: React.FC = () => {
       <div className="hidden h-16 lg:flex lg:items-center lg:justify-between lg:w-full lg:relative">
         <div className="flex gap-2">
           <div className="flex items-center">
-            <LightButton
-              text=""
-              onClick={() => {
-                toggleIsDappListOpen();
-              }}
-              Icon={KlerosSolutionsIcon}
-            />
+            <LightButton text="" onPress={toggleIsDappListOpen} Icon={KlerosSolutionsIcon} />
           </div>
           <Logo />
         </div>

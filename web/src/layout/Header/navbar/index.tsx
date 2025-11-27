@@ -50,9 +50,7 @@ const NavBar: React.FC = () => {
         <LightButton
           className="not-dark:[&_.button-svg]:fill-black/75 not-dark:hover:[&_.button-svg]:fill-black"
           text="Kleros Solutions"
-          onClick={() => {
-            toggleIsDappListOpen();
-          }}
+          onPress={toggleIsDappListOpen}
           Icon={KlerosSolutionsIcon}
         />
         <hr />

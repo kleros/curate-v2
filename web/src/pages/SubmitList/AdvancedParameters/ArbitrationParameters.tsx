@@ -53,7 +53,7 @@ const AbritrationParameters: React.FC = () => {
               "hover:[&_.button-text]:text-klerosUIComponentsPrimaryText hover:bg-transparent"
             )}
             text="Select Kleros Governor"
-            onClick={() => setListData({ ...listData, governor: KLEROS_GOVERNOR, arbitrator: KLEROS_ARBITRATOR })}
+            onPress={() => setListData({ ...listData, governor: KLEROS_GOVERNOR, arbitrator: KLEROS_ARBITRATOR })}
           />
         </div>
         <TextField

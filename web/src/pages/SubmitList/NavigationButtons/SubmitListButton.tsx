@@ -213,7 +213,7 @@ const SubmitListButton: React.FC = () => {
     }
   };
   return progress === ListProgress.SubmitSuccess ? (
-    <Button text="View List" onClick={() => navigate(`/lists/${submittedListItemId}/list/1/desc/all`)} />
+    <Button text="View List" onPress={() => navigate(`/lists/${submittedListItemId}/list/1/desc/all`)} />
   ) : (
     <EnsureChain>
       <div>
@@ -230,7 +230,7 @@ const SubmitListButton: React.FC = () => {
           }
           icon={<CheckCircle className="size-4 mr-2 [&_path]:fill-klerosUIComponentsWhiteBackground" />}
           isDisabled={isButtonDisabled}
-          onClick={handleDeploy}
+          onPress={handleDeploy}
         />
         {insufficientBalance ? (
           <ErrorButtonMessage>

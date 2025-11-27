@@ -38,7 +38,7 @@ const Header: React.FC = () => {
         )}
         text="Return"
         Icon={Arrow}
-        onClick={handleReturn}
+        onPress={handleReturn}
       />
     </div>
   );

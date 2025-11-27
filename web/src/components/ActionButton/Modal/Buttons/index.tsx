@@ -24,13 +24,13 @@ const Buttons: React.FC<IButtons> = ({
 }) => {
   return (
     <div className="flex flex-wrap gap-4 justify-between w-full">
-      <Button variant="secondary" text="Return" onClick={toggleModal} />
+      <Button variant="secondary" text="Return" onPress={toggleModal} />
       <EnsureChain>
         <EnsureAuth>
           <div className="flex flex-col items-center">
             <Button
               text={buttonText}
-              onClick={() => {
+              onPress={() => {
                 callback();
               }}
               isLoading={isLoading}

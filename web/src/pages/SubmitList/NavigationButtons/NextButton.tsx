@@ -40,7 +40,7 @@ const NextButton: React.FC<INextButton> = ({ nextRoute }) => {
   return isDeployPage ? (
     <SubmitListButton />
   ) : (
-    <Button isDisabled={isButtonDisabled} onClick={() => navigate(nextRoute)} text="Next" />
+    <Button isDisabled={isButtonDisabled} onPress={() => navigate(nextRoute)} text="Next" />
   );
 };
 

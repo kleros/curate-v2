@@ -83,9 +83,9 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
         callback={(item) => handleStatusChange(item.itemValue)}
       />
       {isList ? (
-        <Button text="Create New List" Icon={PaperIcon} onClick={() => navigate("/submit-list")} />
+        <Button text="Create New List" Icon={PaperIcon} onPress={() => navigate("/submit-list")} />
       ) : (
-        <Button Icon={PlusIcon} text="Submit Item" onClick={() => navigate(`/submit-item/${id}`)} />
+        <Button Icon={PlusIcon} text="Submit Item" onPress={() => navigate(`/submit-item/${id}`)} />
       )}
     </div>
   );

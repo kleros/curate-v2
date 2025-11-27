@@ -20,7 +20,7 @@ const ReturnButton: React.FC<IReturnButton> = ({ prevRoute }) => {
     !hideReturn && (
       <Button
         className={isEmpty(prevRoute) ? "hidden" : "flex"}
-        onClick={() => navigate(prevRoute)}
+        onPress={() => navigate(prevRoute)}
         text="Return"
         variant="secondary"
         isDisabled={isSubmittingList}

@@ -48,7 +48,7 @@ const JustificationModal: React.FC<IJustificationModal> = ({ request, toggleModa
         <label className="w-full">No Justification provided</label>
       )}
       <div className="flex flex-wrap justify-between w-full mt-9 gap-y-2">
-        <Button variant="secondary" text="Return" onClick={toggleModal} />
+        <Button variant="secondary" text="Return" onPress={toggleModal} />
         {!request.resolved && (
           <ActionButton
             isItem

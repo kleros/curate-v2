@@ -64,7 +64,7 @@ const ActionButton: React.FC<IActionButton> = ({ status, registryAddress, itemId
         variant="secondary"
         isDisabled={disabled}
         text={getModalButtonText(status ?? 0, isItem)}
-        onClick={toggleModal}
+        onPress={toggleModal}
       />
     );
   }, [isExecutable, registryAddress, status, itemId, isLoading, disputeId, isItem, toggleModal, refetch]);

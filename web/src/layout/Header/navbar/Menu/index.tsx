@@ -18,25 +18,25 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
     {
       text: "Settings",
       Icon: SettingsIcon,
-      onClick: () => toggleIsSettingsOpen(),
+      onPress: () => toggleIsSettingsOpen(),
     },
     {
       text: "Help",
       Icon: HelpIcon,
-      onClick: () => {
+      onPress: () => {
         toggleIsHelpOpen();
       },
     },
     {
       text: `${isLightTheme ? "Dark" : "Light"} Mode`,
       Icon: isLightTheme ? DarkModeIcon : LightModeIcon,
-      onClick: () => toggleTheme(),
+      onPress: () => toggleTheme(),
     },
   ];
 
   return (
     <div className="flex flex-col lg:flex-row">
-      {buttons.map(({ text, Icon, onClick }, index) => (
+      {buttons.map(({ text, Icon, onPress }, index) => (
         <div
           key={index}
           className={clsx(
@@ -45,7 +45,7 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
             "not-dark:not-lg:[&_.button-svg]:fill-black/75 not-dark:not-lg:hover:[&_.button-svg]:fill-black"
           )}
         >
-          <LightButton {...{ text, onClick, Icon }} />
+          <LightButton {...{ text, onPress, Icon }} />
         </div>
       ))}
     </div>

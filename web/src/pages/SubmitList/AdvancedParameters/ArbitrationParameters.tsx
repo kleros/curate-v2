@@ -58,6 +58,7 @@ const AbritrationParameters: React.FC = () => {
         </div>
         <TextField
           className="w-full"
+          aria-label="Governor address"
           placeholder="Governor address"
           value={listData.governor}
           onChange={(value) => setListData({ ...listData, governor: value as `0x${string}` })}

@@ -20,14 +20,14 @@ const CustomName: React.FC = () => {
           className="w-full"
           label="Custom item name"
           placeholder="Item"
-          value={listMetadata.itemName}
+          value={listMetadata.itemName ?? ""}
           onChange={(value) => setListMetadata({ ...listMetadata, itemName: value })}
         />
         <TextField
           className="w-full"
           label="Plural"
           placeholder="Items"
-          value={listMetadata.itemNamePlural}
+          value={listMetadata.itemNamePlural ?? ""}
           onChange={(value) => setListMetadata({ ...listMetadata, itemNamePlural: value })}
         />
       </div>

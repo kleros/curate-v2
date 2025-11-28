@@ -14,7 +14,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
   const keywords = searchParams.get("keywords");
 
   const decodedFilter = decodeListURIFilter(filter ?? "all");
-  const [search, setSearch] = useState(keywords ?? undefined);
+  const [search, setSearch] = useState(keywords ?? "");
   const navigate = useNavigate();
 
   useDebounce(
@@ -41,6 +41,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
           className="flex-1 basis-[310px] [&_input]:py-0"
           type="text"
           placeholder="Search by keywords"
+          aria-label="Search by keywords"
           value={search}
           onChange={(value) => setSearch(value)}
         />

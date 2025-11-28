@@ -42,7 +42,7 @@ const FormContact: React.FC<IForm> = ({
       label={contactLabel}
       placeholder={contactPlaceholder}
       value={contactInput}
-      onChange={(value) => setContactInput(value)}
+      onChange={setContactInput}
       validate={(value) => (validator.test(value) ? true : undefined)}
     />
   );

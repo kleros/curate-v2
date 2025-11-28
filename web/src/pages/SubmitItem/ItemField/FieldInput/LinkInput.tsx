@@ -6,19 +6,25 @@ import { responsiveSize } from "src/styles/responsiveSize";
 import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
+  const [link, setLink] = useState(fieldProp.value ?? "");
   const [isError, setIsError] = useState(false);
 
   const handleChange = (value: string) => {
-    if (!isValidUrl(value)) {
+    setLink(value);
+
+    if (value === "" || isValidUrl(value)) {
+      setIsError(false);
+      handleWrite(value);
+    } else {
       setIsError(true);
-      return;
+      handleWrite("");
     }
-    handleWrite(value);
   };
 
   return (
     <TextField
-      value={fieldProp.value}
+      aria-label={fieldProp.description}
+      value={link}
       className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
       onChange={handleChange}

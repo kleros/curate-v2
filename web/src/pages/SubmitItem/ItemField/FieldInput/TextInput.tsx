@@ -11,7 +11,8 @@ const TextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   };
   return (
     <TextField
-      value={fieldProp.value}
+      aria-label={fieldProp.description}
+      value={fieldProp.value ?? ""}
       className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
       onChange={handleChange}

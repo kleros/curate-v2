@@ -11,10 +11,11 @@ const LongTextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   };
   return (
     <TextArea
+      aria-label={fieldProp.description}
       className={cn("[&_textarea]:w-full custom-scrollbar", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
       resizeY
-      value={fieldProp.value}
+      value={fieldProp.value ?? ""}
       onChange={handleChange}
       variant="info"
       message={fieldProp.description}

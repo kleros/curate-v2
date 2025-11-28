@@ -11,9 +11,12 @@ const alertMessage =
 
 const Info: React.FC = () => {
   return (
-    <div className={cn("flex justify-center w-[84vw] mb-8", landscapeWitdhCalc)}>
-      <AlertMessage variant="info" title="Important" msg={alertMessage} />
-    </div>
+    <AlertMessage
+      className={cn("w-[84vw] mb-8", landscapeWitdhCalc)}
+      variant="info"
+      title="Important"
+      msg={alertMessage}
+    />
   );
 };
 

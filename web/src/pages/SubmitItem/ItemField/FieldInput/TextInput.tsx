@@ -6,16 +6,13 @@ import { cn } from "src/utils";
 import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const TextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
-  const handleChange = (value: string) => {
-    handleWrite(value);
-  };
   return (
     <TextField
       aria-label={fieldProp.description}
       value={fieldProp.value ?? ""}
       className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
-      onChange={handleChange}
+      onChange={handleWrite}
       variant="info"
       message={fieldProp.description}
     />

@@ -6,9 +6,6 @@ import { cn } from "src/utils";
 import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const LongTextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
-  const handleChange = (value: string) => {
-    handleWrite(value);
-  };
   return (
     <TextArea
       aria-label={fieldProp.description}
@@ -16,7 +13,7 @@ const LongTextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
       style={{ marginBottom: responsiveSize(68, 40) }}
       resizeY
       value={fieldProp.value ?? ""}
-      onChange={handleChange}
+      onChange={handleWrite}
       variant="info"
       message={fieldProp.description}
     />

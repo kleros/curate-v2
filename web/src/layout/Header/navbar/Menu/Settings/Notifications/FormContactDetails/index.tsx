@@ -20,11 +20,11 @@ import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 
 const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   const [emailInput, setEmailInput] = useState<string>("");
-  const [emailIsValid, setEmailIsValid] = useState<boolean>(false);
   const { address } = useAccount();
   const { user, isAddingUser, isFetchingUser, addUser, updateEmail, isUpdatingUser, userExists } = useAtlasProvider();
 
   const isEditingEmail = user?.email !== emailInput;
+  const emailIsValid = EMAIL_REGEX.test(emailInput);
 
   const isEmailUpdateable = user?.email
     ? !isUndefined(user?.emailUpdateableAt) && new Date(user.emailUpdateableAt).getTime() < new Date().getTime()
@@ -96,7 +96,6 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
           contactInput={emailInput}
           contactIsValid={emailIsValid}
           setContactInput={setEmailInput}
-          setContactIsValid={setEmailIsValid}
           validator={EMAIL_REGEX}
           isEditing={isEditingEmail}
         />

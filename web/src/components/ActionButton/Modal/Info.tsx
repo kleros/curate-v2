@@ -6,11 +6,7 @@ interface IInfo {
 }
 
 const Info: React.FC<IInfo> = ({ alertMessage }) => {
-  return (
-    <div className="flex w-full">
-      <AlertMessage variant="info" title="Important" msg={alertMessage} />
-    </div>
-  );
+  return <AlertMessage className="w-full" variant="info" title="Important" msg={alertMessage} />;
 };
 
 export default Info;

@@ -9,7 +9,6 @@ interface IForm {
   contactInput: string;
   contactIsValid: boolean;
   setContactInput: Dispatch<SetStateAction<string>>;
-  validator: RegExp;
   isEditing?: boolean;
 }
 
@@ -19,7 +18,6 @@ const FormContact: React.FC<IForm> = ({
   contactInput,
   contactIsValid,
   setContactInput,
-  validator,
   isEditing,
 }) => {
   const fieldVariant = useMemo(() => {
@@ -37,7 +35,6 @@ const FormContact: React.FC<IForm> = ({
       placeholder={contactPlaceholder}
       value={contactInput}
       onChange={setContactInput}
-      validate={(value) => (validator.test(value) ? true : undefined)}
     />
   );
 };

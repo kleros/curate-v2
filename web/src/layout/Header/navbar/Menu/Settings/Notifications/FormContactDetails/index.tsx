@@ -96,7 +96,6 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
           contactInput={emailInput}
           contactIsValid={emailIsValid}
           setContactInput={setEmailInput}
-          validator={EMAIL_REGEX}
           isEditing={isEditingEmail}
         />
       </div>

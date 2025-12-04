@@ -29,15 +29,6 @@ const Progress: React.FC = () => {
     { title: "Submitted" },
   ];
 
-  return (
-    <div className="w-full p-8">
-      <Steps
-        className="w-full h-auto pt-4 pb-4"
-        items={steps}
-        currentItemIndex={progressValue}
-        horizontal={isDesktop}
-      />
-    </div>
-  );
+  return <Steps className="w-full h-auto p-8" items={steps} currentItemIndex={progressValue} horizontal={isDesktop} />;
 };
 export default Progress;

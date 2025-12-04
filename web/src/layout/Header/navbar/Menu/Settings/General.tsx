@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 export const DisconnectWalletButton: React.FC = () => {
   const { disconnect } = useDisconnect();
-  return <Button text={`Disconnect`} onClick={() => disconnect()} />;
+  return <Button text={`Disconnect`} onPress={() => disconnect()} />;
 };
 
 const General: React.FC = () => {

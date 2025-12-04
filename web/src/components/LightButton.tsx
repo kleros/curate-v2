@@ -5,13 +5,13 @@ import { cn } from "src/utils";
 interface ILightButton {
   text: string;
   Icon?: React.FC<React.SVGAttributes<SVGElement>>;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onPress?: () => void;
   disabled?: boolean;
   className?: string;
   isMobileNavbar?: boolean;
 }
 
-const LightButton: React.FC<ILightButton> = ({ text, Icon, onClick, disabled, className, isMobileNavbar }) => (
+const LightButton: React.FC<ILightButton> = ({ text, Icon, onPress, disabled, className, isMobileNavbar }) => (
   <Button
     variant="primary"
     small
@@ -25,7 +25,7 @@ const LightButton: React.FC<ILightButton> = ({ text, Icon, onClick, disabled, cl
         : "[&_.button-svg]:fill-white/75 hover:[&_.button-svg]:fill-white",
       className
     )}
-    {...{ text, Icon, onClick, disabled }}
+    {...{ text, Icon, disabled, onPress }}
   />
 );
 

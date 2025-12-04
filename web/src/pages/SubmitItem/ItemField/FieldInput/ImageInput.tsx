@@ -23,8 +23,7 @@ const ImageInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
       .catch((err) => {
         console.log(err);
         errorToast(`Upload failed: ${err?.message}`);
-      })
-      .finally();
+      });
   };
 
   return (

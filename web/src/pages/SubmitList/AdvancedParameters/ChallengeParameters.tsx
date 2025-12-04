@@ -26,6 +26,7 @@ const ChallengeParameters: React.FC = () => {
         </WithHelpTooltip>
         <NumberField
           className="w-full"
+          aria-label="Challenge period duration (hours)"
           placeholder="hours"
           name="challengePeriodDuration"
           minValue={0}
@@ -40,6 +41,7 @@ const ChallengeParameters: React.FC = () => {
         </WithHelpTooltip>
         <NumberField
           className="w-full"
+          aria-label="Submission challenge bounty"
           placeholder="84"
           name="submissionChallengeBaseDeposit"
           minValue={0}
@@ -66,6 +68,7 @@ const ChallengeParameters: React.FC = () => {
         </WithHelpTooltip>
         <NumberField
           className="w-full"
+          aria-label="Removal challenge bounty"
           placeholder="84"
           name="removalChallengeBaseDeposit"
           value={Number(listData.removalChallengeBaseDeposit)}

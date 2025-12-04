@@ -24,6 +24,7 @@ const AddressInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
 
   return (
     <TextField
+      aria-label={fieldProp.description}
       className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
       style={{ marginBottom: responsiveSize(68, 40) }}
       value={address}

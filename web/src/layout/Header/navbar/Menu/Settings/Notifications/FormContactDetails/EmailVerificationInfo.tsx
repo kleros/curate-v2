@@ -14,25 +14,21 @@ interface IEmailInfo {
 const EmailVerificationInfo: React.FC<IEmailInfo> = ({ toggleIsSettingsOpen }) => {
   const { userExists, user, updateEmail } = useAtlasProvider();
 
-  const resendVerificationEmail = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!user) return;
-      infoToast(`Sending verification email ...`);
-      updateEmail({ newEmail: user.email })
-        .then(async (res) => {
-          if (res) {
-            successToast("Verification email sent successfully!");
-            toggleIsSettingsOpen();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          errorToast(`Failed to send verification email: ${err?.message}`);
-        });
-    },
-    [user, updateEmail, toggleIsSettingsOpen]
-  );
+  const resendVerificationEmail = useCallback(() => {
+    if (!user) return;
+    infoToast(`Sending verification email ...`);
+    updateEmail({ newEmail: user.email })
+      .then(async (res) => {
+        if (res) {
+          successToast("Verification email sent successfully!");
+          toggleIsSettingsOpen();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        errorToast(`Failed to send verification email: ${err?.message}`);
+      });
+  }, [user, updateEmail, toggleIsSettingsOpen]);
 
   return userExists && !user?.isEmailVerified ? (
     <div
@@ -55,7 +51,7 @@ const EmailVerificationInfo: React.FC<IEmailInfo> = ({ toggleIsSettingsOpen }) =
               "[&_.button-text]:text-sm [&_.button-text]:font-normal"
             )}
             text="Resend it"
-            onClick={resendVerificationEmail}
+            onPress={resendVerificationEmail}
           />
         </label>
       </div>

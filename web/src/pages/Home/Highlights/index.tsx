@@ -75,7 +75,7 @@ const HighlightedLists = () => {
       </div>
       <Button
         className="mx-auto"
-        onClick={() => navigateAndScrollTop(`/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}`)}
+        onPress={() => navigateAndScrollTop(`/lists/display/1/desc/${encodeListURIFilter(List_filters.Active)}`)}
         text="Show All"
         variant="secondary"
       />

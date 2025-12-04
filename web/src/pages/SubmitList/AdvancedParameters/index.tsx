@@ -37,13 +37,13 @@ const AdvancedParameters: React.FC = () => {
             className={lightButtonStyle}
             text="Reset"
             Icon={() => <HistoryIcon className="fill-klerosUIComponentsPrimaryBlue" />}
-            onClick={reset}
+            onPress={reset}
           />
           <LightButton
             className={lightButtonStyle}
             text="Learn more"
             Icon={() => <BookIcon className="fill-klerosUIComponentsPrimaryBlue" />}
-            onClick={() =>
+            onPress={() =>
               window.open(
                 "https://docs.kleros.io/products/curate/kleros-curate-tutorial",
                 "_blank",

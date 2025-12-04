@@ -55,7 +55,7 @@ const SubmitItemButton: React.FC = () => {
           text="Submit Item"
           isDisabled={isButtonDisabled}
           isLoading={(isConfigLoading && !insufficientBalance) || isSubmittingItem || isBalanceLoading}
-          onClick={() => {
+          onPress={() => {
             if (submitItem && publicClient && config) {
               setIsSubmittingItem(true);
               wrapWithToast(async () => await submitItem(config?.request), publicClient)

@@ -29,7 +29,7 @@ const EnsureAuth: React.FC<IEnsureAuth> = ({ children, className }) => {
   ) : (
     <Button
       text="Sign In"
-      onClick={handleClick}
+      onPress={handleClick}
       isDisabled={isSigningIn || !address}
       isLoading={isSigningIn}
       {...{ className }}

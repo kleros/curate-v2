@@ -16,6 +16,7 @@ const Title: React.FC = () => {
     <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
       <Header text="Name" />
       <TextField
+        aria-label="List name"
         className="w-full"
         onChange={handleWrite}
         placeholder="eg. Address Tags"

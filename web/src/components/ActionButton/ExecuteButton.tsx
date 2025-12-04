@@ -28,7 +28,7 @@ const ExecuteButton: React.FC<IExecuteButton> = ({ registryAddress, itemId, refe
         text="Execute"
         isDisabled={isLoading || isError || isExecuting || isPreparingConfig || disabled}
         isLoading={isLoading || isExecuting}
-        onClick={() => {
+        onPress={() => {
           if (!executeRequest || !config || !publicClient) return;
           setIsExecuting(true);
           wrapWithToast(async () => await executeRequest(config.request), publicClient)

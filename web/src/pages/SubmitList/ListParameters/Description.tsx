@@ -16,6 +16,7 @@ const Description: React.FC = () => {
       <Header text="Description" />
       <TextArea
         className="[&_textarea]:w-full [&_textarea]:h-28 custom-scrollbar"
+        aria-label="List description"
         onChange={handleWrite}
         placeholder="eg. A list of public name tags, associated with Ethereum mainnet contract addresses."
         value={listMetadata.description}

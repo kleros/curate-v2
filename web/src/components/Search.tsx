@@ -14,7 +14,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
   const keywords = searchParams.get("keywords");
 
   const decodedFilter = decodeListURIFilter(filter ?? "all");
-  const [search, setSearch] = useState(keywords ?? undefined);
+  const [search, setSearch] = useState(keywords ?? "");
   const navigate = useNavigate();
 
   useDebounce(
@@ -41,6 +41,7 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
           className="flex-1 basis-[310px] [&_input]:py-0"
           type="text"
           placeholder="Search by keywords"
+          aria-label="Search by keywords"
           value={search}
           onChange={(value) => setSearch(value)}
         />
@@ -83,9 +84,9 @@ const Search: React.FC<{ isList?: Boolean }> = ({ isList }) => {
         callback={(item) => handleStatusChange(item.itemValue)}
       />
       {isList ? (
-        <Button text="Create New List" Icon={PaperIcon} onClick={() => navigate("/submit-list")} />
+        <Button text="Create New List" Icon={PaperIcon} onPress={() => navigate("/submit-list")} />
       ) : (
-        <Button Icon={PlusIcon} text="Submit Item" onClick={() => navigate(`/submit-item/${id}`)} />
+        <Button Icon={PlusIcon} text="Submit Item" onPress={() => navigate(`/submit-item/${id}`)} />
       )}
     </div>
   );

@@ -30,7 +30,7 @@ const MobileHeader = () => {
       <OpenContext.Provider value={memoizedContext}>
         <Logo />
         <NavBar />
-        <LightButton className="p-0 [&_.button-svg]:mr-0" text="" Icon={HamburgerIcon} onClick={toggleIsOpen} />
+        <LightButton className="p-0 [&_.button-svg]:mr-0" text="" Icon={HamburgerIcon} onPress={toggleIsOpen} />
       </OpenContext.Provider>
     </div>
   );

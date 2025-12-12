@@ -6,7 +6,6 @@ import StatusBanner, { mapFromSubgraphStatus } from "../RegistryCard/StatusBanne
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import ItemField from "./ItemField";
-import { cn } from "src/utils";
 import clsx from "clsx";
 
 const landscapeGridColsCalc = "lg:grid-cols-[1fr_var(--spacing-fluid-150-180-900)_max-content]";
@@ -26,7 +25,7 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
       onClick={() => navigateAndScrollTop(`/lists/item/${id?.toString()}`)}
     >
       <div
-        className={cn(
+        className={clsx(
           "grid grid-rows-[repeat(3,min-content)] grid-cols-[1fr_min-content]",
           "w-full h-max p-4 gap-y-2 items-center",
           "lg:h-16 lg:justify-between lg:grid-rows-[1fr] lg:py-0 lg:px-8",

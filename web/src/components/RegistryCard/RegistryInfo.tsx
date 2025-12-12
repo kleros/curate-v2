@@ -19,7 +19,7 @@ interface IListInfo {
 }
 
 const landscapeGridColsCalc =
-  "lg:grid-cols-[auto_1fr_calc(80px+(100-80)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_calc(100px+(150-100)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_max-content]";
+  "lg:grid-cols-[auto_1fr_var(--spacing-fluid-80-100-900)_var(--spacing-fluid-100-150-900)_max-content]";
 
 const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isListView = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);

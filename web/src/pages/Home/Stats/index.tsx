@@ -5,7 +5,6 @@ import PaperIcon from "svgs/icons/paper.svg";
 import ListIcon from "svgs/icons/list.svg";
 import DollarIcon from "svgs/icons/dollar.svg";
 import JurorIcon from "svgs/icons/user.svg";
-import { responsiveSize } from "styles/responsiveSize";
 import { useCoinPrice } from "hooks/useCoinPrice";
 import { CoinIds } from "consts/coingecko";
 import { useCounter } from "hooks/queries/useCounter";
@@ -72,12 +71,9 @@ const Stats = () => {
     <Card
       className={clsx(
         "grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-8",
-        "w-full h-fit mb-16 pb-4! lg:gap-0 lg:pb-0!"
+        "w-full h-fit mb-16 lg:gap-0",
+        "p-fluid-16-30 pl-fluid-16-54 pb-4! lg:pb-0!"
       )}
-      style={{
-        padding: responsiveSize(16, 30),
-        paddingLeft: responsiveSize(16, 54),
-      }}
     >
       {stats.map(({ title, coinId, text, subtext, color, icon }, i) => {
         return <StatDisplay key={i} {...{ title, color, icon, text, subtext }} />;

@@ -6,8 +6,7 @@ import PlusMinusField from "components/PlusMinusField";
 import LightButton from "components/LightButton";
 import HistoryIcon from "svgs/icons/history.svg";
 import { ListField, useSubmitListContext } from "context/SubmitListContext";
-import { cn } from "src/utils";
-import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../../constants";
+import { BASE_CONTAINER_STYLE } from "../../constants";
 
 const Fields: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
@@ -41,7 +40,7 @@ const Fields: React.FC = () => {
   };
 
   return (
-    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Item Fields" />
       <div className="flex flex-col gap-4 w-full mb-2.5">
         <label className="w-full">

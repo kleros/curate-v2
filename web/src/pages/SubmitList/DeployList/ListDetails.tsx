@@ -4,21 +4,17 @@ import { getChainIcon, getChainName } from "components/ChainIcon";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { formatValue } from "utils/format";
 import Skeleton from "react-loading-skeleton";
-import { cn } from "src/utils";
 import clsx from "clsx";
 import { DEFAULT_CHAIN } from "src/consts/chains";
-
-const paddingCalc = "p-[calc(24px+(32-24)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 
 const ListDetails: React.FC = () => {
   const { listMetadata, listData, progress } = useSubmitListContext();
   return (
     <div
-      className={cn(
+      className={clsx(
         "flex flex-col gap-5 w-full",
         "justify-start items-start",
-        paddingCalc,
-        "pb-2 border-b border-klerosUIComponentsStroke",
+        "p-fluid-24-32 pb-2 border-b border-klerosUIComponentsStroke",
         "lg:flex-row lg:justify-between lg:items-center lg:gap-0 lg:pb-4"
       )}
     >

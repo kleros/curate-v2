@@ -6,13 +6,9 @@ import NewTabIcon from "svgs/icons/new-tab.svg";
 
 import Loader from "components/Loader";
 import Header from "./Header";
-import { cn } from "src/utils";
+import clsx from "clsx";
 
 const FileViewer = lazy(() => import("components/FileViewer"));
-
-const paddingCalc = "p-[calc(24px+(136-24)*(min(max(100vw,375px),1250px)-375px)/875)]";
-const paddingTopCalc = "pt-[calc(32px+(80-32)*(min(max(100vw,375px),1250px)-375px)/875)]";
-const paddingBottomCalc = "pb-[calc(76px+(96-76)*(min(max(100vw,375px),1250px)-375px)/875)]";
 
 const AttachmentDisplay: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -20,11 +16,9 @@ const AttachmentDisplay: React.FC = () => {
   const url = searchParams.get("url");
   return (
     <div
-      className={cn(
+      className={clsx(
         "w-full max-w-landscape my-0 mx-auto bg-klerosUIComponentsLightBackground",
-        paddingCalc,
-        paddingTopCalc,
-        paddingBottomCalc
+        "p-fluid-24-136 pt-fluid-32-80 pb-fluid-76-96"
       )}
     >
       <div className="flex flex-col gap-2 w-full">

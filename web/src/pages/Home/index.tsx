@@ -6,8 +6,6 @@ import Header from "./Header";
 import Stats from "./Stats";
 import HighlightedLists from "./Highlights";
 
-const landscapeInlinePaddingCalc = "lg:px-[calc(0px+(132-0)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
-
 const Home: React.FC = () => {
   return (
     <>
@@ -15,7 +13,7 @@ const Home: React.FC = () => {
       <div
         className={clsx(
           "w-full max-w-landscape mx-auto bg-klerosUIComponentsLightBackground px-4 pt-4 pb-10",
-          `${landscapeInlinePaddingCalc} lg:pb-[60px]`
+          `lg:px-fluid-0-32 lg:pb-[60px]`
         )}
       >
         <Header />

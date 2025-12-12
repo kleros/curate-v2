@@ -6,7 +6,7 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { parseEther } from "viem";
 import { formatETH } from "utils/format";
 import { cn } from "src/utils";
-import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
+import { BASE_CONTAINER_STYLE } from "../constants";
 
 const depositContainerStyle = "flex flex-col gap-8 w-full";
 const sliderContainerStyle = "w-full p-4";
@@ -16,7 +16,7 @@ const Deposit: React.FC = () => {
   const { listData, setListData } = useSubmitListContext();
 
   return (
-    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
+    <div className={cn(BASE_CONTAINER_STYLE)}>
       <div className="flex flex-col gap-12 w-full">
         <div className={cn(depositContainerStyle)}>
           <Header text="Item Deposit" />

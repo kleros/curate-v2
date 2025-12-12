@@ -2,15 +2,13 @@ import React from "react";
 import { IFieldInput } from ".";
 import { TextField } from "@kleros/ui-components-library";
 import { responsiveSize } from "src/styles/responsiveSize";
-import { cn } from "src/utils";
-import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const TextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   return (
     <TextField
       aria-label={fieldProp.description}
       value={fieldProp.value ?? ""}
-      className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
+      className="w-[80vw] lg:w-fluid-200-720"
       style={{ marginBottom: responsiveSize(68, 40) }}
       onChange={handleWrite}
       variant="info"

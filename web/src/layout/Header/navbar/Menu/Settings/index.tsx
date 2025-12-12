@@ -5,7 +5,7 @@ import General from "./General";
 import NotificationSettings from "./Notifications";
 import { ISettings } from "../../index";
 import { useLocation, useNavigate } from "react-router-dom";
-import { cn } from "src/utils";
+import clsx from "clsx";
 
 const TABS = [
   {
@@ -22,9 +22,6 @@ const TABS = [
   },
 ];
 
-const tabListInlinePaddingCalc = "[&>div:first-child]:px-[calc(8px+(32-8)*((100vw-300px)/(1250-300)))]";
-const landscapeWidthCalc = "lg:w-[calc(300px+(424-300)*((100vw-300px)/(1250-300)))]";
-
 const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   const containerRef = useRef(null);
   const location = useLocation();
@@ -37,7 +34,7 @@ const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   return (
     <div
       ref={containerRef}
-      className={cn(
+      className={clsx(
         "flex flex-col absolute max-h-[80vh] overflow-y-auto",
         "top-[5%] left-1/2 transform -translate-x-1/2 z-1 rounded-[3px]",
         "bg-klerosUIComponentsWhiteBackground border border-solid border-klerosUIComponentsStroke",
@@ -46,7 +43,7 @@ const Settings: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
     >
       <div className="flex justify-center text-2xl mt-6 text-klerosUIComponentsPrimaryText">Settings</div>
       <Tabs
-        className={cn("py-0 max-w-[660px] w-[86vw]", landscapeWidthCalc, tabListInlinePaddingCalc)}
+        className={clsx("py-0 max-w-[660px] w-[86vw] lg:w-scale-300-424-300", "[&>div:first-child]:px-scale-8-32-300")}
         items={[TABS[0], { ...TABS[1], content: <NotificationSettings {...{ toggleIsSettingsOpen }} /> }]}
       />
     </div>

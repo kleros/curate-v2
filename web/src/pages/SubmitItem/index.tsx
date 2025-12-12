@@ -36,11 +36,14 @@ const SubmitItem: React.FC = () => {
     <>
       {<Header />}
       <div
-        className={clsx("flex flex-col w-full max-w-landscape", "bg-klerosUIComponentsLightBackground my-0 mx-auto")}
+        className={clsx(
+          "flex flex-col w-full max-w-landscape",
+          "bg-klerosUIComponentsLightBackground my-0 mx-auto",
+          "pb-fluid-76-96"
+        )}
         style={{
           paddingInline: responsiveSize(24, 32),
           paddingTop: responsiveSize(24, 28),
-          paddingBottom: responsiveSize(76, 96),
         }}
       >
         {isConnected ? (

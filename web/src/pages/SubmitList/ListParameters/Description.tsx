@@ -3,8 +3,7 @@ import NavigationButtons from "../NavigationButtons";
 import Header from "../Header";
 import { TextArea } from "@kleros/ui-components-library";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { cn } from "src/utils";
-import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
+import { BASE_CONTAINER_STYLE } from "../constants";
 const Description: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
 
@@ -12,7 +11,7 @@ const Description: React.FC = () => {
     setListMetadata({ ...listMetadata, description: value });
   };
   return (
-    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Description" />
       <TextArea
         className="[&_textarea]:w-full [&_textarea]:h-28 custom-scrollbar"

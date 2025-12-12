@@ -5,13 +5,13 @@ import { RegistryDetails } from "context/RegistryDetailsContext";
 import StatusDisplay from "../StatusDisplay";
 import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "src/consts/chains";
 import { responsiveSize } from "src/styles/responsiveSize";
-import { cn, isUndefined } from "src/utils";
+import { isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import { shortenAddress } from "utils/shortenAddress";
 import { Link } from "react-router-dom";
+import clsx from "clsx";
 
-const landscapeColumnGapCalc = "lg:gap-x-[calc(24px+(32-24)*(min(max(100vw,900px),1250px)-900px)/(1250-900))]";
 interface ITopInfo
   extends Pick<
     RegistryDetails,
@@ -60,10 +60,9 @@ const TopInfo: React.FC<ITopInfo> = ({
         )}
       </div>
       <div
-        className={cn(
+        className={clsx(
           "flex flex-row flex-wrap shrink gap-8 items-start pt-5",
-          "lg:shrink-0 lg:gap-y-0",
-          landscapeColumnGapCalc
+          "lg:shrink-0 lg:gap-x-fluid-24-32-900 lg:gap-y-0"
         )}
       >
         {id !== "" ? (

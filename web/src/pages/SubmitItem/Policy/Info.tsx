@@ -1,8 +1,5 @@
 import React from "react";
 import { AlertMessage } from "@kleros/ui-components-library";
-import { cn } from "src/utils";
-
-const landscapeWitdhCalc = "lg:w-[calc(342px+(618-342)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
 
 const alertMessage =
   "The item must follow the Policy. Items that do not follow the policy risk" +
@@ -11,12 +8,7 @@ const alertMessage =
 
 const Info: React.FC = () => {
   return (
-    <AlertMessage
-      className={cn("w-[84vw] mb-8", landscapeWitdhCalc)}
-      variant="info"
-      title="Important"
-      msg={alertMessage}
-    />
+    <AlertMessage className="w-[84vw] mb-8 lg:w-fluid-342-618" variant="info" title="Important" msg={alertMessage} />
   );
 };
 

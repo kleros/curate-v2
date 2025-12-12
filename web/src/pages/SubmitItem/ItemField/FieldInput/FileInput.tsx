@@ -3,9 +3,9 @@ import { IFieldInput } from ".";
 import { FileUploader } from "@kleros/ui-components-library";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
-import { cn, getFileUploaderMsg } from "src/utils";
+import { getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-import { LANDSCAPE_WIDTH_CALC, MARGIN_BOTTOM_CALC } from "./constants";
+import clsx from "clsx";
 
 const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const { uploadFile, roleRestrictions } = useAtlasProvider();
@@ -27,11 +27,9 @@ const FileInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
 
   return (
     <FileUploader
-      className={cn(
-        "w-[84vw]",
-        "[&_small]:whitespace-pre-line [&_small]:text-start",
-        MARGIN_BOTTOM_CALC,
-        LANDSCAPE_WIDTH_CALC
+      className={clsx(
+        "w-[84vw] lg:w-fluid-200-720 mb-fluid-150-72",
+        "[&_small]:whitespace-pre-line [&_small]:text-start"
       )}
       callback={handleFileUpload}
       variant={isDesktop ? "info" : undefined}

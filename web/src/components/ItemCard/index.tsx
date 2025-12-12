@@ -9,9 +9,7 @@ import ItemField from "./ItemField";
 import { cn } from "src/utils";
 import clsx from "clsx";
 
-const landscapeGridColsCalc =
-  "lg:grid-cols-[1fr_calc(150px+(180-150)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_max-content]";
-const landscapeGapCalc = "lg:gap-[calc(16px+(36-16)*(min(max(100vw,900px),1250px)-900px)/(1250-900))]";
+const landscapeGridColsCalc = "lg:grid-cols-[1fr_var(--spacing-fluid-150-180-900)_max-content]";
 
 interface IItemCard extends ItemDetailsFragment {}
 
@@ -37,10 +35,9 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
         style={{ columnGap: responsiveSize(12, 32, 900) }}
       >
         <div
-          className={cn(
+          className={clsx(
             "flex flex-col justify-between items-start gap-4 w-fit col-span-2",
-            "lg:flex-row lg:items-center lg:col-span-1",
-            landscapeGapCalc
+            "lg:flex-row lg:items-center lg:col-span-1 lg:gap-fluid-16-36-900"
           )}
         >
           {sortedProps.map((prop) => prop.isIdentifier && <ItemField key={prop.label} {...prop} />)}

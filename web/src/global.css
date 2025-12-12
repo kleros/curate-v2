@@ -38,7 +38,7 @@
   * Default max screen width is 1250px
   * Default min screen width is 375px
   */
-  --spacing-fluid-0-32: clamp(0px, calc(0px + (132 - 0) * (100vw - 375px) / (1250 - 375)), 132px);
+  --spacing-fluid-0-132: clamp(0px, calc(0px + (132 - 0) * (100vw - 375px) / (1250 - 375)), 132px);
   --spacing-fluid-8-32-300: clamp(8px, calc(8px + (32 - 8) * (100vw - 300px) / (1250 - 300)), 32px);
   --spacing-fluid-16-30: clamp(16px, calc(16px + (30 - 16) * (100vw - 375px) / (1250 - 375)), 30px);
   --spacing-fluid-16-36-900: clamp(16px, calc(16px + (36 - 16) * (100vw - 900px) / (1250 - 900)), 36px);

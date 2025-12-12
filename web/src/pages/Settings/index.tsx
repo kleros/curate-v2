@@ -8,7 +8,7 @@ const Settings: React.FC = () => {
     <div
       className={clsx(
         "w-full max-w-landscape my-0 mx-auto pt-8 pb-10 px-4 bg-klerosUIComponentsLightBackground",
-        "lg:px-fluid-0-32 lg:pt-12 lg:pb-16"
+        "lg:px-fluid-0-132 lg:pt-12 lg:pb-16"
       )}
     >
       <Routes>

@@ -13,7 +13,7 @@ const Home: React.FC = () => {
       <div
         className={clsx(
           "w-full max-w-landscape mx-auto bg-klerosUIComponentsLightBackground px-4 pt-4 pb-10",
-          `lg:px-fluid-0-32 lg:pb-[60px]`
+          `lg:px-fluid-0-132 lg:pb-[60px]`
         )}
       >
         <Header />

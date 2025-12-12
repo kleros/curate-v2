@@ -10,7 +10,7 @@ import ItemDisplay from "./ItemDisplay";
 import Breadcrumb from "./StyledBreadcrumb";
 import clsx from "clsx";
 
-const landscapePaddingCalc = "lg:p-[48px_var(--spacing-fluid-0-32)_60px]";
+const landscapePaddingCalc = "lg:p-[48px_var(--spacing-fluid-0-132)_60px]";
 
 const AllLists: React.FC = () => (
   <div

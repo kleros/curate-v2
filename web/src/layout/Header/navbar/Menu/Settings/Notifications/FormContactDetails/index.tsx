@@ -6,8 +6,6 @@ import { Button } from "@kleros/ui-components-library";
 
 import { EMAIL_REGEX } from "consts/index";
 
-import { responsiveSize } from "styles/responsiveSize";
-
 import { ISettings } from "../../../../index";
 
 import EmailVerificationInfo from "./EmailVerificationInfo";
@@ -72,11 +70,7 @@ const FormContactDetails: React.FC<ISettings> = ({ toggleIsSettingsOpen }) => {
   };
 
   return (
-    <form
-      className="w-full relative flex flex-col py-0 pb-4 gap-4"
-      style={{ paddingInline: responsiveSize(12, 32, 300) }}
-      onSubmit={handleSubmit}
-    >
+    <form className="w-full relative flex flex-col gap-4 py-0 pb-4 px-fluid-12-32-300" onSubmit={handleSubmit}>
       {/* <FormContactContainer>
         <FormContact
           contactLabel="Telegram"

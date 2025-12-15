@@ -10,8 +10,6 @@ import Court from "svgs/icons/kleros.svg";
 import POH from "svgs/icons/poh-image.png";
 import Vea from "svgs/icons/vea.svg";
 
-import { responsiveSize } from "styles/responsiveSize";
-
 import Product from "./Product";
 import clsx from "clsx";
 
@@ -102,9 +100,9 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
       <div
         className={clsx(
           "grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))]",
-          "overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center w-fluid-300-480"
+          "overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center w-fluid-300-480",
+          "pt-1 pb-4 px-fluid-8-24"
         )}
-        style={{ padding: `4px ${responsiveSize(8, 24)} 16px` }}
       >
         {ITEMS.map((item) => {
           return <Product {...item} key={item.text} />;

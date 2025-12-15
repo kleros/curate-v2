@@ -38,22 +38,43 @@
   * Default max screen width is 1250px
   * Default min screen width is 375px
   */
+  --spacing-fluid-0-16: clamp(0px, calc(0px + (16 - 0) * (100vw - 375px) / (1250 - 375)), 16px);
+  --spacing-fluid-0-108: clamp(0px, calc(0px + (108 - 0) * (100vw - 375px) / (1250 - 375)), 108px);
   --spacing-fluid-0-132: clamp(0px, calc(0px + (132 - 0) * (100vw - 375px) / (1250 - 375)), 132px);
+  --spacing-fluid-4-8: clamp(4px, calc(4px + (8 - 4) * (100vw - 375px) / (1250 - 375)), 8px);
+  --spacing-fluid-6-8-300: clamp(6px, calc(6px + (8 - 6) * (100vw - 300px) / (1250 - 300)), 8px);
+  --spacing-fluid-8-16: clamp(8px, calc(8px + (16 - 8) * (100vw - 375px) / (1250 - 375)), 16px);
+  --spacing-fluid-8-24: clamp(8px, calc(8px + (24 - 8) * (100vw - 375px) / (1250 - 375)), 24px);
+  --spacing-fluid-8-24-900: clamp(8px, calc(8px + (24 - 8) * (100vw - 900px) / (1250 - 900)), 24px);
   --spacing-fluid-8-32-300: clamp(8px, calc(8px + (32 - 8) * (100vw - 300px) / (1250 - 300)), 32px);
+  --spacing-fluid-10-130: clamp(10px, calc(10px + (130 - 10) * (100vw - 375px) / (1250 - 375)), 130px);
+  --spacing-fluid-12-32-300: clamp(12px, calc(12px + (32 - 12) * (100vw - 300px) / (1250 - 300)), 32px);
+  --spacing-fluid-12-32-900: clamp(12px, calc(12px + (32 - 12) * (100vw - 900px) / (1250 - 900)), 32px);
+  --spacing-fluid-16-24: clamp(16px, calc(16px + (24 - 16) * (100vw - 375px) / (1250 - 375)), 24px);
   --spacing-fluid-16-30: clamp(16px, calc(16px + (30 - 16) * (100vw - 375px) / (1250 - 375)), 30px);
   --spacing-fluid-16-36-900: clamp(16px, calc(16px + (36 - 16) * (100vw - 900px) / (1250 - 900)), 36px);
   --spacing-fluid-16-54: clamp(16px, calc(16px + (54 - 16) * (100vw - 375px) / (1250 - 375)), 54px);
+  --spacing-fluid-20-24: clamp(20px, calc(20px + (24 - 20) * (100vw - 375px) / (1250 - 375)), 24px);
+  --spacing-fluid-20-28: clamp(20px, calc(20px + (28 - 20) * (100vw - 375px) / (1250 - 375)), 28px);
+  --spacing-fluid-24-28: clamp(24px, calc(24px + (28 - 24) * (100vw - 375px) / (1250 - 375)), 28px);
   --spacing-fluid-24-32: clamp(24px, calc(24px + (32 - 24) * (100vw - 375px) / (1250 - 375)), 32px);
+  --spacing-fluid-24-48: clamp(24px, calc(24px + (48 - 24) * (100vw - 375px) / (1250 - 375)), 48px);
   --spacing-fluid-24-32-900: clamp(24px, calc(24px + (32 - 24) * (100vw - 900px) / (1250 - 900)), 32px);
   --spacing-fluid-24-136: clamp(24px, calc(24px + (136 - 24) * (100vw - 375px) / (1250 - 375)), 136px);
   --spacing-fluid-25-65: clamp(25px, calc(25px + (65 - 25) * (100vw - 375px) / (1250 - 375)), 65px);
+  --spacing-fluid-32-24: clamp(24px, calc(32px + (24 - 32) * (100vw - 375px) / (1250 - 375)), 32px);
   --spacing-fluid-32-80: clamp(32px, calc(32px + (80 - 32) * (100vw - 375px) / (1250 - 375)), 80px);
+  --spacing-fluid-60-80: clamp(60px, calc(60px + (80 - 60) * (100vw - 375px) / (1250 - 375)), 80px);
+  --spacing-fluid-68-40: clamp(40px, calc(68px + (40 - 68) * (100vw - 375px) / (1250 - 375)), 68px);
   --spacing-fluid-76-96: clamp(76px, calc(76px + (96 - 76) * (100vw - 375px) / (1250 - 375)), 96px);
   --spacing-fluid-80-100-900: clamp(80px, calc(80px + (100 - 80) * (100vw - 900px) / (1250 - 900)), 100px);
+  --spacing-fluid-100-130: clamp(100px, calc(100px + (130 - 100) * (100vw - 375px) / (1250 - 375)), 130px);
   --spacing-fluid-100-150-900: clamp(100px, calc(100px + (150 - 100) * (100vw - 900px) / (1250 - 900)), 150px);
+  --spacing-fluid-100-160: clamp(100px, calc(100px + (160 - 100) * (100vw - 375px) / (1250 - 375)), 160px);
   --spacing-fluid-150-72: clamp(72px, calc(150px + (72 - 150) * (100vw - 375px) / (1250 - 375)), 150px);
   --spacing-fluid-150-180-900: clamp(150px, calc(150px + (180 - 150) * (100vw - 900px) / (1250 - 900)), 180px);
   --spacing-fluid-200-720: clamp(200px, calc(200px + (720 - 200) * (100vw - 375px) / (1250 - 375)), 720px);
+  --spacing-fluid-270-296: clamp(270px, calc(270px + (296 - 270) * (100vw - 375px) / (1250 - 375)), 296px);
   --spacing-fluid-300-480: clamp(300px, calc(300px + (480 - 300) * (100vw - 375px) / (1250 - 375)), 480px);
   --spacing-fluid-300-424-300: clamp(300px, calc(300px + (424 - 300) * (100vw - 300px) / (1250 - 300)), 424px);
   --spacing-fluid-342-618: clamp(342px, calc(342px + (618 - 342) * (100vw - 375px) / (1250 - 375)), 618px);

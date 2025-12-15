@@ -8,8 +8,6 @@ import KlerosSolutionsIcon from "svgs/menu-icons/kleros-solutions.svg";
 import { DEFAULT_CHAIN } from "consts/chains";
 import { useLockOverlayScroll } from "hooks/useLockOverlayScroll";
 
-import { responsiveSize } from "styles/responsiveSize";
-
 import ConnectWallet from "components/ConnectWallet";
 import LightButton from "components/LightButton";
 import OverlayPortal from "components/OverlayPortal";
@@ -44,7 +42,7 @@ const DesktopHeader: React.FC = () => {
           <Explore />
         </div>
 
-        <div className="flex ml-2 [&_canvas]:w-5" style={{ gap: responsiveSize(4, 8) }}>
+        <div className="flex gap-fluid-4-8 ml-2 [&_canvas]:w-5">
           <div
             className="[&_label]:cursor-pointer [&_label]:text-white/80"
             onClick={isConnected && isDefaultChain ? toggleIsSettingsOpen : undefined}

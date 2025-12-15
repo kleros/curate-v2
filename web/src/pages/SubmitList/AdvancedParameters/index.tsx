@@ -1,6 +1,5 @@
 import React from "react";
 import NavigationButtons from "../NavigationButtons";
-import { responsiveSize } from "styles/responsiveSize";
 import Header from "../Header";
 import LightButton from "components/LightButton";
 import HistoryIcon from "svgs/icons/history.svg";
@@ -26,7 +25,7 @@ const AdvancedParameters: React.FC = () => {
     });
 
   return (
-    <div className="flex flex-col items-center gap-8 w-full py-0" style={{ paddingInline: responsiveSize(0, 108) }}>
+    <div className="flex flex-col items-center gap-8 w-full py-0 px-fluid-0-108">
       <Header text="Advanced Options" />
       <div className="flex flex-col w-full gap-4 mb-2.5">
         <label className="text-center w-full">

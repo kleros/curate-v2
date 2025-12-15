@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { responsiveSize } from "styles/responsiveSize";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import HeroImage from "components/HeroImage";
@@ -35,12 +34,8 @@ const SubmitList: React.FC = () => {
         className={clsx(
           "flex flex-col w-full max-w-landscape",
           "my-0 mx-auto bg-klerosUIComponentsLightBackground",
-          "pb-fluid-76-96"
+          "pt-fluid-24-28 pb-fluid-76-96 px-fluid-24-32"
         )}
-        style={{
-          paddingInline: responsiveSize(24, 32),
-          paddingTop: responsiveSize(24, 28),
-        }}
       >
         {isConnected && !isTimelineHidden ? (
           <label

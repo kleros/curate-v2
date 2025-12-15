@@ -4,7 +4,6 @@ import Skeleton from "react-loading-skeleton";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import ActionButton from "components/ActionButton";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
-import { responsiveSize } from "styles/responsiveSize";
 import { Policies } from "../RegistryInformationCard/Policies";
 import FieldsDisplay from "./FieldsDisplay";
 import StatusDisplay from "../StatusDisplay";
@@ -61,10 +60,7 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
           <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
         </div>
       </div>
-      <hr
-        className="border-none h-px bg-klerosUIComponentsStroke mx-8"
-        style={{ marginBlock: responsiveSize(20, 28) }}
-      />
+      <hr className="border-none h-px bg-klerosUIComponentsStroke mx-8 my-fluid-20-28" />
       <div className="flex px-8 pb-3 flex-wrap gap-3 justify-between">
         {registerer?.id ? (
           <div className={aliasContainerStyle}>

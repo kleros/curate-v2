@@ -1,5 +1,4 @@
 import React from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import NavigationButtons from "../NavigationButtons";
 import { AlertMessage, Card } from "@kleros/ui-components-library";
 import Progress from "./Progress";
@@ -12,7 +11,7 @@ const DeployList: React.FC = () => {
   const isSuccess = progress === ListProgress.SubmitSuccess;
 
   return (
-    <div className="flex flex-col items-center gap-8 w-full py-0" style={{ paddingInline: responsiveSize(0, 108) }}>
+    <div className="flex flex-col items-center gap-8 w-full py-0 px-fluid-0-108">
       <Card className="flex flex-col w-full h-max">
         <ListDetails />
         <Progress />

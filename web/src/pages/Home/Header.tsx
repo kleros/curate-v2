@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { responsiveSize } from "styles/responsiveSize";
 
 const Header: React.FC = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -15,7 +14,7 @@ const Header: React.FC = () => {
 
   return (
     <div className="flex justify-between">
-      <h1 className="font-medium mb-12 tracking-[1px]" style={{ fontSize: responsiveSize(21, 24) }}>
+      <h1 className="text-(length:--spacing-fluid-20-24) font-medium mb-12 tracking-[1px]">
         Community Curated <span className="text-klerosUIComponentsSecondaryPurple">{words[currentWordIndex]}</span>
       </h1>
     </div>

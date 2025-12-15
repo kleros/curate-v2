@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { IFieldInput } from ".";
 import { TextField } from "@kleros/ui-components-library";
-import { responsiveSize } from "src/styles/responsiveSize";
 
 const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const [link, setLink] = useState(fieldProp.value ?? "");
@@ -23,8 +22,7 @@ const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
     <TextField
       aria-label={fieldProp.description}
       value={link}
-      className="w-[80vw] lg:w-fluid-200-720"
-      style={{ marginBottom: responsiveSize(68, 40) }}
+      className="w-[80vw] lg:w-fluid-200-720 mb-fluid-68-40"
       onChange={handleChange}
       variant={isError ? "error" : "info"}
       message={fieldProp.description}

@@ -1,5 +1,4 @@
 import React from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import { Card, Copiable } from "@kleros/ui-components-library";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
@@ -71,11 +70,8 @@ const RegistryInformationCard: React.FC<IInformationCard> = ({
           registryAddress: parentRegistryAddress,
         }}
       />
-      <hr
-        className="border-none h-px bg-klerosUIComponentsStroke"
-        style={{ marginBlock: responsiveSize(20, 28), marginInline: responsiveSize(24, 32) }}
-      />
-      <div className="flex flex-wrap justify-between gap-5 pb-3" style={{ paddingInline: responsiveSize(24, 32) }}>
+      <hr className="border-none h-px bg-klerosUIComponentsStroke my-fluid-20-28 mx-fluid-24-32" />
+      <div className="flex flex-wrap justify-between gap-5 pb-3 px-fluid-24-32">
         <div className="flex flex-wrap gap-2 items-center leading-18px">
           <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">Submitted by:</small>
           <Copiable copiableContent={registerer?.id ?? ""} tooltipProps={{ small: true }}>

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import { Card } from "@kleros/ui-components-library";
 import PileCoinsIcon from "svgs/icons/pile-coins.svg";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
@@ -42,8 +41,11 @@ const Header: React.FC<IHeader> = ({}) => {
   return (
     <div className="flex justify-center">
       <Card
-        className={clsx("flex flex-wrap justify-between gap-6", "h-auto w-[80vw] lg:w-[91vw]", "mt-[60px] py-6")}
-        style={{ marginBottom: responsiveSize(36, 36), paddingInline: responsiveSize(24, 32) }}
+        className={clsx(
+          "flex flex-wrap justify-between gap-6",
+          "h-auto w-[80vw] lg:w-[91vw]",
+          "mb-9 mt-[60px] py-6 px-fluid-24-32"
+        )}
       >
         <div className="flex flex-wrap gap-2">
           <p className="text-2xl font-semibold">Submit Item to</p>

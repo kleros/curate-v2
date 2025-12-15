@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Card } from "@kleros/ui-components-library";
 import { useNavigateAndScrollTop } from "hooks/useNavigateAndScrollTop";
-import { responsiveSize } from "styles/responsiveSize";
 import StatusBanner, { mapFromSubgraphStatus } from "../RegistryCard/StatusBanner";
 import ArrowIcon from "svgs/icons/arrow.svg";
 import { ItemDetailsFragment } from "src/graphql/graphql";
@@ -27,11 +26,10 @@ const ItemCard: React.FC<IItemCard> = ({ id, status, disputed, props }) => {
       <div
         className={clsx(
           "grid grid-rows-[repeat(3,min-content)] grid-cols-[1fr_min-content]",
-          "w-full h-max p-4 gap-y-2 items-center",
+          "w-full h-max p-4 gap-y-2 gap-x-fluid-12-32-900 items-center",
           "lg:h-16 lg:justify-between lg:grid-rows-[1fr] lg:py-0 lg:px-8",
           landscapeGridColsCalc
         )}
-        style={{ columnGap: responsiveSize(12, 32, 900) }}
       >
         <div
           className={clsx(

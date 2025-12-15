@@ -4,7 +4,6 @@ import Skeleton from "react-loading-skeleton";
 import { RegistryDetails } from "context/RegistryDetailsContext";
 import StatusDisplay from "../StatusDisplay";
 import { DEFAULT_CHAIN, SUPPORTED_CHAINS } from "src/consts/chains";
-import { responsiveSize } from "src/styles/responsiveSize";
 import { isUndefined } from "src/utils";
 import { DEFAULT_LIST_LOGO } from "src/consts";
 import { getIpfsUrl } from "utils/getIpfsUrl";
@@ -33,11 +32,8 @@ const TopInfo: React.FC<ITopInfo> = ({
   const [imageSrc, setImageSrc] = useState(getIpfsUrl(logoURI ?? ""));
   useEffect(() => setImageSrc(getIpfsUrl(logoURI ?? "")), [logoURI]);
   return (
-    <div
-      className="flex flex-wrap justify-between gap-3 lg:flex-nowrap pb-3"
-      style={{ paddingTop: responsiveSize(20, 24), paddingInline: responsiveSize(24, 32) }}
-    >
-      <div className="flex flex-col" style={{ rowGap: responsiveSize(8, 16) }}>
+    <div className="flex flex-wrap justify-between gap-3 lg:flex-nowrap pb-3 pt-fluid-20-24 px-fluid-24-32">
+      <div className="flex flex-col gap-y-fluid-8-16">
         <div className="flex flex-wrap items-center gap-4">
           {isUndefined(logoURI) ? (
             <Skeleton width={125} height={125} borderRadius="62.5px" className="mb-2" />

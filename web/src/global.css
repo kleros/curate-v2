@@ -34,7 +34,7 @@
   --spacing-scale-300-424-300: calc(300px + (424 - 300) * (100vw - 300px) / (1250 - 300));
 
   /* 
-  * Spacing utils for resposive resizing
+  * Spacing utils for responsive resizing
   * Default max screen width is 1250px
   * Default min screen width is 375px
   */

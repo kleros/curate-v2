@@ -7,9 +7,9 @@ import { getIpfsUrl } from "utils/getIpfsUrl";
 import { Link } from "react-router-dom";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
-import { cn, getFileUploaderMsg } from "src/utils";
+import { getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
+import { BASE_CONTAINER_STYLE } from "../constants";
 
 const Policy: React.FC = () => {
   const { listMetadata, setListMetadata, setIsPolicyUploading } = useSubmitListContext();
@@ -34,7 +34,7 @@ const Policy: React.FC = () => {
   };
 
   return (
-    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Submit the List Policy File" />
       <label className="w-full">
         Fundamental to any list, the List Policy provides users with a set of rules that define what is allowed, and

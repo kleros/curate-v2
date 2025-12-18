@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import Skeleton from "react-loading-skeleton";
 import { Button } from "@kleros/ui-components-library";
 import ArrowIcon from "svgs/icons/arrow.svg";
@@ -19,7 +18,7 @@ interface IListInfo {
 }
 
 const landscapeGridColsCalc =
-  "lg:grid-cols-[auto_1fr_calc(80px+(100-80)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_calc(100px+(150-100)*(min(max(100vw,900px),1250px)-900px)/(1250-900))_max-content]";
+  "lg:grid-cols-[auto_1fr_var(--spacing-fluid-80-100-900)_var(--spacing-fluid-100-150-900)_max-content]";
 
 const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isListView = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -35,7 +34,7 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isL
       className={cn(
         "flex flex-col justify-center items-center gap-2 h-[calc(100%-45px)]",
         isListView && [
-          "grid grid-cols-[21px_max-content_1fr_max-content] grid-rows-[repeat(3,min-content)] gap-y-4",
+          "grid grid-cols-[21px_max-content_1fr_max-content] grid-rows-[repeat(3,min-content)] gap-y-4 gap-x-fluid-8-24-900",
           "w-full h-max lg:h-16 p-4",
           "[&_img]:col-span-4",
           "lg:justify-between lg:grid-rows-[1fr] lg:px-8 lg:py-0",
@@ -43,7 +42,6 @@ const ListInfo: React.FC<IListInfo> = ({ title, totalItems, logoURI, status, isL
           landscapeGridColsCalc,
         ]
       )}
-      style={{ columnGap: isListView ? responsiveSize(8, 24, 900) : undefined }}
     >
       {!imageLoaded ? (
         <Skeleton

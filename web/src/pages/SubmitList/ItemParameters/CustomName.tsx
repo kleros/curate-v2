@@ -2,14 +2,13 @@ import React from "react";
 import NavigationButtons from "../NavigationButtons";
 import Header from "../Header";
 import { useSubmitListContext } from "context/SubmitListContext";
-import { cn } from "src/utils";
-import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
+import { BASE_CONTAINER_STYLE } from "../constants";
 import { TextField } from "@kleros/ui-components-library";
 
 const CustomName: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
   return (
-    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Custom Item Name" />
       <label className="w-full">
         By default, we use the words (item, items) to describe the content of a list. If desired, you can customize it.

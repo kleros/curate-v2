@@ -1,6 +1,5 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
-import { responsiveSize } from "styles/responsiveSize";
 
 export const HistorySkeletonCard = () => (
   <div className="flex flex-col gap-2">
@@ -11,17 +10,13 @@ export const HistorySkeletonCard = () => (
   </div>
 );
 
-export const SkeletonRegistryCard = () => (
-  <div className="w-full">
-    <Skeleton height={responsiveSize(270, 296)} />
-  </div>
-);
+export const SkeletonRegistryCard = () => <Skeleton className="w-full h-fluid-270-296" />;
 
 export const SkeletonJustificationCard = () => (
   <div className="flex flex-col gap-4 w-full">
-    <Skeleton className="ml-auto" height={24} width={responsiveSize(100, 160)} />
+    <Skeleton className="ml-auto w-fluid-100-160" height={24} />
     <Skeleton height={60} />
-    <Skeleton height={24} width={responsiveSize(60, 80)} />
+    <Skeleton className="w-fluid-60-80" height={24} />
   </div>
 );
 

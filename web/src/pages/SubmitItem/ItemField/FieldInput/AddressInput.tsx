@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { IFieldInput } from ".";
 import { isAddress } from "viem";
 import { TextField } from "@kleros/ui-components-library";
-import { responsiveSize } from "src/styles/responsiveSize";
-import { cn } from "src/utils";
-import { LANDSCAPE_WIDTH_CALC } from "./constants";
 
 const AddressInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const [address, setAddress] = useState(fieldProp.value ?? "");
@@ -25,8 +22,7 @@ const AddressInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   return (
     <TextField
       aria-label={fieldProp.description}
-      className={cn("w-[80vw]", LANDSCAPE_WIDTH_CALC)}
-      style={{ marginBottom: responsiveSize(68, 40) }}
+      className="w-[80vw] lg:w-fluid-200-720 mb-fluid-68-40"
       value={address}
       onChange={handleChange}
       variant={isError ? "error" : "info"}

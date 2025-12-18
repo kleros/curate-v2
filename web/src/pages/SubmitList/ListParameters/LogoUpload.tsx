@@ -6,9 +6,9 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import ListPreview from "./ListPreview";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
-import { cn, getFileUploaderMsg } from "src/utils";
+import { getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-import { BASE_CONTAINER_LANDSCAPE_WIDTH_CALC, BASE_CONTAINER_STYLE } from "../constants";
+import { BASE_CONTAINER_STYLE } from "../constants";
 
 const LogoUpload: React.FC = () => {
   const { listMetadata, setListMetadata, setIsLogoUploading } = useSubmitListContext();
@@ -51,7 +51,7 @@ const LogoUpload: React.FC = () => {
     reader.readAsDataURL(file);
   };
   return (
-    <div className={cn(BASE_CONTAINER_STYLE, BASE_CONTAINER_LANDSCAPE_WIDTH_CALC)}>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Logo" />
       <FileUploader
         className="w-full [&_small]:whitespace-pre-line [&_small]:text-sm"

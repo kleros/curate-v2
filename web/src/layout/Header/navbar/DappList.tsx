@@ -10,8 +10,6 @@ import Court from "svgs/icons/kleros.svg";
 import POH from "svgs/icons/poh-image.png";
 import Vea from "svgs/icons/vea.svg";
 
-import { responsiveSize } from "styles/responsiveSize";
-
 import Product from "./Product";
 import clsx from "clsx";
 
@@ -82,8 +80,6 @@ interface IDappList {
   toggleIsDappListOpen: () => void;
 }
 
-const landscapeWidthCalc = "lg:w-[calc(300px+(480-300)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
-
 const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
   const containerRef = useRef(null);
   useClickAway(containerRef, () => toggleIsDappListOpen());
@@ -97,17 +93,16 @@ const DappList: React.FC<IDappList> = ({ toggleIsDappListOpen }) => {
         "border border-klerosUIComponentsStroke rounded-[3px]",
         "bg-klerosUIComponentsWhiteBackground shadow-custom",
         "[&_svg]:visible",
-        "lg:mt-16 lg:top-0 lg:left-0 lg:right-auto lg:transform-none lg:translate-x-0 lg:max-h-[80vh]",
-        landscapeWidthCalc
+        "lg:w-fluid-300-480 lg:mt-16 lg:top-0 lg:left-0 lg:right-auto lg:transform-none lg:translate-x-0 lg:max-h-[80vh]"
       )}
     >
       <h1 className="pt-6 mb-4">Kleros Solutions</h1>
       <div
         className={clsx(
           "grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))]",
-          "overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center max-w-[480px] min-w-[300px]"
+          "overflow-y-auto gap-y-2 gap-x-0.5 justify-items-center w-fluid-300-480",
+          "pt-1 pb-4 px-fluid-8-24"
         )}
-        style={{ padding: `4px ${responsiveSize(8, 24)} 16px`, width: responsiveSize(300, 480) }}
       >
         {ITEMS.map((item) => {
           return <Product {...item} key={item.text} />;

@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import ItemInformationCard from "components/InformationCards/ItemInformationCard";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
@@ -19,7 +18,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
   );
 
   return (
-    <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
+    <div className="flex flex-col gap-fluid-32-24">
       <p className="text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the Item page:</p>
       <ItemInformationCard
         props={props}

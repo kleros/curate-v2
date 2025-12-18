@@ -1,5 +1,4 @@
 import React from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import { Card } from "@kleros/ui-components-library";
 import ListPageDisplay from "./ListPageDisplay";
 import HomePageDisplay from "./HomePageDisplay";
@@ -12,13 +11,9 @@ const ListPreview: React.FC = () => {
       <Card
         className={clsx(
           "relative flex flex-col gap-8 w-full h-auto min-h-[100px]",
-          "border-dashed border-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue"
+          "border-dashed border-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue",
+          "mb-fluid-0-16 py-fluid-24-48 px-fluid-24-32"
         )}
-        style={{
-          marginBottom: responsiveSize(0, 16),
-          paddingBlock: responsiveSize(24, 48),
-          paddingInline: responsiveSize(24, 32),
-        }}
       >
         <HomePageDisplay />
         <ListPageDisplay />

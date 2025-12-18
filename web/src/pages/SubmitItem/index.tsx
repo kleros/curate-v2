@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
-import { responsiveSize } from "styles/responsiveSize";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import Timeline from "./Timeline";
@@ -36,12 +35,11 @@ const SubmitItem: React.FC = () => {
     <>
       {<Header />}
       <div
-        className={clsx("flex flex-col w-full max-w-landscape", "bg-klerosUIComponentsLightBackground my-0 mx-auto")}
-        style={{
-          paddingInline: responsiveSize(24, 32),
-          paddingTop: responsiveSize(24, 28),
-          paddingBottom: responsiveSize(76, 96),
-        }}
+        className={clsx(
+          "flex flex-col w-full max-w-landscape",
+          "bg-klerosUIComponentsLightBackground my-0 mx-auto",
+          "pt-fluid-24-28 pb-fluid-76-96 px-fluid-24-32"
+        )}
       >
         {isConnected ? (
           <EnsureAuth className="self-center">

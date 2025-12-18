@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { responsiveSize } from "styles/responsiveSize";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import HeroImage from "components/HeroImage";
@@ -16,9 +15,7 @@ import CustomName from "./ItemParameters/CustomName";
 import AdvancedParameters from "./AdvancedParameters";
 import DeployList from "./DeployList";
 import EnsureAuth from "components/EnsureAuth";
-import { cn } from "src/utils";
-
-const landscapePaddingLeftCalc = "lg:px-[calc(25px+(65-25)*(min(max(100vw,375px),1250px)-375px)/(1250-375))]";
+import clsx from "clsx";
 
 const SubmitList: React.FC = () => {
   const location = useLocation();
@@ -34,20 +31,15 @@ const SubmitList: React.FC = () => {
     <>
       <HeroImage />
       <div
-        className="flex flex-col w-full max-w-landscape my-0 mx-auto bg-klerosUIComponentsLightBackground"
-        style={{
-          paddingInline: responsiveSize(24, 32),
-          paddingTop: responsiveSize(24, 28),
-          paddingBottom: responsiveSize(76, 96),
-        }}
+        className={clsx(
+          "flex flex-col w-full max-w-landscape",
+          "my-0 mx-auto bg-klerosUIComponentsLightBackground",
+          "pt-fluid-24-28 pb-fluid-76-96 px-fluid-24-32"
+        )}
       >
         {isConnected && !isTimelineHidden ? (
           <label
-            className={cn(
-              "hidden",
-              "lg:flex lg:mb-5 lg:text-klerosUIComponentsSecondaryPurple",
-              landscapePaddingLeftCalc
-            )}
+            className={clsx("hidden", "lg:text-klerosUIComponentsSecondaryPurple", "lg:flex lg:mb-5 lg:px-fluid-25-65")}
           >
             Create a List
           </label>

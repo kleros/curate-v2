@@ -1,7 +1,5 @@
 import React from "react";
 
-import { responsiveSize } from "styles/responsiveSize";
-
 import Skeleton from "react-loading-skeleton";
 
 import PolicyIcon from "svgs/icons/policy.svg";
@@ -26,14 +24,13 @@ export const Policies: React.FC<IPolicies> = ({ policyURI, isItem }) => {
     <div
       className={clsx(
         "flex flex-col justify-center lg:flex-row lg:justify-between",
-        "w-full py-6 mt-4 bg-klerosUIComponentsMediumBlue leading-6"
+        "w-full py-6 px-fluid-24-32 mt-4 bg-klerosUIComponentsMediumBlue leading-6"
       )}
-      style={{ paddingInline: responsiveSize(24, 32) }}
     >
       <p className="text-sm leading-6 text-klerosUIComponentsPrimaryBlue mb-4 lg:mb-0">
         Make sure you read and understand the Policies
       </p>
-      <div className="flex flex-wrap" style={{ gap: responsiveSize(16, 24) }}>
+      <div className="flex flex-wrap gap-fluid-16-24">
         {!isItem ? (
           <>
             {parentRegistryDetails ? (

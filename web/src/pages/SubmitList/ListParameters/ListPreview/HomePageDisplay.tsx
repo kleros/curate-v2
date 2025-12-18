@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { responsiveSize } from "styles/responsiveSize";
 import RegistryCard from "components/RegistryCard";
 import { useSubmitListContext } from "context/SubmitListContext";
 import { Status } from "src/graphql/graphql";
@@ -10,7 +9,7 @@ const HomePageDisplay: React.FC = () => {
   const { listMetadata } = useSubmitListContext();
   const previewData = useMemo(() => listMetadata, [listMetadata]);
   return (
-    <div className="flex flex-col" style={{ gap: responsiveSize(32, 24) }}>
+    <div className="flex flex-col gap-fluid-32-24">
       <p className="text-klerosUIComponentsPrimaryBlue">Check how the list is displayed on the home page:</p>
       <RegistryCard
         id={"1"}

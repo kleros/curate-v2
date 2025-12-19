@@ -1,22 +1,7 @@
 import React from "react";
-import styled from "styled-components";
 
 import { type DocRenderer } from "@cyntler/react-doc-viewer";
 import ReactMarkdown from "react-markdown";
-
-const Container = styled.div`
-  padding: 16px;
-`;
-
-const StyledMarkdown = styled(ReactMarkdown)`
-  background-color: ${({ theme }) => theme.whiteBackground};
-  a {
-    font-size: 16px;
-  }
-  code {
-    color: ${({ theme }) => theme.secondaryText};
-  }
-`;
 
 const MarkdownRenderer: DocRenderer = ({ mainState: { currentDocument } }) => {
   if (!currentDocument) return null;
@@ -26,9 +11,11 @@ const MarkdownRenderer: DocRenderer = ({ mainState: { currentDocument } }) => {
   const decodedData = atob(base64String);
 
   return (
-    <Container id="md-renderer">
-      <StyledMarkdown>{decodedData}</StyledMarkdown>
-    </Container>
+    <div className="p-4" id="md-renderer">
+      <ReactMarkdown className="bg-klerosUIComponentsWhiteBackground [&_a]:text-base [&_code]:text-klerosUIComponentsSecondaryText">
+        {decodedData}
+      </ReactMarkdown>
+    </div>
   );
 };
 

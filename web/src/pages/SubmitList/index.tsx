@@ -1,11 +1,8 @@
 import React from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import styled, { css } from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import HeroImage from "components/HeroImage";
-import { MAX_WIDTH_LANDSCAPE, landscapeStyle } from "styles/landscapeStyle";
 import Timeline from "./Timeline";
 import Title from "./ListParameters/Title";
 import Description from "./ListParameters/Description";
@@ -18,49 +15,7 @@ import CustomName from "./ItemParameters/CustomName";
 import AdvancedParameters from "./AdvancedParameters";
 import DeployList from "./DeployList";
 import EnsureAuth from "components/EnsureAuth";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: ${({ theme }) => theme.lightBackground};
-  padding: ${responsiveSize(24, 32)};
-  padding-top: ${responsiveSize(24, 28)};
-  padding-bottom: ${responsiveSize(76, 96)};
-  max-width: ${MAX_WIDTH_LANDSCAPE};
-  margin: 0 auto;
-`;
-
-const ConnectWalletContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: ${({ theme }) => theme.primaryText};
-`;
-
-const StyledEnsureAuth = styled(EnsureAuth)`
-  align-self: center;
-`;
-
-const MiddleContentContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  position: relative;
-`;
-
-const StyledLabel = styled.label`
-  display: none;
-
-  ${landscapeStyle(
-    () => css`
-      display: flex;
-      color: ${({ theme }) => theme.secondaryPurple};
-      margin-bottom: 20px;
-      padding-left: ${responsiveSize(25, 65)};
-    `
-  )}
-`;
+import clsx from "clsx";
 
 const SubmitList: React.FC = () => {
   const location = useLocation();
@@ -75,11 +30,23 @@ const SubmitList: React.FC = () => {
   return (
     <>
       <HeroImage />
-      <Container>
-        {isConnected && !isTimelineHidden ? <StyledLabel>Create a List</StyledLabel> : null}
+      <div
+        className={clsx(
+          "flex flex-col w-full max-w-landscape",
+          "my-0 mx-auto bg-klerosUIComponentsLightBackground",
+          "pt-fluid-24-28 pb-fluid-76-96 px-fluid-24-32"
+        )}
+      >
+        {isConnected && !isTimelineHidden ? (
+          <label
+            className={clsx("hidden", "lg:text-klerosUIComponentsSecondaryPurple", "lg:flex lg:mb-5 lg:px-fluid-25-65")}
+          >
+            Create a List
+          </label>
+        ) : null}
         {isConnected ? (
-          <StyledEnsureAuth>
-            <MiddleContentContainer>
+          <EnsureAuth className="self-center">
+            <div className="relative flex justify-center">
               {isConnected && !isTimelineHidden ? <Timeline /> : null}
               <Routes>
                 <Route index element={<Navigate to="title" replace />} />
@@ -94,16 +61,16 @@ const SubmitList: React.FC = () => {
                 <Route path="/advanced/*" element={<AdvancedParameters />} />
                 <Route path="/deploy/*" element={<DeployList />} />
               </Routes>
-            </MiddleContentContainer>
-          </StyledEnsureAuth>
+            </div>
+          </EnsureAuth>
         ) : (
-          <ConnectWalletContainer>
+          <div className="flex flex-col items-center text-center text-klerosUIComponentsPrimaryText">
             To create a new list, connect first
             <hr />
             <ConnectWallet />
-          </ConnectWalletContainer>
+          </div>
         )}
-      </Container>
+      </div>
     </>
   );
 };

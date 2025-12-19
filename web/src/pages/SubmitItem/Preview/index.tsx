@@ -1,62 +1,27 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 import { Card } from "@kleros/ui-components-library";
 import NavigationButtons from "../NavigationButtons";
 import ListDisplay from "./ListDisplay";
 import ItemDisplay from "./ItemDisplay";
+import clsx from "clsx";
 
-const Container = styled.div`
-  width: 100%;
-  padding: 0px ${responsiveSize(10, 130)};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const StyledCard = styled(Card)`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border: 1px dashed ${({ theme }) => theme.primaryBlue};
-  background-color: ${({ theme }) => theme.mediumBlue};
-  height: auto;
-  min-height: 100px;
-  margin-bottom: ${responsiveSize(0, 16)};
-  padding: ${responsiveSize(24, 48)} ${responsiveSize(24, 32)};
-  gap: 32px;
-  position: relative;
-`;
-
-const Title = styled.h2`
-  margin-bottom: 32px;
-  width: 84vw;
-  text-align: center;
-  font-weight: 600;
-
-  ${landscapeStyle(
-    () => css`
-      width: auto;
-    `
-  )}
-`;
-const Overlay = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-`;
 const Preview: React.FC = () => {
   return (
-    <Container>
-      <Title>Preview</Title>
-      <StyledCard>
+    <div className="flex flex-col items-center w-full py-0 px-fluid-10-130">
+      <h2 className="text-2xl text-center font-semibold mb-8 w-[84vw] lg:w-auto">Preview</h2>
+      <Card
+        className={clsx(
+          "relative flex flex-col gap-8 w-full h-auto min-h-[100px]",
+          "border-dashed border-klerosUIComponentsPrimaryBlue bg-klerosUIComponentsMediumBlue",
+          "mb-fluid-0-16 py-fluid-24-48 px-fluid-24-32"
+        )}
+      >
         <ListDisplay />
         <ItemDisplay />
-        <Overlay />
-      </StyledCard>
+        <div className="absolute w-full h-full" />
+      </Card>
       <NavigationButtons prevRoute="../policy" />
-    </Container>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import TextField, { ITextField } from "./TextField";
 import AddressField, { IAddressField } from "./AddressField";
@@ -14,24 +13,6 @@ import { isProductionDeployment } from "src/consts";
 import { arbitrum, arbitrumSepolia } from "@reown/appkit/networks";
 import { Tooltip } from "@kleros/ui-components-library";
 import WarningIcon from "src/assets/svgs/icons/warning-outline.svg";
-
-const Container = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
-
-const StyledTooltip = styled(Tooltip)`
-  height: 14px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-`;
-
-const StyledWarningIcon = styled(WarningIcon)`
-  width: 14px;
-  height: 14px;
-`;
 
 type ItemDetails = ItemDetailsFragment["props"][number];
 
@@ -100,14 +81,18 @@ const ItemField: React.FC<IItemField> = ({ detailed, type, isUnrecognized = fals
     }
   }
   return (
-    <Container>
+    <div className="flex gap-2 items-center">
       {FieldComponent}
       {isUnrecognized ? (
-        <StyledTooltip text="This field is not defined in list's metadata." small>
-          <StyledWarningIcon />
-        </StyledTooltip>
+        <Tooltip
+          className="flex items-center cursor-pointer"
+          text="This field is not defined in list's metadata."
+          small
+        >
+          <WarningIcon width={14} height={14} />
+        </Tooltip>
       ) : null}
-    </Container>
+    </div>
   );
 };
 

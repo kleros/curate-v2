@@ -1,51 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import styled from "styled-components";
-import { FileUploader, Textarea } from "@kleros/ui-components-library";
-import LabeledInput from "components/LabeledInput";
-import { responsiveSize } from "styles/responsiveSize";
+import { FileUploader, TextArea, TextField } from "@kleros/ui-components-library";
 import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 38px;
-  margin: 6px 0px;
-`;
-
-const TitleField = styled(LabeledInput)`
-  width: 100%;
-`;
-
-const DescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const DescriptionField = styled(Textarea)`
-  width: 100%;
-  height: 180px;
-`;
-
-const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryText};
-`;
-
-const StyledFileUploader = styled(FileUploader)`
-  width: 100%;
-  margin-bottom: ${responsiveSize(150, 72)};
-  path {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  small {
-    white-space: pre-line;
-    text-align: start;
-  }
-`;
 
 export type Evidence = {
   name: string;
@@ -92,29 +50,31 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
   };
 
   return (
-    <Container>
-      <TitleField
-        topLeftLabel={{ text: "Title" }}
+    <div className="flex flex-col gap-9 w-full py-1.5">
+      <TextField
+        className="w-full"
+        label="Title"
         placeholder="eg. The item is not legit."
         value={title}
-        onChange={(event) => setTitle(event.target.value)}
+        onChange={(value) => setTitle(value)}
       />
-      <DescriptionContainer>
-        <StyledLabel>Description</StyledLabel>
-        <DescriptionField
-          placeholder="Explain what motivates you to challenge it. Why do you think the item is not compliant with the Policy?"
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-        />
-      </DescriptionContainer>
-      <StyledFileUploader
+      <TextArea
+        label="Description"
+        id="evidence-description"
+        className="w-full [&_textarea]:w-full [&_textarea]:h-[180px]"
+        placeholder="Explain what motivates you to challenge it. Why do you think the item is not compliant with the Policy?"
+        value={description}
+        onChange={(value) => setDescription(value)}
+      />
+      <FileUploader
+        className="w-full [&_small]:whitespace-pre-line [&_small]:text-start"
         callback={handleFileUpload}
         variant={isDesktop ? "info" : undefined}
         msg={
           "Additionally, you can add an external file.\n" + (getFileUploaderMsg(Roles.Evidence, roleRestrictions) ?? "")
         }
       />
-    </Container>
+    </div>
   );
 };
 

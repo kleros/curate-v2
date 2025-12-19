@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import styled from "styled-components";
 import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
@@ -18,10 +17,6 @@ import {
   useWriteCurateV2RemoveItem,
 } from "hooks/useContract";
 import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
-
-const ReStyledModal = styled(Modal)`
-  gap: 32px;
-`;
 
 interface IRemoveModal extends IBaseModal {}
 
@@ -106,7 +101,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
   ]);
 
   return (
-    <ReStyledModal {...{ toggleModal }}>
+    <Modal className="gap-8" {...{ toggleModal }}>
       <Header text={`Remove ${isItem ? "Item" : "List"}`} />
       <DepositRequired value={depositRequired ?? 0} />
       <EvidenceUpload setEvidence={setEvidence} setIsEvidenceUploading={setIsEvidenceUploading} />
@@ -130,7 +125,7 @@ const RemoveModal: React.FC<IRemoveModal> = ({ toggleModal, isItem, registryAddr
           {...{ toggleModal, insufficientBalance }}
         />
       </div>
-    </ReStyledModal>
+    </Modal>
   );
 };
 

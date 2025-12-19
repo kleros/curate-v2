@@ -1,80 +1,52 @@
 import React, { lazy, Suspense } from "react";
-import styled from "styled-components";
 
-import { MAX_WIDTH_LANDSCAPE } from "styles/landscapeStyle";
-
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import NewTabIcon from "svgs/icons/new-tab.svg";
 
 import Loader from "components/Loader";
-import { ExternalLink } from "components/ExternalLink";
 import Header from "./Header";
+import clsx from "clsx";
 
 const FileViewer = lazy(() => import("components/FileViewer"));
-
-const Container = styled.div`
-  width: 100%;
-  background-color: ${({ theme }) => theme.lightBackground};
-  padding: calc(24px + (136 - 24) * (min(max(100vw, 375px), 1250px) - 375px) / 875);
-  padding-top: calc(32px + (80 - 32) * (min(max(100vw, 375px), 1250px) - 375px) / 875);
-  padding-bottom: calc(76px + (96 - 76) * (min(max(100vw, 375px), 1250px) - 375px) / 875);
-  max-width: ${MAX_WIDTH_LANDSCAPE};
-  margin: 0 auto;
-`;
-
-const AttachmentContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const LoaderContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const StyledExternalLink = styled(ExternalLink)`
-  display: flex;
-  align-items: center;
-  align-self: flex-end;
-  gap: 8px;
-`;
-
-const StyledNewTabIcon = styled(NewTabIcon)`
-  path {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-`;
 
 const AttachmentDisplay: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const url = searchParams.get("url");
   return (
-    <Container>
-      <AttachmentContainer>
+    <div
+      className={clsx(
+        "w-full max-w-landscape my-0 mx-auto bg-klerosUIComponentsLightBackground",
+        "p-fluid-24-136 pt-fluid-32-80 pb-fluid-76-96"
+      )}
+    >
+      <div className="flex flex-col gap-2 w-full">
         <Header />
         {url ? (
           <>
-            <StyledExternalLink to={url} rel="noreferrer" target="_blank">
-              Open in new tab <StyledNewTabIcon />
-            </StyledExternalLink>
+            <Link
+              className="flex items-center self-end gap-2 hover:underline"
+              to={url}
+              rel="noreferrer"
+              target="_blank"
+              aria-label="Open in new tab"
+            >
+              Open in new tab <NewTabIcon className="fill-klerosUIComponentsPrimaryBlue" />
+            </Link>
             <Suspense
               fallback={
-                <LoaderContainer>
+                <div className="flex justify-center w-full">
                   <Loader width={"48px"} height={"48px"} />
-                </LoaderContainer>
+                </div>
               }
             >
               <FileViewer url={url} />
             </Suspense>
           </>
         ) : null}
-      </AttachmentContainer>
-    </Container>
+      </div>
+    </div>
   );
 };
 

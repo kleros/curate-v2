@@ -1,17 +1,9 @@
 import React, { useCallback, useMemo } from "react";
-import styled from "styled-components";
 import { ItemDetailsFragment } from "src/graphql/graphql";
 import ItemField from "components/ItemCard/ItemField";
 import { useRegistryDetailsQuery } from "queries/useRegistryDetailsQuery";
 
-const FieldsContainer = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 16px;
-  flex-direction: row;
-  align-items: center;
-  flex-wrap: wrap;
-`;
+const fieldsContainerStyle = "flex w-full gap-4 flex-row items-center flex-wrap";
 
 interface IFieldsDisplay {
   props: ItemDetailsFragment["props"];
@@ -46,17 +38,17 @@ const FieldsDisplay: React.FC<IFieldsDisplay> = ({ props, registryAddress }) => 
   return (
     <>
       {imageFields.length || textFields.length ? (
-        <FieldsContainer>
+        <div className={fieldsContainerStyle}>
           {imageFields.map((field) => (
             <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
           {textFields.map((field) => (
             <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
-        </FieldsContainer>
+        </div>
       ) : null}
       {displayField ? (
-        <FieldsContainer>
+        <div className={fieldsContainerStyle}>
           {addressFields.map((field) => (
             <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
@@ -66,13 +58,13 @@ const FieldsDisplay: React.FC<IFieldsDisplay> = ({ props, registryAddress }) => 
           {fileFields.map((field) => (
             <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
           ))}
-        </FieldsContainer>
+        </div>
       ) : null}
-      <FieldsContainer>
+      <div className={fieldsContainerStyle}>
         {restOfFields.map((field) => (
           <ItemField key={field.label} {...field} detailed isUnrecognized={isUnrecognized(field)} />
         ))}
-      </FieldsContainer>
+      </div>
     </>
   );
 };

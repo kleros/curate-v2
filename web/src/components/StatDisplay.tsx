@@ -1,56 +1,7 @@
-import React, { useMemo } from "react";
-import { landscapeStyle } from "styles/landscapeStyle";
-import styled, { useTheme, css } from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
-import { Theme } from "styled-components";
+import React from "react";
+import { cn } from "src/utils";
 
-const Container = styled.div`
-  display: flex;
-  max-width: 196px;
-  align-items: center;
-  gap: 8px;
-
-  ${landscapeStyle(
-    () => css`
-      margin-bottom: ${responsiveSize(16, 30)};
-    `
-  )}
-`;
-
-const SVGContainer = styled.div<{ iconColor: string; backgroundColor: string }>`
-  height: 48px;
-  width: 48px;
-  border-radius: 50%;
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    fill: ${({ iconColor }) => iconColor};
-    height: 21px;
-    width: 21px;
-  }
-`;
-
-const TextContainer = styled.div`
-  h1 {
-    margin: 0;
-  }
-`;
-
-const SubtextLabel = styled.label`
-  font-size: 12px;
-`;
-
-const COLORS: Record<string, Array<keyof Theme>> = {
-  green: ["success", "successLight"],
-  blue: ["primaryBlue", "mediumBlue"],
-  purple: ["secondaryPurple", "mediumPurple"],
-  orange: ["warning", "warningLight"],
-};
-
-export type IColors = keyof typeof COLORS;
-
+export type IColors = "green" | "blue" | "purple" | "orange";
 interface IStatDisplay {
   title: string;
   text: string | React.ReactNode;
@@ -60,21 +11,26 @@ interface IStatDisplay {
 }
 
 const StatDisplay: React.FC<IStatDisplay> = ({ title, text, subtext, icon: Icon, color, ...props }) => {
-  const theme = useTheme();
-
-  const [iconColor, backgroundColor] = useMemo(() => {
-    return COLORS[color].map((color) => theme[color]);
-  }, [theme, color]);
-
   return (
-    <Container {...props}>
-      <SVGContainer {...{ iconColor, backgroundColor }}>{<Icon />}</SVGContainer>
-      <TextContainer>
+    <div className="flex items-center gap-2 max-w-[192px] lg:mb-fluid-16-30" {...props}>
+      <div
+        className={cn(
+          "flex items-center justify-center h-12 w-12 rounded-[50%]",
+          "[&_svg]:h-5 [&_svg]:w-5",
+          color === "green" && "bg-klerosUIComponentsSuccessLight [&_svg]:fill-klerosUIComponentsSuccess",
+          color === "blue" && "bg-klerosUIComponentsMediumBlue [&_svg]:fill-klerosUIComponentsPrimaryBlue",
+          color === "purple" && "bg-klerosUIComponentsMediumPurple [&_svg]:fill-klerosUIComponentsSecondaryPurple",
+          color === "orange" && "bg-klerosUIComponentsWarningLight [&_svg]:fill-klerosUIComponentsWarning"
+        )}
+      >
+        {<Icon />}
+      </div>
+      <div className="leading-5">
         <label>{title}</label>
         <h1>{text}</h1>
-        <SubtextLabel>{subtext}</SubtextLabel>
-      </TextContainer>
-    </Container>
+        <label className="text-xs">{subtext}</label>
+      </div>
+    </div>
   );
 };
 

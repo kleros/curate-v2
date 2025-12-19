@@ -1,112 +1,55 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 import Coin from "svgs/icons/pile-coins.svg";
 import { getChainIcon, getChainName } from "components/ChainIcon";
 import { ListProgress, useSubmitListContext } from "context/SubmitListContext";
 import { formatValue } from "utils/format";
 import Skeleton from "react-loading-skeleton";
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: start;
-  border-bottom: 1px solid ${({ theme }) => theme.stroke};
-  padding: ${responsiveSize(24, 32)};
-  padding-bottom: 8px;
-  gap: 19px;
-  ${landscapeStyle(
-    () => css`
-      gap: 0px;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 16px;
-    `
-  )}
-`;
-
-const InnerContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 0px 48px;
-  flex-wrap: wrap;
-`;
-
-const TotalContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
-const StyledHeader = styled.h1`
-  margin: 0px;
-  color: ${({ theme }) => theme.secondaryPurple};
-  ::after {
-    content: "list";
-    margin-left: 8px;
-    color: ${({ theme }) => theme.primaryText};
-  }
-`;
-
-const StyledCost = styled.p`
-  color: ${({ theme }) => theme.secondaryPurple};
-  margin: 0px;
-`;
-
-const StyledP = styled.p`
-  margin: 0px;
-`;
-
-const ChainContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-`;
-
-const SVGContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  svg {
-    fill: ${({ theme }) => theme.secondaryPurple};
-    height: 16px;
-    width: 16px;
-  }
-`;
+import clsx from "clsx";
+import { DEFAULT_CHAIN } from "src/consts/chains";
 
 const ListDetails: React.FC = () => {
   const { listMetadata, listData, progress } = useSubmitListContext();
   return (
-    <Container>
-      <StyledHeader>{listMetadata.title}</StyledHeader>
-      <InnerContainer>
+    <div
+      className={clsx(
+        "flex flex-col gap-5 w-full",
+        "justify-start items-start",
+        "p-fluid-24-32 pb-2 border-b border-klerosUIComponentsStroke",
+        "lg:flex-row lg:justify-between lg:items-center lg:gap-0 lg:pb-4"
+      )}
+    >
+      <h1
+        className={clsx(
+          "text-klerosUIComponentsSecondaryPurple",
+          "after:content-['list'] after:ml-2 after:text-klerosUIComponentsPrimaryText"
+        )}
+      >
+        {listMetadata.title}
+      </h1>
+      <div className="flex flex-wrap justify-between gap-y-0 gap-x-12">
         {progress !== ListProgress.SubmitSuccess && (
-          <TotalContainer>
-            <SVGContainer>
-              <Coin />
-            </SVGContainer>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center justify-center">
+              <Coin width={16} height={16} className="fill-klerosUIComponentsSecondaryPurple" />
+            </div>
             <>
-              <StyledP>Total :</StyledP>
+              <p>Total :</p>
               {listData.deployCost ? (
-                <StyledCost>~{formatValue(listData.deployCost, 5, false)} ETH</StyledCost>
+                <p className="text-klerosUIComponentsSecondaryPurple">
+                  ~{formatValue(listData.deployCost, 5, false)} ETH
+                </p>
               ) : (
                 <Skeleton width={60} height={20} />
               )}
             </>
-          </TotalContainer>
+          </div>
         )}
-        <ChainContainer>
-          <p>{getChainIcon(421614)}</p>
-          <p>{getChainName(421614)}</p>
-        </ChainContainer>
-      </InnerContainer>
-    </Container>
+        <div className="flex gap-2 items-center justify-center">
+          <p>{getChainIcon(DEFAULT_CHAIN)}</p>
+          <p>{getChainName(DEFAULT_CHAIN)}</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

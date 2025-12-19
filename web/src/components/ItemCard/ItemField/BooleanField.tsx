@@ -1,13 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 import WithHelpTooltip from "components/WithHelpTooltip";
-
-const Container = styled.p`
-  margin: 0px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`;
 
 export interface IBooleanField {
   value: string;
@@ -18,7 +10,7 @@ export interface IBooleanField {
 const BooleanField: React.FC<IBooleanField> = ({ value, label, detailed, description }) => {
   const text = value ? `true` : `false`;
   return (
-    <Container>
+    <p className="flex gap-2 items-center">
       {detailed ? (
         <>
           {label}: <WithHelpTooltip tooltipMsg={description ?? ""}>{text}</WithHelpTooltip>
@@ -26,7 +18,7 @@ const BooleanField: React.FC<IBooleanField> = ({ value, label, detailed, descrip
       ) : (
         <WithHelpTooltip tooltipMsg={label ?? ""}>{text}</WithHelpTooltip>
       )}
-    </Container>
+    </p>
   );
 };
 

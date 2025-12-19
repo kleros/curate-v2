@@ -1,20 +1,29 @@
 import React, { useState } from "react";
 import { IFieldInput } from ".";
-import StyledField from "./StyledField";
 import { isAddress } from "viem";
+import { TextField } from "@kleros/ui-components-library";
 
 const AddressInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
+  const [address, setAddress] = useState(fieldProp.value ?? "");
   const [isError, setIsError] = useState(false);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isAddress(event.target.value)) {
+
+  const handleChange = (value: string) => {
+    setAddress(value);
+
+    if (value === "" || isAddress(value)) {
+      setIsError(false);
+      handleWrite(value);
+    } else {
       setIsError(true);
-      return;
+      handleWrite("");
     }
-    handleWrite(event.target.value);
   };
+
   return (
-    <StyledField
-      value={fieldProp.value}
+    <TextField
+      aria-label={fieldProp.description}
+      className="w-[80vw] lg:w-fluid-200-720 mb-fluid-68-40"
+      value={address}
       onChange={handleChange}
       variant={isError ? "error" : "info"}
       message={fieldProp.description}

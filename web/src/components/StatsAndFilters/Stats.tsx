@@ -1,28 +1,13 @@
 import React from "react";
-import styled from "styled-components";
-
-const FieldWrapper = styled.div`
-  display: inline-flex;
-  gap: 4px;
-`;
-
-const SeparatorLabel = styled.label`
-  margin: 0 8px;
-  color: ${({ theme }) => theme.primaryText};
-`;
-
-const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryText};
-`;
 
 const Field: React.FC<{ label: string; value: string }> = ({ label, value }) => (
-  <FieldWrapper>
-    <small>{value}</small>
-    <StyledLabel>{label}</StyledLabel>
-  </FieldWrapper>
+  <div className="inline-flex gap-1">
+    <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">{value}</small>
+    <label className="text-klerosUIComponentsPrimaryText">{label}</label>
+  </div>
 );
 
-const Separator: React.FC = () => <SeparatorLabel>|</SeparatorLabel>;
+const Separator: React.FC = () => <label className="text-klerosUIComponentsPrimaryText">|</label>;
 
 type Field = {
   label: string;

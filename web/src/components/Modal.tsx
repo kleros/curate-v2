@@ -1,28 +1,7 @@
 import React, { useRef } from "react";
-import styled from "styled-components";
 import { Overlay } from "./Overlay";
 import { useClickAway } from "react-use";
-
-const StyledModal = styled.div`
-  display: flex;
-  position: fixed;
-  top: 10vh;
-  left: 50%;
-  transform: translateX(-50%);
-  max-height: 80vh;
-  overflow-y: auto;
-
-  z-index: 10;
-  flex-direction: column;
-  align-items: center;
-  width: 86vw;
-  max-width: 600px;
-  border-radius: 3px;
-  border: 1px solid ${({ theme }) => theme.stroke};
-  background-color: ${({ theme }) => theme.whiteBackground};
-  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.06);
-  padding: 32px 32px 32px 36px;
-`;
+import { cn } from "src/utils";
 
 const Modal: React.FC<{ children: React.ReactNode; toggleModal: () => void; className?: string }> = ({
   children,
@@ -33,9 +12,20 @@ const Modal: React.FC<{ children: React.ReactNode; toggleModal: () => void; clas
   useClickAway(containerRef, () => toggleModal());
   return (
     <Overlay>
-      <StyledModal {...{ className }} ref={containerRef}>
+      <div
+        className={cn(
+          "flex flex-col items-center bg-klerosUIComponentsWhiteBackground",
+          "fixed top-[10vh] left-1/2 overflow-y-auto z-10",
+          "w-[86vw] max-w-[600px] max-h-[80vh] py-8 pr-8 pl-9",
+          "transform -translate-x-1/2",
+          "border rounded-[3px] border-klerosUIComponentsStroke",
+          "shadow-default",
+          className
+        )}
+        ref={containerRef}
+      >
         {children}
-      </StyledModal>
+      </div>
     </Overlay>
   );
 };

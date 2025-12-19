@@ -1,20 +1,7 @@
 import React, { useMemo } from "react";
-import styled from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
 import ItemInformationCard from "components/InformationCards/ItemInformationCard";
 import { useSubmitItemContext } from "context/SubmitItemContext";
 import { ItemDetailsFragment, Status } from "src/graphql/graphql";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSize(32, 24)};
-`;
-
-const StyledP = styled.p`
-  color: ${({ theme }) => theme.primaryBlue};
-  margin: 0;
-`;
 
 interface IListDisplay {}
 
@@ -31,8 +18,8 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
   );
 
   return (
-    <Container>
-      <StyledP>Check how the item is displayed on the Item page:</StyledP>
+    <div className="flex flex-col gap-fluid-32-24">
+      <p className="text-klerosUIComponentsPrimaryBlue">Check how the item is displayed on the Item page:</p>
       <ItemInformationCard
         props={props}
         policyURI="/ipfs/QmSxGYpXHBWBGvGnBeZD1pFxh8fRHj4Z7o3fBzrGiqNx4v/tokens-policy.pdf"
@@ -41,7 +28,7 @@ const ListDisplay: React.FC<IListDisplay> = ({}) => {
         disputed={false}
         isPreview
       />
-    </Container>
+    </div>
   );
 };
 export default ListDisplay;

@@ -1,22 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
-
-const StyledHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const StyledH1 = styled.h1`
-  font-size: ${responsiveSize(21, 24)};
-  font-weight: 500;
-  margin-bottom: 48px;
-  letter-spacing: 1px;
-`;
-
-const StyledSpan = styled.span`
-  color: ${({ theme }) => theme.secondaryPurple};
-`;
 
 const Header: React.FC = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
@@ -31,11 +13,11 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <StyledHeader>
-      <StyledH1>
-        Community Curated <StyledSpan>{words[currentWordIndex]}</StyledSpan>
-      </StyledH1>
-    </StyledHeader>
+    <div className="flex justify-between">
+      <h1 className="text-(length:--spacing-fluid-20-24) font-medium mb-12 tracking-[1px]">
+        Community Curated <span className="text-klerosUIComponentsSecondaryPurple">{words[currentWordIndex]}</span>
+      </h1>
+    </div>
   );
 };
 

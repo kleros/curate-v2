@@ -1,17 +1,7 @@
 import React from "react";
-import styled from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
 import PreviousButton from "./PreviousButton";
 import NextButton from "./NextButton";
 import SubmitItemButton from "./SubmitItemButton";
-
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  margin-top: ${responsiveSize(32, 24)};
-  flex-wrap: wrap;
-`;
 
 interface NavigationButtonsProps {
   prevRoute?: string;
@@ -20,10 +10,10 @@ interface NavigationButtonsProps {
 
 const NavigationButtons: React.FC<NavigationButtonsProps> = ({ prevRoute, nextRoute }) => {
   return (
-    <Container>
+    <div className="flex flex-wrap justify-center gap-6 mt-fluid-32-24">
       {prevRoute && <PreviousButton prevRoute={prevRoute} />}
       {prevRoute === "../policy" ? <SubmitItemButton /> : <NextButton nextRoute={nextRoute} />}
-    </Container>
+    </div>
   );
 };
 

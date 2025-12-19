@@ -1,4 +1,6 @@
 import { Roles } from "@kleros/kleros-app";
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export const isUndefined = (maybeObject: any): maybeObject is undefined => typeof maybeObject === "undefined";
 export const capitalize = (str: string) => {
@@ -37,4 +39,8 @@ export const getFileUploaderMsg = (role: Roles, roleRestrictions?: Role[]) => {
     restrictions.restriction.maxSize /
     (1024 * 1024)
   ).toFixed(2)} MB.`;
+};
+
+export const cn = (...inputs: ClassValue[]) => {
+  return twMerge(clsx(inputs));
 };

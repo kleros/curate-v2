@@ -1,13 +1,17 @@
 import React from "react";
 import { IFieldInput } from ".";
-import StyledField from "./StyledField";
+import { TextField } from "@kleros/ui-components-library";
 
 const TextInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleWrite(event.target.value);
-  };
   return (
-    <StyledField value={fieldProp.value} onChange={handleChange} variant={"info"} message={fieldProp.description} />
+    <TextField
+      aria-label={fieldProp.description}
+      value={fieldProp.value ?? ""}
+      className="w-[80vw] lg:w-fluid-200-720 mb-fluid-68-40"
+      onChange={handleWrite}
+      variant="info"
+      message={fieldProp.description}
+    />
   );
 };
 

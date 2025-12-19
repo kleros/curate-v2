@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import styled from "styled-components";
 import Header from "./Header";
 import Buttons from "./Buttons";
 import DepositRequired from "./DepositRequired";
@@ -18,10 +17,6 @@ import {
   useWriteCurateV2ChallengeRequest,
 } from "hooks/useContract";
 import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
-
-const ReStyledModal = styled(Modal)`
-  gap: 32px;
-`;
 
 export enum ChallengeType {
   Submission,
@@ -129,7 +124,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
   );
 
   return (
-    <ReStyledModal {...{ toggleModal }}>
+    <Modal className="gap-8" {...{ toggleModal }}>
       <Header text={`Challenge ${isItem ? "Item" : "List"}`} />
       <DepositRequired value={depositRequired} />
       <EvidenceUpload {...{ setEvidence, setIsEvidenceUploading }} />
@@ -153,7 +148,7 @@ const ChallengeItemModal: React.FC<IChallengeItemModal> = ({
           {...{ insufficientBalance, toggleModal }}
         />
       </div>
-    </ReStyledModal>
+    </Modal>
   );
 };
 

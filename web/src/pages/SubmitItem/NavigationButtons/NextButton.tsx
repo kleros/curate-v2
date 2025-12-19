@@ -39,7 +39,7 @@ const NextButton: React.FC<INextButton> = ({ nextRoute }) => {
     (location.pathname.includes("/submit-item/preview") && areFieldsFilled) ||
     (location.pathname.includes("/policy") && !isPolicyRead);
 
-  return <Button disabled={isButtonDisabled} onClick={() => navigate(nextRoute)} text="Next" />;
+  return <Button isDisabled={isButtonDisabled} onPress={() => navigate(nextRoute)} text="Next" />;
 };
 
 export default NextButton;

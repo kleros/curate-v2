@@ -1,11 +1,5 @@
-import styled from "styled-components";
+import React from "react";
 
-export const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.blackLowOpacity};
-  z-index: 30;
-`;
+export const Overlay: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
+  <div className="fixed top-0 left-0 w-screen h-screen bg-black-low-opacity z-30">{children}</div>
+);

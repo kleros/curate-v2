@@ -1,57 +1,16 @@
 import React from "react";
-import styled, { css } from "styled-components";
-import { landscapeStyle } from "styles/landscapeStyle";
 import LightButton from "components/LightButton";
 import DarkModeIcon from "svgs/menu-icons/dark-mode.svg";
 import HelpIcon from "svgs/menu-icons/help.svg";
 import LightModeIcon from "svgs/menu-icons/light-mode.svg";
 // import NotificationsIcon from "svgs/menu-icons/notifications.svg";
 import SettingsIcon from "svgs/menu-icons/settings.svg";
-import { useToggleTheme } from "hooks/useToggleThemeContext";
+import { useTheme } from "hooks/useToggleThemeContext";
 import { IHelp, ISettings } from "..";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ${landscapeStyle(
-    () => css`
-      flex-direction: row;
-    `
-  )}
-`;
-
-const ButtonContainer = styled.div`
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-
-  button {
-    padding: 0px;
-  }
-
-  .button-text {
-    display: block;
-  }
-
-  .button-svg {
-    fill: ${({ theme }) => theme.secondaryPurple};
-  }
-
-  ${landscapeStyle(
-    () => css`
-      .button-svg {
-        fill: ${({ theme }) => theme.white};
-      }
-      .button-text {
-        display: none;
-      }
-    `
-  )}
-`;
+import clsx from "clsx";
 
 const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsOpen }) => {
-  const [theme, toggleTheme] = useToggleTheme();
+  const [theme, toggleTheme] = useTheme();
   const isLightTheme = theme === "light";
 
   const buttons = [
@@ -59,30 +18,37 @@ const Menu: React.FC<ISettings & IHelp> = ({ toggleIsHelpOpen, toggleIsSettingsO
     {
       text: "Settings",
       Icon: SettingsIcon,
-      onClick: () => toggleIsSettingsOpen(),
+      onPress: () => toggleIsSettingsOpen(),
     },
     {
       text: "Help",
       Icon: HelpIcon,
-      onClick: () => {
+      onPress: () => {
         toggleIsHelpOpen();
       },
     },
     {
       text: `${isLightTheme ? "Dark" : "Light"} Mode`,
       Icon: isLightTheme ? DarkModeIcon : LightModeIcon,
-      onClick: () => toggleTheme(),
+      onPress: () => toggleTheme(),
     },
   ];
 
   return (
-    <Container>
-      {buttons.map(({ text, Icon, onClick }) => (
-        <ButtonContainer key={Icon}>
-          <LightButton {...{ text, onClick, Icon }} />
-        </ButtonContainer>
+    <div className="flex flex-col lg:flex-row">
+      {buttons.map(({ text, Icon, onPress }, index) => (
+        <div
+          key={index}
+          className={clsx(
+            "flex items-center min-h-8",
+            "[&_.button-text]:block lg:[&_.button-text]:hidden",
+            "not-dark:not-lg:[&_.button-svg]:fill-black/75 not-dark:not-lg:hover:[&_.button-svg]:fill-black"
+          )}
+        >
+          <LightButton {...{ text, onPress, Icon }} />
+        </div>
       ))}
-    </Container>
+    </div>
   );
 };
 

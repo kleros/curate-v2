@@ -11,12 +11,12 @@ const ChainInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   return (
     <DropdownSelect
       items={[
-        { text: getChainName(mainnet.id), value: mainnet.id },
-        { text: getChainName(arbitrum.id), value: arbitrum.id },
-        { text: getChainName(gnosis.id), value: gnosis.id },
-        { text: getChainName(polygon.id), value: polygon.id },
+        { id: mainnet.id, text: getChainName(mainnet.id), itemValue: mainnet.id },
+        { id: arbitrum.id, text: getChainName(arbitrum.id), itemValue: arbitrum.id },
+        { id: gnosis.id, text: getChainName(gnosis.id), itemValue: gnosis.id },
+        { id: polygon.id, text: getChainName(polygon.id), itemValue: polygon.id },
       ]}
-      callback={handleChange}
+      callback={(item) => handleChange(item.itemValue)}
       defaultValue={Number(fieldProp.value ?? mainnet.id)}
     />
   );

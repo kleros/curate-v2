@@ -1,7 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 import NavigationButtons from "../NavigationButtons";
-import { responsiveSize } from "styles/responsiveSize";
 import Header from "../Header";
 import LightButton from "components/LightButton";
 import HistoryIcon from "svgs/icons/history.svg";
@@ -11,61 +9,7 @@ import ChallengeParameters from "./ChallengeParameters";
 import AbritrationParameters from "./ArbitrationParameters";
 import { useSubmitListContext } from "context/SubmitListContext";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  width: 100%;
-  padding: 0px ${responsiveSize(0, 108)};
-`;
-
-const LabelAndButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 10px;
-`;
-
-const StyledLabel = styled.label`
-  width: 100%;
-  text-align: center;
-`;
-
-const ButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-  .button-svg {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  .button-text {
-    color: ${({ theme }) => theme.primaryBlue};
-  }
-`;
-
-const StyledAccordion = styled(Accordion)`
-  width: 100%;
-  > * > button {
-    justify-content: unset;
-    padding: 11.5px ${responsiveSize(8, 18)} !important;
-    background-color: ${({ theme }) => theme.whiteBackground} !important;
-    border: 1px solid ${({ theme }) => theme.stroke} !important;
-    > svg {
-      fill: ${({ theme }) => theme.primaryText} !important;
-    }
-    > p {
-      color: ${({ theme }) => theme.primaryText};
-    }
-  }
-
-  //adds padding to body container
-  > * > div > div {
-    padding: ${responsiveSize(16, 24)} ${responsiveSize(8, 16)};
-  }
-`;
+const lightButtonStyle = "flex gap-1 [&_.button-text]:text-klerosUIComponentsPrimaryBlue";
 
 const AdvancedParameters: React.FC = () => {
   const { listData, setListData } = useSubmitListContext();
@@ -81,16 +25,24 @@ const AdvancedParameters: React.FC = () => {
     });
 
   return (
-    <Container>
+    <div className="flex flex-col items-center gap-8 w-full py-0 px-fluid-0-108">
       <Header text="Advanced Options" />
-      <LabelAndButtonContainer>
-        <StyledLabel>By default, the recommended parameters are selected. You can edit them.</StyledLabel>
-        <ButtonContainer>
-          <LightButton text="Reset" Icon={HistoryIcon} onClick={reset} />{" "}
+      <div className="flex flex-col w-full gap-4 mb-2.5">
+        <label className="text-center w-full">
+          By default, the recommended parameters are selected. You can edit them.
+        </label>
+        <div className="flex justify-center gap-8 w-full">
           <LightButton
+            className={lightButtonStyle}
+            text="Reset"
+            Icon={() => <HistoryIcon className="fill-klerosUIComponentsPrimaryBlue" />}
+            onPress={reset}
+          />
+          <LightButton
+            className={lightButtonStyle}
             text="Learn more"
-            Icon={BookIcon}
-            onClick={() =>
+            Icon={() => <BookIcon className="fill-klerosUIComponentsPrimaryBlue" />}
+            onPress={() =>
               window.open(
                 "https://docs.kleros.io/products/curate/kleros-curate-tutorial",
                 "_blank",
@@ -98,9 +50,10 @@ const AdvancedParameters: React.FC = () => {
               )
             }
           />
-        </ButtonContainer>
-      </LabelAndButtonContainer>
-      <StyledAccordion
+        </div>
+      </div>
+      <Accordion
+        className="w-full"
         defaultExpanded={1}
         items={[
           { title: "Challenge Parameters", body: <ChallengeParameters /> },
@@ -108,7 +61,7 @@ const AdvancedParameters: React.FC = () => {
         ]}
       />
       <NavigationButtons prevRoute="/submit-list/custom" nextRoute="/submit-list/deploy" />
-    </Container>
+    </div>
   );
 };
 export default AdvancedParameters;

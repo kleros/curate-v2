@@ -1,55 +1,12 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import NavigationButtons from "../../NavigationButtons";
 import ItemFields from "./ItemFields";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 import Header from "../../Header";
 import PlusMinusField from "components/PlusMinusField";
 import LightButton from "components/LightButton";
 import HistoryIcon from "svgs/icons/history.svg";
 import { ListField, useSubmitListContext } from "context/SubmitListContext";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  width: 84vw;
-
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(442, 700, 900)};
-    `
-  )}
-`;
-
-const StyledPlusMinusField = styled(PlusMinusField)`
-  align-self: start;
-`;
-
-const LabelAndButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 10px;
-`;
-const StyledLabel = styled.label`
-  width: 100%;
-`;
-
-const ButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  .button-svg {
-    fill: ${({ theme }) => theme.primaryBlue};
-  }
-  .button-text {
-    color: ${({ theme }) => theme.primaryBlue};
-  }
-`;
+import { BASE_CONTAINER_STYLE } from "../../constants";
 
 const Fields: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
@@ -83,26 +40,32 @@ const Fields: React.FC = () => {
   };
 
   return (
-    <Container>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Item Fields" />
-      <LabelAndButtonContainer>
-        <StyledLabel>
+      <div className="flex flex-col gap-4 w-full mb-2.5">
+        <label className="w-full">
           Include the fields you want to be displayed on the items on the list. You can add multiple fields by clicking
           on (+). The field order defined here will be used to display the items on the interface. If your item has an
           image, or name add them as the first fields.
-        </StyledLabel>
-        <ButtonContainer>
-          <LightButton text="Reset" Icon={HistoryIcon} onClick={resetFields} />
-        </ButtonContainer>
-      </LabelAndButtonContainer>
+        </label>
+        <div className="flex justify-center w-full">
+          <LightButton
+            className="flex gap-1 [&_.button-text]:text-klerosUIComponentsPrimaryBlue"
+            text="Reset"
+            Icon={() => <HistoryIcon className="fill-klerosUIComponentsPrimaryBlue" />}
+            onPress={resetFields}
+          />
+        </div>
+      </div>
       <ItemFields />
-      <StyledPlusMinusField
+      <PlusMinusField
+        className="self-start"
         currentValue={listMetadata.columns?.length ?? 2}
         updateValue={updateNumberOfFields}
         minValue={1}
       />
       <NavigationButtons prevRoute="/submit-list/deposit" nextRoute="/submit-list/item-preview" />
-    </Container>
+    </div>
   );
 };
 export default Fields;

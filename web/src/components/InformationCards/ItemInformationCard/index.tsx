@@ -1,101 +1,16 @@
 import React from "react";
 import { Card, Copiable } from "@kleros/ui-components-library";
-import styled, { css } from "styled-components";
 import Skeleton from "react-loading-skeleton";
 import AliasDisplay from "components/RegistryInfo/AliasDisplay";
 import ActionButton from "components/ActionButton";
 import { mapFromSubgraphStatus } from "components/RegistryCard/StatusBanner";
-import { responsiveSize } from "styles/responsiveSize";
-import { landscapeStyle } from "styles/landscapeStyle";
 import { Policies } from "../RegistryInformationCard/Policies";
 import FieldsDisplay from "./FieldsDisplay";
 import StatusDisplay from "../StatusDisplay";
 import { ItemDetailsQuery } from "src/graphql/graphql";
 import { Address } from "viem";
 import { validateItem } from "src/types/CurateItem";
-import { isUndefined } from "src/utils";
-
-const StyledCard = styled(Card)`
-  display: flex;
-  width: 100%;
-  height: auto;
-  flex-direction: column;
-  margin-bottom: 64px;
-`;
-
-const TopInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 12px 32px;
-  ${landscapeStyle(
-    () => css`
-      flex-wrap: nowrap;
-    `
-  )};
-`;
-
-const TopLeftInfo = styled.div`
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding-top: 16px;
-`;
-
-const TopRightInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-  gap: 48px;
-  padding-top: 20px;
-  flex-shrink: 1;
-  ${landscapeStyle(
-    () => css`
-      flex-shrink: 0;
-    `
-  )}
-`;
-
-const StyledLabel = styled.label`
-  color: ${({ theme }) => theme.primaryBlue};
-`;
-
-const Divider = styled.hr`
-  border: none;
-  height: 1px;
-  background-color: ${({ theme }) => theme.stroke};
-  margin: ${responsiveSize(20, 28)} 32px;
-`;
-
-const BottomInfo = styled.div`
-  display: flex;
-  padding: 0 32px;
-  padding-bottom: 12px;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: space-between;
-`;
-
-const AliasContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-`;
-
-const WarningContainer = styled.p`
-  width: 100%;
-  padding: 8px 32px;
-  margin: 0;
-  background-color: ${({ theme }) => theme.warningLight};
-  font-size: 14px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.warning};
-  text-align: center;
-`;
+import { cn, isUndefined } from "src/utils";
 
 type ItemDetails = NonNullable<ItemDetailsQuery["item"]>;
 interface IItemInformationCard extends ItemDetails {
@@ -104,6 +19,8 @@ interface IItemInformationCard extends ItemDetails {
   registryAddress: Address;
   isPreview?: boolean;
 }
+
+const aliasContainerStyle = "flex flex-wrap gap-2 items-center";
 
 const ItemInformationCard: React.FC<IItemInformationCard> = ({
   className,
@@ -121,32 +38,41 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
   const showWarning = isPreview || isUndefined(data) ? false : !validateItem(data).success;
 
   return (
-    <StyledCard {...{ className }}>
+    <Card className={cn("flex flex-col w-full h-auto mb-16", className)}>
       {showWarning ? (
-        <WarningContainer>This item does not pass the validation checks. Please review carefully.</WarningContainer>
+        <p
+          className={cn(
+            "w-full py-1 px-8 bg-klerosUIComponentsWarningLight",
+            "text-sm font-medium text-center text-klerosUIComponentsWarning"
+          )}
+        >
+          This item does not pass the validation checks. Please review carefully.
+        </p>
       ) : null}
-      <TopInfo>
-        <TopLeftInfo>
+      <div className="flex justify-between flex-wrap gap-3 py-3 px-8 lg:flex-nowrap">
+        <div className="flex grow flex-col flex-wrap gap-4 pt-4">
           {props ? <FieldsDisplay {...{ props, registryAddress }} /> : <Skeleton height={80} width={160} />}
-        </TopLeftInfo>
-        <TopRightInfo>
+        </div>
+        <div className="flex flex-row items-start gap-12 pt-5 shrink lg:shrink-0">
           <Copiable copiableContent={itemID ?? ""} info="Copy Item Id" iconPlacement="left">
-            <StyledLabel>Item Id</StyledLabel>
+            <label className="text-klerosUIComponentsPrimaryBlue">Item Id</label>
           </Copiable>
           <StatusDisplay {...{ status, disputed, registryAddress, latestRequestSubmissionTime }} />
-        </TopRightInfo>
-      </TopInfo>
-      <Divider />
-      <BottomInfo>
+        </div>
+      </div>
+      <hr className="border-none h-px bg-klerosUIComponentsStroke mx-8 my-fluid-20-28" />
+      <div className="flex px-8 pb-3 flex-wrap gap-3 justify-between">
         {registerer?.id ? (
-          <AliasContainer>
-            <small>Submitted by:</small>
+          <div className={aliasContainerStyle}>
+            <small className="text-sm font-semibold leading-18px text-klerosUIComponentsPrimaryText">
+              Submitted by:
+            </small>
             <Copiable copiableContent={registerer.id}>
-              <AliasContainer>
+              <div className={aliasContainerStyle}>
                 <AliasDisplay address={registerer.id} />
-              </AliasContainer>
+              </div>
             </Copiable>
-          </AliasContainer>
+          </div>
         ) : (
           <Skeleton height={24} />
         )}
@@ -158,9 +84,9 @@ const ItemInformationCard: React.FC<IItemInformationCard> = ({
             isItem: true,
           }}
         />
-      </BottomInfo>
+      </div>
       <Policies policyURI={policyURI} isItem />
-    </StyledCard>
+    </Card>
   );
 };
 export default ItemInformationCard;

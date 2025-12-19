@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { EnsureChain } from "components/EnsureChain";
@@ -12,8 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { useSimulateCurateV2AddItem, useWriteCurateV2AddItem } from "hooks/useContract";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 import { ErrorButtonMessage } from "components/ActionButton/Modal/Buttons/ErrorButtonMessage";
-
-const StyledButton = styled(Button)``;
 
 const SubmitItemButton: React.FC = () => {
   const [isSubmittingItem, setIsSubmittingItem] = useState(false);
@@ -54,11 +51,11 @@ const SubmitItemButton: React.FC = () => {
   return (
     <EnsureChain>
       <div>
-        <StyledButton
+        <Button
           text="Submit Item"
-          disabled={isButtonDisabled}
+          isDisabled={isButtonDisabled}
           isLoading={(isConfigLoading && !insufficientBalance) || isSubmittingItem || isBalanceLoading}
-          onClick={() => {
+          onPress={() => {
             if (submitItem && publicClient && config) {
               setIsSubmittingItem(true);
               wrapWithToast(async () => await submitItem(config?.request), publicClient)

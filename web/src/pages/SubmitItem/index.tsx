@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { responsiveSize } from "styles/responsiveSize";
-import { MAX_WIDTH_LANDSCAPE } from "styles/landscapeStyle";
 import { useAccount } from "wagmi";
 import ConnectWallet from "components/ConnectWallet";
 import Timeline from "./Timeline";
@@ -13,36 +10,7 @@ import ItemField from "./ItemField";
 import { useRegistryDetailsQuery } from "hooks/queries/useRegistryDetailsQuery";
 import { useRegistryDetailsContext } from "context/RegistryDetailsContext";
 import EnsureAuth from "components/EnsureAuth";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: ${({ theme }) => theme.lightBackground};
-  padding: ${responsiveSize(24, 32)};
-  padding-top: ${responsiveSize(24, 28)};
-  padding-bottom: ${responsiveSize(76, 96)};
-  max-width: ${MAX_WIDTH_LANDSCAPE};
-  margin: 0 auto;
-`;
-
-const ConnectWalletContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: ${({ theme }) => theme.primaryText};
-`;
-
-const StyledEnsureAuth = styled(EnsureAuth)`
-  align-self: center;
-`;
-
-const MiddleContentContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  position: relative;
-`;
+import clsx from "clsx";
 
 const SubmitItem: React.FC = () => {
   const location = useLocation();
@@ -66,10 +34,16 @@ const SubmitItem: React.FC = () => {
   return (
     <>
       {<Header />}
-      <Container>
+      <div
+        className={clsx(
+          "flex flex-col w-full max-w-landscape",
+          "bg-klerosUIComponentsLightBackground my-0 mx-auto",
+          "pt-fluid-24-28 pb-fluid-76-96 px-fluid-24-32"
+        )}
+      >
         {isConnected ? (
-          <StyledEnsureAuth>
-            <MiddleContentContainer>
+          <EnsureAuth className="self-center">
+            <div className="flex justify-center relative">
               {isConnected && !isPreviewPage ? <Timeline /> : null}
               <Routes>
                 <Route index element={<Navigate to="item-field/0" replace />} />
@@ -77,16 +51,16 @@ const SubmitItem: React.FC = () => {
                 <Route path="/policy/*" element={<Policy />} />
                 <Route path="/preview/*" element={<Preview />} />
               </Routes>
-            </MiddleContentContainer>
-          </StyledEnsureAuth>
+            </div>
+          </EnsureAuth>
         ) : (
-          <ConnectWalletContainer>
+          <div className="flex flex-col items-center text-center text-klerosUIComponentsPrimaryText">
             To submit a new item, connect first
             <hr />
             <ConnectWallet />
-          </ConnectWalletContainer>
+          </div>
         )}
-      </Container>
+      </div>
     </>
   );
 };

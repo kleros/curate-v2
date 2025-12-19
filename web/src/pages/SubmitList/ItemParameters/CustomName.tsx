@@ -1,67 +1,37 @@
 import React from "react";
-import styled, { css } from "styled-components";
 import NavigationButtons from "../NavigationButtons";
-import { landscapeStyle } from "styles/landscapeStyle";
-import { responsiveSize } from "styles/responsiveSize";
 import Header from "../Header";
-import LabeledInput from "components/LabeledInput";
 import { useSubmitListContext } from "context/SubmitListContext";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  width: 84vw;
-
-  ${landscapeStyle(
-    () => css`
-      width: ${responsiveSize(442, 700, 900)};
-    `
-  )}
-`;
-
-const StyledLabel = styled.label`
-  width: 100%;
-`;
-
-const InputContainer = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 22px;
-  ${landscapeStyle(
-    () => css`
-      grid-template-columns: 1fr 1fr;
-    `
-  )}
-`;
+import { BASE_CONTAINER_STYLE } from "../constants";
+import { TextField } from "@kleros/ui-components-library";
 
 const CustomName: React.FC = () => {
   const { listMetadata, setListMetadata } = useSubmitListContext();
   return (
-    <Container>
+    <div className={BASE_CONTAINER_STYLE}>
       <Header text="Custom Item Name" />
-      <StyledLabel>
+      <label className="w-full">
         By default, we use the words (item, items) to describe the content of a list. If desired, you can customize it.
         Example: A list of: (Token, Tokens), (Tag, Tags), (Car, Cars), etc.
-      </StyledLabel>
-      <InputContainer>
-        <LabeledInput
-          topLeftLabel={{ text: "Custom item name" }}
+      </label>
+      <div className="w-full grid grid-cols-[1fr] gap-5 lg:grid-cols-[1fr_1fr]">
+        <TextField
+          className="w-full"
+          label="Custom item name"
           placeholder="Item"
-          value={listMetadata.itemName}
-          onChange={(event) => setListMetadata({ ...listMetadata, itemName: event.target.value })}
+          value={listMetadata.itemName ?? ""}
+          onChange={(value) => setListMetadata({ ...listMetadata, itemName: value })}
         />
-        <LabeledInput
-          topLeftLabel={{ text: "Plural" }}
+        <TextField
+          className="w-full"
+          label="Plural"
           placeholder="Items"
-          value={listMetadata.itemNamePlural}
-          onChange={(event) => setListMetadata({ ...listMetadata, itemNamePlural: event.target.value })}
+          value={listMetadata.itemNamePlural ?? ""}
+          onChange={(value) => setListMetadata({ ...listMetadata, itemNamePlural: value })}
         />
-      </InputContainer>
+      </div>
       <NavigationButtons prevRoute="/submit-list/item-preview" nextRoute="/submit-list/advanced" />
-    </Container>
+    </div>
   );
 };
 export default CustomName;

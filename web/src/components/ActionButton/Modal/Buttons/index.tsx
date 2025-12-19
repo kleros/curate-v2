@@ -1,24 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { Button } from "@kleros/ui-components-library";
 import { EnsureChain } from "components/EnsureChain";
 import EnsureAuth from "components/EnsureAuth";
 import ClosedCircleIcon from "components/StyledIcons/ClosedCircleIcon";
 import { ErrorButtonMessage } from "./ErrorButtonMessage";
-
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-`;
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
 interface IButtons {
   toggleModal: () => void;
@@ -38,28 +23,28 @@ const Buttons: React.FC<IButtons> = ({
   insufficientBalance,
 }) => {
   return (
-    <Container>
-      <Button variant="secondary" text="Return" onClick={toggleModal} />
+    <div className="flex flex-wrap gap-4 justify-between w-full">
+      <Button variant="secondary" text="Return" onPress={toggleModal} />
       <EnsureChain>
         <EnsureAuth>
-          <ButtonsContainer>
+          <div className="flex flex-col items-center">
             <Button
               text={buttonText}
-              onClick={() => {
+              onPress={() => {
                 callback();
               }}
               isLoading={isLoading}
-              disabled={isDisabled}
+              isDisabled={isDisabled}
             />
             {insufficientBalance ? (
               <ErrorButtonMessage>
                 <ClosedCircleIcon /> Insufficient balance
               </ErrorButtonMessage>
             ) : null}
-          </ButtonsContainer>
+          </div>
         </EnsureAuth>
       </EnsureChain>
-    </Container>
+    </div>
   );
 };
 export default Buttons;

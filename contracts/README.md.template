@@ -61,7 +61,6 @@ The following env vars are required:
 The ones below are optional:
 
 - `ETHERSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Etherscan**.
-- `ARBISCAN_API_KEY`: to verify the source of the newly deployed contracts on **Arbitrum**.
 - `GNOSISSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Gnosis chain**.
 
 #### 1. Deploy to a Local Network

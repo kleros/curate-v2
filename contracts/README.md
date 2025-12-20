@@ -16,9 +16,9 @@ Refresh the list of deployed contracts by running `./scripts/generateDeployments
 
 #### Arbitrum Sepolia
 
-- [CurateFactory](https://sepolia.arbiscan.io/address/0x6f824A72d67bcF76f6F55C12F6E8FcAF531818bD)
-- [CurateV2](https://sepolia.arbiscan.io/address/0xed1f06a9963D2B2D5f2176b2dFFaaf03FC909531)
-- [CurateView](https://sepolia.arbiscan.io/address/0x61DAadc87f1e0889407d2Fd725eAEB79E2B5cF80)
+- [CurateFactory](https://sepolia.arbiscan.io/address/0xa872dAd304fD3458f483e23245F21855B254057d)
+- [CurateV2](https://sepolia.arbiscan.io/address/0x7d557d86Cb33A397A9C7CDd948CD006Bd0B7C118)
+- [CurateView](https://sepolia.arbiscan.io/address/0x9Aef4a15B8D218fd9ba8f9aa44911245D079Ee4F)
 
 #### Sepolia
 
@@ -75,7 +75,6 @@ The following env vars are required:
 The ones below are optional:
 
 - `ETHERSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Etherscan**.
-- `ARBISCAN_API_KEY`: to verify the source of the newly deployed contracts on **Arbitrum**.
 - `GNOSISSCAN_API_KEY`: to verify the source of the newly deployed contracts on **Gnosis chain**.
 
 #### 1. Deploy to a Local Network

@@ -470,7 +470,7 @@ contract CurateV2 is IArbitrableV2 {
         uint256 templateId = request.requestType == RequestType.Registration
             ? templateIdRegistration
             : templateIdRemoval;
-        emit DisputeRequest(arbitrator, disputeData.disputeID, requestID, templateId, "");
+        emit DisputeRequest(arbitrator, disputeData.disputeID, templateId);
 
         if (msg.value > totalCost) {
             payable(msg.sender).send(msg.value - totalCost);

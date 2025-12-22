@@ -1,14 +1,8 @@
 /**
- * Supported file extensions.
- * Extend this union when adding new file types.
- */
-export type FileExtension = "pdf" | "png" | "jpg" | "jpeg" | "webp" | "gif" | "txt";
-
-/**
  * Mapping of MIME types to their most common file extensions.
  * Note: MIME types are not guaranteed to be present or accurate.
  */
-const MIME_TO_EXT: Record<string, FileExtension> = {
+const MIME_TO_EXT: Record<string, string> = {
   "application/pdf": "pdf",
   "image/png": "png",
   "image/jpeg": "jpg",
@@ -26,14 +20,14 @@ const MIME_TO_EXT: Record<string, FileExtension> = {
  * @example
  * getExtensionFromFilename(file) // "pdf"
  */
-export function getExtensionFromFilename(file: File): FileExtension | null {
+export function getExtensionFromFilename(file: File): string | null {
   const name = file.name?.trim();
   if (!name) return null;
 
   const lastDot = name.lastIndexOf(".");
   if (lastDot <= 0) return null; // handles ".env", "README"
 
-  return name.slice(lastDot + 1).toLowerCase() as FileExtension;
+  return name.slice(lastDot + 1).toLowerCase();
 }
 
 /**
@@ -45,7 +39,7 @@ export function getExtensionFromFilename(file: File): FileExtension | null {
  * @example
  * file.type === "application/pdf" → "pdf"
  */
-export function getExtensionFromMime(file: File): FileExtension | null {
+export function getExtensionFromMime(file: File): string | null {
   if (!file.type) return null;
   return MIME_TO_EXT[file.type] ?? null;
 }
@@ -62,7 +56,7 @@ export function getExtensionFromMime(file: File): FileExtension | null {
  * @example
  * await getExtensionFromMagicBytes(file) // "pdf"
  */
-export async function getExtensionFromMagicBytes(file: File): Promise<FileExtension | null> {
+export async function getExtensionFromMagicBytes(file: File): Promise<string | null> {
   const buffer = await file.slice(0, 12).arrayBuffer();
   const bytes = new Uint8Array(buffer);
 
@@ -117,6 +111,6 @@ export async function getExtensionFromMagicBytes(file: File): Promise<FileExtens
  * const ext = await getFileExtension(file);
  * if (!ext) throw new Error("Unsupported file type");
  */
-export async function getFileExtension(file: File): Promise<FileExtension | null> {
+export async function getFileExtension(file: File): Promise<string | null> {
   return getExtensionFromFilename(file) ?? getExtensionFromMime(file) ?? (await getExtensionFromMagicBytes(file));
 }

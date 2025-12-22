@@ -1,13 +1,12 @@
 import React, { createContext, useState, useContext, useMemo, useEffect } from "react";
 
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { EVIDENCE_MODULE, KLEROS_ARBITRATOR } from "consts/arbitration";
+import { KLEROS_ARBITRATOR } from "consts/arbitration";
 import { useLocation } from "react-router-dom";
 
 export interface IList {
   governor: string;
   arbitrator: string;
-  evidenceModule: string;
   connectedList: string;
   arbitratorExtraData?: string;
   templateRegistryParams: {
@@ -78,7 +77,6 @@ const initialListData: Partial<IListData> = {
   removalBaseDeposit: "0.00001",
   submissionChallengeBaseDeposit: "0.00001",
   removalChallengeBaseDeposit: "0.00001",
-  evidenceModule: EVIDENCE_MODULE,
   challengePeriodDuration: 2, //hrs
 };
 

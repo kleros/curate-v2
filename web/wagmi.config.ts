@@ -24,7 +24,6 @@ type ArbitratorContracts = {
       KlerosCoreNeo: ContractConfigWithoutChainId;
       SortitionModule: ContractConfigWithoutChainId;
       SortitionModuleNeo: ContractConfigWithoutChainId;
-      EvidenceModule: ContractConfigWithoutChainId;
       DisputeTemplateRegistry: ContractConfigWithoutChainId;
     };
   };
@@ -91,12 +90,11 @@ const readArtifacts = async (
     `SortitionModule${contractNameSuffix}` as keyof typeof arbitratorContracts.default.contracts;
   const { [sortitionModuleContractName]: SortitionModule } = arbitratorContracts.default.contracts;
 
-  const { EvidenceModule, DisputeTemplateRegistry } = arbitratorContracts.default.contracts;
+  const { DisputeTemplateRegistry } = arbitratorContracts.default.contracts;
 
   const arbitratorContractConfigs = [
     { name: "KlerosCore", contract: KlerosCore },
     { name: "SortitionModule", contract: SortitionModule },
-    { name: "EvidenceModule", contract: EvidenceModule },
     { name: "DisputeTemplateRegistry", contract: DisputeTemplateRegistry },
   ];
 

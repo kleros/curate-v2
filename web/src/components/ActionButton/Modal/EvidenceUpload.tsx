@@ -4,13 +4,8 @@ import { errorToast, infoToast, successToast } from "utils/wrapWithToast";
 import { Roles, useAtlasProvider } from "@kleros/kleros-app";
 import { getFileUploaderMsg } from "src/utils";
 import useIsDesktop from "hooks/useIsDesktop";
-
-export type Evidence = {
-  name: string;
-  description: string;
-  fileURI: string;
-  fileTypeExtension: string;
-};
+import { Evidence } from "src/types/Evidence";
+import { getFileExtension } from "utils/getFileExtension";
 
 interface IEvidenceUpload {
   setEvidence: Dispatch<SetStateAction<Evidence | undefined>>;
@@ -20,7 +15,8 @@ interface IEvidenceUpload {
 const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceUploading }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [fileURI, setFileURI] = useState("");
+  const [fileURI, setFileURI] = useState<string>();
+  const [fileTypeExtension, setFileTypeExtension] = useState<string>();
   const { uploadFile, roleRestrictions } = useAtlasProvider();
   const isDesktop = useIsDesktop();
 
@@ -29,26 +25,32 @@ const EvidenceUpload: React.FC<IEvidenceUpload> = ({ setEvidence, setIsEvidenceU
       name: title,
       description,
       fileURI,
-      fileTypeExtension: "pdf",
+      fileTypeExtension,
     });
   }, [title, description, fileURI]);
 
-  const handleFileUpload = (file: File) => {
+  const handleFileUpload = async (file: File) => {
     setIsEvidenceUploading(true);
     infoToast("Uploading to IPFS...");
-    uploadFile(file, Roles.Evidence)
-      .then(async (fileURI) => {
-        if (!fileURI) throw new Error("Error uploading file to IPFS");
-        setFileURI(fileURI);
-        successToast("Uploaded successfully!");
-      })
-      .catch((err) => {
-        console.log(err);
-        errorToast(`Upload failed: ${err?.message}`);
-      })
-      .finally(() => setIsEvidenceUploading(false));
-  };
 
+    try {
+      const [fileURI, ext] = await Promise.all([uploadFile(file, Roles.Evidence), getFileExtension(file)]);
+
+      if (!fileURI) {
+        throw new Error("Error uploading file to IPFS");
+      }
+
+      setFileURI(fileURI);
+      if (ext) setFileTypeExtension(ext);
+
+      successToast("Uploaded successfully!");
+    } catch (err) {
+      console.error(err);
+      errorToast(`Upload failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+    } finally {
+      setIsEvidenceUploading(false);
+    }
+  };
   return (
     <div className="flex flex-col gap-9 w-full py-1.5">
       <TextField

@@ -6,7 +6,7 @@ import Info from "./Info";
 import { useAccount, useBalance, usePublicClient } from "wagmi";
 import { wrapWithToast } from "utils/wrapWithToast";
 import { IBaseModal } from ".";
-import EvidenceUpload, { Evidence } from "./EvidenceUpload";
+import EvidenceUpload from "./EvidenceUpload";
 import Modal from "components/Modal";
 import { isUndefined } from "src/utils";
 import {
@@ -17,6 +17,7 @@ import {
   useWriteCurateV2ChallengeRequest,
 } from "hooks/useContract";
 import { useReadKlerosCoreArbitrationCost } from "hooks/contracts/generated";
+import { Evidence } from "src/types/Evidence";
 
 export enum ChallengeType {
   Submission,

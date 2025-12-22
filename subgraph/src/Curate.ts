@@ -8,9 +8,9 @@ import {
   NewItem,
   Ruling,
   Curate,
-  DisputeRequest,
   ConnectedListSet,
   ListMetadataSet,
+  RequestChallenged,
 } from "../generated/templates/Curate/Curate";
 import {
   ItemStatus,
@@ -264,21 +264,24 @@ export function handleRuling(event: Ruling): void {
   request.save();
 }
 
-export function handleRequestChallenged(event: DisputeRequest): void {
+export function handleRequestChallenged(event: RequestChallenged): void {
   let curate = Curate.bind(event.address);
-  let itemID = curate.arbitratorDisputeIDToItemID(event.params._arbitrator, event.params._arbitratorDisputeID);
-  let graphItemID = itemID.toHexString() + "@" + event.address.toHexString();
+  let graphItemID = event.params._itemID.toHexString() + "@" + event.address.toHexString();
   let item = Item.load(graphItemID);
   if (!item) {
     log.warning(`Item {} not found.`, [graphItemID]);
     return;
   }
-  let itemInfo = curate.getItemInfo(itemID);
+  let itemInfo = curate.try_getItemInfo(event.params._itemID);
 
+  if (itemInfo.reverted) {
+    log.error(`Item Info request failed for {}.`, [graphItemID]);
+    return;
+  }
   let prevStatus = getExtendedStatus(item.status, item.disputed);
   item.disputed = true;
   item.latestChallenger = ensureUser(event.transaction.from.toHexString()).id;
-  item.status = getStatus(itemInfo.value0);
+  item.status = getStatus(itemInfo.value.value0);
   let newStatus = getExtendedStatus(item.status, item.disputed);
 
   updateCounters(prevStatus, newStatus, event.address);
@@ -290,11 +293,17 @@ export function handleRequestChallenged(event: DisputeRequest): void {
     log.error(`Request {} not found.`, [requestID]);
     return;
   }
+  let disputeInfo = curate.try_requestsDisputeData(event.params._itemID, requestIndex);
 
+  if (disputeInfo.reverted) {
+    log.error(`DisputeInfo request reverted for {}.`, [requestID]);
+    return;
+  }
   request.disputed = true;
   request.challenger = ensureUser(event.transaction.from.toHexString()).id;
   request.challengeTime = event.block.timestamp;
-  request.disputeID = event.params._arbitratorDisputeID;
+  request.disputeID = disputeInfo.value.getDisputeID();
+  request.challengerEvidence = event.params._evidence;
 
   request.save();
   item.save();

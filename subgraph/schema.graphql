@@ -164,16 +164,18 @@ type Request @entity {
   disputed: Boolean!
   "ID of the dispute, if any."
   disputeID: BigInt
-  "External ID of the dispute, this is always there since it's just requestID. Please use disputed field to check if the dispute was created."
-  externalDisputeID: BigInt!
   "Time when the request was made. Used to track when the challenge period ends."
   submissionTime: BigInt!
   "True if the request was executed and/or any raised disputes were resolved."
   resolved: Boolean!
   "The party that made a request"
   requester: User!
+  "Evidence submitted by requester while submitting/removing"
+  requesterEvidence: String
   "The party that challenged the request"
   challenger: User
+  "Evidence submitted by challenger while challenging request"
+  challengerEvidence: String
   "Time when the request was challenged."
   challengeTime: BigInt
   "The arbitrator trusted to solve disputes for this request."

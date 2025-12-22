@@ -8,7 +8,7 @@
 
 pragma solidity 0.8.24;
 
-import {CurateV2, IArbitratorV2, EvidenceModule} from "./CurateV2.sol";
+import {CurateV2, IArbitratorV2} from "./CurateV2.sol";
 
 /// @title CurateFactory
 /// This contract acts as a registry for Curate instances.
@@ -46,7 +46,6 @@ contract CurateFactory {
     /// @param _governor The trusted governor of this contract.
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
-    /// @param _evidenceModule The evidence contract for the arbitrator.
     /// @param _connectedList The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
     /// @param _templateRegistryParams The dispute template registry.
     /// - templateRegistry : The dispute template registry.
@@ -64,7 +63,6 @@ contract CurateFactory {
         address _governor,
         IArbitratorV2 _arbitrator,
         bytes calldata _arbitratorExtraData,
-        EvidenceModule _evidenceModule,
         address _connectedList,
         CurateV2.TemplateRegistryParams calldata _templateRegistryParams,
         uint256[4] calldata _baseDeposits,
@@ -77,7 +75,6 @@ contract CurateFactory {
             _governor,
             _arbitrator,
             _arbitratorExtraData,
-            _evidenceModule,
             _connectedList,
             CurateV2.TemplateRegistryParams(
                 _templateRegistryParams.templateRegistry,

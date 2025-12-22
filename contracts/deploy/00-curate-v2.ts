@@ -25,12 +25,12 @@ const listMetadata = `{
 
 // General court, 3 jurors
 const extraData =
-  "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003";
+  "0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000030000000000000000000000000000000000000000000000000000000000000001";
 
 const NETWORK_TO_DEPLOYMENT: Record<string, DeploymentName> = {
   arbitrumSepoliaDevnet: "devnet",
   arbitrumSepolia: "testnet",
-  arbitrum: "mainnetNeo",
+  arbitrum: "mainnet",
 } as const;
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
@@ -50,7 +50,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
       `Unsupported network: ${networkName}. Supported networks: ${Object.keys(NETWORK_TO_DEPLOYMENT).join(", ")}`
     );
 
-  const { klerosCore, evidence, disputeTemplateRegistry } = await getContractsEthers(ethers.provider, deploymentName);
+  const { klerosCore, disputeTemplateRegistry } = await getContractsEthers(ethers.provider, deploymentName);
   const fee = ethers.parseEther("0.00001");
   const timeout = 600; // 10 minutes
 
@@ -66,7 +66,6 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     deployer,
     klerosCore.target,
     extraData,
-    evidence.target,
     ethers.ZeroAddress, // _connectedTCR
     {
       templateRegistry: disputeTemplateRegistry.target,
@@ -86,16 +85,16 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   });
 
   const curateFactory = (await ethers.getContract("CurateFactory")) as CurateFactory;
+  // main curate
   await curateFactory.deploy(
     deployer,
     klerosCore.target,
     extraData,
-    evidence.target,
     ethers.ZeroAddress, // _connectedTCR
     {
       templateRegistry: disputeTemplateRegistry.target,
-      registrationTemplateParameters: [registrationTemplate, ""],
-      removalTemplateParameters: [removalTemplate, ""],
+      registrationTemplateParameters: [registrationTemplate, dataMappings],
+      removalTemplateParameters: [removalTemplate, dataMappings],
     },
     [fee, fee, fee, fee],
     timeout,

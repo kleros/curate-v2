@@ -9,7 +9,6 @@
 pragma solidity 0.8.24;
 
 import {IArbitrableV2, IArbitratorV2} from "@kleros/kleros-v2-contracts/arbitration/interfaces/IArbitrableV2.sol";
-import {EvidenceModule} from "@kleros/kleros-v2-contracts/arbitration/evidence/EvidenceModule.sol";
 import "@kleros/kleros-v2-contracts/arbitration/interfaces/IDisputeTemplateRegistry.sol";
 
 /// @title Curate
@@ -156,7 +155,6 @@ contract CurateV2 is IArbitrableV2 {
     /// @param _governor The trusted governor of this contract.
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
-    /// @param _evidenceModule The evidence contract for the arbitrator.
     /// @param _connectedList The address of the Curate contract that stores related Curate addresses. This parameter can be left empty.
     /// @param _templateRegistryParams The dispute template registry.
     /// - templateRegistry : The dispute template registry.
@@ -174,7 +172,6 @@ contract CurateV2 is IArbitrableV2 {
         address _governor,
         IArbitratorV2 _arbitrator,
         bytes calldata _arbitratorExtraData,
-        EvidenceModule _evidenceModule,
         address _connectedList,
         TemplateRegistryParams calldata _templateRegistryParams,
         uint256[4] calldata _baseDeposits,
@@ -308,11 +305,9 @@ contract CurateV2 is IArbitrableV2 {
     /// @notice Changes the params related to arbitration.
     /// @param _arbitrator Arbitrator to resolve potential disputes. The arbitrator is trusted to support appeal periods and not reenter.
     /// @param _arbitratorExtraData Extra data for the trusted arbitrator contract.
-    /// @param _evidenceModule The evidence module for the arbitrator.
     function changeArbitrationParams(
         IArbitratorV2 _arbitrator,
-        bytes calldata _arbitratorExtraData,
-        EvidenceModule _evidenceModule
+        bytes calldata _arbitratorExtraData
     ) external onlyGovernor {
         arbitrationParamsChanges.push(
             ArbitrationParams({arbitrator: _arbitrator, arbitratorExtraData: _arbitratorExtraData})

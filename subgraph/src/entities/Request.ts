@@ -31,7 +31,7 @@ export function createRequestFromEvent(event: RequestSubmitted): void {
   request.submissionTime = event.block.timestamp;
   request.requestType = item.status;
   request.creationTx = event.transaction.hash;
-  request.externalDisputeID = event.params._requestID;
+  request.requesterEvidence = event.params._evidence;
 
   let counter = ensureCounter();
   let deposit = item.status.includes("registrationRequested")

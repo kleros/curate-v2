@@ -14,6 +14,17 @@ const sharedTemplateProperties = `
     "registryTitle": "{{registryTitle}}",
     "registryDescription": "{{registryDescription}}"
   },
+  "extraEvidences": [
+  {{#requesterEvidence}}
+  {{{requesterEvidence}}}
+  {{/requesterEvidence}}
+
+  {{#requesterEvidence}}{{#challengerEvidence}},{{/challengerEvidence}}{{/requesterEvidence}}
+
+  {{#challengerEvidence}}
+  {{{challengerEvidence}}}
+  {{/challengerEvidence}}
+  ],
   "category": "Curated Lists",
   "version": "1.0"`;
 
@@ -61,9 +72,9 @@ export const dataMappings = `[
   {
     "type": "graphql",
     "endpoint": "https://gateway-arbitrum.network.thegraph.com/api/{{{graphApiKey}}}/subgraphs/id/H93eWJbDpYKAtkLmsMn7Su3ZLZwAwLN5VoyvQH4NbGAv",
-    "query": "query SearchRequestByDisputeID($externalDisputeID: BigInt!) { requests(where: { externalDisputeID: $externalDisputeID }) { id disputeID submissionTime resolved requester { id } challenger { id } arbitrator arbitratorExtraData deposit disputeOutcome requestType item { id itemID data status registry { id title description policyURI } } } }",
+    "query": "query SearchRequestByDisputeID($disputeID: BigInt!) { requests(where: { disputeID: $disputeID }) { id disputeID submissionTime resolved requester { id } challenger { id } arbitrator arbitratorExtraData deposit disputeOutcome requestType requesterEvidence challengerEvidence item { id itemID data status registry { id title description policyURI } } } }",
     "variables": {
-      "externalDisputeID": "{{externalDisputeID}}"
+      "disputeID": "{{arbitratorDisputeID}}"
     },
     "seek": [
       "requests[0].item.registry.title",
@@ -72,7 +83,9 @@ export const dataMappings = `[
       "requests[0].item.id",
       "requests[0].item.data",
       "requests[0].item.status",
-      "requests[0].item.registry.id"
+      "requests[0].item.registry.id",
+      "requests[0].requesterEvidence",
+      "requests[0].challengerEvidence"
     ],
     "populate": [
       "registryTitle",
@@ -81,7 +94,9 @@ export const dataMappings = `[
       "itemID",
       "itemData",
       "itemStatus",
-      "listAddress"
+      "listAddress",
+      "requesterEvidence",
+      "challengerEvidence"
     ]
   },
   {

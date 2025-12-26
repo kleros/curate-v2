@@ -4,13 +4,15 @@ import { RequestDetailsFragment } from "src/graphql/graphql";
 import DocIcon from "svgs/icons/doc.svg";
 import { useToggle } from "react-use";
 import JustificationModal from "./JustificationModal";
+import { Evidence } from "~src/types/Evidence";
 
 interface IParty {
   request: RequestDetailsFragment;
   isRemoval?: boolean;
+  justification?: Evidence;
 }
 
-const Party: React.FC<IParty> = ({ request, isRemoval = false }) => {
+const Party: React.FC<IParty> = ({ request, isRemoval = false, justification }) => {
   const [isOpen, toggleModal] = useToggle(false);
   const aliasAddress = isRemoval ? request.requester.id : request?.challenger?.id;
 
@@ -25,7 +27,7 @@ const Party: React.FC<IParty> = ({ request, isRemoval = false }) => {
       >
         <DocIcon width={16} height={16} className="fill-klerosUIComponentsPrimaryBlue" /> Justification
       </label>
-      {isOpen && <JustificationModal {...{ request, toggleModal, isRemoval }} />}
+      {isOpen && <JustificationModal {...{ request, toggleModal, isRemoval, justification }} />}
     </div>
   );
 };

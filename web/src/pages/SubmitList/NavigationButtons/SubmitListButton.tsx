@@ -91,7 +91,6 @@ const SubmitListButton: React.FC = () => {
       listParams.governor as `0x${string}`,
       listParams.arbitrator as `0x${string}`,
       listParams.arbitratorExtraData as `0x${string}`,
-      listParams.evidenceModule as `0x${string}`,
       listParams.connectedList as `0x${string}`,
       listParams.templateRegistryParams,
       listParams.baseDeposits,

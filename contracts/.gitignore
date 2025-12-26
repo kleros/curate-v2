@@ -185,3 +185,4 @@ tags
 .env.vault
 
 !.env.vault
+!.env.example

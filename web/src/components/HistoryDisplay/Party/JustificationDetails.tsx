@@ -2,12 +2,10 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { getIpfsUrl } from "utils/getIpfsUrl";
 import AttachmentIcon from "svgs/icons/attachment.svg";
-import { Evidence } from "src/graphql/graphql";
 import { Link } from "react-router-dom";
+import { Evidence } from "src/types/Evidence";
 
-export type Justification = Pick<Evidence, "name" | "description" | "evidence" | "fileURI">;
-
-const JustificationDetails: React.FC<{ justification: Justification }> = ({ justification }) => {
+const JustificationDetails: React.FC<{ justification: Evidence }> = ({ justification }) => {
   return (
     <div className="flex flex-col w-full">
       <h3 className="text-base text-klerosUIComponentsPrimaryText font-semibold">

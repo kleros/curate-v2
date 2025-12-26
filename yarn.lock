@@ -5442,7 +5442,7 @@ __metadata:
     "@kleros/curate-v2-prettier-config": "workspace:^"
     "@kleros/curate-v2-templates": "workspace:^"
     "@kleros/curate-v2-tsconfig": "workspace:^"
-    "@kleros/kleros-v2-contracts": "npm:^0.10.0"
+    "@kleros/kleros-v2-contracts": "npm:^2.0.0-rc.1"
     "@logtail/pino": "npm:^0.4.0"
     "@nomicfoundation/hardhat-chai-matchers": "npm:^2.0.8"
     "@nomicfoundation/hardhat-ethers": "npm:^3.0.8"
@@ -5462,7 +5462,7 @@ __metadata:
     graphql: "npm:^16.8.1"
     graphql-request: "npm:^6.1.0"
     hardhat: "npm:^2.23.0"
-    hardhat-deploy: "npm:^1.0.2"
+    hardhat-deploy: "npm:^1.0.4"
     hardhat-deploy-ethers: "npm:^0.4.2"
     hardhat-docgen: "npm:^1.3.0"
     hardhat-gas-reporter: "npm:^1.0.10"
@@ -5634,6 +5634,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kleros/kleros-v2-contracts@npm:^2.0.0-rc.1":
+  version: 2.0.0-rc.1
+  resolution: "@kleros/kleros-v2-contracts@npm:2.0.0-rc.1"
+  dependencies:
+    "@chainlink/contracts": "npm:^1.4.0"
+    "@kleros/vea-contracts": "npm:^0.7.0"
+    "@openzeppelin/contracts": "npm:^5.5.0"
+    "@shutter-network/shutter-sdk": "npm:0.0.2"
+    isomorphic-fetch: "npm:^3.0.0"
+  peerDependencies:
+    viem: ^2.24.1
+  peerDependenciesMeta:
+    viem:
+      optional: false
+  checksum: abfea0e4bdae6f8cbe7901a9a934916a78aef99117580e157b20c32aad2f0b99fc1974551bc3eed3b44f9058624b2a1e8d3e1f0b1a39c19a51d9c10cc6ee5b41
+  languageName: node
+  linkType: hard
+
 "@kleros/ui-components-library@npm:^3.6.0":
   version: 3.6.0
   resolution: "@kleros/ui-components-library@npm:3.6.0"
@@ -5665,6 +5683,13 @@ __metadata:
   version: 0.6.0
   resolution: "@kleros/vea-contracts@npm:0.6.0"
   checksum: 1dafd94620d3392c2e00e09e7d1ca923007143f8625b4b584411a7b49404ae5630e870d3e260685964d37ccb9c4c4ab406523b8ec4dd9f89bcf6099a4f5976ec
+  languageName: node
+  linkType: hard
+
+"@kleros/vea-contracts@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@kleros/vea-contracts@npm:0.7.0"
+  checksum: bba12886020cd4bfce39938de56edf2b56472627871ef91b10b721de655e5c20f632a8cb57679927d868375218007898b12033d769b7d33cd3f18447ca093896
   languageName: node
   linkType: hard
 
@@ -6844,6 +6869,13 @@ __metadata:
   version: 5.4.0
   resolution: "@openzeppelin/contracts@npm:5.4.0"
   checksum: 4f7f926ebd98279ba8223cae5d2cd38e0806e60e3e3a615c9d739ffab870ffab7a1e85f47092faa123c0f26d1699ca15252adea8bcdcaf360b21781acc93b218
+  languageName: node
+  linkType: hard
+
+"@openzeppelin/contracts@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "@openzeppelin/contracts@npm:5.5.0"
+  checksum: 5eb1a201e2e324280292077f68c8a4a2e450762798d3c990741b540b1b218c4fed143901647f8519e9abe239017bd29a455cb7e43aff25918ef110e4cdea7013
   languageName: node
   linkType: hard
 
@@ -9589,7 +9621,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shutter-network/shutter-sdk@npm:^0.0.2":
+"@shutter-network/shutter-sdk@npm:0.0.2, @shutter-network/shutter-sdk@npm:^0.0.2":
   version: 0.0.2
   resolution: "@shutter-network/shutter-sdk@npm:0.0.2"
   dependencies:
@@ -10864,7 +10896,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/qs@npm:*, @types/qs@npm:^6.2.31, @types/qs@npm:^6.9.7":
+"@types/qs@npm:*, @types/qs@npm:^6.2.31":
   version: 6.9.11
   resolution: "@types/qs@npm:6.9.11"
   checksum: 620ca1628bf3da65662c54ed6ebb120b18a3da477d0bfcc872b696685a9bb1893c3c92b53a1190a8f54d52eaddb6af8b2157755699ac83164604329935e8a7f2
@@ -20075,9 +20107,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hardhat-deploy@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "hardhat-deploy@npm:1.0.2"
+"hardhat-deploy@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "hardhat-deploy@npm:1.0.4"
   dependencies:
     "@ethersproject/abi": "npm:^5.7.0"
     "@ethersproject/abstract-signer": "npm:^5.7.0"
@@ -20090,7 +20122,6 @@ __metadata:
     "@ethersproject/solidity": "npm:^5.7.0"
     "@ethersproject/transactions": "npm:^5.7.0"
     "@ethersproject/wallet": "npm:^5.7.0"
-    "@types/qs": "npm:^6.9.7"
     axios: "npm:^0.21.1"
     chalk: "npm:^4.1.2"
     chokidar: "npm:^3.5.2"
@@ -20101,9 +20132,9 @@ __metadata:
     fs-extra: "npm:^10.0.0"
     match-all: "npm:^1.2.6"
     murmur-128: "npm:^0.2.1"
-    qs: "npm:^6.9.4"
+    neoqs: "npm:^6.13.0"
     zksync-ethers: "npm:^5.0.0"
-  checksum: 76882b56fa6103ebe080077f00eb75a04914c7c2f931b2ecec02922d5105a01d3cd1dec3238b4050c9be88f2e45034035d208f4aa2ab7789cccbba414feb972d
+  checksum: 41b4784703a29a1690578a34fd8bb75c463347e7050c55ef39ca1d183fef5463bc8a1f679d57e5f7228524fc6abf8e499f8edbe1bcbc801abd10e3ac3299f9f3
   languageName: node
   linkType: hard
 
@@ -25065,6 +25096,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"neoqs@npm:^6.13.0":
+  version: 6.13.0
+  resolution: "neoqs@npm:6.13.0"
+  checksum: 222ac1cc370a3906c24cbc3e384dea47f993d593200b35d5f97ccb03e7248b405889d480a668ddb131898ec3d5049dffc4ddc1910d75f96772ded9c6a33f103a
+  languageName: node
+  linkType: hard
+
 "nice-try@npm:^1.0.4":
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
@@ -27818,7 +27856,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.4.0, qs@npm:^6.9.4":
+"qs@npm:^6.4.0":
   version: 6.11.2
   resolution: "qs@npm:6.11.2"
   dependencies:

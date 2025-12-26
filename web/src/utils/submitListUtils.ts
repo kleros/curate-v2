@@ -36,7 +36,6 @@ export const areListParamsValid = (params: IList) => {
     isAddress(params.governor) &&
     isAddress(params.arbitrator) &&
     isAddress(params.connectedList) &&
-    isAddress(params.evidenceModule) &&
     isAddress(params.relayerContract) &&
     isAddress(params.templateRegistryParams.templateRegistry);
 

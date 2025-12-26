@@ -9,6 +9,7 @@ import ClosedIcon from "assets/svgs/icons/close-circle.svg";
 import { HistorySkeletonCard } from "../StyledSkeleton";
 import Party from "./Party";
 import { useTheme } from "src/hooks/useToggleThemeContext";
+import { parseEvidence } from "src/utils/parseEvidence";
 
 interface IHistory {
   itemId: string;
@@ -59,7 +60,6 @@ const constructItemsFromRequest = (
       title: `${isItem ? "Item" : "List"} Submitted`,
       variant: isLightTheme ? "#009aff" : "#6cc5ff",
       subtitle: formatDate(request.submissionTime),
-      rightSided: true,
       party: "",
     });
 
@@ -67,9 +67,13 @@ const constructItemsFromRequest = (
       historyItems.push({
         title: `${isItem ? "Submission" : "Registration"} Challenged - Case ${request.disputeID}`,
         variant: isLightTheme ? "#9013fe" : "#b45fff",
-        party: <Party {...{ request }} />,
+        party: (
+          <Party
+            {...{ request }}
+            justification={request?.challengerEvidence ? parseEvidence(request.challengerEvidence) : undefined}
+          />
+        ),
         subtitle: formatDate(request.challengeTime),
-        rightSided: true,
       });
     }
 
@@ -80,7 +84,6 @@ const constructItemsFromRequest = (
         title: `${isItem ? "Item" : "List"} ${included ? "Included" : "Rejected"}`,
         variant: included ? (isLightTheme ? "#009aff" : "#6cc5ff") : isLightTheme ? "#f60c36" : "#ff5a78",
         subtitle: formatDate(request.resolutionTime),
-        rightSided: true,
         party: "",
         Icon: included ? CheckIcon : ClosedIcon,
       });
@@ -90,17 +93,26 @@ const constructItemsFromRequest = (
       title: "Removal Requested",
       variant: isLightTheme ? "#009aff" : "#6cc5ff",
       subtitle: formatDate(request.submissionTime),
-      rightSided: true,
-      party: <Party {...{ request }} isRemoval />,
+      party: (
+        <Party
+          {...{ request }}
+          isRemoval
+          justification={request?.requesterEvidence ? parseEvidence(request.requesterEvidence) : undefined}
+        />
+      ),
     });
 
     if (request.disputed && request.challenger) {
       historyItems.push({
         title: `Removal Challenged - Case ${request.disputeID}`,
         variant: isLightTheme ? "#9013fe" : "#b45fff",
-        party: <Party {...{ request }} />,
+        party: (
+          <Party
+            {...{ request }}
+            justification={request?.challengerEvidence ? parseEvidence(request.challengerEvidence) : undefined}
+          />
+        ),
         subtitle: formatDate(request.submissionTime),
-        rightSided: true,
       });
     }
     if (request.resolved) {
@@ -109,7 +121,6 @@ const constructItemsFromRequest = (
         title: `${isItem ? "Item" : "List"} ${removed ? "Removed" : "Included"}`,
         variant: removed ? (isLightTheme ? "#f60c36" : "#ff5a78") : isLightTheme ? "#00c42b" : "#65dc7f",
         subtitle: formatDate(request.resolutionTime),
-        rightSided: true,
         party: "",
         Icon: removed ? ClosedIcon : CheckIcon,
       });

@@ -3,7 +3,7 @@ import { useSubmitListContext } from "context/SubmitListContext";
 import { roundSumToPrecision } from "utils/format";
 import EthIcon from "svgs/icons/eth-round.svg";
 import clsx from "clsx";
-import { NumberField } from "@kleros/ui-components-library";
+import { BigNumberField, NumberField } from "@kleros/ui-components-library";
 import WithHelpTooltip from "src/components/WithHelpTooltip";
 
 const ChallengeParameters: React.FC = () => {
@@ -32,6 +32,9 @@ const ChallengeParameters: React.FC = () => {
           minValue={0}
           value={listData.challengePeriodDuration}
           onChange={(value) => handleDurationChange(value)}
+          formatOptions={{
+            maximumFractionDigits: 0,
+          }}
         />
       </div>
 
@@ -39,25 +42,20 @@ const ChallengeParameters: React.FC = () => {
         <WithHelpTooltip tooltipMsg="This is the deposit required to submit an item to the list and also the amount awarded to successful challengers. If the value is too low, challengers may not have enough incentive to look for flaws in the submissions and bad ones could make it through. If it is too high, submitters may not have enough incentive to send items which may result in an empty list.">
           <label>Submission challenge bounty</label>
         </WithHelpTooltip>
-        <NumberField
+        <BigNumberField
           className="w-full"
           aria-label="Submission challenge bounty"
           placeholder="84"
           name="submissionChallengeBaseDeposit"
-          minValue={0}
-          value={Number(listData.submissionChallengeBaseDeposit)}
+          minValue="0"
+          value={listData.submissionChallengeBaseDeposit}
           onChange={(value) => handleDepositChange("submissionChallengeBaseDeposit", value.toString())}
           Icon={EthIcon}
-          formatOptions={{
-            //Prevent automatic rounding of very small amounts
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 18,
-          }}
         />
         <WithHelpTooltip tooltipMsg="The total cost is the sum of the base deposit and the arbitration cost.">
           <label>
             Total:{" "}
-            {roundSumToPrecision(Number(listData.arbitrationCost), Number(listData.submissionChallengeBaseDeposit))} ETH
+            {roundSumToPrecision(listData.arbitrationCost ?? "0", listData.submissionChallengeBaseDeposit ?? "0")} ETH
           </label>
         </WithHelpTooltip>
       </div>
@@ -66,24 +64,19 @@ const ChallengeParameters: React.FC = () => {
         <WithHelpTooltip tooltipMsg="This is the deposit required to remove an item and also the amount awarded to successful challengers. If the value is too low, people will not have enough incentive to look for flaws in removal requests and compliant items could be removed from the list. If it is too high, people will be afraid to remove items so a non compliant submission could stay longer than it should.">
           <label>Removal challenge bounty</label>
         </WithHelpTooltip>
-        <NumberField
+        <BigNumberField
           className="w-full"
           aria-label="Removal challenge bounty"
           placeholder="84"
           name="removalChallengeBaseDeposit"
-          value={Number(listData.removalChallengeBaseDeposit)}
+          value={listData.removalChallengeBaseDeposit}
           onChange={(value) => handleDepositChange("removalChallengeBaseDeposit", value.toString())}
           Icon={EthIcon}
-          minValue={0}
-          formatOptions={{
-            //Prevent automatic rounding of very small amounts
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 18,
-          }}
+          minValue="0"
         />
         <WithHelpTooltip tooltipMsg="The total cost is the sum of the base deposit and the arbitration cost.">
           <label>
-            Total: {roundSumToPrecision(Number(listData.arbitrationCost), Number(listData.removalChallengeBaseDeposit))}{" "}
+            Total: {roundSumToPrecision(listData.arbitrationCost ?? "0", listData.removalChallengeBaseDeposit ?? "0")}{" "}
             ETH
           </label>
         </WithHelpTooltip>

@@ -1,4 +1,4 @@
-import { AlertMessage, DropdownCascader, NumberField, TextField } from "@kleros/ui-components-library";
+import { AlertMessage, BigNumberField, DropdownCascader, NumberField, TextField } from "@kleros/ui-components-library";
 import React, { useEffect, useMemo } from "react";
 import { rootCourtToItems, useCourtTree } from "hooks/queries/useCourtTree";
 import { isEmpty, isUndefined } from "utils/index";
@@ -95,18 +95,16 @@ const AbritrationParameters: React.FC = () => {
           minValue={0}
           value={Number(noOfVotes)}
           onChange={handleJurorsWrite}
+          formatOptions={{
+            maximumFractionDigits: 0,
+          }}
         />
-        <NumberField
+        <BigNumberField
           className="w-full"
           label="Arbitration Cost"
-          value={arbitrationCost ? Number(formatEther(arbitrationCost as bigint)) : 0}
+          value={arbitrationCost ? formatEther(arbitrationCost as bigint) : "0"}
           Icon={ETH}
           isDisabled
-          formatOptions={{
-            //Prevent automatic rounding of very small amounts
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 18,
-          }}
         />
       </div>
 

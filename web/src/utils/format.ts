@@ -24,9 +24,6 @@ export const formatETH = (value: bigint, fractionDigits = 4, roundDown = false) 
 export const formatUSD = (value: number, fractionDigits = 2) => "$" + commify(Number(value).toFixed(fractionDigits));
 
 export const roundSumToPrecision = (num1: string, num2: string) => {
-  const maxDecimalPlaces = Math.max(
-    (num1.toString().split(".")[1] || "").length,
-    (num2.toString().split(".")[1] || "").length
-  );
+  const maxDecimalPlaces = Math.max((num1.split(".")[1] || "").length, (num2.split(".")[1] || "").length);
   return BigNumber(num1).plus(num2).toFixed(maxDecimalPlaces);
 };

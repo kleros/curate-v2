@@ -18,7 +18,7 @@ const Modal: React.FC<{ children: React.ReactNode; toggleModal: () => void; clas
           "fixed top-[10vh] left-1/2 overflow-y-auto z-10",
           "w-[86vw] max-w-[600px] max-h-[80vh] py-8 pr-8 pl-9",
           "transform -translate-x-1/2",
-          "border rounded-[3px] border-klerosUIComponentsStroke",
+          "border rounded-base border-klerosUIComponentsStroke",
           "shadow-default",
           className
         )}

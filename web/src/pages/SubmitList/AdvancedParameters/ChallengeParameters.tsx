@@ -33,7 +33,7 @@ const ChallengeParameters: React.FC = () => {
           value={listData.challengePeriodDuration}
           onChange={(value) => handleDurationChange(value)}
           formatOptions={{
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           }}
         />
       </div>

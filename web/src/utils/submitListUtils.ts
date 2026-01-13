@@ -19,7 +19,7 @@ export const constructListParams = (listData: IListData, listMetadata: IListMeta
     parseEther(listData.submissionChallengeBaseDeposit),
     parseEther(listData.removalChallengeBaseDeposit),
   ];
-  baseTemplate.challengePeriodDuration = listData.challengePeriodDuration * 60 * 60;
+  baseTemplate.challengePeriodDuration = Math.round(listData.challengePeriodDuration * 60 * 60);
   baseTemplate.connectedList = listData.connectedList ?? zeroAddress;
   baseTemplate.relayerContract = baseTemplate.relayerContract ?? baseTemplate.governor;
   baseTemplate.arbitratorExtraData = prepareArbitratorExtradata(listData.courtId ?? "1", listData.numberOfJurors) ?? "";

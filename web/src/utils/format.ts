@@ -1,5 +1,6 @@
 import { formatEther, formatUnits } from "viem";
 import { commify } from "./commify";
+import BigNumber from "bignumber.js";
 
 export const roundNumberDown = (value: number, fractionDigits = 0) => {
   const factor = 10 ** fractionDigits;
@@ -22,11 +23,7 @@ export const formatETH = (value: bigint, fractionDigits = 4, roundDown = false) 
 
 export const formatUSD = (value: number, fractionDigits = 2) => "$" + commify(Number(value).toFixed(fractionDigits));
 
-export const roundSumToPrecision = (num1: number, num2: number) => {
-  const maxDecimalPlaces = Math.max(
-    (num1.toString().split(".")[1] || "").length,
-    (num2.toString().split(".")[1] || "").length
-  );
-  const sum = num1 + num2;
-  return sum.toFixed(maxDecimalPlaces);
+export const roundSumToPrecision = (num1: string, num2: string) => {
+  const maxDecimalPlaces = Math.max((num1.split(".")[1] || "").length, (num2.split(".")[1] || "").length);
+  return BigNumber(num1).plus(num2).toFixed(maxDecimalPlaces);
 };

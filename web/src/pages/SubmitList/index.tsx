@@ -64,7 +64,7 @@ const SubmitList: React.FC = () => {
             </div>
           </EnsureAuth>
         ) : (
-          <div className="flex flex-col items-center text-center text-klerosUIComponentsPrimaryText">
+          <div className="flex flex-col gap-4 items-center text-center text-klerosUIComponentsPrimaryText">
             To create a new list, connect first
             <hr />
             <ConnectWallet />

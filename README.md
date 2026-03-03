@@ -22,7 +22,7 @@ cd web && yarn start
 
 ## Project structure
 
-```
+```text
 contracts/   # CurateV2, CurateFactory
 subgraph/    # Subgraph indexing
 templates/   # Dispute templates

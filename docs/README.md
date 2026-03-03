@@ -8,7 +8,7 @@
 
 **Curate Item** is the format used when you _submit an item_ to a list. Each item's `columns` must match the list's schema, and `values` holds the actual data for each column.
 
-```
+```text
 List created → List metadata (JSON string) emitted via ListMetadataSet
                          ↓
 User submits item → CurateItem (JSON string) passed to contract

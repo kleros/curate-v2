@@ -2,16 +2,32 @@
 
 # curate-v2
 
-Setup:
+Decentralized curation protocol for lists on-chain.
+
+> Types and schemas may change — product under development. See **[docs/README.md](docs/README.md)** for types, schemas, and templates.
+
+## Setup
 
 ```bash
 yarn
 ```
 
-The frontend is located in the `web` folder
+## Development
+
+**Frontend**
 
 ```bash
-cd web
-yarn && yarn start
+cd web && yarn start
 ```
 
+## Project structure
+
+```text
+contracts/   # CurateV2, CurateFactory
+subgraph/    # Subgraph indexing
+templates/   # Dispute templates
+web/         # Frontend
+docs/        # Types, schemas, API reference
+```
+
+For deployment, env vars, and more: see `contracts/README.md` and `web/` package scripts.

@@ -8,7 +8,7 @@ import Loader from "components/Loader";
 import Header from "./Header";
 import clsx from "clsx";
 
-const FileViewer = lazy(() => import("components/FileViewer"));
+const FileViewer = lazy(() => import("@kleros/ui-components-library").then((m) => ({ default: m.FileViewer })));
 
 const AttachmentDisplay: React.FC = () => {
   const [searchParams] = useSearchParams();

@@ -17,7 +17,7 @@ const LinkField: React.FC<ILinkField> = ({ value }) => {
       window.open(safeUrl, "_blank", "noopener,noreferrer");
     }
     setIsWarningOpen(false);
-  }, []);
+  }, [safeUrl]);
 
   const handleCancelNavigation = useCallback(() => {
     setIsWarningOpen(false);

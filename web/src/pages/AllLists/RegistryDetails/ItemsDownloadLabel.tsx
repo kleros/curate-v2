@@ -7,7 +7,7 @@ import { isUndefined } from "src/utils";
 
 const sanitizeCsvCell = (value: string) => {
   // check if value contains a formula, if so makes it render as a string
-  if (/^[=+\-@\t\r]/.test(value)) {
+  if (/^[=+\-@\t\r\n]/.test(value)) {
     return `'${value}`;
   }
   return value;

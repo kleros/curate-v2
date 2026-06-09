@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import NewTabIcon from "svgs/icons/new-tab.svg";
 
-import { isAllowedAttachmentUrl } from "utils/urlValidation";
+import { getAllowedAttachmentUrl } from "utils/urlValidation";
 
 import Loader from "components/Loader";
 import Header from "./Header";
@@ -16,7 +16,7 @@ const AttachmentDisplay: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const url = searchParams.get("url");
-  const safeUrl = url && isAllowedAttachmentUrl(url) ? url : null;
+  const safeUrl = url ? getAllowedAttachmentUrl(url) : null;
 
   return (
     <div

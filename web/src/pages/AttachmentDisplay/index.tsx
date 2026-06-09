@@ -4,6 +4,8 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import NewTabIcon from "svgs/icons/new-tab.svg";
 
+import { isAllowedAttachmentUrl } from "utils/urlValidation";
+
 import Loader from "components/Loader";
 import Header from "./Header";
 import clsx from "clsx";
@@ -14,6 +16,8 @@ const AttachmentDisplay: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const url = searchParams.get("url");
+  const safeUrl = url && isAllowedAttachmentUrl(url) ? url : null;
+
   return (
     <div
       className={clsx(
@@ -23,12 +27,12 @@ const AttachmentDisplay: React.FC = () => {
     >
       <div className="flex flex-col gap-2 w-full">
         <Header />
-        {url ? (
+        {safeUrl ? (
           <>
             <Link
               className="flex items-center self-end gap-2 hover:underline"
-              to={url}
-              rel="noreferrer"
+              to={safeUrl}
+              rel="noopener noreferrer"
               target="_blank"
               aria-label="Open in new tab"
             >
@@ -41,7 +45,7 @@ const AttachmentDisplay: React.FC = () => {
                 </div>
               }
             >
-              <FileViewer url={url} />
+              <FileViewer url={safeUrl} />
             </Suspense>
           </>
         ) : null}

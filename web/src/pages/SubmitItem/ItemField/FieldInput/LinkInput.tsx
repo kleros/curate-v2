@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IFieldInput } from ".";
 import { TextField } from "@kleros/ui-components-library";
+import { getSafeNavigationUrl } from "utils/urlValidation";
 
 const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const [link, setLink] = useState(fieldProp.value ?? "");
@@ -9,7 +10,7 @@ const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
   const handleChange = (value: string) => {
     setLink(value);
 
-    if (value === "" || isValidUrl(value)) {
+    if (value === "" || getSafeNavigationUrl(value)) {
       setIsError(false);
       handleWrite(value);
     } else {
@@ -28,14 +29,6 @@ const LinkInput: React.FC<IFieldInput> = ({ fieldProp, handleWrite }) => {
       message={fieldProp.description}
     />
   );
-};
-
-const isValidUrl = (urlString: string) => {
-  try {
-    return Boolean(new URL(urlString));
-  } catch (e) {
-    return false;
-  }
 };
 
 export default LinkInput;

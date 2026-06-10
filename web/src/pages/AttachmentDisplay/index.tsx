@@ -49,6 +49,21 @@ const AttachmentDisplay: React.FC = () => {
             </Suspense>
           </>
         ) : null}
+
+        {url && !safeUrl ? (
+          <div className="flex flex-col gap-2 w-full">
+            <p className="text-klerosUIComponentsSecondaryText text-base">This link cannot be previewed here.</p>
+            <div
+              className={clsx(
+                "bg-klerosUIComponentsLightBackground border rounded-sm border-klerosUIComponentsStroke",
+                "text-sm font-mono text-klerosUIComponentsPrimaryText break-all",
+                "w-full py-2 px-3"
+              )}
+            >
+              {url}
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

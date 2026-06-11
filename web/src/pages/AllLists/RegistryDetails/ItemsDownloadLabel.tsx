@@ -30,8 +30,8 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
       };
 
       item.props.forEach((prop) => {
-        row[`${prop.label} (${prop.description})`] =
-          !isUndefined(prop.value) && prop.value !== null ? sanitizeCsvCell(prop.value) : null;
+        const key = sanitizeCsvCell(`${prop.label} (${prop.description})`);
+        row[key] = !isUndefined(prop.value) && prop.value !== null ? sanitizeCsvCell(prop.value) : null;
       });
 
       return row;

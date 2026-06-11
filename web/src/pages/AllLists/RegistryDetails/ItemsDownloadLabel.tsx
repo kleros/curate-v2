@@ -3,6 +3,15 @@ import { useRegistryItemsQuery } from "queries/useRegistryAllItemsQuery";
 import { json2csv } from "json-2-csv";
 import ExportIcon from "svgs/icons/export.svg";
 import clsx from "clsx";
+import { isUndefined } from "src/utils";
+
+const sanitizeCsvCell = (value: string) => {
+  // check if value contains a formula, if so makes it render as a string
+  if (/^[=+\-@\t\r\n]/.test(value)) {
+    return `'${value}`;
+  }
+  return value;
+};
 
 const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAddress }) => {
   const [isPreparing, setIsPreparing] = useState(false);
@@ -21,7 +30,8 @@ const ItemsDownloadLabel: React.FC<{ registryAddress?: string }> = ({ registryAd
       };
 
       item.props.forEach((prop) => {
-        row[`${prop.label} (${prop.description})`] = prop.value;
+        const key = sanitizeCsvCell(`${prop.label} (${prop.description})`);
+        row[key] = !isUndefined(prop.value) && prop.value !== null ? sanitizeCsvCell(prop.value) : null;
       });
 
       return row;

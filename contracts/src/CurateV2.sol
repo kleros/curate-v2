@@ -97,6 +97,7 @@ contract CurateV2 is IArbitrableV2 {
     mapping(address => mapping(uint256 => bytes32)) public arbitratorDisputeIDToItemID; // Maps a dispute ID to the ID of the item with the disputed request in the form arbitratorDisputeIDToItemID[arbitrator][disputeID].
     mapping(bytes32 => mapping(uint256 => DisputeData)) public requestsDisputeData; // Maps an item and a request to the data of the dispute related to them. requestsDisputeData[itemID][requestIndex]
     ArbitrationParams[] public arbitrationParamsChanges;
+    bytes32 public historyHead; // Hash chain over every item status transition: keccak256(abi.encode(previousHead, itemID, newStatus)). Replaying the ItemStatusTransition events from the zero head reproduces it.
 
     // ************************************* //
     // *        Function Modifiers         * //
@@ -120,6 +121,12 @@ contract CurateV2 is IArbitrableV2 {
     /// @param _itemID The ID of the affected item.
     /// @param _updatedDirectly Whether this was emitted in either `addItemDirectly` or `removeItemDirectly`. This is used in the subgraph.
     event ItemStatusChange(bytes32 indexed _itemID, bool _updatedDirectly);
+
+    /// @dev Emitted on every item status transition, together with the new value of `historyHead`.
+    /// @param _itemID The ID of the affected item.
+    /// @param _status The new status of the item.
+    /// @param _historyHead The value of `historyHead` after committing this transition.
+    event ItemStatusTransition(bytes32 indexed _itemID, Status _status, bytes32 _historyHead);
 
     /// @dev Emitted when someone submits an item for the first time.
     /// @param _itemID The ID of the new item.
@@ -330,7 +337,7 @@ contract CurateV2 is IArbitrableV2 {
             emit NewItem(itemID, _item, true);
         }
 
-        item.status = Status.Registered;
+        _setStatus(item, itemID, Status.Registered);
 
         emit ItemStatusChange(itemID, true);
     }
@@ -341,7 +348,7 @@ contract CurateV2 is IArbitrableV2 {
         Item storage item = items[_itemID];
         require(item.status == Status.Registered, "Item must be registered to be removed.");
 
-        item.status = Status.Absent;
+        _setStatus(item, _itemID, Status.Absent);
 
         emit ItemStatusChange(_itemID, true);
     }
@@ -369,7 +376,7 @@ contract CurateV2 is IArbitrableV2 {
         require(msg.value >= totalCost, "You must fully fund the request.");
 
         item.sumDeposit = totalCost;
-        item.status = Status.RegistrationRequested;
+        _setStatus(item, itemID, Status.RegistrationRequested);
 
         request.requestType = RequestType.Registration;
         request.submissionTime = uint64(block.timestamp);
@@ -401,7 +408,7 @@ contract CurateV2 is IArbitrableV2 {
         require(msg.value >= totalCost, "You must fully fund the request.");
 
         item.sumDeposit = totalCost;
-        item.status = Status.ClearingRequested;
+        _setStatus(item, _itemID, Status.ClearingRequested);
 
         request.submissionTime = uint64(block.timestamp);
         request.arbitrationParamsIndex = uint24(arbitrationParamsIndex);
@@ -488,9 +495,9 @@ contract CurateV2 is IArbitrableV2 {
         require(disputeData.status == DisputeStatus.None, "The request should not be disputed.");
 
         if (item.status == Status.RegistrationRequested) {
-            item.status = Status.Registered;
+            _setStatus(item, _itemID, Status.Registered);
         } else if (item.status == Status.ClearingRequested) {
-            item.status = Status.Absent;
+            _setStatus(item, _itemID, Status.Absent);
         } else {
             revert("There must be a request.");
         }
@@ -536,7 +543,7 @@ contract CurateV2 is IArbitrableV2 {
         if (winner == Party.None) {
             // If the arbitrator refuse to rule, then the item status should be the same it was before the request.
             // Regarding item.status this is equivalent to the challenger winning the dispute.
-            item.status = item.status == Status.RegistrationRequested ? Status.Absent : Status.Registered;
+            _setStatus(item, itemID, item.status == Status.RegistrationRequested ? Status.Absent : Status.Registered);
 
             // Since nobody has won, then we reimburse both parties equally.
             // If item.sumDeposit is odd, 1 wei will remain in the contract balance.
@@ -545,16 +552,30 @@ contract CurateV2 is IArbitrableV2 {
             request.requester.send(halfSumDeposit);
             request.challenger.send(halfSumDeposit);
         } else if (winner == Party.Requester) {
-            item.status = item.status == Status.RegistrationRequested ? Status.Registered : Status.Absent;
+            _setStatus(item, itemID, item.status == Status.RegistrationRequested ? Status.Registered : Status.Absent);
 
             request.requester.send(sumDeposit);
         } else {
-            item.status = item.status == Status.RegistrationRequested ? Status.Absent : Status.Registered;
+            _setStatus(item, itemID, item.status == Status.RegistrationRequested ? Status.Absent : Status.Registered);
 
             request.challenger.send(sumDeposit);
         }
 
         emit ItemStatusChange(itemID, false);
+    }
+
+    // ************************************* //
+    // *            Internal               * //
+    // ************************************* //
+
+    /// @dev Sets the status of an item and commits the transition to `historyHead`.
+    /// @param _item The item to update.
+    /// @param _itemID The ID of the item.
+    /// @param _status The new status of the item.
+    function _setStatus(Item storage _item, bytes32 _itemID, Status _status) internal {
+        _item.status = _status;
+        historyHead = keccak256(abi.encode(historyHead, _itemID, _status));
+        emit ItemStatusTransition(_itemID, _status, historyHead);
     }
 
     // ************************************* //
